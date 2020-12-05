@@ -39,6 +39,8 @@ silo.buildType = () => extend(Building, {
         this.items.clear();
         silo.sector.info.waves = false;
         silo.sector.info.wasCaptured = true;
+        Fx.launchPod.at(this);
+        Effect.shake(3, 3, this);
         Events.fire(new SectorCaptureEvent(silo.sector));
       } else {
         if (!Vars.state.isCampaign()){
@@ -55,9 +57,9 @@ silo.buildType = () => extend(Building, {
   draw(){
     this.super$draw();
     Draw.rect(Core.atlas.find(silo.name), this.x, this.y);
-    Draw.rect(Core.atlas.find("launchpod"), this.x, this.y);
     
     if (this.consValid()){
+    Draw.rect(Core.atlas.find("launchpod"), this.x, this.y);
       var rad = 20 * 0.74;
       var scl = 2;
       Draw.z(Layer.bullet - 0.0001);
