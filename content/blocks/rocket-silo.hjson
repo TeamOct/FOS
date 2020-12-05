@@ -1,0 +1,18 @@
+health: 7500
+size: 5
+breakable: true
+solid: true
+update: true
+configurable: true
+requirements: [
+  lead/5000
+  silicon/5000
+  titanium/3500
+  thorium/2500
+  plastanium/2500
+  phase-fabric/1500
+  surge-alloy/1500
+]
+category: effect
+research: launch-pad
+buildVisibility: campaignOnly
