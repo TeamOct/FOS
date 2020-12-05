@@ -24,9 +24,21 @@ jupiter.meshLoader = () => new SunMesh(jupiter, 4, 5, 0.3, 1.7, 1.2, 1, 1.5, Col
 jupiter.accessible = false;
 jupiter.hasAtmosphere = false;
 
+const saturn = new JavaAdapter(Planet, {}, "saturn", Planets.sun, 4, 0.8);
+saturn.meshLoader = () => new SunMesh(venus, 4, 5, 0.3, 1.7, 1.2, 1, 1.5, Color.valueOf("ffd866"), Color.valueOf("ecffc2"), Color.valueOf("ffc2e8"));
+saturn.accessible = false;
+saturn.hasAtmosphere = false;
+
 //ракетная шахта
 
-const silo = extendContent(Block, "rocket-silo", {});
+const silo = extendContent(Block, "rocket-silo", {
+  icons(){
+    return [
+      Core.atlas.find(this.name),
+      Core.atlas.find(this.name + "-team")
+      ];
+  }
+});
 silo.buildType = () => extend(Building, {
   buildConfiguration(table){
     table.button(Icon.effect, Styles.clearTransi, () => {
@@ -72,5 +84,7 @@ silo.buildType = () => extend(Building, {
       Lines.square(this.x, this.y, rad, Time.time / scl);
       Lines.square(this.x, this.y, rad, -Time.time / scl);
     };
+    Draw.color(this.team.color);
+    Draw.rect(Core.atlas.find(silo.name + "-team"), this.x, this.y);
   }
 });
