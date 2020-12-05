@@ -1,23 +1,25 @@
-type: groundUnit
-speed: 0.2
-mass: 2
-maxVelocity: 1
+type: mech
+speed: 1
 flying: false
 health: 390
 range: 120
-weapon: {
-ejectEffect: shellEjectSmall
-name: goldChainBlaster
-length: 1.5
-reload: 20
-alternate: true
-bullet: {
-lifetime: 60
-speed: 2
-shootEffect: shootSmall
-smokeEffect: shootSmallSmoke
-damage: 20
-bulletWidth: 9
-bulletHeight: 12
-} 
-} 
+weapons: [
+  {
+    name: goldChainBlaster
+    x: 4
+    y: 2
+    ejectEffect: casing1
+    length: 1.5
+    reload: 20
+    alternate: true
+    bullet: {
+      lifetime: 60
+      speed: 2
+      shootEffect: shootSmall
+      smokeEffect: shootSmallSmoke
+      damage: 20
+      width: 9
+      height: 12
+    } 
+  }
+]

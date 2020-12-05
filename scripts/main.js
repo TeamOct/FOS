@@ -10,7 +10,6 @@ const venus = new JavaAdapter(Planet, {}, "venus", Planets.sun, 4, 0.9);
 venus.orbitRadius = 21.0;
 venus.meshLoader = () => new SunMesh(venus, 4, 5, 0.3, 1.7, 1.2, 1, 1.5, Color.valueOf("cc7400"), Color.valueOf("e98400"), Color.valueOf("d47d00"));
 venus.accessible = false;
-venus.bloom = false;
 venus.hasAtmosphere = false;
 
 Planets.serpulo.orbitRadius = 28.0;
@@ -18,8 +17,12 @@ Planets.serpulo.orbitRadius = 28.0;
 const mars = new JavaAdapter(Planet, {}, "mars", Planets.sun, 4, 0.8);
 mars.meshLoader = () => new SunMesh(venus, 4, 5, 0.3, 1.7, 1.2, 1, 1.5, Color.valueOf("ff6058"), Color.valueOf("f24240"), Color.valueOf("f03336"));
 mars.accessible = false;
-mars.bloom = false;
 mars.hasAtmosphere = false;
+
+const jupiter = new JavaAdapter(Planet, {}, "jupiter", Planets.sun, 4, 2.2);
+jupiter.meshLoader = () => new SunMesh(jupiter, 4, 5, 0.3, 1.7, 1.2, 1, 1.5, Color.valueOf("ffd866"), Color.valueOf("ffad00"));
+jupiter.accessible = false;
+jupiter.hasAtmosphere = false;
 
 //ракетная шахта
 
