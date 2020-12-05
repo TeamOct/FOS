@@ -1,9 +1,23 @@
 health: 7500
 size: 5
+hasItems: true
+itemCapacity: 500
 breakable: true
 solid: true
 update: true
 configurable: true
+consumes: {
+power: 15
+  items: {
+    items: [
+      lead/500
+      graphite/500
+      silicon/500
+      thorium/500
+      surge-alloy/500
+    ]
+  }
+}
 requirements: [
   lead/5000
   silicon/5000
@@ -15,4 +29,4 @@ requirements: [
 ]
 category: effect
 research: launch-pad
-buildVisibility: campaignOnly
+# buildVisibility: campaignOnly

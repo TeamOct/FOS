@@ -30,23 +30,42 @@ silo.buildType = () => extend(Building, {
       if (Vars.state.isCampaign()){
       Vars.ui.planet.showSelect(Vars.state.rules.sector, s => silo.sector = s);
       } else {
-        Vars.ui.showInfo("@silo.campaign");
+        Vars.ui.showInfo("@silo.campaignonly");
       }
       this.deselect();
     }).size(40);
     table.button(Icon.upOpen, Styles.clearTransi, () => {
-      if ((Vars.state.isCampaign()) && silo.sector != undefined){
+      if ((Vars.state.isCampaign()) && (silo.sector != undefined) && (this.consValid())){
+        this.items.clear();
         silo.sector.info.waves = false;
         silo.sector.info.wasCaptured = true;
         Events.fire(new SectorCaptureEvent(silo.sector));
       } else {
         if (!Vars.state.isCampaign()){
-          Vars.ui.showInfo("@silo.campaign");
+          Vars.ui.showInfo("@silo.campaignonly");
           return;
         };
-        Vars.ui.showInfo("@silo.nosector");
+        if (silo.sector == undefined){
+          Vars.ui.showInfo("@silo.nosector");
+        };
       };
       this.deselect();
     }).size(40);
+  },
+  draw(){
+    this.super$draw();
+    Draw.rect(Core.atlas.find(silo.name), this.x, this.y);
+    Draw.rect(Core.atlas.find("launchpod"), this.x, this.y);
+    
+    if (this.consValid()){
+      var rad = 20 * 0.74;
+      var scl = 2;
+      Draw.z(Layer.bullet - 0.0001);
+      Lines.stroke(1.75, this.team.color);
+      Lines.square(this.x, this.y, rad * 1.22, 45);
+      Lines.stroke(3, this.team.color);
+      Lines.square(this.x, this.y, rad, Time.time / scl);
+      Lines.square(this.x, this.y, rad, -Time.time / scl);
+    };
   }
 });
