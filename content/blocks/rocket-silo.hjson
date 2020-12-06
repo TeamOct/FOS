@@ -28,5 +28,4 @@ requirements: [
   surge-alloy/1500
 ]
 category: effect
-research: launch-pad
 buildVisibility: campaignOnly
