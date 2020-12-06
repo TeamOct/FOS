@@ -1,3 +1,2 @@
-type: Floor
+type: OreBlock
 itemDrop: meteorite
-variants: 3
