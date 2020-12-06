@@ -13,11 +13,21 @@ venus.hasAtmosphere = false;
 Planets.serpulo.orbitRadius = 30.0;
 
 const mars = new JavaAdapter(Planet, {}, "mars", Planets.sun, 4, 0.8);
-mars.meshLoader = () => new SunMesh(venus, 4, 5, 0.3, 1.7, 1.2, 1, 1.5, Color.valueOf("ff6058"), Color.valueOf("f24240"), Color.valueOf("f03336"));
+mars.meshLoader = () => new SunMesh(mars, 4, 5, 0.3, 1.7, 1.2, 1, 1.5, Color.valueOf("ff6058"), Color.valueOf("f24240"), Color.valueOf("f03336"));
+mars.accessible = false;
+mars.hasAtmosphere = false;
+
+const polaris = new JavaAdapter(Planet, {}, "polaris", Planets.sun, 4, 0.6);
+mars.meshLoader = () => new SunMesh(polaris, 4, 5, 0.3, 1.7, 1.2, 1, 1.5, Color.valueOf("7b68ee"), Color.valueOf("6a5acd"), Color.valueOf("4169e1"));
 mars.accessible = false;
 mars.hasAtmosphere = false;
 
 const moon = new JavaAdapter(Planet, {}, "moon", Planets.serpulo, 4, 0.7);
 moon.meshLoader = () => new SunMesh(moon, 4, 5, 0.3, 1.7, 1.2, 1, 1.5, Color.valueOf("847982"), Color.valueOf("939393"), Color.valueOf("837881"));
+moon.accessible = false;
+moon.hasAtmosphere = false;
+
+const saylot = new JavaAdapter(Planet, {}, "saylot", Planets.polaris, 4, 0.7);
+moon.meshLoader = () => new SunMesh(moon, 4, 5, 0.3, 1.7, 1.2, 1, 1.5, Color.valueOf("000000"), Color.valueOf("ff9900"), Color.valueOf("323332"));
 moon.accessible = false;
 moon.hasAtmosphere = false;
