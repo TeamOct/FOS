@@ -17,16 +17,6 @@ mars.meshLoader = () => new SunMesh(venus, 4, 5, 0.3, 1.7, 1.2, 1, 1.5, Color.va
 mars.accessible = false;
 mars.hasAtmosphere = false;
 
-const jupiter = new JavaAdapter(Planet, {}, "jupiter", Planets.sun, 4, 2.2);
-jupiter.meshLoader = () => new SunMesh(jupiter, 4, 5, 0.3, 1.7, 1.2, 1, 1.5, Color.valueOf("ffd866"), Color.valueOf("ffad00"));
-jupiter.accessible = false;
-jupiter.hasAtmosphere = false;
-
-const saturn = new JavaAdapter(Planet, {}, "saturn", Planets.sun, 4, 0.8);
-saturn.meshLoader = () => new SunMesh(venus, 4, 5, 0.3, 1.7, 1.2, 1, 1.5, Color.valueOf("ffd866"), Color.valueOf("ecffc2"), Color.valueOf("ffc2e8"));
-saturn.accessible = false;
-saturn.hasAtmosphere = false;
-
 const moon = new JavaAdapter(Planet, {}, "moon", Planets.serpulo, 4, 0.7);
 moon.meshLoader = () => new SunMesh(moon, 4, 5, 0.3, 1.7, 1.2, 1, 1.5, Color.valueOf("847982"), Color.valueOf("939393"), Color.valueOf("837881"));
 moon.accessible = false;
