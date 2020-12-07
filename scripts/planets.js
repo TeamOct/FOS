@@ -27,12 +27,12 @@ moon.meshLoader = () => new SunMesh(moon, 4, 5, 0.3, 1.7, 1.2, 1, 1.5, Color.val
 moon.accessible = false;
 moon.hasAtmosphere = false;
 
-const saylot = new JavaAdapter(Planet, {}, "saylot", Planets.polaris, 4, 0.7);
+const saylot = new JavaAdapter(Planet, {}, "saylot", polaris, 4, 0.7);
 saylot.meshLoader = () => new SunMesh(saylot, 4, 5, 0.3, 1.7, 1.2, 1, 1.5, Color.valueOf("000000"), Color.valueOf("ff9900"), Color.valueOf("323332"));
 saylot.accessible = false;
 saylot.hasAtmosphere = false;
 
-const ko = new JavaAdapter(Planet, {}, "ko", Planets.polaris, 4, 0.7);
+const ko = new JavaAdapter(Planet, {}, "ko", polaris, 4, 0.7);
 ko.meshLoader = () => new SunMesh(ko, 4, 5, 0.3, 1.7, 1.2, 1, 1.5, Color.valueOf("000000"), Color.valueOf("ff9900"), Color.valueOf("323332"));
 ko.accessible = false;
 ko.hasAtmosphere = false;
