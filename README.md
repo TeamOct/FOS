@@ -1,2 +1,5 @@
 # fictional-octo-system
-the patent on the planet
+Credits:
+- JSON and JS - @TheSlaylord
+- Sprites - @TheKoStr
+- Ideas and 3 of the planets here - @Polar4ik
