@@ -1,0 +1,26 @@
+type: mech
+health: 200
+rotateSpeed: 1.5
+range: 216
+weapons: [
+  {
+    name: mw-artillery-weapon
+    x: 4
+    y: 0
+    ejectEffect: casing2
+    reload: 120
+    alternate: true
+    bullet: {
+      type: ArtilleryBulletType
+      width: 6
+      height: 6
+      damage: 5
+      splashDamage: 18
+      splashDamageRadius: 8
+      speed: 2
+      lifetime: 108
+      collidesTiles: true
+      collidesGround: true
+    }
+  }
+]
