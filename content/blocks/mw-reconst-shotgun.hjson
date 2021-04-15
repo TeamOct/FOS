@@ -1,0 +1,18 @@
+type: Reconstructor
+health: 800
+size: 4
+update: true
+constructTime: 7200
+requirements: [
+lead/60
+scrap/50
+]
+upgrades: [
+  [
+  mw-standard, mw-artillery
+  ]
+]
+requirements: [
+  copper/500
+  lead/600
+]

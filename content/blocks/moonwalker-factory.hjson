@@ -15,22 +15,6 @@ plans: [
     time: 3600 #yep, it takes a whole minute to make units
   }
   {
-    unit: mw-shotgun
-    requirements: [
-      copper/40
-      lead/50
-    ]
-    time: 3600
-  }
-  {
-    unit: mw-artillery
-    requirements: [
-      copper/60
-      lead/40
-    ]
-    time: 3600
-  }
-  {
     unit: mw-miner
     requirements: [
       copper/90
