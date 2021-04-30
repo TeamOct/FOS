@@ -1,0 +1,34 @@
+type: LaserTurret
+health: 3200
+size: 5
+shootSnake: 4
+recoilAmount: 5
+range: 190
+reloadTime: 50
+powerUse: 500
+shootCone: 5
+firingMoveFract: 0.5
+shootDuration: 220
+buildCostMultiplier: 1.0
+powerUse: 17
+shootType: {
+  type: ContinuousLaserBulletType
+  damage: 230
+  length: 200
+  hitEffect: hitMeltdown
+  hitSize: 18
+  incendChance: 0.4
+  incendSpread: 5
+  incendAmount: 1
+  lifetime: 40
+  drawSize: 420
+}
+shootEffect: shootBigSmoke2
+shootSound: laserbig
+loopSound: beam
+loopSoundVolume: 2
+requirements: [
+silicon/100
+]
+category: turret
+research: router

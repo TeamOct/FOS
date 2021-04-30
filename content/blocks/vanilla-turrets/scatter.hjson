@@ -1,0 +1,20 @@
+ammoTypes: {
+  scrap: flakScrap
+  lead: flakLead
+  metaglass: flakGlass
+  meteorite: {
+    type: BasicBulletType
+    collidesGround: false
+    targetGround: false
+    width: 8
+    height: 8
+    damage: 3
+    splashDamage: 40
+    splashDamageRadius: 24
+    incendAmount: 1
+    sprite: meteor-shot
+    backColor: ad6b00
+    frontColor: ff9d00
+    ammoMultiplier: 5
+  }
+}
