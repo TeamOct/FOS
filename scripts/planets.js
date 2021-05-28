@@ -313,3 +313,5 @@ moon.generator = mgen;
 moon.hasAtmosphere = false;
 moon.meshLoader = () => new HexMesh(moon, 6);
 moon.startSector = 40;
+
+this.global.moon = moon;

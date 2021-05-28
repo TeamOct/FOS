@@ -1,14 +1,23 @@
-function newNode(content, parentName, req, objectives){
-  var parent = TechTree.all.find(t => t.content.name.equals(parentName));
-
-  var node = new TechTree.TechNode(parent, content, req);
-  node.objectives.add(objectives);
+const newNode = (parent, content, req, objectives) => {
+  const parnode = TechTree.get(parent);
+  const node = new TechTree.TechNode(parnode, content, req != null ? req : content.researchRequirements());
+  var used = new ObjectSet();
   
-  parent.children.add(node);
+  if ((objectives != null) && !(content instanceof SectorPreset)){
+    node.objectives.addAll(objectives);
+  }
 }
 
-const silo = Vars.content.getByName(ContentType.block, "fictional-octo-system-rocket-silo");
-const siloTerminal = Vars.content.getByName(ContentType.sector, "fictional-octo-system-siloTerminal");
+const rocketSilo = Vars.content.getByName(ContentType.block, "fos-rocket-silo");
+const siloTerminal = Vars.content.getByName(ContentType.sector, "fos-siloTerminal");
 
-newNode(silo, "launch-pad", silo.researchRequirements(), Seq.with(new Objectives.SectorComplete(siloTerminal)));
-newNode(siloTerminal, nuclearComplex, null, Seq.with(new Objectives.SectorComplete(SectorPresets.impact0078), new Objectives.SectorComplete(SectorPresets.nuclearComplex), new Objectives.Research(Blocks.launchPad)));
+newNode(Blocks.launchPad,
+  rocketSilo,
+  null,
+  Seq.with(new Objectives.SectorComplete(siloTerminal))
+);
+newNode(SectorPresets.nuclearComplex,
+  siloTerminal,
+  null,
+  Seq.with(new Objectives.SectorComplete(SectorPresets.nuclearComplex), new Objectives.Research(Blocks.launchPad), new Objectives.Research(Blocks.interplanetaryAccelerator))
+);

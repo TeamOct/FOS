@@ -29,4 +29,3 @@ requirements: [
 ]
 category: effect
 buildVisibility: campaignOnly
-research: launch-pad
