@@ -9,6 +9,7 @@ const newNode = (parent, content, req, objectives) => {
 }
 
 const rocketSilo = Vars.content.getByName(ContentType.block, "fos-rocket-silo");
+const mechSeparator = Vars.content.getByName(ContentType.block, "fos-mechanical-separator");
 
 const siloTerminal = Vars.content.getByName(ContentType.sector, "fos-siloTerminal");
 const lsMoon = Vars.content.getByName(ContentType.sector, "fos-landingSiteMoon");
@@ -22,9 +23,11 @@ newNode(Planets.serpulo, moon, null, Seq.with(new Objectives.Research(Blocks.int
 //endregion
 
 //region sectors
-newNode(SectorPresets.nuclearComplex, siloTerminal, null, Seq.with(new Objectives.SectorComplete(SectorPresets.nuclearComplex), new Objectives.Research(Blocks.launchPad), new Objectives.Research(Blocks.interplanetaryAccelerator)));
+newNode(SectorPresets.nuclearComplex, siloTerminal, null, Seq.with(new Objectives.SectorComplete(SectorPresets.nuclearComplex), new Objectives.Research(Blocks.launchPad)));
 
-newNode(moon, lsMoon, null, null);
+newNode(SectorPresets.planetaryTerminal, lsMoon, null, Seq.with(new Objectives.SectorComplete(SectorPresets.planetaryTerminal), new Objectives.Research(moon)));
 //endregion
-
+//region blocks
 newNode(Blocks.launchPad, rocketSilo, null, Seq.with(new Objectives.SectorComplete(siloTerminal)));
+
+newNode(Blocks.separator, mechSeparator, null, Seq.with(new Objectives.Research(moon), new Objectives.SectorComplete(lsMoon)));

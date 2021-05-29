@@ -1,3 +1,6 @@
+//init for future use
+const mechSeparator = extendContent(Separator, "mechanical-separator", {});
+
 require('planets');
 require('rocket-silo');
 require('sectorpresets');

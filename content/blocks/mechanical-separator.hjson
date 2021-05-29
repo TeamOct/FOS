@@ -1,0 +1,24 @@
+size: 2
+itemCapacity: 10
+liquidCapacity: 0
+craftTime: 180
+requirements: [
+copper/200
+lead/50
+]
+consumes: {
+  items: {
+    items: [
+    scrap/7
+    ]
+  liquid: {
+    liquid: water
+    amount: 0.00
+  }
+  }
+}
+results: [
+lead/5
+graphite/2
+]
+category: crafting
