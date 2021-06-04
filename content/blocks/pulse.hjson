@@ -1,0 +1,22 @@
+type: TractorBeamTurret
+health: 480
+size: 3
+range: 160
+targetAir: true
+targetGround: true
+retargetTime: 60
+status: disarmed
+statusDuration: 60
+damage: 0
+force: 0
+scaledForce: 0
+
+consumes: {
+  power: 4
+}
+#placeholder requirement
+requirements: [
+copper/5
+]
+category: turret
+research: thunder
