@@ -1,6 +1,6 @@
 const newNode = (parent, content, req, objectives) => {
-  const parnode = TechTree.get(parent);
-  const node = new TechTree.TechNode(parnode, content, req != null ? req : content.researchRequirements());
+  var parnode = TechTree.get(parent);
+  var node = new TechTree.TechNode(parnode, content, req != null ? req : content.researchRequirements());
   var used = new ObjectSet();
   
   if (objectives != null){
