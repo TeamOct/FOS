@@ -7,3 +7,4 @@ require('campaign/sectorpresets');
 require('campaign/techtree');
 
 require('units/mw-miner');
+require('units/whip');
