@@ -314,4 +314,12 @@ moon.hasAtmosphere = false;
 moon.meshLoader = () => new HexMesh(moon, 6);
 moon.startSector = 40;
 
-this.global.moon = moon;
+module.exports = {
+  mercury: mercury,
+  venus: venus,
+  moon: moon,
+  mars: mars,
+  polaris: polaris,
+  saylot: saylot,
+  ko: ko
+}
