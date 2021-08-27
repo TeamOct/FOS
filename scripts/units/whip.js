@@ -8,7 +8,7 @@ const whip = extendContent(UnitType, "whip", {
 whip.constructor = () => extend(UnitEntity, {});
 
 const weapon = extendContent(Weapon, "injector", {
-  bullet: injectorb.bullet(0.1, 0.25, 50, 180, false),
+  bullet: injectorb.bullet(0, 0.15, 50, 300, false),
   x: 0, y: 0,
   reload: 60 * 20,
   ejectEffect: Fx.casing1
