@@ -1,4 +1,4 @@
-const status = require('status-fx/trojan');
+const status = require('status-fx/hacked');
 
 const bullet = (minChance, maxChance, minHPThreshold, maxHPThreshold, attacksGuardians) => extendContent(BasicBulletType, {
   collidesTiles: false,
@@ -29,7 +29,7 @@ const bullet = (minChance, maxChance, minHPThreshold, maxHPThreshold, attacksGua
       var chance = this.chance(entity);
       if (Math.random() < chance){
         entity.team = b.team;
-        entity.apply(status.trojan(entity.health / (60*20)));
+        entity.apply(status.hacked(entity.health / (60*20)));
       }
     }
   }
