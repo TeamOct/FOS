@@ -1,5 +1,5 @@
 const effect = new Effect(60, e => {
-  Draw.color(Color.valueOf("51a0b0"));
+  Draw.color(Color.valueOf("51a0b0"), Color.valueOf("8ae3df"), e.fin());
   Fill.circle(e.x, e.y, (7 - e.fin() * 7)/4);
 })
 
