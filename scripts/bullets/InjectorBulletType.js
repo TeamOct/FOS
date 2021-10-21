@@ -1,6 +1,6 @@
 const status = require('status-fx/hacked');
 
-const bullet = (minChance, maxChance, minHPThreshold, maxHPThreshold, attacksGuardians) => extendContent(BasicBulletType, {
+const bullet = (minChance, maxChance, minHPThreshold, maxHPThreshold, attacksGuardians) => extend(BasicBulletType, {
   collidesTiles: false,
   speed: 8,
   lifetime: 20,

@@ -12,7 +12,6 @@ venus.hasAtmosphere = false;
 
 Planets.serpulo.orbitRadius = 30.0;
 
-//planet Zuila
 const marsgen = extend(PlanetGenerator, {
     rawHeight(position){
         position = Tmp.v33.set(position).scl(this.scl);

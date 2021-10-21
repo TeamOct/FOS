@@ -1,5 +1,8 @@
 //init for future use
 const mechSeparator = extendContent(Separator, "mechanical-separator", {});
+const meteorite = extendContent(Item, "meteorite", {});
+
+require('bullets/meteor-bullet');
 
 require('campaign/planets');
 require('campaign/rocket-silo');
