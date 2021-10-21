@@ -4,7 +4,10 @@ const meteorite = extendContent(Item, "meteorite", {});
 
 require('bullets/meteor-bullet');
 
-require('campaign/planets');
+require('planets/planets');
+require('planets/lumina');
+require('planets/mars');
+
 require('campaign/rocket-silo');
 require('campaign/sectorpresets');
 require('campaign/techtree');
