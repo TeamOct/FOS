@@ -1,0 +1,7 @@
+health: 520
+size: 1
+requirements: [
+  meteorite/6
+]
+category: defense
+research: plastanium-wall

@@ -1,0 +1,7 @@
+health: 2080
+size: 2
+requirements: [
+  meteorite/24
+]
+category: defense
+research: meteorite-wall

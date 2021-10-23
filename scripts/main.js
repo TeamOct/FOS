@@ -2,6 +2,8 @@
 const mechSeparator = extendContent(Separator, "mechanical-separator", {});
 const meteorite = extendContent(Item, "meteorite", {});
 
+require('blocks/meteor-walls');
+
 require('bullets/meteor-bullet');
 
 require('planets/planets');
