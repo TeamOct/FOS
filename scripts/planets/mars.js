@@ -1,3 +1,8 @@
+const cstone = extendContent(Floor, "crimson-stone", {});
+const cstoneWall = extendContent(StaticWall, "crimson-stone-wall", {
+  variants: 1,
+});
+
 const marsgen = extend(PlanetGenerator, {
     rawHeight(position){
         position = Tmp.v33.set(position).scl(this.scl);
@@ -11,19 +16,23 @@ const marsgen = extend(PlanetGenerator, {
 
     getColor(position){
         var block = this.getBlock(position);
-        if(block == null) return Blocks.sand.mapColor;
+        if(block == null) return Color.valueOf("ffffff");
         Tmp.c1.set(block.mapColor).a = 1 - block.albedo;
         
         return Tmp.c1;
     },
 
     genTile(position, tile){
-        tile.floor = this.getBlock(position);
+      tile.floor = this.getBlock(position);
+      if (tile.floor == cstone){
+        tile.block = cstoneWall;
+      } else {
         tile.block = tile.floor.asFloor().wall;
+      }
 
-        if(this.rid.getValue(position.x, position.y, position.z, 22) > 0.32){
-            tile.block = Blocks.air;
-        };
+      if(this.rid.getValue(position.x, position.y, position.z, 22) > 0.32){
+          tile.block = Blocks.air;
+      };
     },
 
     getBlock(position){
@@ -52,7 +61,14 @@ const marsgen = extend(PlanetGenerator, {
     },
 
     generateSector(sec){
+      var tile = sec.tile;
       
+      var poles = Math.abs(tile.v.y);
+      var noise = Packages.arc.util.noise.Noise.snoise3(tile.v.x, tile.v.y, tile.v.z, 0.001, 0.58);
+      
+      if ((noise + poles / 7.1 > 0.17) && (poles > 0.6)){
+        sec.generateEnemyBase = true;
+      }
     },
 
     generate(tiles, sec){
@@ -197,10 +213,6 @@ const marsgen = extend(PlanetGenerator, {
         if(rand.chance(0.25)){
             ores.add(Blocks.oreScrap);
         };
-        
-        if(rand.chance(0.7)){
-          ores.add(Vars.content.getByName(ContentType.block, "goldmod-ore-goldOre"));
-        }
 
         var frequencies = new FloatSeq();
         for(var i = 0; i < ores.size; i++){
@@ -216,14 +228,10 @@ const marsgen = extend(PlanetGenerator, {
                 var freq = frequencies.get(i);
                 
                 if(Math.abs(0.5 - this.noiseOct(offsetX, offsetY + i * 999, 2, 0.7, (40 + i * 2))) > 0.22 + i * 0.01 &&
-                    Math.abs(0.5 - this.noiseOct(offsetX, offsetY - i * 999, 1, 1, (30 + i * 4))) > 0.37 + freq){
-                    this.ore = entry;
-                    break;
-                };    
-            };
-
-            if(this.ore == Blocks.oreScrap && rand.chance(0.33)){
-                this.floor = Blocks.metalFloorDamaged;
+                Math.abs(0.5 - this.noiseOct(offsetX, offsetY - i * 999, 1, 1, (30 + i * 4))) > 0.37 + freq){
+                  this.ore = entry;
+                  break;
+              };    
             };
         });
 
@@ -231,14 +239,7 @@ const marsgen = extend(PlanetGenerator, {
         this.median(2);
         this.tech();
         this.pass((x, y) => {
-            //random boulder
-            if(this.floor == Blocks.stone){
-                if(Math.abs(0.5 - this.noiseOct(x - 90, y, 4, 0.8, 65)) > 0.02){
-                    this.floor = Blocks.boulder;
-                };
-            };
-
-            if(this.floor != null && this.floor != Blocks.stone && this.floor != Blocks.dirt && this.floor.asFloor().hasSurface()){
+            if(this.floor != cstone && this.floor.asFloor().hasSurface()){
                 var noise = this.noiseOct(x + 782, y, 5, 0.75, 260);
                 if(noise > 0.72){
                     this.floor = noise > 0.78 ? Blocks.water : (this.floor == Blocks.sand ? Blocks.sandWater : Blocks.sandWater);
@@ -288,20 +289,20 @@ const marsgen = extend(PlanetGenerator, {
     } 
 });
 marsgen.arr = [   
-    [Blocks.deepwater, Blocks.sandWater, Blocks.sandWater, Blocks.grass, Blocks.craters, Blocks.grass, Blocks.grass, Blocks.stone, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt],
-    [Blocks.deepwater, Blocks.sandWater, Blocks.sandWater, Blocks.grass, Blocks.grass, Blocks.grass, Blocks.metalFloorDamaged, Blocks.sand, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt],
-    [Blocks.deepwater, Blocks.sandWater, Blocks.grass, Blocks.grass, Blocks.metalFloorDamaged, Blocks.metalFloorDamaged, Blocks.dirt, Blocks.stone, Blocks.stone, Blocks.stone, Blocks.dirt, Blocks.dirt, Blocks.dirt],
-    [Blocks.water, Blocks.sandWater, Blocks.grass, Blocks.grass, Blocks.stone, Blocks.metalFloorDamaged, Blocks.stone, Blocks.hotrock, Blocks.stone, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt],
-    [Blocks.sandWater, Blocks.grass, Blocks.grass, Blocks.grass, Blocks.metalFloorDamaged, Blocks.mud, Blocks.dirt, Blocks.stone, Blocks.stone, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt],
+    [Blocks.water, Blocks.sandWater, Blocks.sandWater, Blocks.grass, cstone, Blocks.grass, Blocks.grass, cstone, cstone, cstone, cstone, Blocks.ice, Blocks.ice],
+    [Blocks.water, Blocks.sandWater, Blocks.sandWater, Blocks.grass, Blocks.grass, Blocks.grass, cstone, Blocks.sand, cstone, cstone, cstone, cstone, Blocks.ice],
+    [Blocks.water, Blocks.sandWater, Blocks.grass, Blocks.grass, cstone, cstone, cstone, cstone, cstone, cstone, Blocks.ice, Blocks.ice, Blocks.ice],
+    [Blocks.water, Blocks.sandWater, Blocks.grass, Blocks.grass, cstone, cstone, cstone, Blocks.hotrock, cstone, cstone, cstone, Blocks.ice, Blocks.ice],
+    [Blocks.sandWater, Blocks.grass, Blocks.grass, Blocks.grass, cstone, cstone, cstone, cstone, cstone, cstone, cstone, Blocks.ice, Blocks.ice],
     
-    [Blocks.sandWater, Blocks.craters, Blocks.grass, Blocks.mud, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt],
-    [Blocks.water, Blocks.sandWater, Blocks.grass, Blocks.mud, Blocks.mud, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt],
-    [Blocks.sandWater, Blocks.sandWater, Blocks.grass, Blocks.mud, Blocks.metalFloorDamaged, Blocks.mud, Blocks.sand, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt],
-    [Blocks.sandWater, Blocks.grass, Blocks.dirt, Blocks.dirt, Blocks.grass, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt, Blocks.dirt],
-    [Blocks.sandWater, Blocks.sandWater, Blocks.grass, Blocks.grass, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sandWater, Blocks.stone, Blocks.stone],
-    [Blocks.sandWater, Blocks.sandWater, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sandWater, Blocks.stone, Blocks.stone, Blocks.stone],
-    [Blocks.sandWater, Blocks.sandWater, Blocks.sand, Blocks.sand, Blocks.craters, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sandWater, Blocks.stone, Blocks.stone, Blocks.stone],
-    [Blocks.sandWater, Blocks.sandWater, Blocks.sand, Blocks.craters, Blocks.craters, Blocks.craters, Blocks.sand, Blocks.stone, Blocks.stone, Blocks.stone, Blocks.dirt, Blocks.grass, Blocks.dirt]
+    [Blocks.sandWater, cstone, Blocks.grass, cstone, cstone, cstone, cstone, cstone, cstone, cstone, Blocks.ice, Blocks.ice, Blocks.ice],
+    [Blocks.water, Blocks.sandWater, Blocks.grass, cstone, cstone, cstone, cstone, cstone, cstone, cstone, cstone, Blocks.ice, Blocks.ice],
+    [Blocks.sandWater, Blocks.sandWater, Blocks.grass, cstone, cstone, cstone, Blocks.sand, cstone, cstone, cstone, cstone, Blocks.ice, Blocks.ice],
+    [Blocks.sandWater, Blocks.grass, cstone, cstone, Blocks.grass, cstone, cstone, cstone, cstone, cstone, Blocks.ice, Blocks.ice, Blocks.ice],
+    [Blocks.sandWater, Blocks.sandWater, Blocks.grass, Blocks.grass, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sandWater, cstone, cstone],
+    [Blocks.sandWater, Blocks.sandWater, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sandWater, cstone, cstone, cstone],
+    [Blocks.sandWater, Blocks.sandWater, Blocks.sand, Blocks.sand, cstone, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sand, Blocks.sandWater, cstone, cstone, Blocks.ice],
+    [Blocks.sandWater, Blocks.sandWater, Blocks.sand, cstone, cstone, cstone, Blocks.sand, cstone, cstone, cstone, cstone, Blocks.grass, Blocks.ice]
 ];
 marsgen.rid = new Packages.arc.util.noise.RidgedPerlin(1, 2);
 marsgen.basegen = new BaseGenerator();

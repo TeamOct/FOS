@@ -51,6 +51,17 @@ const lgen = extend(PlanetGenerator, {
         var v = this.sector.rect.project(x, y).scl(5);
         return this.noise.octaveNoise3D(octaves, falloff, 1 / scl, v.x, v.y, v.z);
     },
+    
+    generateSector(sec){
+      var tile = sec.tile;
+      
+      var poles = Math.abs(tile.v.y);
+      var noise = Packages.arc.util.noise.Noise.snoise3(tile.v.x, tile.v.y, tile.v.z, 0.001, 0.58);
+      
+      if (noise + poles / 7.1 > 0.25 && poles > 0.23){
+        sec.generateEnemyBase = true;
+      }
+    },
 
     generate(tiles, sec){
         this.tiles = tiles;
