@@ -1,7 +1,7 @@
 const spark = extend(BasicBulletType, {
   damage: 40,
-  speed: 5, lifetime: 20,
-  width: 5, height: 5,
+  speed: 4, lifetime: 20,
+  width: 6, height: 6,
   incendAmount: 1,
   backColor: Color.valueOf("ad6b00"),
   frontColor: Color.valueOf("ff9d00"),
