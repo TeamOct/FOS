@@ -2,6 +2,10 @@ const cstone = extendContent(Floor, "crimson-stone", {});
 const cstoneWall = extendContent(StaticWall, "crimson-stone-wall", {
   variants: 1,
 });
+const alienMoss = extendContent(Boulder, "alien-moss", {
+  breakable: false,
+  alwaysReplace: true,
+});
 
 const marsgen = extend(PlanetGenerator, {
     rawHeight(position){
@@ -239,16 +243,18 @@ const marsgen = extend(PlanetGenerator, {
         this.median(2);
         this.tech();
         this.pass((x, y) => {
-            if(this.floor != cstone && this.floor.asFloor().hasSurface()){
-                var noise = this.noiseOct(x + 782, y, 5, 0.75, 260);
-                if(noise > 0.72){
-                    this.floor = noise > 0.78 ? Blocks.water : (this.floor == Blocks.sand ? Blocks.sandWater : Blocks.sandWater);
-                    this.ore = Blocks.air;
-                }else if(noise > 0.67){
-                    this.floor = (this.floor == Blocks.sand ? this.floor : Blocks.sand);
-                    this.ore = Blocks.air;
-                };
-            };
+          //random alien moss
+          if ((this.floor == cstone) && (this.block == Blocks.air)){
+            for(var i = ores.size - 1; i >= 0; i--){
+              var freq = frequencies.get(i);
+                
+              if((Math.abs(0.5 - this.noiseOct(x-4, y+23+i* 999, 2, 0.7, (40 + i * 2))) > 0.22 + i * 0.01) &&
+              (Math.abs(0.5 - this.noiseOct(x+90, y-23-i*999, 1, 1, (30 + i * 4))) > 0.37 + freq)){
+                this.block = alienMoss;
+                break;
+              };
+            }
+          }
         });
 
         var difficulty = this.sector.threat;
@@ -292,9 +298,8 @@ marsgen.arr = [
     [Blocks.water, Blocks.sandWater, Blocks.sandWater, Blocks.grass, cstone, Blocks.grass, Blocks.grass, cstone, cstone, cstone, cstone, Blocks.ice, Blocks.ice],
     [Blocks.water, Blocks.sandWater, Blocks.sandWater, Blocks.grass, Blocks.grass, Blocks.grass, cstone, Blocks.sand, cstone, cstone, cstone, cstone, Blocks.ice],
     [Blocks.water, Blocks.sandWater, Blocks.grass, Blocks.grass, cstone, cstone, cstone, cstone, cstone, cstone, Blocks.ice, Blocks.ice, Blocks.ice],
-    [Blocks.water, Blocks.sandWater, Blocks.grass, Blocks.grass, cstone, cstone, cstone, Blocks.hotrock, cstone, cstone, cstone, Blocks.ice, Blocks.ice],
+    [Blocks.water, Blocks.sandWater, Blocks.grass, Blocks.grass, cstone, cstone, cstone, cstone, cstone, cstone, cstone, Blocks.ice, Blocks.ice],
     [Blocks.sandWater, Blocks.grass, Blocks.grass, Blocks.grass, cstone, cstone, cstone, cstone, cstone, cstone, cstone, Blocks.ice, Blocks.ice],
-    
     [Blocks.sandWater, cstone, Blocks.grass, cstone, cstone, cstone, cstone, cstone, cstone, cstone, Blocks.ice, Blocks.ice, Blocks.ice],
     [Blocks.water, Blocks.sandWater, Blocks.grass, cstone, cstone, cstone, cstone, cstone, cstone, cstone, cstone, Blocks.ice, Blocks.ice],
     [Blocks.sandWater, Blocks.sandWater, Blocks.grass, cstone, cstone, cstone, Blocks.sand, cstone, cstone, cstone, cstone, Blocks.ice, Blocks.ice],
