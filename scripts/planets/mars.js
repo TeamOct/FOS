@@ -1,3 +1,4 @@
+//environment
 const cstone = extendContent(Floor, "crimson-stone", {});
 const cstoneWall = extendContent(StaticWall, "crimson-stone-wall", {
   variants: 1,
@@ -245,7 +246,7 @@ const marsgen = extend(PlanetGenerator, {
         this.pass((x, y) => {
           //random alien moss
           if ((this.floor == cstone) && (this.block == Blocks.air)){
-            for(var i = ores.size - 1; i >= 0; i--){
+            for(var i = ores.size - 1; i >= 1; i--){
               var freq = frequencies.get(i);
                 
               if((Math.abs(0.5 - this.noiseOct(x-4, y+23+i* 999, 2, 0.7, (40 + i * 2))) > 0.22 + i * 0.01) &&
@@ -253,6 +254,24 @@ const marsgen = extend(PlanetGenerator, {
                 this.block = alienMoss;
                 break;
               };
+            }
+          };
+          //random trees
+          if (((this.floor == Blocks.grass) || (this.floor == cstone)) && (this.block == Blocks.air)){
+            if (rand.chance(0.01)){
+              let any = false;
+              let all = true;
+              for (let p of Geometry.d4){
+                let other = this.tiles.get(x + p.x, y + p.y);
+                if (other != null){
+                  any = true;
+                } else {
+                  all = false;
+                }
+              };
+              if ((any) && rand.chance(0.1)){
+                this.block = Blocks.whiteTree;
+              }
             }
           }
         });
