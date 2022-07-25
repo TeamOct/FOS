@@ -14,7 +14,11 @@ public class FOSMod extends Mod{
     public void loadContent(){
         FOSItems.load();
         FOSBlocks.load();
-        Log.info("FOS content loaded... probably");
+        FOSUnits.load();
+        Log.info("Never gonna give you up");
+        Log.info("Never gonna let you down");
+        Log.info("Never gonna run around");
+        Log.info("And desert you");
     }
 
 }
