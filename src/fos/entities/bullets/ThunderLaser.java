@@ -1,7 +1,7 @@
 package fos.entities.bullets;
 
-import mindustry.content.Fx;
-import mindustry.entities.bullet.ContinuousLaserBulletType;
+import mindustry.content.*;
+import mindustry.entities.bullet.*;
 
 public class ThunderLaser extends ContinuousLaserBulletType {
     public ThunderLaser(){

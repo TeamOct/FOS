@@ -1,6 +1,6 @@
 package fos.entities.bullets;
 
-import mindustry.entities.bullet.BasicBulletType;
+import mindustry.entities.bullet.*;
 
 public class SmallStandard extends BasicBulletType {
     public SmallStandard(){

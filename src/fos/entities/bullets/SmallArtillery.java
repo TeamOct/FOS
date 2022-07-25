@@ -1,6 +1,6 @@
 package fos.entities.bullets;
 
-import mindustry.entities.bullet.ArtilleryBulletType;
+import mindustry.entities.bullet.*;
 
 public class SmallArtillery extends ArtilleryBulletType {
     public SmallArtillery(){

@@ -2,12 +2,13 @@ package fos.content;
 
 import arc.struct.Seq;
 import fos.entities.bullets.*;
-import mindustry.content.Fx;
-import mindustry.gen.MechUnit;
+import mindustry.ai.types.*;
+import mindustry.content.*;
+import mindustry.gen.*;
 import mindustry.type.*;
 
 public class FOSUnits {
-    public static UnitType mwArtillery, mwShotgun, mwStandard;
+    public static UnitType mwArtillery, mwShotgun, mwStandard, mwMiner;
 
     public static void load(){
         mwArtillery = new UnitType("mw-artillery"){{
@@ -23,7 +24,7 @@ public class FOSUnits {
                         bullet = new SmallArtillery();
                     }}
             );
-            constructor = () -> new MechUnit(){{}};
+            constructor = () -> new MechUnit(){};
         }};
         mwShotgun = new UnitType("mw-shotgun"){{
             health = 220;
@@ -40,7 +41,7 @@ public class FOSUnits {
                         bullet = new SmallStandardFlak();
                     }}
             );
-            constructor = () -> new MechUnit(){{}};
+            constructor = () -> new MechUnit(){};
         }};
         mwStandard = new UnitType("mw-standard"){{
             health = 200;
@@ -55,7 +56,17 @@ public class FOSUnits {
                         bullet = new SmallStandard();
                     }}
             );
-            constructor = () -> new MechUnit(){{}};
+            constructor = () -> new MechUnit(){};
+        }};
+        mwMiner = new UnitType("mw-miner"){{
+            health = 200;
+            rotateSpeed = 10;
+            mineTier = 1;
+            mineSpeed = 0.5f;
+            range = 30;
+            weapons = Seq.with();
+            aiController = () -> new MinerAI(){};
+            constructor = () -> new UnitEntity(){};
         }};
     }
 }

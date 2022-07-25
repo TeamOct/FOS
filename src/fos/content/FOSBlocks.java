@@ -1,15 +1,17 @@
 package fos.content;
 
+import arc.struct.*;
 import fos.entities.bullets.*;
 import fos.type.*;
 import mindustry.content.*;
-import mindustry.entities.bullet.*;
 import mindustry.gen.*;
 import mindustry.type.*;
 import mindustry.world.*;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.production.*;
+import mindustry.world.blocks.units.*;
+import mindustry.world.meta.*;
 
 import static mindustry.type.ItemStack.*;
 
@@ -20,7 +22,11 @@ public class FOSBlocks {
     //defense
     meteoriteWall, meteoriteWallLarge, pulse, thunder,
     //environment & ores
-    meteoriteBlock, meteoriteFloor, oreLuminium;
+    meteoriteBlock, meteoriteFloor, oreLuminium,
+    //units
+    moonwalkerFactory, reconstructorArtillery, reconstructorShotgun,
+    //special
+    nukeLauncher;
 
     public static void load() {
         //region crafting
@@ -89,7 +95,51 @@ public class FOSBlocks {
         }};
         //endregion
         //region units
-
+        moonwalkerFactory = new UnitFactory("moonwalker-factory"){{
+            health = 800;
+            size = 4;
+            requirements(Category.units, with(Items.copper, 200, Items.lead, 300));
+            plans = Seq.with(
+                    new UnitPlan(FOSUnits.mwStandard, 3600, with(Items.copper, 50, Items.lead, 30)),
+                    new UnitPlan(FOSUnits.mwMiner, 5400, with(Items.copper, 90, Items.lead, 45))
+            );
+        }};
+        reconstructorArtillery = new Reconstructor("mw-reconst-artillery"){{
+            health = 800;
+            size = 4;
+            update = true;
+            constructTime = 1800;
+            consumeItems(with(Items.lead, 70, Items.scrap, 20));
+            requirements(Category.units, with(Items.lead, 70, Items.scrap, 20));
+            upgrades.addAll(
+                    new UnitType[]{FOSUnits.mwStandard, FOSUnits.mwArtillery}
+            );
+        }};
+        reconstructorShotgun = new Reconstructor("mw-reconst-shotgun"){{
+            health = 800;
+            size = 4;
+            update = true;
+            constructTime = 1800;
+            consumeItems(with(Items.lead, 60, Items.scrap, 50));
+            requirements(Category.units, with(Items.copper, 500, Items.lead, 600));
+            upgrades.addAll(
+                    new UnitType[]{FOSUnits.mwStandard, FOSUnits.mwShotgun}
+            );
+        }};
         //endregion
+        //region special
+        nukeLauncher = new NukeLauncher("rocket-silo"){{
+            health = 7500;
+            size = 5;
+            hasItems = true;
+            itemCapacity = 500;
+            breakable = true;
+            solid = true;
+            update = true;
+            configurable = true;
+            consumePower(15);
+            consumeItems(with(Items.lead, 500, Items.graphite, 500, Items.silicon, 500, Items.thorium, 500, Items.surgeAlloy, 500));
+            requirements(Category.effect, BuildVisibility.campaignOnly, with(Items.lead, 5000, Items.silicon, 5000, Items.titanium, 3500, Items.thorium, 2500, Items.phaseFabric, 1500, Items.surgeAlloy, 1500));
+        }};
     }
 }
