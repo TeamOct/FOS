@@ -1,14 +1,20 @@
 package fos.content;
 
-import arc.struct.Seq;
-import fos.entities.bullets.*;
+import arc.math.*;
+import arc.struct.*;
+import fos.type.bullets.InjectorBulletType;
 import mindustry.ai.types.*;
 import mindustry.content.*;
+import mindustry.entities.abilities.*;
 import mindustry.gen.*;
 import mindustry.type.*;
 
 public class FOSUnits {
-    public static UnitType mwArtillery, mwShotgun, mwStandard, mwMiner;
+    public static UnitType
+    //mechs
+    mwArtillery, mwShotgun, mwStandard, mwMiner, legion,
+    //flying
+    whip;
 
     public static void load(){
         mwArtillery = new UnitType("mw-artillery"){{
@@ -21,7 +27,7 @@ public class FOSUnits {
                         ejectEffect = Fx.casing2;
                         reload = 120;
                         alternate = true;
-                        bullet = new SmallArtillery();
+                        bullet = FOSBullets.smallArtillery;
                     }}
             );
             constructor = () -> new MechUnit(){};
@@ -38,7 +44,7 @@ public class FOSUnits {
                         alternate = true;
                         shoot.shots = 4;
                         shootCone = 15;
-                        bullet = new SmallStandardFlak();
+                        bullet = FOSBullets.smallStandardFlak;
                     }}
             );
             constructor = () -> new MechUnit(){};
@@ -53,7 +59,7 @@ public class FOSUnits {
                         ejectEffect = Fx.casing1;
                         reload = 30;
                         alternate = true;
-                        bullet = new SmallStandard();
+                        bullet = FOSBullets.smallStandard;
                     }}
             );
             constructor = () -> new MechUnit(){};
@@ -66,6 +72,38 @@ public class FOSUnits {
             range = 30;
             weapons = Seq.with();
             aiController = () -> new MinerAI(){};
+            constructor = () -> new UnitEntity(){};
+        }};
+        legion = new UnitType("legion"){{
+            health = 25000;
+            armor = 25;
+            hitSize = 25;
+            speed = 0.1f;
+            flying = false;
+            canBoost = false;
+
+            float angle = 0f;
+            for(int i = 0; i < 8; i++){
+                float x = Mathf.cos(angle) * 32;
+                float y = Mathf.sin(angle) * 32;
+                abilities.add(new UnitSpawnAbility(UnitTypes.atrax, 600, x, y));
+                angle += Mathf.PI2 / 8;
+            }
+            constructor = () -> new MechUnit(){};
+        }};
+
+        whip = new UnitType("whip"){{
+            health = 150;
+            hitSize = 6;
+            speed = 1.2f;
+            weapons.add(
+                    new Weapon("injector"){{
+                        bullet = new InjectorBulletType(0, 0.15f, 50, 300, false);
+                        x = 0; y = 0;
+                        reload = 60 * 20;
+                        ejectEffect = Fx.casing1;
+                    }}
+            );
             constructor = () -> new UnitEntity(){};
         }};
     }

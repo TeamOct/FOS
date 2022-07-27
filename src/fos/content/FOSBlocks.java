@@ -1,8 +1,8 @@
 package fos.content;
 
 import arc.struct.*;
-import fos.entities.bullets.*;
-import fos.type.*;
+import fos.type.blocks.MeteoriteWall;
+import fos.type.blocks.NukeLauncher;
 import mindustry.content.*;
 import mindustry.gen.*;
 import mindustry.type.*;
@@ -76,7 +76,7 @@ public class FOSBlocks {
             shootCone = 5;
             firingMoveFract = 0.5f;
             shootDuration = 220;
-            shootType = new ThunderLaser();
+            shootType = FOSBullets.thunderLaser;
             shootEffect = Fx.shootBigSmoke2;
             shootSound = Sounds.laserbig;
             loopSound = Sounds.beam;
@@ -87,7 +87,7 @@ public class FOSBlocks {
         meteoriteBlock = new StaticWall("meteorite-block"){{
             variants = 3;
         }};
-        meteoriteFloor = new OreBlock("meteorite-floor"){{
+        meteoriteFloor = new OreBlock("ore-meteorite"){{
             itemDrop = FOSItems.meteorite;
         }};
         oreLuminium = new OreBlock("ore-luminium"){{

@@ -13,8 +13,10 @@ public class FOSMod extends Mod{
     @Override
     public void loadContent(){
         FOSItems.load();
-        FOSBlocks.load();
+        FOSBullets.load();
+        FOSStatuses.load();
         FOSUnits.load();
+        FOSBlocks.load();
         Log.info("Never gonna give you up");
         Log.info("Never gonna let you down");
         Log.info("Never gonna run around");

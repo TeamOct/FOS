@@ -1,4 +1,4 @@
-package fos.type;
+package fos.type.blocks;
 
 import arc.*;
 import arc.graphics.g2d.*;
@@ -40,7 +40,7 @@ public class NukeLauncher extends Block {
             }).size(40);
 
             table.button(Icon.upOpen, Styles.clearTogglei, () -> {
-                if ((Vars.state.isCampaign()) && (chosen != null) && (consumeTriggerValid())){
+                if ((Vars.state.isCampaign()) && (chosen != null) && (canConsume())){
                     items.clear();
                     chosen.info.waves = false;
                     chosen.info.wasCaptured = true;
@@ -63,7 +63,8 @@ public class NukeLauncher extends Block {
             super.draw();
             Draw.rect(Core.atlas.find(name), x, y);
 
-            if (consumeTriggerValid()){
+            if (canConsume()){
+                Drawf.light(x, y, 320f, Pal.accent, 0.6f);
                 Draw.rect(Core.atlas.find("launchpod"), x, y);
                 float rad = 20 * 0.74f;
                 float scl = 2;
