@@ -154,6 +154,3 @@ gradle-app.setting
 .DS_Store
 Thumbs.db
 android/libs/
-
-## A .bat file I compile the mod with
-compile.bat

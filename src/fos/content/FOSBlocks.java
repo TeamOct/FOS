@@ -3,6 +3,7 @@ package fos.content;
 import arc.struct.*;
 import fos.type.blocks.MeteoriteWall;
 import fos.type.blocks.NukeLauncher;
+import fos.type.blocks.UndergroundOreBlock;
 import mindustry.content.*;
 import mindustry.gen.*;
 import mindustry.type.*;
@@ -22,7 +23,7 @@ public class FOSBlocks {
     //defense
     meteoriteWall, meteoriteWallLarge, pulse, thunder,
     //environment & ores
-    meteoriteBlock, meteoriteFloor, oreLuminium,
+    totallyNormalAir, meteoriteBlock, meteoriteFloor, oreTin, oreLuminium,
     //units
     moonwalkerFactory, reconstructorArtillery, reconstructorShotgun,
     //special
@@ -84,13 +85,17 @@ public class FOSBlocks {
         }};
         //endregion
         //region environment & ores
+        totallyNormalAir = new AirBlock("totally-normal-air");
         meteoriteBlock = new StaticWall("meteorite-block"){{
             variants = 3;
         }};
         meteoriteFloor = new OreBlock("ore-meteorite"){{
             itemDrop = FOSItems.meteorite;
         }};
-        oreLuminium = new OreBlock("ore-luminium"){{
+        oreTin = new UndergroundOreBlock("ore-tin"){{
+            itemDrop = FOSItems.tin;
+        }};
+        oreLuminium = new UndergroundOreBlock("ore-luminium"){{
             itemDrop = FOSItems.luminium;
         }};
         //endregion
