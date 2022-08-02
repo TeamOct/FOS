@@ -15,6 +15,8 @@ public class FOSPlanets {
             meshLoader = () -> new HexMesh(this, 6);
             startSector = 40;
             generator = new LuminaPlanetGenerator();
+            minZoom = 0.3f;
+            camRadius += 0.8f;
         }};
     }
 }

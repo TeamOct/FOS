@@ -1,9 +1,7 @@
 package fos.content;
 
 import arc.struct.*;
-import fos.type.blocks.MeteoriteWall;
-import fos.type.blocks.NukeLauncher;
-import fos.type.blocks.UndergroundOreBlock;
+import fos.type.blocks.*;
 import mindustry.content.*;
 import mindustry.gen.*;
 import mindustry.type.*;
@@ -20,10 +18,12 @@ public class FOSBlocks {
     public static Block
     //crafting
     mechSeparator,
+    //production
+    oreDetector,
     //defense
     meteoriteWall, meteoriteWallLarge, pulse, thunder,
     //environment & ores
-    totallyNormalAir, meteoriteBlock, meteoriteFloor, oreTin, oreLuminium,
+    totallyNormalAir, meteoriteBlock, meteoriteFloor, oreTin, oreAluminium,
     //units
     moonwalkerFactory, reconstructorArtillery, reconstructorShotgun,
     //special
@@ -39,6 +39,14 @@ public class FOSBlocks {
             craftTime = 120;
             spinnerSpeed = 1f;
             results = with(Items.lead, 3, Items.graphite, 1);
+        }};
+        //endregion
+        //region production
+        oreDetector = new OreDetector("ore-detector"){{
+            health = 960;
+            size = 3;
+            requirements(Category.production, with(FOSItems.tin, 75));
+            consumePower(0.5f);
         }};
         //endregion
         //region defense
@@ -95,8 +103,8 @@ public class FOSBlocks {
         oreTin = new UndergroundOreBlock("ore-tin"){{
             itemDrop = FOSItems.tin;
         }};
-        oreLuminium = new UndergroundOreBlock("ore-luminium"){{
-            itemDrop = FOSItems.luminium;
+        oreAluminium = new UndergroundOreBlock("ore-aluminium"){{
+            itemDrop = FOSItems.aluminium;
         }};
         //endregion
         //region units

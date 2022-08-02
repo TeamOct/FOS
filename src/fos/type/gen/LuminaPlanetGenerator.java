@@ -193,7 +193,7 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
         float addscl = 1.3f;
 
         if (Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x + 1, sector.tile.v.y, sector.tile.v.z) * nmag + poles > 0.5f * addscl){
-            ores.add(FOSBlocks.oreLuminium);
+            ores.add(FOSBlocks.oreAluminium);
         }
         if (rand.chance(0.5f)){
             ores.add(Blocks.oreScrap);
@@ -223,7 +223,7 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
             }
 
             //TODO still broken for whatever reason
-            if (ore instanceof UndergroundOreBlock) {
+            if (ore instanceof UndergroundOreBlock && block == Blocks.air) {
                 block = FOSBlocks.totallyNormalAir;
             }
         });

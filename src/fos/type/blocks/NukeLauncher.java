@@ -16,6 +16,7 @@ import mindustry.world.*;
 public class NukeLauncher extends Block {
     public NukeLauncher(String name){
         super(name);
+        buildType = NukeLauncherBuild::new;
     }
 
     @Override
