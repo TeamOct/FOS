@@ -23,7 +23,7 @@ public class FOSBlocks {
     //defense
     meteoriteWall, meteoriteWallLarge, pulse, thunder,
     //environment & ores
-    totallyNormalAir, meteoriteBlock, meteoriteFloor, oreTin, oreAluminium,
+    cyanium, cyaniumWall, meteoriteBlock, meteoriteFloor, oreTin, oreAluminium,
     //units
     moonwalkerFactory, reconstructorArtillery, reconstructorShotgun,
     //special
@@ -93,10 +93,16 @@ public class FOSBlocks {
         }};
         //endregion
         //region environment & ores
-        totallyNormalAir = new AirBlock("totally-normal-air");
+        cyanium = new Floor("cyanium"){{
+            variants = 4;
+        }};
+        cyaniumWall = new StaticWall("cyanium-wall"){{
+            variants = 4;
+        }};
         meteoriteBlock = new StaticWall("meteorite-block"){{
             variants = 3;
         }};
+
         meteoriteFloor = new OreBlock("ore-meteorite"){{
             itemDrop = FOSItems.meteorite;
         }};

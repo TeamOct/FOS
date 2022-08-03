@@ -63,7 +63,7 @@ public class OreDetector extends Block {
 
         @Override
         public void drawSelect(){
-            Drawf.dashCircle(x, y, range(), Color.valueOf("4b95ff"));
+            Drawf.dashCircle(x, y, range, Color.valueOf("4b95ff"));
         }
 
         public void locateOres(int x, int y, float range) {
@@ -71,6 +71,7 @@ public class OreDetector extends Block {
                 for (float j = -range; j <= range * 4; j+=8) {
                     Tile tile = world.tileWorld(i, j);
                     if (Mathf.within(x, y, i, j, range) && tile != null && tile.overlay() != null && tile.overlay() instanceof UndergroundOreBlock) {
+                        Draw.z(Layer.bullet - 0.0001f);
                         Draw.alpha(0.4f);
                         Drawf.square(tile.x * 8, tile.y * 8, 4, Mathf.PI / 4, tile.drop().color);
 

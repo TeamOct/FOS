@@ -7,7 +7,6 @@ import arc.struct.*;
 import arc.util.*;
 import arc.util.noise.*;
 import fos.content.FOSBlocks;
-import fos.type.blocks.UndergroundOreBlock;
 import mindustry.*;
 import mindustry.ai.*;
 import mindustry.content.*;
@@ -26,8 +25,8 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
     Block[][] arr = {
             {Blocks.darksand, Blocks.darksand, Blocks.dacite, Blocks.dacite},
             {Blocks.darksand, Blocks.dacite, Blocks.dacite, Blocks.stone},
-            {Blocks.dacite, Blocks.dacite, Blocks.stone, Blocks.stone},
-            {Blocks.stone, Blocks.stone, Blocks.stone, Blocks.basalt}
+            {Blocks.dacite, Blocks.dacite, Blocks.stone, FOSBlocks.cyanium},
+            {Blocks.stone, FOSBlocks.cyanium, FOSBlocks.cyanium, FOSBlocks.cyanium}
     };
 
     //TODO make a planet have actual mountains instead of being shaped as a sphere
@@ -41,6 +40,7 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
     protected void genTile(Vec3 position, TileGen tile) {
         tile.floor = getBlock(position);
         tile.block = tile.floor.asFloor().wall;
+        if (tile.floor == FOSBlocks.cyanium) tile.block = FOSBlocks.cyaniumWall;
 
         if (Ridged.noise3d(seed, position.x, position.y, position.z, 22) > 0.32) {
             tile.block = Blocks.air;
@@ -211,20 +211,15 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
             for(int i = ores.size - 1; i >= 0; i--){
                 Block entry = ores.get(i);
                 float freq = frequencies.get(i);
-                if (Math.abs(0.5 - noise(offsetX, offsetY + i * 999, 2, 0,7f, (40 + i * 2))) > 0.3f + i * 0.01 &&
-                Math.abs(0.5 - noise(offsetX, offsetY - i * 999, 1, 1, (30 + i * 4))) > 0.4f + freq){
+                if (Math.abs(0.5 - noise(offsetX, offsetY + i * 999, 2, 0.7f, (40 + i * 2))) > 0.24f + i * 0.01 &&
+                Math.abs(0.5 - noise(offsetX, offsetY - i * 999, 1, 1, (30 + i * 4))) > 0.38f + freq){
                     ore = entry;
                     break;
                 }
             }
 
-            if (ore == Blocks.oreScrap && rand.chance(0.33)) {
+            if (ore == Blocks.oreScrap && rand.chance(0.5)) {
                 floor = Blocks.metalFloorDamaged;
-            }
-
-            //TODO still broken for whatever reason
-            if (ore instanceof UndergroundOreBlock && block == Blocks.air) {
-                block = FOSBlocks.totallyNormalAir;
             }
         });
 
