@@ -9,6 +9,7 @@ import mindustry.world.blocks.defense.*;
 public class MeteoriteWall extends Wall {
     public MeteoriteWall(String name) {
         super(name);
+        buildType = MeteoriteWallBuild::new;
     }
 
     public class MeteoriteWallBuild extends WallBuild {

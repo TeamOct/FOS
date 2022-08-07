@@ -5,5 +5,5 @@ author: "The FOS Team"
 main: "fos.FOSMod"
 description: "A space-related mod. Not exactly sure what it adds yet. NOW ON V7!!!"
 version: "1.1 pre-alpha"
-minGameVersion: 136.1
+minGameVersion: 137
 java: true

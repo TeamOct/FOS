@@ -19,11 +19,11 @@ public class FOSBlocks {
     //crafting
     mechSeparator,
     //production
-    oreDetector,
+    drillBase2, tinDrill, oreDetector,
     //defense
     meteoriteWall, meteoriteWallLarge, pulse, thunder,
     //environment & ores
-    cyanium, cyaniumWall, meteoriteBlock, meteoriteFloor, oreTin, oreAluminium,
+    cyanium, cyaniumWall, meteoriteBlock, meteoriteFloor, oreTin, oreSilver,
     //units
     moonwalkerFactory, reconstructorArtillery, reconstructorShotgun,
     //special
@@ -42,6 +42,17 @@ public class FOSBlocks {
         }};
         //endregion
         //region production
+        drillBase2 = new DrillBase("drill-base-2"){{
+            health = 120;
+            size = 2;
+            requirements(Category.production, with(FOSItems.tin, 10));
+        }};
+        tinDrill = new UndergroundDrill("tin-drill"){{
+            health = 480;
+            size = 2;
+            tier = 1;
+            requirements(Category.production, with(FOSItems.tin, 5));
+        }};
         oreDetector = new OreDetector("ore-detector"){{
             health = 960;
             size = 3;
@@ -109,8 +120,8 @@ public class FOSBlocks {
         oreTin = new UndergroundOreBlock("ore-tin"){{
             itemDrop = FOSItems.tin;
         }};
-        oreAluminium = new UndergroundOreBlock("ore-aluminium"){{
-            itemDrop = FOSItems.aluminium;
+        oreSilver = new UndergroundOreBlock("ore-silver"){{
+            itemDrop = FOSItems.silver;
         }};
         //endregion
         //region units
