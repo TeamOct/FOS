@@ -1,6 +1,6 @@
 package fos.type.blocks;
 
-import arc.Core;
+import arc.*;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
@@ -8,48 +8,38 @@ import arc.scene.style.*;
 import arc.scene.ui.layout.*;
 import arc.util.*;
 import arc.util.io.*;
+import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.graphics.*;
-import mindustry.logic.*;
 import mindustry.ui.*;
 import mindustry.world.*;
-import mindustry.world.meta.*;
+import mindustry.world.blocks.storage.*;
 
-import static mindustry.Vars.*;
+import static mindustry.Vars.world;
 
-public class OreDetector extends Block {
-    public float range = 15f * 8f;
+public class LuminaCoreBlock extends CoreBlock {
+    public float radarRange = 25f * 8f + 8f * size;
 
-    public OreDetector(String name) {
+    public LuminaCoreBlock(String name) {
         super(name);
-        solid = true;
-        update = true;
         configurable = true;
-        hasPower = true;
-        canOverdrive = false;
-        buildType = OreDetectorBuild::new;
+        buildType = LuminaCoreBuild::new;
     }
 
     @Override
-    public void setStats() {
-        super.setStats();
-
-        stats.add(Stat.range, range / tilesize, StatUnit.blocks);
+    public boolean canReplace(Block other) {
+        return !other.name.equals("fos-core-colony") && super.canReplace(other);
     }
 
     @Override
-    public void drawPlace(int x, int y, int rotation, boolean valid){
-        super.drawPlace(x, y, rotation, valid);
-        Drawf.dashCircle(x * tilesize + offset, y * tilesize + offset, range, Color.valueOf("4b95ff"));
+    public boolean canPlaceOn(Tile tile, Team team, int rotation) {
+        if (this.name.equals("fos-core-colony")) return true;
+
+        return super.canPlaceOn(tile, team, rotation);
     }
 
-    public class OreDetectorBuild extends Building implements Ranged {
+    public class LuminaCoreBuild extends CoreBuild {
         public boolean showOres = true;
-
-        @Override
-        public float range() {
-            return range * potentialEfficiency;
-        }
 
         protected TextureRegionDrawable eyeIcon() {
             return showOres ? Icon.eyeSmall : Icon.eyeOffSmall;
@@ -64,32 +54,22 @@ public class OreDetector extends Block {
         }
 
         @Override
-        public boolean shouldConsume() {
-            return showOres;
-        }
-
-        @Override
         public void draw() {
             super.draw();
-            if (canConsume() && showOres) {
+            if (canConsume() && showOres && radarRange != 0) {
                 Draw.z(Layer.bullet - 0.0001f);
                 Draw.alpha(0.6f);
                 Lines.stroke(2.5f, Color.valueOf("4b95ff"));
-                float x2 = x + (Mathf.cos(Time.time / 18f) * range());
-                float y2 = y + (Mathf.sin(Time.time / 18f) * range());
+                float x2 = x + (Mathf.cos(Time.time / 18f) * radarRange);
+                float y2 = y + (Mathf.sin(Time.time / 18f) * radarRange);
                 Draw.z(Layer.block - 1f);
                 Lines.line(x, y, x2, y2);
                 Draw.z(Layer.bullet - 0.0001f);
                 Draw.alpha(0.2f);
-                Drawf.circles(x, y, range(), Color.valueOf("4b95ff"));
-                Drawf.circles(x, y, range() * 0.95f, Color.valueOf("4b95ff"));
-                locateOres((int)x, (int)y, range());
+                Drawf.circles(x, y, radarRange, Color.valueOf("4b95ff"));
+                Drawf.circles(x, y, radarRange * 0.95f, Color.valueOf("4b95ff"));
+                locateOres((int)x, (int)y, radarRange);
             }
-        }
-
-        @Override
-        public void drawSelect(){
-            Drawf.dashCircle(x, y, range, Color.valueOf("4b95ff"));
         }
 
         public void locateOres(int x, int y, float range) {
@@ -102,7 +82,7 @@ public class OreDetector extends Block {
                         Draw.alpha(0.4f);
                         Drawf.square(tile.x * 8, tile.y * 8, 3, Mathf.PI / 4, tile.drop().color);
 
-                        //show an item icon above the cursor/finger?
+                        //show an item icon above the cursor/finger
                         Tile hoverTile = world.tileWorld(Core.input.mouseWorld().x, Core.input.mouseWorld().y);
 
                         if (tile == hoverTile) {

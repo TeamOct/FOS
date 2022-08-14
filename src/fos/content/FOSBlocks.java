@@ -1,8 +1,10 @@
 package fos.content;
 
+import arc.graphics.Color;
 import arc.struct.*;
 import fos.type.blocks.*;
 import mindustry.content.*;
+import mindustry.entities.bullet.BasicBulletType;
 import mindustry.gen.*;
 import mindustry.type.*;
 import mindustry.world.*;
@@ -20,12 +22,18 @@ public class FOSBlocks {
     mechSeparator,
     //production
     drillBase2, tinDrill, oreDetector,
+    //distribution
+    /* scrapped: transportBelt, */
+    //power
+    windTurbine,
     //defense
-    meteoriteWall, meteoriteWallLarge, pulse, thunder,
+    meteoriteWall, meteoriteWallLarge, particulator, pulse, thunder,
     //environment & ores
     cyanium, cyaniumWall, meteoriteBlock, meteoriteFloor, oreTin, oreSilver,
     //units
     moonwalkerFactory, reconstructorArtillery, reconstructorShotgun,
+    //storage
+    coreColony, coreFortress, coreCity, coreMetropolis,
     //special
     nukeLauncher;
 
@@ -35,10 +43,10 @@ public class FOSBlocks {
             hasItems = true;
             size = 2;
             itemCapacity = 10;
-            requirements(Category.crafting, with(Items.copper, 200, Items.lead, 50));
+            requirements(Category.crafting, with(FOSItems.tin, 200, FOSItems.silver, 50));
             craftTime = 120;
             spinnerSpeed = 1f;
-            results = with(Items.lead, 3, Items.graphite, 1);
+            results = with(FOSItems.tin, 3, FOSItems.silver, 1, Items.silicon, 2);
         }};
         //endregion
         //region production
@@ -72,6 +80,75 @@ public class FOSBlocks {
             requirements(Category.defense, with(FOSItems.meteorite, 24));
         }};
 
+        particulator = new ItemTurret("particulator"){{
+            health = 2400;
+            size = 3;
+            range = 96;
+            targetAir = targetGround = true;
+            recoil = 2;
+            reload = 40;
+            inaccuracy = 5;
+            shootSound = Sounds.pew;
+            ammo(
+                FOSItems.tin, new BasicBulletType(1.6f, 240){{
+                    lifetime = 60f;
+                    width = 16f; height = 24f;
+                    backColor = Color.valueOf("347043");
+                    frontColor = trailColor = lightColor = Color.valueOf("85b374");
+                    trailEffect = Fx.artilleryTrail;
+                    trailInterval = 20f;
+                    ammoMultiplier = 1;
+                    splashDamage = 10f;
+                    splashDamageRadius = 24f;
+                    knockback = 3.2f;
+                    fragOnHit = true;
+                    hitEffect = despawnEffect = Fx.explosion;
+                    fragBullets = 6;
+                    fragBullet = new BasicBulletType(0.8f, 30){{
+                        lifetime = 60f * 30; //frags will stay for pretty long
+                        drag = 0.024f;
+                        width = height = 6f;
+                        backColor = Color.valueOf("347043");
+                        frontColor = trailColor = Color.valueOf("85b374");
+                        trailEffect = Fx.artilleryTrail;
+                        pierceArmor = true;
+                        collidesAir = false;
+                        collidesTiles = true;
+                        hitEffect = Fx.hitBulletSmall;
+                        despawnEffect = Fx.none;
+                    }};
+                }},
+                FOSItems.silver, new BasicBulletType(1.6f, 360){{
+                    lifetime = 60f;
+                    width = 16f; height = 24f;
+                    backColor = Color.valueOf("813ba1");
+                    frontColor = trailColor = lightColor = Color.valueOf("b38bb3");
+                    trailEffect = Fx.artilleryTrail;
+                    trailInterval = 20f;
+                    ammoMultiplier = 1;
+                    splashDamage = 25f;
+                    splashDamageRadius = 24f;
+                    knockback = 4f;
+                    fragOnHit = true;
+                    hitEffect = despawnEffect = Fx.explosion;
+                    fragBullets = 7;
+                    fragBullet = new BasicBulletType(0.8f, 48){{
+                        lifetime = 60f * 30; //frags will stay for pretty long
+                        drag = 0.024f;
+                        width = height = 6f;
+                        backColor = Color.valueOf("813ba1");
+                        frontColor = trailColor = Color.valueOf("b38bb3");
+                        trailEffect = Fx.artilleryTrail;
+                        pierceArmor = true;
+                        collidesAir = false;
+                        collidesTiles = true;
+                        hitEffect = Fx.hitBulletSmall;
+                        despawnEffect = Fx.none;
+                    }};
+                }}
+            );
+            requirements(Category.turret, with(FOSItems.tin, 200, FOSItems.silver, 75));
+        }};
         pulse = new TractorBeamTurret("pulse"){{
             health = 2400;
             size = 3;
@@ -101,6 +178,14 @@ public class FOSBlocks {
             shootSound = Sounds.laserbig;
             loopSound = Sounds.beam;
             requirements(Category.turret, with(Items.silicon, 5));
+        }};
+        //endregion
+        //region power
+        windTurbine = new WindTurbine("wind-turbine"){{
+            health = 480;
+            size = 2;
+            powerProduction = 3f;
+            requirements(Category.power, with(FOSItems.tin, 80));
         }};
         //endregion
         //region environment & ores
@@ -155,6 +240,36 @@ public class FOSBlocks {
             upgrades.addAll(
                     new UnitType[]{FOSUnits.mwStandard, FOSUnits.mwShotgun}
             );
+        }};
+        //endregion
+        //region storage
+        coreColony = new LuminaCoreBlock("core-colony"){{
+            //no radar
+            radarRange = 0f;
+            configurable = false;
+
+            health = 1920;
+            size = 2;
+            itemCapacity = 250;
+            requirements(Category.effect, with(FOSItems.tin, 1500));
+        }};
+        coreFortress = new LuminaCoreBlock("core-fortress"){{
+            health = 2800;
+            size = 3;
+            itemCapacity = 2500;
+            requirements(Category.effect, with(FOSItems.tin, 2000, FOSItems.silver, 1250));
+        }};
+        coreCity = new LuminaCoreBlock("core-city"){{
+            health = 4600;
+            size = 4;
+            itemCapacity = 5000;
+            requirements(Category.effect, with(FOSItems.tin, 2500, FOSItems.silver, 2000 /*TODO more items soon(tm)*/));
+        }};
+        coreMetropolis = new LuminaCoreBlock("core-metropolis"){{
+            health = 8000;
+            size = 5;
+            itemCapacity = 8000;
+            requirements(Category.effect, with(FOSItems.tin, 4500, FOSItems.silver, 3500 /*TODO*/));
         }};
         //endregion
         //region special

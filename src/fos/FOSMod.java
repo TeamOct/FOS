@@ -12,6 +12,8 @@ public class FOSMod extends Mod{
 
     @Override
     public void loadContent(){
+        FOSAttributes.load();
+        FOSWeathers.load();
         FOSItems.load();
         FOSBullets.load();
         FOSStatuses.load();

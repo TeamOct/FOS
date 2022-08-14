@@ -6,7 +6,7 @@ import arc.math.geom.*;
 import arc.struct.*;
 import arc.util.*;
 import arc.util.noise.*;
-import fos.content.FOSBlocks;
+import fos.content.*;
 import mindustry.*;
 import mindustry.ai.*;
 import mindustry.content.*;
@@ -25,8 +25,8 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
     Block[][] arr = {
             {Blocks.darksand, Blocks.darksand, Blocks.dacite, Blocks.dacite},
             {Blocks.darksand, Blocks.dacite, Blocks.dacite, Blocks.stone},
-            {Blocks.dacite, Blocks.dacite, Blocks.stone, FOSBlocks.cyanium},
-            {Blocks.stone, FOSBlocks.cyanium, FOSBlocks.cyanium, FOSBlocks.cyanium}
+            {Blocks.dacite, Blocks.dacite, FOSBlocks.cyanium, FOSBlocks.cyanium},
+            {FOSBlocks.cyanium, FOSBlocks.cyanium, FOSBlocks.cyanium, FOSBlocks.cyanium}
     };
 
     //TODO make a planet have actual mountains instead of being shaped as a sphere
@@ -195,9 +195,6 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
         if (Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x + 1, sector.tile.v.y, sector.tile.v.z) * nmag + poles > 0.5f * addscl){
             ores.add(FOSBlocks.oreSilver);
         }
-        if (rand.chance(0.5f)){
-            ores.add(Blocks.oreScrap);
-        }
 
         FloatSeq frequencies = new FloatSeq();
         for(int i = 0; i < ores.size; i++){
@@ -249,6 +246,10 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
         Vars.state.rules.waves = sector.info.waves = true;
         Vars.state.rules.enemyCoreBuildRadius = 300;
         Vars.state.rules.spawns = Waves.generate(difficulty, new Rand(), Vars.state.rules.attackMode);
+
+        Weather.WeatherEntry weather = new Weather.WeatherEntry(FOSWeathers.wind);
+        weather.always = true; //always windy
+        Vars.state.rules.weather = Seq.with(weather);
     }
 
     @Override
