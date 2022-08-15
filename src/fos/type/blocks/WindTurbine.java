@@ -1,23 +1,27 @@
 package fos.type.blocks;
 
-import arc.util.io.Reads;
-import arc.util.io.Writes;
+import arc.Core;
+import arc.graphics.g2d.*;
 import fos.content.*;
 import mindustry.world.blocks.power.*;
-import mindustry.world.draw.DrawDefault;
-import mindustry.world.draw.DrawMulti;
-import mindustry.world.draw.DrawRegion;
 import mindustry.world.meta.*;
 
 public class WindTurbine extends PowerGenerator {
     public float displayEfficiencyScale = 1f;
     public Attribute attr = FOSAttributes.windPower;
+    public TextureRegion rotatorRegion = Core.atlas.find(this.name + "-rotator");
 
     public WindTurbine(String name) {
         super(name);
-        drawer = new DrawMulti(new DrawDefault(), new DrawRegion("-spinner"));
         noUpdateDisabled = true;
         buildType = WindTurbineBuild::new;
+    }
+
+    @Override
+    public TextureRegion[] icons() {
+        return new TextureRegion[]{
+            this.region, this.rotatorRegion
+        };
     }
 
     @Override
@@ -29,9 +33,18 @@ public class WindTurbine extends PowerGenerator {
     }
 
     public class WindTurbineBuild extends GeneratorBuild {
+        public float rotatorAngle = 0f;
+
         @Override
         public void updateTile(){
             productionEfficiency = attr.env();
+            rotatorAngle += productionEfficiency;
+        }
+
+        @Override
+        public void draw() {
+            super.draw();
+            Draw.rect(rotatorRegion, x, y, rotatorAngle);
         }
     }
 }
