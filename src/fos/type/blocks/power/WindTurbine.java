@@ -1,4 +1,4 @@
-package fos.type.blocks;
+package fos.type.blocks.power;
 
 import arc.Core;
 import arc.graphics.g2d.*;

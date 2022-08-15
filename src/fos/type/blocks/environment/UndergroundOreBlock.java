@@ -1,4 +1,4 @@
-package fos.type.blocks;
+package fos.type.blocks.environment;
 
 import arc.graphics.g2d.*;
 import mindustry.world.*;

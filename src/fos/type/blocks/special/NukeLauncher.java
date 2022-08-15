@@ -1,4 +1,4 @@
-package fos.type.blocks;
+package fos.type.blocks.special;
 
 import arc.*;
 import arc.graphics.g2d.*;

@@ -1,6 +1,7 @@
-package fos.type.blocks;
+package fos.type.blocks.production;
 
 import arc.math.*;
+import fos.type.blocks.production.DrillBase;
 import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.gen.*;

@@ -1,4 +1,4 @@
-package fos.type.blocks;
+package fos.type.blocks.production;
 
 import arc.Core;
 import arc.graphics.*;
@@ -8,6 +8,7 @@ import arc.scene.style.*;
 import arc.scene.ui.layout.*;
 import arc.util.*;
 import arc.util.io.*;
+import fos.type.blocks.environment.UndergroundOreBlock;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.logic.*;

@@ -1,4 +1,4 @@
-package fos.type.blocks;
+package fos.type.blocks.production;
 
 import arc.math.Mathf;
 import mindustry.entities.*;

@@ -1,4 +1,4 @@
-package fos.type.blocks;
+package fos.type.blocks.defense;
 
 import arc.math.*;
 import fos.content.FOSBullets;

@@ -2,7 +2,14 @@ package fos.content;
 
 import arc.graphics.Color;
 import arc.struct.*;
-import fos.type.blocks.*;
+import fos.type.blocks.defense.MeteoriteWall;
+import fos.type.blocks.environment.UndergroundOreBlock;
+import fos.type.blocks.power.WindTurbine;
+import fos.type.blocks.production.DrillBase;
+import fos.type.blocks.production.OreDetector;
+import fos.type.blocks.production.UndergroundDrill;
+import fos.type.blocks.special.NukeLauncher;
+import fos.type.blocks.storage.LuminaCoreBlock;
 import mindustry.content.*;
 import mindustry.entities.bullet.BasicBulletType;
 import mindustry.gen.*;
@@ -29,7 +36,7 @@ public class FOSBlocks {
     //defense
     meteoriteWall, meteoriteWallLarge, particulator, pulse, thunder,
     //environment & ores
-    cyanium, cyaniumWall, meteoriteBlock, meteoriteFloor, oreTin, oreSilver,
+    cyanium, cyaniumWall, elithite, elithiteWall, elbium, elbiumWall, meteoriteBlock, meteoriteFloor, oreTin, oreSilver, oreLithium,
     //units
     moonwalkerFactory, reconstructorArtillery, reconstructorShotgun,
     //storage
@@ -195,11 +202,18 @@ public class FOSBlocks {
         cyaniumWall = new StaticWall("cyanium-wall"){{
             variants = 4;
         }};
+        elithite = new Floor("elithite"){{
+            variants = 4;
+        }};
+        elithiteWall = new StaticWall("elithite-wall"){};
+        elbium = new Floor("elbium"){{
+            variants = 4;
+        }};
+        elbiumWall = new StaticWall("elbium-wall"){};
         meteoriteBlock = new StaticWall("meteorite-block"){{
             variants = 3;
         }};
-
-        meteoriteFloor = new OreBlock("ore-meteorite"){{
+        meteoriteFloor = new Floor("meteorite-floor"){{
             itemDrop = FOSItems.meteorite;
         }};
         oreTin = new UndergroundOreBlock("ore-tin"){{
@@ -207,6 +221,9 @@ public class FOSBlocks {
         }};
         oreSilver = new UndergroundOreBlock("ore-silver"){{
             itemDrop = FOSItems.silver;
+        }};
+        oreLithium = new OreBlock("ore-lithium"){{
+            itemDrop = FOSItems.lithium;
         }};
         //endregion
         //region units
