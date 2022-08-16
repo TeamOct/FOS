@@ -22,13 +22,14 @@ public class FOSPlanets {
         lumina = new Planet("lumina", Planets.serpulo, 0.6f, 2){{
             alwaysUnlocked = true;
             hasAtmosphere = true;
+            atmosphereColor = Color.valueOf("b0dcb7");
             meshLoader = () -> new HexMesh(this, 6);
             startSector = 40;
             generator = new LuminaPlanetGenerator();
             minZoom = 0.3f;
             camRadius += 0.8f;
         }};
-        aster = makeAsteroid("aster", Planets.sun, FOSBlocks.elithiteWall, Blocks.iceWall, 0.5f, 14, 1.6f, gen -> {
+        aster = makeAsteroid("aster", lumina, FOSBlocks.elithiteWall, FOSBlocks.elbiumWall, 0.5f, 22, 1.6f, gen -> {
             gen.defaultFloor = FOSBlocks.elithite;
             gen.elbiumChance = 0.4f;
             gen.meteoriteChance = 0.3f;

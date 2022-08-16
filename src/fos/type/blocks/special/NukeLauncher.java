@@ -41,7 +41,7 @@ public class NukeLauncher extends Block {
             }).size(40);
 
             table.button(Icon.upOpen, Styles.clearTogglei, () -> {
-                if ((Vars.state.isCampaign()) && (chosen != null) && (canConsume())){
+                if (Vars.state.isCampaign() && chosen != null && canConsume() && potentialEfficiency == 1){
                     items.clear();
                     chosen.info.waves = false;
                     chosen.info.wasCaptured = true;

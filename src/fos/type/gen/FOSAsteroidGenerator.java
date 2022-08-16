@@ -17,8 +17,8 @@ import mindustry.world.blocks.environment.*;
 public class FOSAsteroidGenerator extends BlankPlanetGenerator {
     public Block defaultFloor = FOSBlocks.cyanium;
 
-    public int min = 25, max = 40, octaves = 2;
-    public float radMin = 18f, radMax = 64f, persistence = 0.4f, scale = 30f, mag = 0.46f, thresh = 1f;
+    public int min = 15, max = 30, octaves = 2;
+    public float radMin = 15f, radMax = 40f, persistence = 0.4f, scale = 30f, mag = 0.46f, thresh = 1f;
     public float elithiteChance = 0f, elbiumChance = 0f, iceChance = 0f, meteoriteChance = 0f;
     public float tinScl = 1f, silverScl = 1f, lithiumScl = 1f;
 
@@ -63,7 +63,7 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
 
         int smalls = rand.random(min, max) * 3;
         for (int i = 0; i < smalls; i++){
-            float rad = rand.random(2, 6), ax = rand.random(rad, width - rad), ay = rand.random(rad, height - rad);
+            float rad = rand.random(3, 8), ax = rand.random(rad, width - rad), ay = rand.random(rad, height - rad);
             asteroid((int)ax, (int)ay, (int)rad);
         }
 
@@ -82,11 +82,11 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
             block = floor == FOSBlocks.meteoriteFloor ? FOSBlocks.meteoriteBlock : floor.asFloor().wall;
         });
 
-        //tin is found under, and lithium is found on elbium
+        //generate tin and lithium on elbium
         ore(FOSBlocks.oreTin, FOSBlocks.elbium, 5f, 0.8f * tinScl);
         ore(FOSBlocks.oreLithium, FOSBlocks.elbium, 4f, 0.8f * lithiumScl);
 
-        //silver is found under elithite
+        //generate silver on elithite
         ore(FOSBlocks.oreSilver, FOSBlocks.elithite, 4f, 0.7f * silverScl);
 
         int spawnSide = rand.random(3);
@@ -96,9 +96,9 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
         Schematics.placeLaunchLoadout(sx, sy);
 
         Vars.state.rules.planetBackground = new PlanetParams(){{
-            planet = sector.planet;
-            zoom = 1f;
-            camPos = new Vec3(1.2388899f, 1.6047299f, 2.4758825f);
+            planet = sector.planet.parent;
+            zoom = 0.75f;
+            camPos = new Vec3(0f, 0f, 45f);
         }};
 
         Vars.state.rules.dragMultiplier = 0.2f; //it's space after all, so very little drag

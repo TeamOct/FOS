@@ -1,21 +1,20 @@
 package fos.content;
 
-import arc.graphics.Color;
+import arc.graphics.*;
 import arc.struct.*;
-import fos.type.blocks.defense.MeteoriteWall;
-import fos.type.blocks.environment.UndergroundOreBlock;
-import fos.type.blocks.power.WindTurbine;
-import fos.type.blocks.production.DrillBase;
-import fos.type.blocks.production.OreDetector;
-import fos.type.blocks.production.UndergroundDrill;
-import fos.type.blocks.special.NukeLauncher;
-import fos.type.blocks.storage.LuminaCoreBlock;
+import fos.type.blocks.defense.*;
+import fos.type.blocks.environment.*;
+import fos.type.blocks.power.*;
+import fos.type.blocks.production.*;
+import fos.type.blocks.special.*;
+import fos.type.blocks.storage.*;
 import mindustry.content.*;
-import mindustry.entities.bullet.BasicBulletType;
+import mindustry.entities.bullet.*;
 import mindustry.gen.*;
 import mindustry.type.*;
 import mindustry.world.*;
 import mindustry.world.blocks.defense.turrets.*;
+import mindustry.world.blocks.distribution.Duct;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.units.*;
@@ -30,7 +29,7 @@ public class FOSBlocks {
     //production
     drillBase2, tinDrill, oreDetector,
     //distribution
-    /* scrapped: transportBelt, */
+    /* scrapped: transportBelt, */ spaceDuct,
     //power
     windTurbine,
     //defense
@@ -42,7 +41,7 @@ public class FOSBlocks {
     //storage
     coreColony, coreFortress, coreCity, coreMetropolis,
     //special
-    nukeLauncher;
+    nukeLauncher, bigBoy, stationPlatform;
 
     public static void load() {
         //region crafting
@@ -187,6 +186,14 @@ public class FOSBlocks {
             requirements(Category.turret, with(Items.silicon, 5));
         }};
         //endregion
+        //region distribution
+        spaceDuct = new Duct("space-duct"){{
+            health = 10;
+            size = 1;
+            requirements(Category.distribution, with(FOSItems.meteorite, 1));
+            envRequired = Env.space;
+        }};
+        //endregion
         //region power
         windTurbine = new WindTurbine("wind-turbine"){{
             health = 480;
@@ -303,5 +310,25 @@ public class FOSBlocks {
             consumeItems(with(Items.lead, 500, Items.graphite, 500, Items.silicon, 500, Items.thorium, 500, Items.surgeAlloy, 500));
             requirements(Category.effect, BuildVisibility.campaignOnly, with(Items.lead, 5000, Items.silicon, 5000, Items.titanium, 3500, Items.thorium, 2500, Items.phaseFabric, 1500, Items.surgeAlloy, 1500));
         }};
+        bigBoy = new GiantNukeLauncher("big-boy"){{
+            health = 20000;
+            size = 9;
+            hasItems = true;
+            itemCapacity = 5000;
+            breakable = true;
+            solid = true;
+            update = true;
+            configurable = true;
+            consumePower(60);
+            consumeItems(with(FOSItems.tin, 5000, FOSItems.silver, 5000));
+            requirements(Category.effect, with(FOSItems.tin, 10000, FOSItems.silver, 10000));
+        }};
+        /*TODO broken
+        stationPlatform = new StationPlatform("station-platform"){{
+            health = 160;
+            size = 1;
+            requirements(Category.effect, with(FOSItems.meteorite, 5, FOSItems.tin, 3));
+        }};
+        */
     }
 }
