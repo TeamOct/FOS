@@ -1,8 +1,10 @@
 package fos.content;
 
+import arc.graphics.Color;
 import arc.math.*;
 import arc.struct.*;
-import fos.type.bullets.InjectorBulletType;
+import fos.type.abilities.HackFieldAbility;
+import fos.type.bullets.*;
 import mindustry.ai.types.*;
 import mindustry.content.*;
 import mindustry.entities.abilities.*;
@@ -14,7 +16,7 @@ public class FOSUnits {
     //mechs
     mwArtillery, mwShotgun, mwStandard, mwMiner, legion,
     //flying
-    whip;
+    sergeant, lieutenant, captain, general, marshal;
 
     public static void load(){
         mwArtillery = new UnitType("mw-artillery"){{
@@ -92,17 +94,107 @@ public class FOSUnits {
             constructor = () -> new MechUnit(){};
         }};
 
-        whip = new UnitType("whip"){{
+        sergeant = new UnitType("sergeant"){{
             health = 150;
             hitSize = 6;
             speed = 1.2f;
+            flying = true;
+            omniMovement = true;
             weapons.add(
                     new Weapon("injector"){{
-                        bullet = new InjectorBulletType(0, 0.15f, 50, 300, false);
+                        bullet = new InjectorBulletType(0, 0.3f, 50, 300, false){{
+                            homingPower = 1;
+                            speed = 1.2f;
+                        }};
                         x = 0; y = 0;
-                        reload = 60 * 20;
+                        reload = 60 * 5;
                         ejectEffect = Fx.casing1;
                     }}
+            );
+            constructor = () -> new UnitEntity(){};
+        }};
+        lieutenant = new UnitType("lieutenant"){{
+            health = 260;
+            hitSize = 8;
+            speed = 1.4f;
+            flying = true;
+            aiController = SuicideAI::new;
+            weapons.add(
+                new Weapon(){{
+                    x = y = 0;
+                    mirror = false;
+                    rotate = true;
+                    bullet = new InjectorBulletType(0.03f, false){{
+                        splashDamage = 10;
+                        splashDamageRadius = 16;
+                        killShooter = true;
+                        instantDisappear = true;
+                    }};
+                }}
+            );
+            constructor = () -> new UnitEntity(){};
+        }};
+        captain = new UnitType("captain"){{
+            health = 600;
+            hitSize = 12;
+            speed = 1.1f;
+            flying = true;
+            aiController = MissileAI::new;
+            weapons.add(
+                new Weapon("missile-launcher"){{
+                    x = -2; y = -1;
+                    mirror = true;
+                    alternate = false;
+                    rotate = true;
+                    reload = 300f;
+                    shoot.shots = 8;
+                    shoot.shotDelay = 10f;
+                    inaccuracy = 12f;
+                    bullet = new InjectorBulletType(0f, 0.95f, 600, 5000, false){{
+                        damage = 25f;
+                        speed = 2.4f; lifetime = 90f;
+                        width = 6f; height = 12f;
+                        backColor = Color.valueOf("51a0b0");
+                        frontColor = Color.valueOf("8ae3df");
+                        homingPower = 1;
+                        weaveScale = 0.8f;
+                        weaveMag = 1.8f;
+                    }};
+                }}
+            );
+            constructor = () -> new UnitEntity(){};
+        }};
+        general = new UnitType("general"){{
+            health = 6250;
+            hitSize = 20;
+            speed = 1.5f;
+            flying = true;
+            aiController = HugAI::new;
+            abilities.add(new HackFieldAbility(FOSStatuses.hacked, 40f, 0.005f));
+            constructor = () -> new UnitEntity(){};
+        }};
+        marshal = new UnitType("marshal"){{
+            health = 18000;
+            hitSize = 36;
+            speed = 0.8f;
+            range = 280f;
+            flying = true;
+            weapons.add(
+                new Weapon(){{
+                    x = 0; y = 4;
+                    reload = 900f;
+                    shoot.firstShotDelay = 300f;
+                    inaccuracy = 0f;
+                    bullet = new InjectorBulletType(1, true){{
+                        chargeEffect = Fx.lancerLaserCharge;
+                        speed = 6f; lifetime = 64f;
+                        width = height = 18f;
+                        homingRange = 280f;
+                        homingPower = 1f;
+                        backColor = Color.valueOf("51a0b0");
+                        frontColor = Color.valueOf("8ae3df");
+                    }};
+                }}
             );
             constructor = () -> new UnitEntity(){};
         }};

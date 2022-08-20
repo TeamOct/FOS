@@ -18,7 +18,7 @@ public class FOSItems {
             hardness = 3;
         }};
         lithium = new Item("lithium", Color.valueOf("000000")){{
-            hardness = 2;
+            hardness = 1;
         }};
     }
 }

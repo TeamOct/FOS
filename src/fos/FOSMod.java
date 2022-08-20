@@ -20,10 +20,7 @@ public class FOSMod extends Mod{
         FOSUnits.load();
         FOSBlocks.load();
         FOSPlanets.load();
-        Log.info("Never gonna give you up");
-        Log.info("Never gonna let you down");
-        Log.info("Never gonna run around");
-        Log.info("And desert you");
+        FOSSectors.load();
+        UxerdTechTree.load();
     }
-
 }

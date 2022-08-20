@@ -15,21 +15,21 @@ import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 
 public class FOSAsteroidGenerator extends BlankPlanetGenerator {
+    public String launchSchem = "bXNjaAF4nCWOyw4CIQxFrwzjPNAY/Q8WfotL4wKx0VFkCAzx9y3Dou09TU5THDA2kN58CcMl5MVPH32GelCycQrLNHsAW2fu5BK6awrG0q3FMc3ORB2MJ6c5PQn98oo5LRSh7BwCRf0zzqF/Z2/XOzs7R9I+W0c58dUTsEFXmuRqBPgRcGt4KQTnlWSltlDJLAhsCwnOsuhD1fu6HOoYqz5WQVVShYB9GX/b0ycX";
     public Block defaultFloor = FOSBlocks.cyanium;
 
-    public int min = 15, max = 30, octaves = 2;
-    public float radMin = 15f, radMax = 40f, persistence = 0.4f, scale = 30f, mag = 0.46f, thresh = 1f;
-    public float elithiteChance = 0f, elbiumChance = 0f, iceChance = 0f, meteoriteChance = 0f;
+    public int min = 19, max = 19, octaves = 2;
+    public float radMin = 24f, radMax = 40f, persistence = 0.4f, scale = 30f, mag = 0.46f, thresh = 0.8f;
+    public float elithiteChance = 0f, elbiumChance = 0f, meteoriteChance = 0f;
     public float tinScl = 1f, silverScl = 1f, lithiumScl = 1f;
 
-    @Nullable Rand rand;
+    public @Nullable Rand rand;
     int seed;
 
     void asteroid(int ax, int ay, int rad) {
         Floor floor = (
             rand.chance(elithiteChance) ? FOSBlocks.elithite :
             rand.chance(elbiumChance) ? FOSBlocks.elbium :
-            rand.chance(iceChance) ? Blocks.ice :
             rand.chance(meteoriteChance) ? FOSBlocks.meteoriteFloor :
             defaultFloor
         ).asFloor();
@@ -61,12 +61,6 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
             asteroid((int)ax, (int)ay, (int)rad);
         }
 
-        int smalls = rand.random(min, max) * 3;
-        for (int i = 0; i < smalls; i++){
-            float rad = rand.random(3, 8), ax = rand.random(rad, width - rad), ay = rand.random(rad, height - rad);
-            asteroid((int)ax, (int)ay, (int)rad);
-        }
-
         //walls on asteroids
         pass((x, y) -> {
             if (floor == bg || Ridged.noise2d(seed + 1, x, y, 4, 0.7f, 1f / 60f) > 0.45f || Mathf.within(x, y, sx, sy, 20 + Ridged.noise2d(seed, x, y, 3, 0.5f, 1f / 30f) * 6f)) return;
@@ -83,7 +77,7 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
         });
 
         //generate tin and lithium on elbium
-        ore(FOSBlocks.oreTin, FOSBlocks.elbium, 5f, 0.8f * tinScl);
+        ore(FOSBlocks.oreTin, FOSBlocks.elbium, 4f, 0.8f * tinScl);
         ore(FOSBlocks.oreLithium, FOSBlocks.elbium, 4f, 0.8f * lithiumScl);
 
         //generate silver on elithite
@@ -111,7 +105,7 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
 
     @Override
     public Schematic getDefaultLoadout() {
-        return Loadouts.basicNucleus;
+        return Schematics.readBase64(launchSchem);
     }
 
     @Override

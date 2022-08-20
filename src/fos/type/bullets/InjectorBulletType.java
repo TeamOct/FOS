@@ -1,50 +1,70 @@
 package fos.type.bullets;
 
+import arc.math.Mathf;
 import fos.content.*;
-import mindustry.content.*;
+import fos.type.statuses.HackedEffect;
+import mindustry.content.StatusEffects;
 import mindustry.entities.bullet.*;
+import mindustry.game.Team;
 import mindustry.gen.*;
 
 public class InjectorBulletType extends BasicBulletType {
-    private final float minChance, maxChance, minHPThreshold, maxHPThreshold;
+    private final float minChance, maxChance, minHP, maxHP;
     private final boolean attacksGuardians;
-    public InjectorBulletType(float minchance, float maxchance, float minHP, float maxHP, boolean attacksBosses){
-        super(8, 1);
+    //chance varies, but with permanent effect (tiers 1, 3, 4)
+    public InjectorBulletType(float minChance, float maxChance, float minHP, float maxHP, boolean attacksGuardians) {
+        super(8, 10);
         lifetime = 20;
         width = 6; height = 12;
+        hittable = false;
+        absorbable = true;
+        collidesTiles = false;
 
-        minChance = minchance;
-        maxChance = maxchance;
-        minHPThreshold = minHP;
-        maxHPThreshold = maxHP;
-        attacksGuardians = attacksBosses;
+        this.minChance = minChance;
+        this.maxChance = maxChance;
+        this.minHP = minHP;
+        this.maxHP = maxHP;
+        this.attacksGuardians = attacksGuardians;
+    }
+    //fixed chance, (tiers 2, 5)
+    public InjectorBulletType(float chance, boolean attacksGuardians) {
+        super(8, 10);
+        lifetime = 20;
+        width = 6;
+        height = 12;
+
+        this.minChance = this.maxChance = chance;
+        this.minHP = this.maxHP = 0;
+        this.attacksGuardians = attacksGuardians;
     }
 
     private float chance(Entityc entity) {
         float health = ((Unit) entity).health;
-        if (health <= minHPThreshold){
+        if (health <= minHP){
             return maxChance;
-        } else if (health >= maxHPThreshold) {
+        } else if (health >= maxHP) {
             return minChance;
         } else {
-            float hpRange = maxHPThreshold - minHPThreshold;
-            return (health - minHPThreshold) / hpRange;
+            return 1 - ((health - minHP) / (maxHP - minHP));
         }
 
     }
 
     @Override
     public void hitEntity(Bullet b, Hitboxc entity, float health) {
-        if (entity instanceof Unit){
-            //if it can't attack bosses, return
-            if ((((Unit) entity).hasEffect(StatusEffects.boss)) && (!attacksGuardians)) return;
+        if (entity instanceof Unit u){
+            //if the target is a boss AND a projectile can't attack bosses, return
+            if (u.isBoss() && !attacksGuardians) return;
             //no point of overriding the effect
-            if (((Unit) entity).hasEffect(FOSStatuses.hacked)) return;
+            if (u.hasEffect(FOSStatuses.hacked)) return;
+            //do not take over players
+            if (u.isPlayer()) return;
 
             float chance = chance(entity);
-            if (Math.random() < chance){
-                ((Unit) entity).team = b.team;
-                ((Unit) entity).apply(FOSStatuses.hacked);
+            if (Mathf.random(chance) <= chance){
+                u.apply(FOSStatuses.hacked);
+                u.team = b.team;
+                if (u.isBoss()) u.unapply(StatusEffects.boss);
             }
         }
     }
