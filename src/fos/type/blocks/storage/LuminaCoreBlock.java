@@ -57,28 +57,26 @@ public class LuminaCoreBlock extends CoreBlock {
         @Override
         public void draw() {
             super.draw();
-            if (canConsume() && showOres && radarRange != 0) {
+            if (showOres && radarRange != 0) {
                 Draw.z(Layer.bullet - 0.0001f);
                 Draw.alpha(0.6f);
                 Lines.stroke(2.5f, Color.valueOf("4b95ff"));
+                Draw.alpha(0.2f);
                 float x2 = x + (Mathf.cos(Time.time / 18f) * radarRange);
                 float y2 = y + (Mathf.sin(Time.time / 18f) * radarRange);
-                Draw.z(Layer.block - 1f);
                 Lines.line(x, y, x2, y2);
-                Draw.z(Layer.bullet - 0.0001f);
-                Draw.alpha(0.2f);
                 Drawf.circles(x, y, radarRange, Color.valueOf("4b95ff"));
                 Drawf.circles(x, y, radarRange * 0.95f, Color.valueOf("4b95ff"));
-                locateOres((int)x, (int)y, radarRange);
+                locateOres(radarRange);
             }
         }
 
-        public void locateOres(int x, int y, float range) {
-            for (float i = -range; i <= range * 4; i+=8) {
-                for (float j = -range; j <= range * 4; j+=8) {
-                    Tile tile = world.tileWorld(i, j);
+        public void locateOres(float range) {
+            for (float i = -range; i <= range; i+=8) {
+                for (float j = -range; j <= range; j+=8) {
+                    Tile tile = world.tileWorld(x + i, y + j);
                     //oh god so many conditions here
-                    if (Mathf.within(x, y, i, j, range) && tile != null && tile.overlay() != null && tile.overlay() instanceof UndergroundOreBlock) {
+                    if (Mathf.within(x, y, x + i, y + j, range) && tile != null && tile.overlay() != null && tile.overlay() instanceof UndergroundOreBlock) {
                         Draw.z(1f);
                         Draw.alpha(0.4f);
                         Drawf.square(tile.x * 8, tile.y * 8, 3, Mathf.PI / 4, tile.drop().color);
@@ -86,7 +84,7 @@ public class LuminaCoreBlock extends CoreBlock {
                         //show an item icon above the cursor/finger
                         Tile hoverTile = world.tileWorld(Core.input.mouseWorld().x, Core.input.mouseWorld().y);
 
-                        if (tile == hoverTile) {
+                        if (tile == hoverTile && tile.block() != null) {
                             Draw.z(Layer.max);
                             Draw.alpha(1f);
                             Draw.rect(tile.drop().uiIcon, tile.x * 8, tile.y * 8 + 8);

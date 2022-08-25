@@ -10,15 +10,14 @@ import static mindustry.content.TechTree.*;
 
 public class UxerdTechTree {
     public static void load() {
-
         FOSPlanets.uxerd.techTree = nodeRoot("Uxerd", Blocks.coreNucleus, true, () -> {
             node(spaceDuct, Seq.with(new OnPlanet(FOSPlanets.uxerd)), () -> {
                 node(itemCatapult, Seq.with(new Research(heatGenerator)), () -> {});
             });
-            node(meteorite, Seq.with(new Produce(meteorite)), () -> {
-                node(lithium, Seq.with(new Produce(lithium)), () -> {});
-                node(tin, Seq.with(new Produce(tin), new Research(oreDetectorSmall)), () -> {});
-                node(silver, Seq.with(new Produce(silver), new Research(oreDetectorSmall)), () -> {});
+            node(meteorite, Seq.with(new OnPlanet(FOSPlanets.uxerd)), () -> {
+                nodeProduce(lithium, () -> {});
+                nodeProduce(tin, () -> {});
+                nodeProduce(silver, () -> {});
             });
             node(meteoriteDrill, Seq.with(new OnPlanet(FOSPlanets.uxerd)), () -> {
                 node(heatGenerator, () -> {
@@ -30,5 +29,6 @@ public class UxerdTechTree {
                 node(pulse);
             });
         });
+        FOSPlanets.uxerd.unlockedOnLand = Seq.with(spaceDuct, meteorite, meteoriteDrill);
     }
 }

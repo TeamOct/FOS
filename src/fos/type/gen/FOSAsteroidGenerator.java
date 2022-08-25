@@ -15,16 +15,13 @@ import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 
 public class FOSAsteroidGenerator extends BlankPlanetGenerator {
-    public String launchSchem = "bXNjaAF4nCWOyw4CIQxFrwzjPNAY/Q8WfotL4wKx0VFkCAzx9y3Dou09TU5THDA2kN58CcMl5MVPH32GelCycQrLNHsAW2fu5BK6awrG0q3FMc3ORB2MJ6c5PQn98oo5LRSh7BwCRf0zzqF/Z2/XOzs7R9I+W0c58dUTsEFXmuRqBPgRcGt4KQTnlWSltlDJLAhsCwnOsuhD1fu6HOoYqz5WQVVShYB9GX/b0ycX";
+    public String launchSchem = "bXNjaAF4nEVOQQ7CIBAcagPUevDiMzj0LR6NB8SNaURKShu/7y4cXBJm2JnZBQOGA/rkP4ThmvctzW83YXxSCeuct3lJAHT0D4oF5layD3TvcWbZZ/f1Mbro1xdhLAsTl32iiONfxiksK7m0h0h74WEX1OqUXA00Ey6DroNirgQ0lKp9bspb8T/5SIadVbMS182ixSJgWtNK1jTNSEhATAzVYtt2K9t/nOsjhQ==";
     public Block defaultFloor = FOSBlocks.cyanium;
 
     public int min = 19, max = 19, octaves = 2;
     public float radMin = 24f, radMax = 40f, persistence = 0.4f, scale = 30f, mag = 0.46f, thresh = 0.8f;
     public float elithiteChance = 0f, elbiumChance = 0f, meteoriteChance = 0f;
     public float tinScl = 1f, silverScl = 1f, lithiumScl = 1f;
-
-    public @Nullable Rand rand;
-    int seed;
 
     void asteroid(int ax, int ay, int rad) {
         Floor floor = (
@@ -45,7 +42,6 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
 
     @Override
     public void generate() {
-        seed = Vars.state.rules.sector.planet.id;
         int sx = width/2, sy = height/2;
         rand = new Rand(seed);
 
@@ -77,10 +73,11 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
         });
 
         //generate tin and lithium on elbium
-        ore(FOSBlocks.oreTin, FOSBlocks.elbium, 4f, 0.8f * tinScl);
+        ore(FOSBlocks.oreTin, FOSBlocks.elbium, 4f, 0.6f * tinScl);
         ore(FOSBlocks.oreLithium, FOSBlocks.elbium, 4f, 0.8f * lithiumScl);
 
-        //generate silver on elithite
+        //generate silver and titanium on elithite
+        oreAround(Blocks.oreTitanium, FOSBlocks.elithiteWall, 3, 1f, 0.8f);
         ore(FOSBlocks.oreSilver, FOSBlocks.elithite, 4f, 0.7f * silverScl);
 
         int spawnSide = rand.random(3);
@@ -91,7 +88,7 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
 
         Vars.state.rules.planetBackground = new PlanetParams(){{
             planet = sector.planet.parent;
-            zoom = 0.75f;
+            zoom = 0.3f;
             camPos = new Vec3(0f, 0f, 45f);
         }};
 

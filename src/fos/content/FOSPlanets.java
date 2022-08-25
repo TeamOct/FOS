@@ -29,6 +29,8 @@ public class FOSPlanets {
             camRadius += 0.8f;
         }};
         uxerd = makeAsteroid("uxerd", lumina, 0.5f, 19, 1.6f, gen -> {
+            //this is the seed I thought it's good enough
+            gen.seed = 8;
             gen.defaultFloor = FOSBlocks.elbium;
             gen.elithiteChance = 0.33f;
             gen.elbiumChance = 0.5f;
@@ -64,7 +66,7 @@ public class FOSPlanets {
                 ).mapColor;
                 Color tinted = color.cpy().a(1f - color.a);
 
-                rand = new Rand(id + 690);
+                rand = new Rand(id);
                 meshes.add(new NoiseMesh(
                     this, 0, 2, radius, 2, 0.55f, 0.45f, 14f,
                     color, tinted, 3, 0.6f, 0.38f, tintThresh

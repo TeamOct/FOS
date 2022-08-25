@@ -4,8 +4,7 @@ import arc.util.*;
 import fos.content.*;
 import mindustry.mod.*;
 
-public class FOSMod extends Mod{
-
+public class FOSMod extends Mod {
     public FOSMod(){
         //nothing here right now
     }
@@ -21,6 +20,8 @@ public class FOSMod extends Mod{
         FOSBlocks.load();
         FOSPlanets.load();
         FOSSectors.load();
+
+        SerpuloTechTree.load();
         UxerdTechTree.load();
     }
 }

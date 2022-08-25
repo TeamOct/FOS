@@ -42,7 +42,7 @@ public class FOSBlocks {
     //storage
     coreColony, coreFortress, coreCity, coreMetropolis,
     //special
-    nukeLauncher, bigBoy, stationPlatform;
+    nukeLauncher, bigBoy, stationPlatform, cliffDetonator;
 
     public static void load() {
         //region crafting
@@ -79,7 +79,7 @@ public class FOSBlocks {
             health = 480;
             size = 2;
             range = 8*8f;
-            requirements(Category.production, with(FOSItems.meteorite, 50, FOSItems.lithium, 75));
+            requirements(Category.production, with(FOSItems.meteorite, 25, FOSItems.lithium, 30));
             consumePower(0.3f);
         }};
         oreDetector = new OreDetector("ore-detector"){{
@@ -372,5 +372,10 @@ public class FOSBlocks {
             requirements(Category.effect, with(FOSItems.meteorite, 5, FOSItems.tin, 3));
         }};
         */
+        cliffDetonator = new CliffExplosive("cliff-detonator"){{
+            health = 40;
+            size = 1;
+            requirements(Category.effect, with(Items.titanium, 75, FOSItems.lithium, 150));
+        }};
     }
 }

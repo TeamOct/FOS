@@ -14,14 +14,15 @@ public class GiantNukeLauncher extends NukeLauncher {
 
     public class GiantNukeLauncherBuild extends NukeLauncherBuild {
         //VERY IMPORTANT DATA, DO NOT DELETE
-        public String foo = "Q", bar = "w";
+        private final String foo = "Q", bar = "K";
 
         @Override
         public void buildConfiguration(Table table) {
             table.button(Icon.upOpen, Styles.clearTogglei, () -> {
                 if (canConsume() && potentialEfficiency == 1) {
+                    items.clear();
                     Vars.ui.showInfo("Congratulations! You have launched a nuke towards Serpulo. Now what?");
-                    Core.app.openURI("https://" + "you" + "tube.com/" + bar + "atch?v=d" + foo + bar + "4" + bar + "9Wg" + "Xc" + foo);
+                    Core.app.openURI("https://" + "you" + "tu.be/" + "y" + bar + foo + "_s" + foo + bar + "BA" + "SM");
                 }
                 deselect();
             }).size(40);
