@@ -16,7 +16,6 @@ import mindustry.world.*;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.environment.*;
-import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.units.*;
 import mindustry.world.meta.*;
@@ -30,9 +29,9 @@ public class FOSBlocks {
     //production
     meteoriteDrill, drillBase2, tinDrill, oreDetectorSmall, oreDetector,
     //distribution
-    /* scrapped: transportBelt, */ spaceDuct, itemCatapult,
+    spaceDuct, itemCatapult,
     //power
-    windTurbine, heatGenerator, /*powerBeacon,*/
+    windTurbine, heatGenerator, plasmaLauncher,
     //defense
     meteoriteWall, meteoriteWallLarge, particulator, pulse, thunder,
     //environment & ores
@@ -72,7 +71,7 @@ public class FOSBlocks {
         tinDrill = new UndergroundDrill("tin-drill"){{
             health = 480;
             size = 2;
-            tier = 2;
+            tier = 102;
             requirements(Category.production, with(FOSItems.tin, 5));
         }};
         oreDetectorSmall = new OreDetector("ore-detector-small"){{
@@ -232,17 +231,16 @@ public class FOSBlocks {
         heatGenerator = new HeatGenerator("heat-generator"){{
             health = 480;
             size = 2;
-            heatInput = 3f;
-            powerProduction = 3f;
+            heatInput = powerProduction = 3f;
             envEnabled |= Env.space;
             requirements(Category.power, with(FOSItems.meteorite, 45));
         }};
-        /*powerBeacon = new PowerNode("power-beacon"){{
-            laserRange = 20f;
-            maxNodes = 18;
-            laserColor1 = laserColor2 = Color.valueOf("00000000");
-            requirements(Category.power, with(FOSItems.meteorite, 30, FOSItems.lithium, 40));
-        }};*/
+        plasmaLauncher = new PlasmaLauncher("plasma-launcher"){{
+            health = 1500;
+            size = 3;
+            envEnabled |= Env.space;
+            requirements(Category.power, with(FOSItems.meteorite, 125, FOSItems.lithium, 90, Items.titanium, 75));
+        }};
         //endregion
         //region environment & ores
         cyanium = new Floor("cyanium"){{

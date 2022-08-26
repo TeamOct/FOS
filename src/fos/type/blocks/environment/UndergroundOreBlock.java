@@ -16,8 +16,14 @@ public class UndergroundOreBlock extends OverlayFloor {
     @Override
     public TextureRegion[] icons() {
         return new TextureRegion[]{
-            this.itemDrop.uiIcon
+            itemDrop.uiIcon
         };
+    }
+
+    //also show an item inside the editor too
+    @Override
+    public TextureRegion editorIcon() {
+        return itemDrop.uiIcon;
     }
 
     //can't see in-game

@@ -21,6 +21,7 @@ public class UxerdTechTree {
             });
             node(meteoriteDrill, Seq.with(new OnPlanet(FOSPlanets.uxerd)), () -> {
                 node(heatGenerator, () -> {
+                    node(plasmaLauncher);
                     node(oreDetectorSmall);
                     node(bigBoy);
                 });
