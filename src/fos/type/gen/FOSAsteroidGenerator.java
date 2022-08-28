@@ -2,7 +2,6 @@ package fos.type.gen;
 
 import arc.math.*;
 import arc.math.geom.*;
-import arc.util.*;
 import arc.util.noise.*;
 import fos.content.FOSBlocks;
 import mindustry.*;
@@ -15,19 +14,21 @@ import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 
 public class FOSAsteroidGenerator extends BlankPlanetGenerator {
-    public String launchSchem = "bXNjaAF4nEVOQQ7CIBAcagPUevDiMzj0LR6NB8SNaURKShu/7y4cXBJm2JnZBQOGA/rkP4ThmvctzW83YXxSCeuct3lJAHT0D4oF5layD3TvcWbZZ/f1Mbro1xdhLAsTl32iiONfxiksK7m0h0h74WEX1OqUXA00Ey6DroNirgQ0lKp9bspb8T/5SIadVbMS182ixSJgWtNK1jTNSEhATAzVYtt2K9t/nOsjhQ==";
-    public Block defaultFloor = FOSBlocks.cyanium;
+    /** Schematic used as the launch loadout.*/
+    public String launchSchem = "bXNjaAF4nFVQzWrDMAyWs5Kk6WBj0LteIA/RF9ilsMvYwXNEFnDlYMcNe/tJ9mGbDP7k78cyhiMcH+DA9kbwcsEruUgbXt0X3ey2ODhNlFxc1m0JDG+vdKeIc2C2OC93wu+QMa/DX95LXukp7PxPiJnRxpB5Gi48oVxMsVih9faTfIKn9z3smAKm8oyPAzzLcLuOu/V+9DbOBKcUpBlXy+Rh+JXh0YVII2fnKScAOEOpxuhWoZVGqoOmASO9UWjBmMILqWcj3yFLM+IsWq/xtlpatSh0lew121Wt05CCmgSKpa/Te53+A19tSSQ=";
+
+    public Block defaultFloor = Blocks.stone;
 
     public int min = 19, max = 19, octaves = 2;
-    public float radMin = 24f, radMax = 40f, persistence = 0.4f, scale = 30f, mag = 0.46f, thresh = 0.8f;
-    public float elithiteChance = 0f, elbiumChance = 0f, meteoriteChance = 0f;
+    public float radMin = 32f, radMax = 59f, persistence = 0.4f, scale = 30f, mag = 0.46f, thresh = 0.8f;
+    public float elithiteChance = 0f, elbiumChance = 0f, nethratiumChance = 0f;
     public float tinScl = 1f, silverScl = 1f, lithiumScl = 1f;
 
     void asteroid(int ax, int ay, int rad) {
         Floor floor = (
             rand.chance(elithiteChance) ? FOSBlocks.elithite :
             rand.chance(elbiumChance) ? FOSBlocks.elbium :
-            rand.chance(meteoriteChance) ? FOSBlocks.meteoriteFloor :
+            rand.chance(nethratiumChance) ? FOSBlocks.nethratium :
             defaultFloor
         ).asFloor();
 
@@ -57,6 +58,14 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
             asteroid((int)ax, (int)ay, (int)rad);
         }
 
+        //cliffs around asteroids
+        pass((x, y) -> {
+            if (floor == bg) return;
+
+            block = floor.asFloor().wall;
+        });
+        cliffs();
+
         //walls on asteroids
         pass((x, y) -> {
             if (floor == bg || Ridged.noise2d(seed + 1, x, y, 4, 0.7f, 1f / 60f) > 0.45f || Mathf.within(x, y, sx, sy, 20 + Ridged.noise2d(seed, x, y, 3, 0.5f, 1f / 30f) * 6f)) return;
@@ -69,7 +78,7 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
                     }
                 }
             }
-            block = floor == FOSBlocks.meteoriteFloor ? FOSBlocks.meteoriteBlock : floor.asFloor().wall;
+            block = floor.asFloor().wall;
         });
 
         //generate tin and lithium on elbium
@@ -77,12 +86,13 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
         ore(FOSBlocks.oreLithium, FOSBlocks.elbium, 4f, 0.8f * lithiumScl);
 
         //generate silver and titanium on elithite
-        oreAround(Blocks.oreTitanium, FOSBlocks.elithiteWall, 3, 1f, 0.8f);
+        oreAround(Blocks.oreTitanium, FOSBlocks.elithiteWall, 2, 1f, 0.2f);
         ore(FOSBlocks.oreSilver, FOSBlocks.elithite, 4f, 0.7f * silverScl);
 
-        int spawnSide = rand.random(3);
+        //TODO place enemy spawn in the first place?
+        /*int spawnSide = rand.random(3);
         int sizeOffset = width / 2 - 1;
-        tiles.getn(sizeOffset * Geometry.d8edge[spawnSide].x + width/2, sizeOffset * Geometry.d8edge[spawnSide].y + height/2).setOverlay(Blocks.spawn);
+        tiles.getn(sizeOffset * Geometry.d8edge[spawnSide].x + width/2, sizeOffset * Geometry.d8edge[spawnSide].y + height/2).setOverlay(Blocks.spawn);*/
 
         Schematics.placeLaunchLoadout(sx, sy);
 
@@ -94,10 +104,7 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
 
         Vars.state.rules.dragMultiplier = 0.2f; //it's space after all, so very little drag
         Vars.state.rules.borderDarkness = false;
-        Vars.state.rules.waves = true;
-        Vars.state.rules.showSpawns = true;
-        //TODO custom waves
-        Vars.state.rules.spawns = Waves.generate(0.5f, rand, false, true, false);
+        Vars.state.rules.waves = false;
     }
 
     @Override

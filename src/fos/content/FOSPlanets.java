@@ -34,11 +34,11 @@ public class FOSPlanets {
             gen.defaultFloor = FOSBlocks.elbium;
             gen.elithiteChance = 0.33f;
             gen.elbiumChance = 0.5f;
-            gen.meteoriteChance = 1f;
+            gen.nethratiumChance = 1f;
         });
 
         //TODO Anuke said it's temporary but it works for now
-        uxerd.hiddenItems.addAll(Items.serpuloItems).addAll(Items.erekirItems);
+        uxerd.hiddenItems.addAll(Items.serpuloItems).addAll(Items.erekirItems).remove(Items.titanium);
     }
 
     private static Planet makeAsteroid(String name, Planet parent, float tintThresh, int pieces, float scale, Cons<FOSAsteroidGenerator> cgen){
@@ -57,18 +57,17 @@ public class FOSPlanets {
             cgen.get((FOSAsteroidGenerator)generator);
 
             meshLoader = () -> {
-                Rand rand = new Rand(id);
+                Rand rand = new Rand(8);
                 Seq<GenericMesh> meshes = new Seq<>();
                 Color color = (
                     rand.chance(0.33f) ? FOSBlocks.elithite :
                     rand.chance(0.5f) ? FOSBlocks.elbium :
-                    FOSBlocks.meteoriteFloor
+                    FOSBlocks.nethratium
                 ).mapColor;
                 Color tinted = color.cpy().a(1f - color.a);
 
-                rand = new Rand(id);
                 meshes.add(new NoiseMesh(
-                    this, 0, 2, radius, 2, 0.55f, 0.45f, 14f,
+                    this, 8, 2, radius, 2, 0.55f, 0.45f, 14f,
                     color, tinted, 3, 0.6f, 0.38f, tintThresh
                 ));
 
@@ -76,12 +75,12 @@ public class FOSPlanets {
                     color = (
                         rand.chance(0.33f) ? FOSBlocks.elithite :
                         rand.chance(0.5f) ? FOSBlocks.elbium :
-                        FOSBlocks.meteoriteFloor
+                        FOSBlocks.nethratium
                     ).mapColor;
                     tinted = color.cpy().a(1f - color.a);
 
                     meshes.add(new MatMesh(
-                        new NoiseMesh(this, j + 1, 1, 0.022f + rand.random(0.039f) * scale, 2, 0.6f, 0.38f, 20f,
+                        new NoiseMesh(this, 8, 1, 0.03f + rand.random(0.045f) * scale, 2, 0.6f, 0.38f, 20f,
                             color, tinted, 3, 0.6f, 0.38f, tintThresh),
                         new Mat3D().setToTranslation(Tmp.v31.setToRandomDirection(rand).setLength(rand.random(0.44f, 1.4f) * scale)))
                     );

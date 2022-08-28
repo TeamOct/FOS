@@ -33,9 +33,9 @@ public class FOSBlocks {
     //power
     windTurbine, heatGenerator, plasmaLauncher,
     //defense
-    meteoriteWall, meteoriteWallLarge, particulator, pulse, thunder,
+    /*TODO will be most likely scrapped: meteoriteWall, meteoriteWallLarge,*/ particulator, pulse, thunder,
     //environment & ores
-    cyanium, cyaniumWall, elithite, elithiteWall, elbium, elbiumWall, meteoriteBlock, meteoriteFloor, oreTin, oreSilver, oreLithium,
+    cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall, oreTin, oreSilver, oreLithium,
     //units
     moonwalkerFactory, reconstructorArtillery, reconstructorShotgun,
     //storage
@@ -56,11 +56,11 @@ public class FOSBlocks {
         }};
         //endregion
         //region production
-        meteoriteDrill = new HeatProducerDrill("meteorite-drill"){{
+        meteoriteDrill = new HeatProducerDrill("nethratium-drill"){{
             health = 960;
             size = 2;
             tier = 2;
-            requirements(Category.production, with(FOSItems.meteorite, 30));
+            requirements(Category.production, with(FOSItems.nethratium, 30));
             envRequired = Env.space;
         }};
         drillBase2 = new DrillBase("drill-base-2"){{
@@ -78,7 +78,7 @@ public class FOSBlocks {
             health = 480;
             size = 2;
             range = 8*8f;
-            requirements(Category.production, with(FOSItems.meteorite, 25, FOSItems.lithium, 30));
+            requirements(Category.production, with(FOSItems.nethratium, 25, FOSItems.lithium, 30));
             consumePower(0.3f);
         }};
         oreDetector = new OreDetector("ore-detector"){{
@@ -89,16 +89,17 @@ public class FOSBlocks {
         }};
         //endregion
         //region defense
-        meteoriteWall = new MeteoriteWall("meteorite-wall"){{
+        //TODO
+        /*meteoriteWall = new MeteoriteWall("meteorite-wall"){{
             health = 520;
             size = 1;
-            requirements(Category.defense, with(FOSItems.meteorite, 6));
+            requirements(Category.defense, with(FOSItems.nethratium, 6));
         }};
         meteoriteWallLarge = new MeteoriteWall("meteorite-wall-large"){{
             health = 2080;
             size = 2;
-            requirements(Category.defense, with(FOSItems.meteorite, 24));
-        }};
+            requirements(Category.defense, with(FOSItems.nethratium, 24));
+        }};*/
 
         particulator = new ItemTurret("particulator"){{
             health = 2400;
@@ -205,7 +206,7 @@ public class FOSBlocks {
         spaceDuct = new Duct("space-duct"){{
             health = 10;
             size = 1;
-            requirements(Category.distribution, with(FOSItems.meteorite, 1));
+            requirements(Category.distribution, with(FOSItems.nethratium, 1));
             envRequired = Env.space;
         }};
         itemCatapult = new MassDriver("item-catapult"){{
@@ -217,7 +218,7 @@ public class FOSBlocks {
                 damage = 1f;
             }};
             consumePower(1f / 6f);
-            requirements(Category.distribution, with(FOSItems.meteorite, 120, FOSItems.lithium, 50));
+            requirements(Category.distribution, with(FOSItems.nethratium, 120, FOSItems.lithium, 50));
             envRequired = Env.space;
         }};
         //endregion
@@ -233,13 +234,13 @@ public class FOSBlocks {
             size = 2;
             heatInput = powerProduction = 3f;
             envEnabled |= Env.space;
-            requirements(Category.power, with(FOSItems.meteorite, 45));
+            requirements(Category.power, with(FOSItems.nethratium, 45));
         }};
         plasmaLauncher = new PlasmaLauncher("plasma-launcher"){{
             health = 1500;
             size = 3;
             envEnabled |= Env.space;
-            requirements(Category.power, with(FOSItems.meteorite, 125, FOSItems.lithium, 90, Items.titanium, 75));
+            requirements(Category.power, with(FOSItems.nethratium, 125, FOSItems.lithium, 90, Items.titanium, 75));
         }};
         //endregion
         //region environment & ores
@@ -249,6 +250,10 @@ public class FOSBlocks {
         cyaniumWall = new StaticWall("cyanium-wall"){{
             variants = 4;
         }};
+        crimsonStone = new Floor("crimson-stone"){};
+        crimsonStoneWall = new StaticWall("crimson-stone-wall"){{
+            variants = 1;
+        }};
         elithite = new Floor("elithite"){{
             variants = 4;
         }};
@@ -257,12 +262,11 @@ public class FOSBlocks {
             variants = 4;
         }};
         elbiumWall = new StaticWall("elbium-wall"){};
-        meteoriteBlock = new StaticWall("meteorite-block"){{
-            variants = 3;
+        nethratium = new Floor("nethratium"){{
+            itemDrop = FOSItems.nethratium;
+            variants = 4;
         }};
-        meteoriteFloor = new Floor("meteorite-floor"){{
-            itemDrop = FOSItems.meteorite;
-        }};
+        nethratiumWall = new StaticWall("nethratium-wall"){};
         oreTin = new UndergroundOreBlock("ore-tin"){{
             itemDrop = FOSItems.tin;
         }};
@@ -360,14 +364,14 @@ public class FOSBlocks {
             update = true;
             configurable = true;
             consumePower(60);
-            consumeItems(with(FOSItems.tin, 5000, FOSItems.silver, 5000));
+            consumeItems(with(Items.titanium, 5000, FOSItems.tin, 5000, FOSItems.silver, 5000));
             requirements(Category.effect, with(FOSItems.tin, 10000, FOSItems.silver, 10000));
         }};
         /*TODO broken
         stationPlatform = new StationPlatform("station-platform"){{
             health = 160;
             size = 1;
-            requirements(Category.effect, with(FOSItems.meteorite, 5, FOSItems.tin, 3));
+            requirements(Category.effect, with(FOSItems.nethratium, 5, FOSItems.tin, 3));
         }};
         */
         cliffDetonator = new CliffExplosive("cliff-detonator"){{

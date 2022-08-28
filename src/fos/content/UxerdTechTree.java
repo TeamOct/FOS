@@ -14,7 +14,7 @@ public class UxerdTechTree {
             node(spaceDuct, Seq.with(new OnPlanet(FOSPlanets.uxerd)), () -> {
                 node(itemCatapult, Seq.with(new Research(heatGenerator)), () -> {});
             });
-            node(meteorite, Seq.with(new OnPlanet(FOSPlanets.uxerd)), () -> {
+            node(FOSItems.nethratium, Seq.with(new OnPlanet(FOSPlanets.uxerd)), () -> {
                 nodeProduce(lithium, () -> {});
                 nodeProduce(tin, () -> {});
                 nodeProduce(silver, () -> {});
@@ -30,6 +30,6 @@ public class UxerdTechTree {
                 node(pulse);
             });
         });
-        FOSPlanets.uxerd.unlockedOnLand = Seq.with(spaceDuct, meteorite, meteoriteDrill);
+        FOSPlanets.uxerd.unlockedOnLand = Seq.with(spaceDuct, FOSItems.nethratium, meteoriteDrill, heatGenerator);
     }
 }
