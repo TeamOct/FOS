@@ -8,9 +8,12 @@ import arc.struct.*;
 import arc.util.*;
 import fos.type.gen.*;
 import mindustry.content.*;
+import mindustry.game.Team;
 import mindustry.graphics.g3d.*;
 import mindustry.type.*;
 import mindustry.world.meta.*;
+
+import static mindustry.type.Weather.*;
 
 public class FOSPlanets {
     public static Planet
@@ -18,23 +21,34 @@ public class FOSPlanets {
         /* asteroids */ uxerd;
 
     public static void load(){
-        lumina = new Planet("lumina", Planets.serpulo, 0.6f, 2){{
+        lumina = new Planet("lumina", Planets.serpulo, 0.9f, 2){{
+            defaultCore = FOSBlocks.coreFortress;
             alwaysUnlocked = true;
             hasAtmosphere = true;
-            atmosphereColor = Color.valueOf("b0dcb7");
-            meshLoader = () -> new HexMesh(this, 6);
+            bloom = false;
+            atmosphereColor = Color.valueOf("b0dcb76d");
+            meshLoader = () -> new HexMesh(this, 7);
             startSector = 40;
             generator = new LuminaPlanetGenerator();
-            minZoom = 0.3f;
+            minZoom = 1.2f;
             camRadius += 0.8f;
+            cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 7, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
+            ruleSetter = r -> {
+                r.waveTeam = FOSTeam.corru;
+                r.waves = true;
+                r.enemyCoreBuildRadius = 300;
+                WeatherEntry weather = new WeatherEntry(FOSWeathers.wind);
+                weather.always = true; //always windy
+                r.weather.add(weather);
+            };
         }};
-        uxerd = makeAsteroid("uxerd", lumina, 0.5f, 19, 1.6f, gen -> {
+        uxerd = makeAsteroid("uxerd", lumina, 0.5f, 28, 1.3f, gen -> {
             //this is the seed I thought it's good enough
             gen.seed = 8;
-            gen.defaultFloor = FOSBlocks.elbium;
+            gen.defaultFloor = Blocks.ice;
             gen.elithiteChance = 0.33f;
             gen.elbiumChance = 0.5f;
-            gen.nethratiumChance = 1f;
+            gen.nethratiumChance = 0.4f;
         });
 
         //TODO Anuke said it's temporary but it works for now
@@ -62,7 +76,8 @@ public class FOSPlanets {
                 Color color = (
                     rand.chance(0.33f) ? FOSBlocks.elithite :
                     rand.chance(0.5f) ? FOSBlocks.elbium :
-                    FOSBlocks.nethratium
+                    rand.chance(0.4f) ? FOSBlocks.nethratium :
+                    Blocks.ice
                 ).mapColor;
                 Color tinted = color.cpy().a(1f - color.a);
 
@@ -75,7 +90,8 @@ public class FOSPlanets {
                     color = (
                         rand.chance(0.33f) ? FOSBlocks.elithite :
                         rand.chance(0.5f) ? FOSBlocks.elbium :
-                        FOSBlocks.nethratium
+                        rand.chance(0.4f) ? FOSBlocks.nethratium :
+                        Blocks.ice
                     ).mapColor;
                     tinted = color.cpy().a(1f - color.a);
 

@@ -5,6 +5,7 @@ import arc.math.*;
 import arc.struct.*;
 import fos.type.abilities.HackFieldAbility;
 import fos.type.bullets.*;
+import fos.type.units.*;
 import mindustry.ai.types.*;
 import mindustry.content.*;
 import mindustry.entities.abilities.*;
@@ -15,8 +16,12 @@ public class FOSUnits {
     public static UnitType
     //mechs
     mwArtillery, mwShotgun, mwStandard, mwMiner, legion,
+    //legs
+    temp, testBoss,
     //flying
-    sergeant, lieutenant, captain, general, marshal;
+    sergeant, lieutenant, captain, general, marshal,
+
+    hidden;
 
     public static void load(){
         mwArtillery = new UnitType("mw-artillery"){{
@@ -32,7 +37,7 @@ public class FOSUnits {
                         bullet = FOSBullets.smallArtillery;
                     }}
             );
-            constructor = () -> new MechUnit(){};
+            constructor = MechUnit::create;
         }};
         mwShotgun = new UnitType("mw-shotgun"){{
             health = 220;
@@ -49,7 +54,7 @@ public class FOSUnits {
                         bullet = FOSBullets.smallStandardFlak;
                     }}
             );
-            constructor = () -> new MechUnit(){};
+            constructor = MechUnit::create;
         }};
         mwStandard = new UnitType("mw-standard"){{
             health = 200;
@@ -64,7 +69,7 @@ public class FOSUnits {
                         bullet = FOSBullets.smallStandard;
                     }}
             );
-            constructor = () -> new MechUnit(){};
+            constructor = MechUnit::create;
         }};
         mwMiner = new UnitType("mw-miner"){{
             health = 200;
@@ -74,7 +79,7 @@ public class FOSUnits {
             range = 30;
             weapons = Seq.with();
             aiController = () -> new MinerAI(){};
-            constructor = () -> new UnitEntity(){};
+            constructor = UnitEntity::create;
         }};
         legion = new UnitType("legion"){{
             health = 25000;
@@ -91,7 +96,27 @@ public class FOSUnits {
                 abilities.add(new UnitSpawnAbility(UnitTypes.atrax, 600, x, y));
                 angle += Mathf.PI2 / 8;
             }
-            constructor = () -> new MechUnit(){};
+            constructor = MechUnit::create;
+        }};
+
+        temp = new LuminaUnitType("TEMP-NAME"){{
+            health = 2400;
+            armor = 6;
+            hitSize = 10;
+            speed = 0.4f;
+            flying = false;
+            canBoost = false;
+            buildSpeed = 1f;
+            weapons.add(FOSWeaponModules.standard1.weapon);
+            constructor = LuminaUnit::create;
+        }};
+        testBoss = new LuminaBossType("test-boss", FOSWeaponModules.standard5){{
+            health = 4000;
+            armor = 8;
+            hitSize = 14;
+            speed = 0.4f;
+            flying = false;
+            constructor = BossLegsUnit::create;
         }};
 
         sergeant = new UnitType("sergeant"){{
@@ -111,7 +136,7 @@ public class FOSUnits {
                         ejectEffect = Fx.casing1;
                     }}
             );
-            constructor = () -> new UnitEntity(){};
+            constructor = UnitEntity::create;
         }};
         lieutenant = new UnitType("lieutenant"){{
             health = 260;
@@ -132,7 +157,7 @@ public class FOSUnits {
                     }};
                 }}
             );
-            constructor = () -> new UnitEntity(){};
+            constructor = UnitEntity::create;
         }};
         captain = new UnitType("captain"){{
             health = 600;
@@ -162,7 +187,7 @@ public class FOSUnits {
                     }};
                 }}
             );
-            constructor = () -> new UnitEntity(){};
+            constructor = UnitEntity::create;
         }};
         general = new UnitType("general"){{
             health = 6250;
@@ -171,7 +196,7 @@ public class FOSUnits {
             flying = true;
             aiController = HugAI::new;
             abilities.add(new HackFieldAbility(FOSStatuses.hacked, 40f, 0.005f));
-            constructor = () -> new UnitEntity(){};
+            constructor = UnitEntity::create;
         }};
         marshal = new UnitType("marshal"){{
             health = 18000;
@@ -196,7 +221,9 @@ public class FOSUnits {
                     }};
                 }}
             );
-            constructor = () -> new UnitEntity(){};
+            constructor = UnitEntity::create;
         }};
+
+        hidden = new HiddenUnitType("hidden");
     }
 }

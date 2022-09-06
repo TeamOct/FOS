@@ -7,7 +7,6 @@ import arc.struct.*;
 import arc.util.*;
 import arc.util.noise.*;
 import fos.content.*;
-import mindustry.*;
 import mindustry.ai.*;
 import mindustry.content.*;
 import mindustry.game.*;
@@ -15,34 +14,35 @@ import mindustry.maps.generators.*;
 import mindustry.type.*;
 import mindustry.world.*;
 
+import static mindustry.Vars.*;
 import static mindustry.graphics.g3d.PlanetGrid.*;
 
 public class LuminaPlanetGenerator extends PlanetGenerator {
+    //schematic used as launch loadout
+    String launchSchem = "bXNjaAF4nGNgZmBmZmDJS8xNZeBzSizOTFZwyy8qKUotLmbgTkktTi7KLCjJzM9jYGBgy0lMSs0pZmCKjmVkEEzLL9ZNzi9K1U2DKWdgYAQhIAEAzp0V0Q==";
     BaseGenerator basegen = new BaseGenerator();
-    float scl = 5f;
-    float waterOffset = 0.07f;
+    float scl = 8f;
 
     Block[][] arr = {
-            {Blocks.darksand, Blocks.darksand, Blocks.dacite, Blocks.dacite},
-            {Blocks.darksand, Blocks.dacite, Blocks.dacite, Blocks.stone},
-            {Blocks.dacite, Blocks.dacite, FOSBlocks.cyanium, FOSBlocks.cyanium},
-            {FOSBlocks.cyanium, FOSBlocks.cyanium, FOSBlocks.cyanium, FOSBlocks.cyanium}
+            {FOSBlocks.crimsonStone, FOSBlocks.annite, FOSBlocks.crimsonStone, FOSBlocks.annite},
+            {FOSBlocks.crimsonStone, FOSBlocks.annite, FOSBlocks.annite, FOSBlocks.crimsonStone},
+            {FOSBlocks.annite, FOSBlocks.annite, FOSBlocks.cyanium, FOSBlocks.cyanium},
+            {FOSBlocks.cyanium, FOSBlocks.annite, FOSBlocks.cyanium, FOSBlocks.annite}
     };
 
     //TODO make a planet have actual mountains instead of being shaped as a sphere
     @Override
     public float getHeight(Vec3 position) {
         position = Tmp.v33.set(position).scl(scl);
-        return (Mathf.pow(Simplex.noise3d(seed, 7, 0.5f, 1f/3f, position.x, position.y, position.z), 2.3f) + waterOffset) / (1f + waterOffset);
+        return Mathf.pow(Simplex.noise3d(seed, 7, 0.5f, 1f/3f, position.x, position.y, position.z), 3f);
     }
 
     @Override
     protected void genTile(Vec3 position, TileGen tile) {
         tile.floor = getBlock(position);
         tile.block = tile.floor.asFloor().wall;
-        if (tile.floor == FOSBlocks.cyanium) tile.block = FOSBlocks.cyaniumWall;
 
-        if (Ridged.noise3d(seed, position.x, position.y, position.z, 22) > 0.32) {
+        if (Ridged.noise3d(seed, position.x, position.y, position.z, 22) > 0.18f) {
             tile.block = Blocks.air;
         }
     }
@@ -50,10 +50,10 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
     @Override
     public void generateSector(Sector sector) {
         Ptile tile = sector.tile;
-        float poles = Math.abs(tile.v.y);
-        float noise = Noise.snoise3(tile.v.x, tile.v.y, tile.v.z, 0.001f, 0.58f);
+        float meridian = tile.v.x, poles = tile.v.y;
 
-        if (noise + poles / 7.1 > 0.25 && poles > 0.23){
+        //an arc of enemy bases
+        if ((meridian < -0.32f && poles < -0.27f && poles > -0.9f) || (meridian > -0.29f && meridian < 0.21f && poles > -0.12f && poles < 0.68f)){
             sector.generateEnemyBase = true;
         }
     }
@@ -111,17 +111,27 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
                 connected.add(this);
             }
 
+            void join(int x1, int y1, int x2, int y2){
+                float nscl = rand.random(20, 60);
+                int stroke = rand.random(4, 12);
+                brush(pathfind(x1, y1, x2, y2, tile -> (tile.solid() ? 27f : 0f) + noise(tile.x, tile.y, 2, 2f, 1f / nscl) * 60, Astar.manhattan), stroke);
+            }
+
             void connect(Room to) {
                 if (!connected.add(to) || to == this) return;
 
-                float nscl = rand.random(20, 60);
-                int stroke = rand.random(4, 12);
+                Vec2 midpoint = Tmp.v1.set(to.x, to.y).add(x, y).scl(0.5f);
+                rand.nextFloat();
+                midpoint.add(Tmp.v2.setToRandomDirection(rand).scl(Tmp.v1.dst(x, y)));
+                midpoint.sub(width/2f, height/2f).limit(width / 2f / Mathf.sqrt3).add(width/2f, height/2f);
+                int mx = (int) midpoint.x, my = (int) midpoint.y;
 
-                brush(pathfind(x, y, to.x, to.y, tile -> (tile.solid() ? 5 : 0) + noise(x, y, 1, 1, 1 / nscl) * 60, Astar.manhattan), stroke);
+                join(x, y, mx, my);
+                join(mx, my, to.x, to.y);
             }
         }
 
-        cells(4);
+        cells(7);
         distort(10, 12);
 
         width = tiles.width;
@@ -129,7 +139,7 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
 
         float constraint = 1.3f;
         float radius = width / 2f / Mathf.sqrt3;
-        int rooms = rand.random(2, 5);
+        int rooms = rand.random(6, 8);
         Seq<Room> roomseq = new Seq<>();
 
         for (int i = 0; i < rooms; i++){
@@ -208,8 +218,8 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
             for(int i = ores.size - 1; i >= 0; i--){
                 Block entry = ores.get(i);
                 float freq = frequencies.get(i);
-                if (Math.abs(0.5 - noise(offsetX, offsetY + i * 999, 2, 0.7f, (40 + i * 2))) > 0.24f + i * 0.01 &&
-                Math.abs(0.5 - noise(offsetX, offsetY - i * 999, 1, 1, (30 + i * 4))) > 0.38f + freq){
+                if (Math.abs(0.5 - noise(offsetX, offsetY + i * 999, 2, 0.7f, (40 + i * 2))) > 0.22f + i * 0.01 &&
+                Math.abs(0.5 - noise(offsetX, offsetY - i * 999, 1, 1, (30 + i * 4))) > 0.35f + freq){
                     ore = entry;
                     break;
                 }
@@ -222,8 +232,6 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
 
         trimDark();
         median(2);
-        tech();
-        pass((x, y) -> {});
 
         float difficulty = sector.threat;
         ints.clear();
@@ -234,22 +242,21 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
         enemies.each(espawn -> tiles.getn(espawn.x, espawn.y).setOverlay(Blocks.spawn));
 
         if (sector.hasEnemyBase()){
-            basegen.generate(tiles, enemies.map(r -> tiles.getn(r.x, r.y)), tiles.get(spawn.x, spawn.y), Vars.state.rules.waveTeam, sector, difficulty);
-            Vars.state.rules.attackMode = sector.info.attack = true;
+            basegen.generate(tiles, enemies.map(r -> tiles.getn(r.x, r.y)), tiles.get(spawn.x, spawn.y), state.rules.waveTeam, sector, difficulty);
+            state.rules.attackMode = sector.info.attack = true;
         } else {
-            Vars.state.rules.winWave = sector.info.winWave = 10 + 5 * (int)Math.max(difficulty * 10, 1);
+            state.rules.winWave = sector.info.winWave = 10 + 5 * (int)Math.max(difficulty * 10, 10);
         }
 
         float waveTimeDec = 0.4f;
 
-        Vars.state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2, 60 * 60, (float)Math.floor(Math.max(difficulty - waveTimeDec, 0) / 0.8f));
-        Vars.state.rules.waves = sector.info.waves = true;
-        Vars.state.rules.enemyCoreBuildRadius = 300;
-        Vars.state.rules.spawns = Waves.generate(difficulty, new Rand(), Vars.state.rules.attackMode);
+        state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2, 60 * 60, (float)Math.floor(Math.max(difficulty - waveTimeDec, 0) / 0.8f));
+        state.rules.spawns = LuminaWaves.generate(difficulty, new Rand(), state.rules.attackMode);
+    }
 
-        Weather.WeatherEntry weather = new Weather.WeatherEntry(FOSWeathers.wind);
-        weather.always = true; //always windy
-        Vars.state.rules.weather = Seq.with(weather);
+    @Override
+    public Schematic getDefaultLoadout() {
+        return Schematics.readBase64(launchSchem);
     }
 
     @Override

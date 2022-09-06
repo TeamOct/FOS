@@ -8,6 +8,7 @@ import fos.type.blocks.power.*;
 import fos.type.blocks.production.*;
 import fos.type.blocks.special.*;
 import fos.type.blocks.storage.*;
+import fos.type.blocks.units.*;
 import mindustry.content.*;
 import mindustry.entities.bullet.*;
 import mindustry.gen.*;
@@ -27,7 +28,7 @@ public class FOSBlocks {
     //crafting
     mechSeparator,
     //production
-    meteoriteDrill, drillBase2, tinDrill, oreDetectorSmall, oreDetector,
+    rockCrusher, drillBase2, tinDrill, oreDetectorSmall, oreDetector,
     //distribution
     spaceDuct, itemCatapult,
     //power
@@ -35,9 +36,9 @@ public class FOSBlocks {
     //defense
     /*TODO will be most likely scrapped: meteoriteWall, meteoriteWallLarge,*/ particulator, pulse, thunder,
     //environment & ores
-    cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall, oreTin, oreSilver, oreLithium,
+    cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall, annite, anniteWall, oreTin, oreSilver, oreLithium,
     //units
-    moonwalkerFactory, reconstructorArtillery, reconstructorShotgun,
+    moonwalkerFactory, reconstructorArtillery, reconstructorShotgun, upgradeCenter,
     //storage
     coreColony, coreFortress, coreCity, coreMetropolis,
     //special
@@ -56,11 +57,11 @@ public class FOSBlocks {
         }};
         //endregion
         //region production
-        meteoriteDrill = new HeatProducerDrill("nethratium-drill"){{
+        rockCrusher = new HeatProducerDrill("rock-crusher"){{
             health = 960;
             size = 2;
             tier = 2;
-            requirements(Category.production, with(FOSItems.nethratium, 30));
+            requirements(Category.production, with(FOSItems.rawNethratium, 30));
             envRequired = Env.space;
         }};
         drillBase2 = new DrillBase("drill-base-2"){{
@@ -78,7 +79,7 @@ public class FOSBlocks {
             health = 480;
             size = 2;
             range = 8*8f;
-            requirements(Category.production, with(FOSItems.nethratium, 25, FOSItems.lithium, 30));
+            requirements(Category.production, with(FOSItems.rawNethratium, 25, FOSItems.lithium, 30));
             consumePower(0.3f);
         }};
         oreDetector = new OreDetector("ore-detector"){{
@@ -93,31 +94,32 @@ public class FOSBlocks {
         /*meteoriteWall = new MeteoriteWall("meteorite-wall"){{
             health = 520;
             size = 1;
-            requirements(Category.defense, with(FOSItems.nethratium, 6));
+            requirements(Category.defense, with(FOSItems.rawNethratium, 6));
         }};
         meteoriteWallLarge = new MeteoriteWall("meteorite-wall-large"){{
             health = 2080;
             size = 2;
-            requirements(Category.defense, with(FOSItems.nethratium, 24));
+            requirements(Category.defense, with(FOSItems.rawNethratium, 24));
         }};*/
 
         particulator = new ItemTurret("particulator"){{
             health = 2400;
             size = 3;
-            range = 96;
+            range = 120;
             targetAir = targetGround = true;
             recoil = 2;
             reload = 40;
             inaccuracy = 5;
             shootSound = Sounds.pew;
             ammo(
-                FOSItems.tin, new BasicBulletType(1.6f, 240){{
+                FOSItems.tin, new BasicBulletType(2f, 80){{
                     lifetime = 60f;
                     width = 16f; height = 24f;
                     backColor = Color.valueOf("347043");
                     frontColor = trailColor = lightColor = Color.valueOf("85b374");
                     trailEffect = Fx.artilleryTrail;
-                    trailInterval = 20f;
+                    trailWidth = 16;
+                    trailLength = 20;
                     ammoMultiplier = 1;
                     splashDamage = 10f;
                     splashDamageRadius = 24f;
@@ -125,13 +127,14 @@ public class FOSBlocks {
                     fragOnHit = true;
                     hitEffect = despawnEffect = Fx.explosion;
                     fragBullets = 6;
-                    fragBullet = new BasicBulletType(0.8f, 30){{
+                    fragBullet = new BasicBulletType(0.8f, 10){{
                         lifetime = 60f * 30; //frags will stay for pretty long
                         drag = 0.024f;
                         width = height = 6f;
                         backColor = Color.valueOf("347043");
                         frontColor = trailColor = Color.valueOf("85b374");
                         trailEffect = Fx.artilleryTrail;
+                        trailLength = 8;
                         pierceArmor = true;
                         collidesAir = false;
                         collidesTiles = true;
@@ -139,13 +142,14 @@ public class FOSBlocks {
                         despawnEffect = Fx.none;
                     }};
                 }},
-                FOSItems.silver, new BasicBulletType(1.6f, 360){{
+                FOSItems.silver, new BasicBulletType(2f, 120){{
                     lifetime = 60f;
                     width = 16f; height = 24f;
                     backColor = Color.valueOf("813ba1");
                     frontColor = trailColor = lightColor = Color.valueOf("b38bb3");
                     trailEffect = Fx.artilleryTrail;
-                    trailInterval = 20f;
+                    trailWidth = 16;
+                    trailLength = 20;
                     ammoMultiplier = 1;
                     splashDamage = 25f;
                     splashDamageRadius = 24f;
@@ -153,13 +157,14 @@ public class FOSBlocks {
                     fragOnHit = true;
                     hitEffect = despawnEffect = Fx.explosion;
                     fragBullets = 7;
-                    fragBullet = new BasicBulletType(0.8f, 48){{
+                    fragBullet = new BasicBulletType(0.8f, 16){{
                         lifetime = 60f * 30; //frags will stay for pretty long
                         drag = 0.024f;
                         width = height = 6f;
                         backColor = Color.valueOf("813ba1");
                         frontColor = trailColor = Color.valueOf("b38bb3");
                         trailEffect = Fx.artilleryTrail;
+                        trailLength = 8;
                         pierceArmor = true;
                         collidesAir = false;
                         collidesTiles = true;
@@ -206,7 +211,7 @@ public class FOSBlocks {
         spaceDuct = new Duct("space-duct"){{
             health = 10;
             size = 1;
-            requirements(Category.distribution, with(FOSItems.nethratium, 1));
+            requirements(Category.distribution, with(FOSItems.rawNethratium, 1));
             envRequired = Env.space;
         }};
         itemCatapult = new MassDriver("item-catapult"){{
@@ -218,7 +223,7 @@ public class FOSBlocks {
                 damage = 1f;
             }};
             consumePower(1f / 6f);
-            requirements(Category.distribution, with(FOSItems.nethratium, 120, FOSItems.lithium, 50));
+            requirements(Category.distribution, with(FOSItems.rawNethratium, 120, FOSItems.lithium, 50));
             envRequired = Env.space;
         }};
         //endregion
@@ -234,13 +239,13 @@ public class FOSBlocks {
             size = 2;
             heatInput = powerProduction = 3f;
             envEnabled |= Env.space;
-            requirements(Category.power, with(FOSItems.nethratium, 45));
+            requirements(Category.power, with(FOSItems.rawNethratium, 45));
         }};
         plasmaLauncher = new PlasmaLauncher("plasma-launcher"){{
             health = 1500;
             size = 3;
             envEnabled |= Env.space;
-            requirements(Category.power, with(FOSItems.nethratium, 125, FOSItems.lithium, 90, Items.titanium, 75));
+            requirements(Category.power, with(FOSItems.rawNethratium, 125, FOSItems.lithium, 90, Items.titanium, 75));
         }};
         //endregion
         //region environment & ores
@@ -255,18 +260,24 @@ public class FOSBlocks {
             variants = 1;
         }};
         elithite = new Floor("elithite"){{
+            itemDrop = FOSItems.rawElithite;
             variants = 4;
         }};
         elithiteWall = new StaticWall("elithite-wall"){};
         elbium = new Floor("elbium"){{
+            itemDrop = FOSItems.rawElbium;
             variants = 4;
         }};
         elbiumWall = new StaticWall("elbium-wall"){};
         nethratium = new Floor("nethratium"){{
-            itemDrop = FOSItems.nethratium;
+            itemDrop = FOSItems.rawNethratium;
             variants = 4;
         }};
         nethratiumWall = new StaticWall("nethratium-wall"){};
+        annite = new Floor("annite"){{
+            variants = 4;
+        }};
+        anniteWall = new StaticWall("annite-wall"){};
         oreTin = new UndergroundOreBlock("ore-tin"){{
             itemDrop = FOSItems.tin;
         }};
@@ -309,6 +320,12 @@ public class FOSBlocks {
                     new UnitType[]{FOSUnits.mwStandard, FOSUnits.mwShotgun}
             );
         }};
+        upgradeCenter = new UpgradeCenter("upgrade-center"){{
+            health = 1500;
+            size = 3;
+            consumePower(3f);
+            requirements(Category.units, with(FOSItems.tin, 1));
+        }};
         //endregion
         //region storage
         coreColony = new LuminaCoreBlock("core-colony"){{
@@ -325,6 +342,7 @@ public class FOSBlocks {
             health = 2800;
             size = 3;
             itemCapacity = 2500;
+            unitType = FOSUnits.temp;
             requirements(Category.effect, with(FOSItems.tin, 2000, FOSItems.silver, 1250));
         }};
         coreCity = new LuminaCoreBlock("core-city"){{
@@ -371,7 +389,7 @@ public class FOSBlocks {
         stationPlatform = new StationPlatform("station-platform"){{
             health = 160;
             size = 1;
-            requirements(Category.effect, with(FOSItems.nethratium, 5, FOSItems.tin, 3));
+            requirements(Category.effect, with(FOSItems.rawNethratium, 5, FOSItems.tin, 3));
         }};
         */
         cliffDetonator = new CliffExplosive("cliff-detonator"){{

@@ -1,9 +1,9 @@
 name: "fos"
 displayName: "Fictional Octo System"
-subtitle: "Casually porting it to Java..."
+subtitle: "soon(tm)"
 author: "The FOS Team"
 main: "fos.FOSMod"
 description: "A space-related mod. Not exactly sure what it adds yet. NOW ON V7!!!"
 version: "1.1 pre-alpha"
-minGameVersion: 137
+minGameVersion: 138
 java: true
