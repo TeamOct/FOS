@@ -13,18 +13,16 @@ import mindustry.graphics.*;
 import mindustry.type.*;
 
 public class HackFieldAbility extends Ability {
-    public StatusEffect status;
     public float range, chance;
 
     public HackFieldAbility(StatusEffect status, float range, float chance) {
-        this.status = status;
         this.range = range;
         this.chance = chance;
     }
 
     @Override
     public String localized() {
-        return Core.bundle.format("ability.hackfield", range / 8f, status.emoji());
+        return Core.bundle.format("ability.hackfield", range / 8f, FOSStatuses.hacked.emoji());
     }
 
     @Override

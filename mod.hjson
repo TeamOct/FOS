@@ -1,9 +1,9 @@
 name: "fos"
 displayName: "Fictional Octo System"
-subtitle: "soon(tm)"
-author: "The FOS Team"
+author: "Team Oct"
 main: "fos.FOSMod"
-description: "A space-related mod. Not exactly sure what it adds yet. NOW ON V7!!!"
+description: "A space themed mod. Adds landable asteroids as well as a brand-new planet with unique gameplay.\n\n[red]REQUIRES liplum/MultiCrafterLib TO WORK![]"
 version: "1.1 pre-alpha"
 minGameVersion: 138
 java: true
+dependencies: [ "multi-crafter" ]

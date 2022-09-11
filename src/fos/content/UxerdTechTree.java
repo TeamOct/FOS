@@ -11,7 +11,7 @@ import static mindustry.content.TechTree.*;
 
 public class UxerdTechTree {
     public static void load() {
-        FOSPlanets.uxerd.techTree = nodeRoot("Uxerd", Blocks.coreNucleus, true, () -> {
+        FOSPlanets.uxerd.techTree = nodeRoot("@planet.fos-uxerd.name", Blocks.coreNucleus, true, () -> {
             node(coreFortress);
             node(spaceDuct, Seq.with(new OnPlanet(FOSPlanets.uxerd)), () -> {
                 node(itemCatapult, Seq.with(new Research(heatGenerator)), () -> {});
@@ -29,6 +29,7 @@ public class UxerdTechTree {
             });
             node(rockCrusher, Seq.with(new OnPlanet(FOSPlanets.uxerd)), () -> {
                 node(heatGenerator, () -> {
+                    node(resourceExtractor);
                     node(plasmaLauncher);
                     node(oreDetectorSmall);
                     node(bigBoy);

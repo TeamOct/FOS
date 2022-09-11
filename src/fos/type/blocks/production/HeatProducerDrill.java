@@ -2,18 +2,14 @@ package fos.type.blocks.production;
 
 import arc.math.*;
 import arc.util.io.*;
-import fos.type.blocks.power.HeatGenerator;
 import mindustry.graphics.*;
 import mindustry.ui.*;
 import mindustry.world.blocks.heat.*;
 import mindustry.world.blocks.production.*;
 import mindustry.world.meta.*;
 
-import static mindustry.Vars.indexer;
-
 public class HeatProducerDrill extends BurstDrill {
-    public float heatOutput = 0.5f;
-    public float heatCapacity = 600f;
+    public float heatOutput = 4f;
 
     public HeatProducerDrill(String name) {
         super(name);
@@ -38,8 +34,9 @@ public class HeatProducerDrill extends BurstDrill {
         @Override
         public void updateTile() {
             super.updateTile();
-            heat = Mathf.approachDelta(heat, heatOutput, 0.3f * delta());
-            if (heat == heatOutput && indexer.findTile(team, x, y, 4f, b -> b instanceof HeatConsumer) == null) damage(1);
+            heat = lastDrillSpeed == 0 ? Mathf.approachDelta(heat, 0f, 0.3f * delta()) : Mathf.approachDelta(heat, heatOutput, 0.3f * delta());
+
+            if (heat == heatOutput && !nearbyHeatConsumers()) damage(1);
         }
 
         @Override
@@ -50,6 +47,10 @@ public class HeatProducerDrill extends BurstDrill {
         @Override
         public float heat() {
             return heat;
+        }
+
+        public boolean nearbyHeatConsumers() {
+            return proximity.contains(b -> b instanceof HeatConsumer);
         }
 
         @Override

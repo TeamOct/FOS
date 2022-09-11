@@ -2,13 +2,16 @@ package fos.type.statuses;
 
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
+import fos.type.draw.FOSStats;
 import mindustry.entities.Effect;
 import mindustry.game.Team;
 import mindustry.gen.Unit;
 import mindustry.type.StatusEffect;
+import mindustry.world.meta.Stat;
+import mindustry.world.meta.StatUnit;
 
 public class HackedEffect extends StatusEffect {
-    /*TODO public Team originalTeam;*/
+    public float lifetime = 1800f;
 
     public HackedEffect(String name) {
         super(name);
@@ -20,10 +23,13 @@ public class HackedEffect extends StatusEffect {
 
     @Override
     public void update(Unit unit, float time) {
-        unit.damage(unit.maxHealth / 1800f);
+        unit.damageContinuousPierce(unit.maxHealth / lifetime);
         effect.at(unit.x, unit.y);
-        /*if (!permanent && time <= 1) unit.team = originalTeam;*/
     }
 
-
+    @Override
+    public void setStats() {
+        super.setStats();
+        stats.add(FOSStats.lifetime, lifetime / 60f, StatUnit.seconds);
+    }
 }

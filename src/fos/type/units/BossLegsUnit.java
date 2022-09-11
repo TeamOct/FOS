@@ -9,8 +9,10 @@ public class BossLegsUnit extends LegsUnit {
     @Override
     public void add() {
         super.add();
-        FOSMusic.luminaBoss.play();
+
+        FOSMusic.luminaBoss.setVolume(1f);
         FOSMusic.luminaBoss.setLooping(true);
+        FOSMusic.luminaBoss.play();
     }
 
     @Override

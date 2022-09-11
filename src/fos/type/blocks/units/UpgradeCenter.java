@@ -28,7 +28,7 @@ public class UpgradeCenter extends Block {
     }
 
     public class UpgradeCenterBuild extends Building {
-        public Weapon weapon = FOSWeaponModules.standard5.weapon;
+        public Weapon weapon = FOSWeaponModules.standard2.weapon;
 
         //TODO currently non-functional
         @Override

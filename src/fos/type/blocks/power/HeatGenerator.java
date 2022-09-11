@@ -2,6 +2,8 @@ package fos.type.blocks.power;
 
 import arc.*;
 import arc.graphics.*;
+import arc.struct.IntSet;
+import mindustry.gen.Building;
 import mindustry.graphics.*;
 import mindustry.ui.Bar;
 import mindustry.world.blocks.heat.*;
@@ -10,7 +12,7 @@ import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
 
 public class HeatGenerator extends PowerGenerator {
-    public float heatInput = 3f;
+    public float heatInput = 14f;
 
     public HeatGenerator(String name) {
         super(name);

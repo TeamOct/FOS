@@ -9,8 +9,8 @@ import mindustry.game.Team;
 import mindustry.gen.*;
 
 public class InjectorBulletType extends BasicBulletType {
-    private final float minChance, maxChance, minHP, maxHP;
-    private final boolean attacksGuardians;
+    public final float minChance, maxChance, minHP, maxHP;
+    public final boolean attacksGuardians;
     //chance varies, but with permanent effect (tiers 1, 3, 4)
     public InjectorBulletType(float minChance, float maxChance, float minHP, float maxHP, boolean attacksGuardians) {
         super(8, 10);

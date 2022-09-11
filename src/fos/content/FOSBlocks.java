@@ -2,13 +2,13 @@ package fos.content;
 
 import arc.graphics.*;
 import arc.struct.*;
-import fos.type.blocks.defense.*;
 import fos.type.blocks.environment.*;
 import fos.type.blocks.power.*;
 import fos.type.blocks.production.*;
 import fos.type.blocks.special.*;
 import fos.type.blocks.storage.*;
 import fos.type.blocks.units.*;
+import fos.type.draw.DrawDiagonalPistons;
 import mindustry.content.*;
 import mindustry.entities.bullet.*;
 import mindustry.gen.*;
@@ -18,15 +18,17 @@ import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.production.*;
-import mindustry.world.blocks.units.*;
+import mindustry.world.draw.*;
 import mindustry.world.meta.*;
+import multicraft.*;
 
+import static fos.content.FOSItems.*;
 import static mindustry.type.ItemStack.*;
 
 public class FOSBlocks {
     public static Block
     //crafting
-    mechSeparator,
+    mechSeparator, resourceExtractor,
     //production
     rockCrusher, drillBase2, tinDrill, oreDetectorSmall, oreDetector,
     //distribution
@@ -38,7 +40,7 @@ public class FOSBlocks {
     //environment & ores
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall, annite, anniteWall, oreTin, oreSilver, oreLithium,
     //units
-    moonwalkerFactory, reconstructorArtillery, reconstructorShotgun, upgradeCenter,
+    upgradeCenter,
     //storage
     coreColony, coreFortress, coreCity, coreMetropolis,
     //special
@@ -55,12 +57,65 @@ public class FOSBlocks {
             spinnerSpeed = 1f;
             results = with(FOSItems.tin, 3, FOSItems.silver, 1, Items.silicon, 2);
         }};
+        resourceExtractor = new MultiCrafter("resource-extractor"){{
+            itemCapacity = 15;
+            size = 3;
+            hasItems = acceptsItems = true;
+            configurable = true;
+            drawer = new DrawMulti(
+                new DrawDiagonalPistons(){{
+                    sides = 8;
+                    sinScl = 6f;
+                    lenOffset = 7f;
+                }},
+                new DrawDefault()
+            );
+            requirements(Category.crafting, with(FOSItems.rawNethratium, 50));
+            consumePower(2f);
+
+            resolvedRecipes = Seq.with(
+                new Recipe(
+                    new IOEntry(
+                        Seq.with(ItemStack.with(rawNethratium, 2)),
+                        Seq.with()
+                    ),
+                    new IOEntry(
+                        Seq.with(ItemStack.with(aluminium, 1)),
+                        Seq.with()
+                    ),
+                    60f
+                ),
+                new Recipe(
+                    new IOEntry(
+                        Seq.with(ItemStack.with(rawElbium, 5)),
+                        Seq.with()
+                    ),
+                    new IOEntry(
+                        Seq.with(ItemStack.with(tin, 1, lithium, 1)),
+                        Seq.with()
+                    ),
+                    90f
+                ),
+                new Recipe(
+                    new IOEntry(
+                        Seq.with(ItemStack.with(rawElithite, 8)),
+                        Seq.with()
+                    ),
+                    new IOEntry(
+                        Seq.with(ItemStack.with(silver, 1, Items.titanium, 1)),
+                        Seq.with()
+                    ),
+                    120f
+                )
+            );
+        }};
         //endregion
         //region production
         rockCrusher = new HeatProducerDrill("rock-crusher"){{
-            health = 960;
+            health = 300;
             size = 2;
             tier = 2;
+            heatOutput = 4f;
             requirements(Category.production, with(FOSItems.rawNethratium, 30));
             envRequired = Env.space;
         }};
@@ -237,7 +292,8 @@ public class FOSBlocks {
         heatGenerator = new HeatGenerator("heat-generator"){{
             health = 480;
             size = 2;
-            heatInput = powerProduction = 3f;
+            heatInput = 14f;
+            powerProduction = 3f;
             envEnabled |= Env.space;
             requirements(Category.power, with(FOSItems.rawNethratium, 45));
         }};
@@ -289,37 +345,6 @@ public class FOSBlocks {
         }};
         //endregion
         //region units
-        moonwalkerFactory = new UnitFactory("moonwalker-factory"){{
-            health = 800;
-            size = 4;
-            requirements(Category.units, with(Items.copper, 200, Items.lead, 300));
-            plans = Seq.with(
-                    new UnitPlan(FOSUnits.mwStandard, 3600, with(Items.copper, 50, Items.lead, 30)),
-                    new UnitPlan(FOSUnits.mwMiner, 5400, with(Items.copper, 90, Items.lead, 45))
-            );
-        }};
-        reconstructorArtillery = new Reconstructor("mw-reconst-artillery"){{
-            health = 800;
-            size = 4;
-            update = true;
-            constructTime = 1800;
-            consumeItems(with(Items.lead, 70, Items.scrap, 20));
-            requirements(Category.units, with(Items.lead, 70, Items.scrap, 20));
-            upgrades.addAll(
-                    new UnitType[]{FOSUnits.mwStandard, FOSUnits.mwArtillery}
-            );
-        }};
-        reconstructorShotgun = new Reconstructor("mw-reconst-shotgun"){{
-            health = 800;
-            size = 4;
-            update = true;
-            constructTime = 1800;
-            consumeItems(with(Items.lead, 60, Items.scrap, 50));
-            requirements(Category.units, with(Items.copper, 500, Items.lead, 600));
-            upgrades.addAll(
-                    new UnitType[]{FOSUnits.mwStandard, FOSUnits.mwShotgun}
-            );
-        }};
         upgradeCenter = new UpgradeCenter("upgrade-center"){{
             health = 1500;
             size = 3;
@@ -341,6 +366,7 @@ public class FOSBlocks {
         coreFortress = new LuminaCoreBlock("core-fortress"){{
             health = 2800;
             size = 3;
+            unitCapModifier = 5;
             itemCapacity = 2500;
             unitType = FOSUnits.temp;
             requirements(Category.effect, with(FOSItems.tin, 2000, FOSItems.silver, 1250));
@@ -348,13 +374,17 @@ public class FOSBlocks {
         coreCity = new LuminaCoreBlock("core-city"){{
             health = 4600;
             size = 4;
+            unitCapModifier = 7;
             itemCapacity = 5000;
+            unitType = FOSUnits.temp;
             requirements(Category.effect, with(FOSItems.tin, 2500, FOSItems.silver, 2000 /*TODO more items soon(tm)*/));
         }};
         coreMetropolis = new LuminaCoreBlock("core-metropolis"){{
             health = 8000;
             size = 5;
+            unitCapModifier = 10;
             itemCapacity = 8000;
+            unitType = FOSUnits.temp;
             requirements(Category.effect, with(FOSItems.tin, 4500, FOSItems.silver, 3500 /*TODO*/));
         }};
         //endregion

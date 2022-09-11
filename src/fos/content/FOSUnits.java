@@ -1,11 +1,12 @@
 package fos.content;
 
-import arc.graphics.Color;
+import arc.graphics.*;
 import arc.math.*;
-import arc.struct.*;
-import fos.type.abilities.HackFieldAbility;
+import fos.type.abilities.*;
+import fos.type.ai.*;
 import fos.type.bullets.*;
 import fos.type.units.*;
+import fos.type.units.weapons.*;
 import mindustry.ai.types.*;
 import mindustry.content.*;
 import mindustry.entities.abilities.*;
@@ -15,7 +16,7 @@ import mindustry.type.*;
 public class FOSUnits {
     public static UnitType
     //mechs
-    mwArtillery, mwShotgun, mwStandard, mwMiner, legion,
+    legion,
     //legs
     temp, testBoss,
     //flying
@@ -24,63 +25,6 @@ public class FOSUnits {
     hidden;
 
     public static void load(){
-        mwArtillery = new UnitType("mw-artillery"){{
-            health = 200;
-            rotateSpeed = 1.5f;
-            range = 216;
-            weapons = Seq.with(
-                    new Weapon("mw-artillery-weapon"){{
-                        x = 4; y = 0;
-                        ejectEffect = Fx.casing2;
-                        reload = 120;
-                        alternate = true;
-                        bullet = FOSBullets.smallArtillery;
-                    }}
-            );
-            constructor = MechUnit::create;
-        }};
-        mwShotgun = new UnitType("mw-shotgun"){{
-            health = 220;
-            rotateSpeed = 1.5f;
-            range = 110;
-            weapons = Seq.with(
-                    new Weapon("mw-shotgun-weapon"){{
-                        x = 4; y = 0;
-                        ejectEffect = Fx.casing1;
-                        reload = 180;
-                        alternate = true;
-                        shoot.shots = 4;
-                        shootCone = 15;
-                        bullet = FOSBullets.smallStandardFlak;
-                    }}
-            );
-            constructor = MechUnit::create;
-        }};
-        mwStandard = new UnitType("mw-standard"){{
-            health = 200;
-            rotateSpeed = 1.5f;
-            range = 160;
-            weapons = Seq.with(
-                    new Weapon("mw-standard-weapon"){{
-                        x = 4; y = 0;
-                        ejectEffect = Fx.casing1;
-                        reload = 30;
-                        alternate = true;
-                        bullet = FOSBullets.smallStandard;
-                    }}
-            );
-            constructor = MechUnit::create;
-        }};
-        mwMiner = new UnitType("mw-miner"){{
-            health = 200;
-            rotateSpeed = 10;
-            mineTier = 1;
-            mineSpeed = 0.5f;
-            range = 30;
-            weapons = Seq.with();
-            aiController = () -> new MinerAI(){};
-            constructor = UnitEntity::create;
-        }};
         legion = new UnitType("legion"){{
             health = 25000;
             armor = 25;
@@ -117,6 +61,7 @@ public class FOSUnits {
             speed = 0.4f;
             flying = false;
             constructor = BossLegsUnit::create;
+            aiController = GroundBossAI::new;
         }};
 
         sergeant = new UnitType("sergeant"){{
@@ -126,7 +71,7 @@ public class FOSUnits {
             flying = true;
             omniMovement = true;
             weapons.add(
-                    new Weapon("injector"){{
+                    new InjectorWeapon("injector"){{
                         bullet = new InjectorBulletType(0, 0.3f, 50, 300, false){{
                             homingPower = 1;
                             speed = 1.2f;
@@ -145,7 +90,7 @@ public class FOSUnits {
             flying = true;
             aiController = SuicideAI::new;
             weapons.add(
-                new Weapon(){{
+                new InjectorWeapon(){{
                     x = y = 0;
                     mirror = false;
                     rotate = true;
@@ -166,7 +111,7 @@ public class FOSUnits {
             flying = true;
             aiController = MissileAI::new;
             weapons.add(
-                new Weapon("missile-launcher"){{
+                new InjectorWeapon("missile-launcher"){{
                     x = -2; y = -1;
                     mirror = true;
                     alternate = false;
@@ -205,7 +150,7 @@ public class FOSUnits {
             range = 280f;
             flying = true;
             weapons.add(
-                new Weapon(){{
+                new InjectorWeapon(){{
                     x = 0; y = 4;
                     reload = 900f;
                     shoot.firstShotDelay = 300f;

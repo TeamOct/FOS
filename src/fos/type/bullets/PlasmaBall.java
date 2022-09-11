@@ -15,16 +15,18 @@ import mindustry.graphics.Pal;
 public class PlasmaBall extends BasicBulletType {
     public PlasmaBall(){
         super(2f, 500);
+        backRegion = Core.atlas.find("fos-plasma-ball-back");
+        frontRegion = Core.atlas.find("fos-plasma-ball");
         despawnEffect = Fx.absorb;
     }
 
     @Override
     public void draw(Bullet b) {
         Draw.color(Pal.redLight);
-        Draw.rect(Core.atlas.find("fos-plasma-ball-back"), b.x, b.y, 8f, 8f);
+        Draw.rect(backRegion, b.x, b.y, 8f, 8f);
 
         Draw.color(Pal.power);
-        Draw.rect(Core.atlas.find("fos-plasma-ball"), b.x, b.y, 6f, 6f);
+        Draw.rect(frontRegion, b.x, b.y, 6f, 6f);
 
         if (Mathf.random() < 0.03) Fx.circleColorSpark.at(b.x, b.y);
 
