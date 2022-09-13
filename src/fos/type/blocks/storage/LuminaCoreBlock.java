@@ -9,6 +9,7 @@ import arc.scene.ui.layout.*;
 import arc.util.*;
 import arc.util.io.*;
 import fos.type.blocks.environment.UndergroundOreBlock;
+import mindustry.Vars;
 import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -20,11 +21,17 @@ import static mindustry.Vars.world;
 
 public class LuminaCoreBlock extends CoreBlock {
     public float radarRange = 25f * 8f + 8f * size;
+    public float spawnCooldown = 5f * 60f;
 
     public LuminaCoreBlock(String name) {
         super(name);
         configurable = true;
         buildType = LuminaCoreBuild::new;
+    }
+
+    @Override
+    protected TextureRegion[] icons() {
+        return teamRegion.found() ? new TextureRegion[]{region, teamRegions[Team.sharded.id]} : new TextureRegion[]{region};
     }
 
     @Override
@@ -40,10 +47,31 @@ public class LuminaCoreBlock extends CoreBlock {
     }
 
     public class LuminaCoreBuild extends CoreBuild {
-        public boolean showOres = true;
+        public float timer = 0f;
+        public boolean showOres = true, requested = false;
 
         protected TextureRegionDrawable eyeIcon() {
             return showOres ? Icon.eyeSmall : Icon.eyeOffSmall;
+        }
+
+        @Override
+        public void requestSpawn(Player player) {
+            //spawn cooldown
+            if (!requested) {
+                timer = spawnCooldown;
+                requested = true;
+                Time.run(spawnCooldown, () -> {
+                    super.requestSpawn(player);
+                    requested = false;
+                });
+            }
+        }
+
+        @Override
+        public void updateTile() {
+            super.updateTile();
+
+            if (timer > 0) timer -= Time.delta;
         }
 
         @Override
@@ -68,6 +96,18 @@ public class LuminaCoreBlock extends CoreBlock {
                 Drawf.circles(x, y, radarRange, Color.valueOf("4b95ff"));
                 Drawf.circles(x, y, radarRange * 0.95f, Color.valueOf("4b95ff"));
                 locateOres(radarRange);
+            }
+
+            if (timer > 0) {
+                Vars.ui.showLabel(String.valueOf(Mathf.ceil(timer / 60f)), 1f / 60f, x, y + 16f);
+
+                Draw.z(Layer.blockOver);
+                Draw.rect("empty", x, y, 45f);
+
+                float progress = 1 - timer / spawnCooldown;
+                Draw.draw(Layer.blockOver, () -> Drawf.construct(this, unitType, 0f, progress, 1f, progress * 300f));
+
+                Drawf.square(x, y, 6f);
             }
         }
 

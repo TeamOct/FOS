@@ -47,20 +47,24 @@ public class FOSUnits {
             health = 2400;
             armor = 6;
             hitSize = 10;
-            speed = 0.4f;
+            speed = 0.8f;
             flying = false;
             canBoost = false;
+            mineTier = 2;
+            mineSpeed = 8f;
             buildSpeed = 1f;
             weapons.add(FOSWeaponModules.standard1.weapon);
             constructor = LuminaUnit::create;
         }};
-        testBoss = new LuminaBossType("test-boss", FOSWeaponModules.standard5){{
-            health = 4000;
+        testBoss = new LuminaBossType("test-boss", FOSWeaponModules.standard2){{
+            health = 2800;
             armor = 8;
+            /* custom range to prevent cheesing */ range = 200f;
             hitSize = 14;
-            speed = 0.4f;
+            speed = 0.6f;
             flying = false;
-            constructor = BossLegsUnit::create;
+            weapons.add(FOSWeaponModules.standard2.weapon);
+            constructor = LegsUnit::create;
             aiController = GroundBossAI::new;
         }};
 

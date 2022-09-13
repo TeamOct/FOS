@@ -6,7 +6,6 @@ import arc.math.geom.*;
 import arc.struct.*;
 import arc.util.*;
 import arc.util.noise.*;
-import fos.content.*;
 import mindustry.ai.*;
 import mindustry.content.*;
 import mindustry.game.*;
@@ -14,6 +13,7 @@ import mindustry.maps.generators.*;
 import mindustry.type.*;
 import mindustry.world.*;
 
+import static fos.content.FOSBlocks.*;
 import static mindustry.Vars.*;
 import static mindustry.graphics.g3d.PlanetGrid.*;
 
@@ -24,13 +24,12 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
     float scl = 8f;
 
     Block[][] arr = {
-            {FOSBlocks.crimsonStone, FOSBlocks.annite, FOSBlocks.crimsonStone, FOSBlocks.annite},
-            {FOSBlocks.crimsonStone, FOSBlocks.annite, FOSBlocks.annite, FOSBlocks.crimsonStone},
-            {FOSBlocks.annite, FOSBlocks.annite, FOSBlocks.cyanium, FOSBlocks.cyanium},
-            {FOSBlocks.cyanium, FOSBlocks.annite, FOSBlocks.cyanium, FOSBlocks.annite}
+            {crimsonStone, annite, crimsonStone, annite},
+            {crimsonStone, annite, annite, crimsonStone},
+            {annite, annite, cyanium, cyanium},
+            {cyanium, annite, cyanium, annite}
     };
 
-    //TODO make a planet have actual mountains instead of being shaped as a sphere
     @Override
     public float getHeight(Vec3 position) {
         position = Tmp.v33.set(position).scl(scl);
@@ -89,7 +88,11 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
     @Override
     public void generate(Tiles tiles, Sector sec, int seed) {
         this.tiles = tiles;
+        this.seed = seed;
         this.sector = sec;
+        this.width = tiles.width;
+        this.height = tiles.height;
+        this.rand.setSeed(seed);
 
         TileGen gen = new TileGen();
         tiles.each((x, y) -> {
@@ -196,14 +199,14 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
 
         inverseFloodFill(tiles.getn(spawn.x, spawn.y));
 
-        Seq<Block> ores = Seq.with(FOSBlocks.oreTin);
+        Seq<Block> ores = Seq.with(oreTin, oreTinSurface);
         float poles = Math.abs(sector.tile.v.y);
         float nmag = 0.5f;
-        float scl = 1;
+        float scl = 0.8f;
         float addscl = 1.3f;
 
         if (Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x + 1, sector.tile.v.y, sector.tile.v.z) * nmag + poles > 0.5f * addscl){
-            ores.add(FOSBlocks.oreSilver);
+            ores.add(oreSilver);
         }
 
         FloatSeq frequencies = new FloatSeq();
@@ -219,7 +222,7 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
                 Block entry = ores.get(i);
                 float freq = frequencies.get(i);
                 if (Math.abs(0.5 - noise(offsetX, offsetY + i * 999, 2, 0.7f, (40 + i * 2))) > 0.22f + i * 0.01 &&
-                Math.abs(0.5 - noise(offsetX, offsetY - i * 999, 1, 1, (30 + i * 4))) > 0.35f + freq){
+                Math.abs(0.5 - noise(offsetX, offsetY - i * 999, 1, 1, (30 + i * 4))) > 0.33f + freq){
                     ore = entry;
                     break;
                 }
@@ -261,7 +264,6 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
 
     @Override
     public void postGenerate(Tiles tiles) {
-        if (sector.hasEnemyBase())
-            basegen.postGenerate();
+        //TODO add something later...
     }
 }

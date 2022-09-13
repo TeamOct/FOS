@@ -38,11 +38,13 @@ public class FOSWeaponModules {
                 fragOnHit = false;
                 fragBullets = 2;
                 fragVelocityMin = 1f;
+                collidesTiles = false;
                 fragBullet = new SmartBulletType(7f, 30){{
                     width = 4f; height = 5f;
                     lifetime = 20f;
                     trailLength = 15;
                     hitEffect = Fx.hitBulletSmall;
+                    collidesTiles = true;
                 }};
             }};
         }});

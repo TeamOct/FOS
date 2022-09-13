@@ -28,6 +28,7 @@ public class OreDetector extends Block {
         configurable = true;
         hasPower = true;
         canOverdrive = false;
+        fogRadius = (int)range / 8;
         buildType = OreDetectorBuild::new;
     }
 

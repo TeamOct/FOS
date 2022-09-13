@@ -8,7 +8,6 @@ import arc.struct.*;
 import arc.util.*;
 import fos.type.gen.*;
 import mindustry.content.*;
-import mindustry.game.Team;
 import mindustry.graphics.g3d.*;
 import mindustry.type.*;
 import mindustry.world.meta.*;
@@ -28,12 +27,13 @@ public class FOSPlanets {
             bloom = false;
             atmosphereColor = Color.valueOf("b0dcb76d");
             meshLoader = () -> new HexMesh(this, 7);
-            startSector = 40;
+            startSector = 9;
             generator = new LuminaPlanetGenerator();
             minZoom = 1.2f;
             camRadius += 0.8f;
             cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 7, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
             ruleSetter = r -> {
+                r.fog = true;
                 r.waveTeam = FOSTeam.corru;
                 r.waves = true;
                 r.enemyCoreBuildRadius = 300;
@@ -53,6 +53,7 @@ public class FOSPlanets {
 
         //TODO Anuke said it's temporary but it works for now
         uxerd.hiddenItems.addAll(Items.serpuloItems).addAll(Items.erekirItems).remove(Items.titanium);
+        lumina.hiddenItems.addAll(Items.serpuloItems).addAll(Items.erekirItems);
     }
 
     private static Planet makeAsteroid(String name, Planet parent, float tintThresh, int pieces, float scale, Cons<FOSAsteroidGenerator> cgen){

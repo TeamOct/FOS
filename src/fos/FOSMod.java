@@ -5,12 +5,12 @@ import arc.math.Mathf;
 import arc.util.*;
 import fos.content.*;
 import fos.type.audio.MusicHandler;
-import mindustry.*;
 import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.mod.*;
 import mindustry.type.*;
 
+import static mindustry.Vars.*;
 import static mindustry.Vars.mods;
 import static mindustry.game.EventType.*;
 
@@ -20,7 +20,7 @@ public class FOSMod extends Mod {
     public FOSMod(){
         Events.on(UnitSpawnEvent.class, e -> {
             //debug stuff, so only limited to myself
-            if (!Vars.steamPlayerName.equals("Slotterleet")) return;
+            if (!steamPlayerName.equals("Slotterleet")) return;
 
             Unit u = e.unit; Team team = u.team; UnitType type = u.type;
             Log.info("Spawned " + type.name + " as " + team.name + " (" + team.id + ", " + team.color.toString() + ")");
@@ -29,7 +29,7 @@ public class FOSMod extends Mod {
 
     @Override
     public void init() {
-        SplashTexts.load(10);
+        SplashTexts.load(12);
 
         //random splash text
         Mods.LoadedMod mod = mods.locateMod("fos");

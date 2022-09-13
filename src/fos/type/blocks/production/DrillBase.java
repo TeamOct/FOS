@@ -20,7 +20,6 @@ public class DrillBase extends Block {
         priority = TargetPriority.transport;
     }
 
-    //TODO now fixed, but still incompatible with cores
     @Override
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {
         Building build = indexer.findTile(player.team(), tile.worldx(), tile.worldy(), 999f, b ->

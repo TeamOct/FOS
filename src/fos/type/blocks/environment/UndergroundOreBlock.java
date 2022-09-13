@@ -1,6 +1,6 @@
 package fos.type.blocks.environment;
 
-import arc.graphics.g2d.*;
+import mindustry.graphics.MultiPacker;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 
@@ -10,20 +10,7 @@ public class UndergroundOreBlock extends OverlayFloor {
         //hide an ore from the minimap
         useColor = false;
         playerUnmineable = true;
-    }
-
-    //an item drop's icon should be the in-editor icon
-    @Override
-    public TextureRegion[] icons() {
-        return new TextureRegion[]{
-            itemDrop.uiIcon
-        };
-    }
-
-    //also show an item inside the editor too
-    @Override
-    public TextureRegion editorIcon() {
-        return itemDrop.uiIcon;
+        variants = 1;
     }
 
     //can't see in-game

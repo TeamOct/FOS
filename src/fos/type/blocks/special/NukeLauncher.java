@@ -21,10 +21,7 @@ public class NukeLauncher extends Block {
 
     @Override
     protected TextureRegion[] icons() {
-        return new TextureRegion[]{
-                Core.atlas.find(name),
-                Core.atlas.find(name + "-team")
-        };
+        return teamRegion.found() ? new TextureRegion[]{region, teamRegions[Team.sharded.id]} : new TextureRegion[]{region};
     }
 
     public class NukeLauncherBuild extends Building {

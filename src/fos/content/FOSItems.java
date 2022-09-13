@@ -20,10 +20,10 @@ public class FOSItems {
             radioactivity = 0.1f;
         }};
         tin = new Item("tin", Color.valueOf("85b374")){{
-            hardness = 102;
+            hardness = 2;
         }};
         silver = new Item("silver", Color.valueOf("813ba1")){{
-            hardness = 103;
+            hardness = 3;
         }};
         lithium = new Item("lithium", Color.valueOf("b6e358")){{
             hardness = 1;
