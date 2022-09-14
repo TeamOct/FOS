@@ -21,7 +21,7 @@ public class FOSWeathers {
             noiseColor = Color.valueOf("b0dcb73b");
             useWindVector = true;
             baseSpeed = 3.6f;
-            force = 0.2f;
+            force = 0f;
             sound = Sounds.wind;
             soundVol = 0.9f;
             duration = 7f * Time.toMinutes;
