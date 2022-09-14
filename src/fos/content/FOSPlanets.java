@@ -26,11 +26,11 @@ public class FOSPlanets {
             hasAtmosphere = true;
             bloom = false;
             atmosphereColor = Color.valueOf("b0dcb76d");
-            meshLoader = () -> new HexMesh(this, 7);
+            meshLoader = () -> new HexMesh(this, 5);
             startSector = 9;
             generator = new LuminaPlanetGenerator();
-            minZoom = 1.2f;
-            camRadius += 0.8f;
+            minZoom = 0.8f;
+            camRadius += 1f;
             cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 7, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
             ruleSetter = r -> {
                 r.fog = true;
