@@ -29,7 +29,7 @@ public class FOSPlanets {
             meshLoader = () -> new HexMesh(this, 5);
             startSector = 9;
             generator = new LuminaPlanetGenerator();
-            minZoom = 2f;
+            minZoom = 0.8f;
             camRadius += 1f;
             cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 7, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
             ruleSetter = r -> {
