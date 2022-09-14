@@ -128,7 +128,7 @@ public class FOSBlocks {
         tinDrill = new UndergroundDrill("tin-drill"){{
             health = 480;
             size = 2;
-            tier = 102;
+            tier = 3;
             requirements(Category.production, with(tin, 5));
         }};
         oreDetectorSmall = new OreDetector("ore-detector-small"){{

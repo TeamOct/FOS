@@ -1,5 +1,7 @@
 # Fictional Octo System
-Update 1.1 brings you _new_ a asteroid group and a planet for you to explore with brand-new blocks and mechanics such as underground ores, gameplay unique from Serpulo/Erekir, etc.
+***REQUIRES [liplum/MultiCrafterLib](https://github.com/liplum/MultiCrafterLib) TO WORK!***
+
+Update 1.1 brings you a _new_ asteroid group and a planet for you to explore with brand-new blocks and mechanics such as underground ores, gameplay unique from Serpulo/Erekir, etc.
 ## Credits
 - Team founder: [@Polar4ik](https://github.com/Polar4ik) (root$Polar4ik#6727)
 - Programmer: [@Slotterleet](https://github.com/Slotterleet) (Slotterleet#7897)

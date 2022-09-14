@@ -27,13 +27,16 @@ public class UndergroundDrill extends Drill {
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {
         if (isMultiblock()) {
             for(Tile other : tile.getLinkedTilesAs(this, tempTiles)) {
+                //if mining surface tin, place immediately
+                if (other.overlay().name.equals("fos-ore-tin-surface")) return true;
+
                 Building block = other.build;
                 return block != null && block.block() instanceof DrillBase && block.team == team;
             }
             return false;
         } else {
             Building block = tile.build;
-            return block != null && block.block() instanceof DrillBase && block.team == team;
+            return (block != null && block.block() instanceof DrillBase && block.team == team) || tile.overlay().name.equals("fos-ore-tin-surface");
         }
     }
 
