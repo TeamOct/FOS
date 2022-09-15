@@ -31,7 +31,7 @@ public class FOSPlanets {
             generator = new LuminaPlanetGenerator();
             minZoom = 0.8f;
             camRadius += 0.4f;
-            cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 7, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
+            cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 5, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
             ruleSetter = r -> {
                 r.fog = true;
                 r.waveTeam = FOSTeam.corru;
