@@ -108,7 +108,8 @@ public class FOSBlocks {
                     ),
                     120f
                 )
-            );
+            )
+            envRequired = Env.space;
         }};
         //endregion
         //region production
@@ -282,7 +283,7 @@ public class FOSBlocks {
         itemCatapult = new MassDriver("item-catapult"){{
             health = 480;
             size = 2;
-            range = 30f * 8;
+            range = 31f * 8;
             bullet = new MassDriverBolt(){{
                 speed = 0.5f;
                 damage = 1f;
