@@ -5,9 +5,11 @@ import arc.math.Mathf;
 import arc.util.*;
 import fos.content.*;
 import fos.type.audio.MusicHandler;
+import mindustry.Vars;
 import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.mod.*;
+import mindustry.mod.Mods.*;
 import mindustry.type.*;
 
 import static mindustry.Vars.*;
@@ -29,12 +31,12 @@ public class FOSMod extends Mod {
 
     @Override
     public void init() {
+        LoadedMod mod = mods.locateMod("fos");
+
         SplashTexts.load(12);
 
-        //random splash text
-        Mods.LoadedMod mod = mods.locateMod("fos");
         int n = Mathf.floor((float) Math.random() * SplashTexts.splashes.size);
-        mod.meta.subtitle = SplashTexts.splashes.get(n);
+        if (mod != null) mod.meta.subtitle = SplashTexts.splashes.get(n);
 
         FOSTeam.load();
 

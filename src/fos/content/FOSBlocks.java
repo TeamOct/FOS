@@ -24,6 +24,7 @@ import mindustry.world.meta.*;
 import multicraft.*;
 
 import static fos.content.FOSItems.*;
+import static mindustry.content.Items.*;
 import static mindustry.type.ItemStack.*;
 
 public class FOSBlocks {
@@ -45,7 +46,7 @@ public class FOSBlocks {
     //storage
     coreColony, coreFortress, coreCity, coreMetropolis,
     //special
-    nukeLauncher, bigBoy, cliffDetonator;
+    nukeLauncher, bigBoy, cliffDetonator, orbitalAccelerator;
 
     public static void load() {
         //region crafting
@@ -56,14 +57,16 @@ public class FOSBlocks {
             requirements(Category.crafting, with(tin, 200, silver, 50));
             craftTime = 120;
             spinnerSpeed = 1f;
-            results = with(tin, 3, silver, 1, Items.silicon, 2);
+            results = with(tin, 3, silver, 1, silicon, 2);
         }};
         resourceExtractor = new MultiCrafter("resource-extractor"){{
             itemCapacity = 15;
             size = 3;
             hasItems = acceptsItems = true;
             configurable = true;
+            envRequired = envEnabled = Env.space;
             drawer = new DrawMulti(
+                new DrawRegion("-bottom"),
                 new DrawDiagonalPistons(){{
                     sides = 8;
                     sinScl = 6f;
@@ -88,7 +91,7 @@ public class FOSBlocks {
                 ),
                 new Recipe(
                     new IOEntry(
-                        Seq.with(ItemStack.with(rawElbium, 5)),
+                        Seq.with(ItemStack.with(rawElbium, 4)),
                         Seq.with()
                     ),
                     new IOEntry(
@@ -99,11 +102,11 @@ public class FOSBlocks {
                 ),
                 new Recipe(
                     new IOEntry(
-                        Seq.with(ItemStack.with(rawElithite, 8)),
+                        Seq.with(ItemStack.with(rawElithite, 6)),
                         Seq.with()
                     ),
                     new IOEntry(
-                        Seq.with(ItemStack.with(silver, 1, Items.titanium, 1)),
+                        Seq.with(ItemStack.with(silver, 1, titanium, 1)),
                         Seq.with()
                     ),
                     120f
@@ -118,24 +121,27 @@ public class FOSBlocks {
             tier = 2;
             heatOutput = 4f;
             requirements(Category.production, with(rawNethratium, 30));
-            envRequired = Env.space;
+            envRequired = envEnabled = Env.space;
         }};
         drillBase2 = new DrillBase("drill-base-2"){{
             health = 120;
             size = 2;
+            envEnabled |= Env.space;
             requirements(Category.production, with(tin, 10));
         }};
         tinDrill = new UndergroundDrill("tin-drill"){{
             health = 480;
             size = 2;
             tier = 3;
+            envEnabled |= Env.space;
             requirements(Category.production, with(tin, 5));
         }};
         oreDetectorSmall = new OreDetector("ore-detector-small"){{
             health = 480;
             size = 2;
             range = 8*8f;
-            requirements(Category.production, with(rawNethratium, 25, lithium, 30));
+            envRequired = envEnabled = Env.space;
+            requirements(Category.production, with(aluminium, 25, lithium, 30));
             consumePower(0.3f);
         }};
         oreDetector = new OreDetector("ore-detector"){{
@@ -252,7 +258,7 @@ public class FOSBlocks {
             force = 0;
             scaledForce = 0;
             consumePower(4);
-            requirements(Category.turret, with(Items.copper, 5));
+            requirements(Category.turret, with(copper, 5));
         }};
         /*TODO currently crashes the game
         thunder = new LaserTurret("thunder"){{
@@ -282,14 +288,15 @@ public class FOSBlocks {
         itemCatapult = new MassDriver("item-catapult"){{
             health = 480;
             size = 2;
-            range = 30f * 8;
+            range = 60f * 8;
             bullet = new MassDriverBolt(){{
-                speed = 0.5f;
+                speed = 0.2f;
+                lifetime = 2400f;
                 damage = 1f;
             }};
             consumePower(1f / 6f);
-            requirements(Category.distribution, with(rawNethratium, 120, lithium, 50));
-            envRequired = Env.space;
+            requirements(Category.distribution, with(aluminium, 120, lithium, 50));
+            envRequired = envEnabled = Env.space;
         }};
         tinBelt = new StackConveyor("tin-belt"){{
             health = 10;
@@ -321,8 +328,8 @@ public class FOSBlocks {
         plasmaLauncher = new PlasmaLauncher("plasma-launcher"){{
             health = 1500;
             size = 3;
-            envEnabled |= Env.space;
-            requirements(Category.power, with(rawNethratium, 125, lithium, 90, Items.titanium, 75));
+            envRequired = envEnabled = Env.space;
+            requirements(Category.power, with(aluminium, 125, lithium, 90, titanium, 75));
         }};
         //endregion
         //region environment & ores
@@ -385,6 +392,8 @@ public class FOSBlocks {
             health = 1920;
             size = 2;
             itemCapacity = 250;
+            unitCapModifier = 0;
+            unitType = FOSUnits.temp;
             requirements(Category.effect, with(tin, 1500));
         }};
         coreFortress = new LuminaCoreBlock("core-fortress"){{
@@ -423,8 +432,8 @@ public class FOSBlocks {
             update = true;
             configurable = true;
             consumePower(15);
-            consumeItems(with(Items.lead, 500, Items.graphite, 500, Items.silicon, 500, Items.thorium, 500, Items.surgeAlloy, 500));
-            requirements(Category.effect, BuildVisibility.campaignOnly, with(Items.lead, 5000, Items.silicon, 5000, Items.titanium, 3500, Items.thorium, 2500, Items.phaseFabric, 1500, Items.surgeAlloy, 1500));
+            consumeItems(with(lead, 500, graphite, 500, silicon, 500, thorium, 500, surgeAlloy, 500));
+            requirements(Category.effect, BuildVisibility.campaignOnly, with(lead, 5000, silicon, 5000, titanium, 3500, thorium, 2500, phaseFabric, 1500, surgeAlloy, 1500));
         }};
         bigBoy = new GiantNukeLauncher("big-boy"){{
             health = 20000;
@@ -436,13 +445,23 @@ public class FOSBlocks {
             update = true;
             configurable = true;
             consumePower(60);
-            consumeItems(with(Items.titanium, 5000, tin, 5000, silver, 5000));
-            requirements(Category.effect, with(tin, 10000, silver, 10000));
+            consumeItems(with(titanium, 5000, tin, 5000, silver, 5000));
+            requirements(Category.effect, with(aluminium, 10000, tin, 10000, silver, 10000));
         }};
         cliffDetonator = new CliffExplosive("cliff-detonator"){{
             health = 40;
             size = 1;
-            requirements(Category.effect, with(Items.titanium, 75, lithium, 150));
+            requirements(Category.effect, with(titanium, 75, lithium, 150));
+        }};
+        orbitalAccelerator = new OrbitalAccelerator("orbital-accelerator"){{
+            health = 5000;
+            size = 5;
+            envEnabled |= Env.space;
+            hasPower = true;
+            buildCostMultiplier = 0.2f;
+            consumePower(10f);
+            launching = coreFortress;
+            requirements(Category.effect, BuildVisibility.campaignOnly, with(aluminium, 5000, titanium, 3000, lithium, 2500, tin, 2500, silver, 2000));
         }};
     }
 }

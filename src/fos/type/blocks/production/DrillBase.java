@@ -27,7 +27,7 @@ public class DrillBase extends Block {
         if (build instanceof OreDetector.OreDetectorBuild) {
             return Mathf.within(tile.worldx(), tile.worldy(), build.x, build.y, ((OreDetector.OreDetectorBuild) build).range());
         } else {
-            return build != null && Mathf.within(tile.worldx(), tile.worldy(), build.x, build.y, 25f * 8f + 8f * build.block().size);
+            return build != null && Mathf.within(tile.worldx(), tile.worldy(), build.x, build.y, build.block().name.equals("fos-core-colony") ? 0 : 25f * 8f);
         }
     }
 }

@@ -8,7 +8,7 @@ import mindustry.world.blocks.heat.*;
 import mindustry.world.blocks.production.*;
 import mindustry.world.meta.*;
 
-public class HeatProducerDrill extends BurstDrill {
+public class HeatProducerDrill extends Drill {
     public float heatOutput = 4f;
 
     public HeatProducerDrill(String name) {
@@ -28,7 +28,7 @@ public class HeatProducerDrill extends BurstDrill {
         addBar("heat", (HeatProducerDrillBuild build) -> new Bar("bar.heat", Pal.lightOrange, build::heatFrac));
     }
 
-    public class HeatProducerDrillBuild extends BurstDrillBuild implements HeatBlock {
+    public class HeatProducerDrillBuild extends DrillBuild implements HeatBlock {
         public float heat;
 
         @Override

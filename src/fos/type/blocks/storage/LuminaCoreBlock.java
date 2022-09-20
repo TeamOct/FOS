@@ -20,7 +20,7 @@ import mindustry.world.blocks.storage.*;
 import static mindustry.Vars.world;
 
 public class LuminaCoreBlock extends CoreBlock {
-    public float radarRange = 25f * 8f + 8f * size;
+    public float radarRange = 25f * 8f;
     public float spawnCooldown = 5f * 60f;
 
     public LuminaCoreBlock(String name) {

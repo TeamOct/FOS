@@ -2,6 +2,7 @@ package fos.content;
 
 import arc.graphics.Color;
 import mindustry.game.Team;
+import mindustry.ui.Fonts;
 
 public class FOSTeam {
     public static Team corru;

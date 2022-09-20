@@ -44,8 +44,42 @@ public class UndergroundDrill extends Drill {
     public void setStats() {
         super.setStats();
         stats.remove(Stat.drillTier);
-        stats.add(Stat.drillTier, StatValues.blocks(b -> (b.name.equals("fos-ore-tin-surface") || b instanceof UndergroundOreBlock) &&
+        stats.add(Stat.drillTier, StatValues.blocks(b -> (b.name.equals("fos-ore-tin-surface") || b.itemDrop == Items.titanium || b instanceof UndergroundOreBlock) &&
             b.itemDrop != null && b.itemDrop.hardness <= tier && b.itemDrop != blockedItem && (indexer.isBlockPresent(b) || state.isMenu())));
+    }
+
+    @Override
+    protected void countOre(Tile tile) {
+        returnItem = null;
+        returnCount = 0;
+
+        oreCount.clear();
+        itemArray.clear();
+
+        for(Tile other : tile.getLinkedTilesAs(this, tempTiles)){
+            if(canMine(other) && (other.overlay() instanceof UndergroundOreBlock || other.overlay().name.equals("fos-ore-tin-surface") || getDrop(other) == Items.titanium)){
+                oreCount.increment(getDrop(other), 0, 1);
+            }
+        }
+
+        for(Item item : oreCount.keys()){
+            itemArray.add(item);
+        }
+
+        itemArray.sort((item1, item2) -> {
+            int type = Boolean.compare(!item1.lowPriority, !item2.lowPriority);
+            if(type != 0) return type;
+            int amounts = Integer.compare(oreCount.get(item1, 0), oreCount.get(item2, 0));
+            if(amounts != 0) return amounts;
+            return Integer.compare(item1.id, item2.id);
+        });
+
+        if(itemArray.size == 0){
+            return;
+        }
+
+        returnItem = itemArray.peek();
+        returnCount = oreCount.get(itemArray.peek(), 0);
     }
 
     public Item getOutput(Tile tile) {

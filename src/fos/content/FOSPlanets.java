@@ -7,11 +7,13 @@ import arc.math.geom.*;
 import arc.struct.*;
 import arc.util.*;
 import fos.type.gen.*;
+import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.graphics.g3d.*;
 import mindustry.type.*;
 import mindustry.world.meta.*;
 
+import static fos.content.FOSItems.*;
 import static mindustry.type.Weather.*;
 
 public class FOSPlanets {
@@ -22,13 +24,13 @@ public class FOSPlanets {
     public static void load(){
         lumina = new Planet("lumina", Planets.serpulo, 0.9f, 2){{
             defaultCore = FOSBlocks.coreFortress;
-            alwaysUnlocked = true;
             hasAtmosphere = true;
             bloom = false;
             atmosphereColor = Color.valueOf("b0dcb76d");
             meshLoader = () -> new HexMesh(this, 5);
             startSector = 9;
             generator = new LuminaPlanetGenerator();
+            defaultEnv = Env.terrestrial | Env.oxygen;
             minZoom = 0.8f;
             camRadius += 0.4f;
             cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 7, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
@@ -42,7 +44,7 @@ public class FOSPlanets {
                 r.weather.add(weather);
             };
         }};
-        uxerd = makeAsteroid("uxerd", lumina, 0.5f, 28, 1.3f, gen -> {
+        uxerd = makeAsteroid("uxerd", lumina, 0.5f, 28, 1.3f, lumina, gen -> {
             //this is the seed I thought it's good enough
             gen.seed = 8;
             gen.defaultFloor = Blocks.ice;
@@ -52,11 +54,11 @@ public class FOSPlanets {
         });
 
         //TODO Anuke said it's temporary but it works for now
-        uxerd.hiddenItems.addAll(Items.serpuloItems).addAll(Items.erekirItems).remove(Items.titanium);
-        lumina.hiddenItems.addAll(Items.serpuloItems).addAll(Items.erekirItems);
+        uxerd.hiddenItems.addAll(Vars.content.items()).removeAll(uxerdItems);
+        lumina.hiddenItems.addAll(Vars.content.items()).removeAll(luminaItems);
     }
 
-    private static Planet makeAsteroid(String name, Planet parent, float tintThresh, int pieces, float scale, Cons<FOSAsteroidGenerator> cgen){
+    private static Planet makeAsteroid(String name, Planet parent, float tintThresh, int pieces, float scale, Planet launchCandidate, Cons<FOSAsteroidGenerator> cgen){
         return new Planet(name, parent, 0.12f){{
             hasAtmosphere = false;
             updateLighting = false;
@@ -67,6 +69,7 @@ public class FOSPlanets {
             accessible = true;
             clipRadius = 2f;
             defaultEnv = Env.space;
+            launchCandidates.add(launchCandidate);
 
             generator = new FOSAsteroidGenerator();
             cgen.get((FOSAsteroidGenerator)generator);

@@ -1,10 +1,14 @@
 package fos.content;
 
 import arc.graphics.Color;
+import arc.struct.Seq;
+import mindustry.content.Items;
 import mindustry.type.Item;
 
 public class FOSItems {
     public static Item rawNethratium, rawElbium, rawElithite, aluminium, tin, silver, lithium;
+
+    public static Seq<Item> uxerdItems = new Seq<>(), luminaItems = new Seq<>();
 
     public static void load(){
         rawNethratium = new Item("raw-nethratium", Color.valueOf("de8900")){{
@@ -28,5 +32,8 @@ public class FOSItems {
         lithium = new Item("lithium", Color.valueOf("b6e358")){{
             hardness = 1;
         }};
+
+        uxerdItems.addAll(rawNethratium, rawElbium, rawElithite, aluminium, tin, silver, lithium, Items.titanium);
+        luminaItems.addAll(tin, silver);
     }
 }

@@ -15,6 +15,8 @@ import mindustry.type.*;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 
+import static fos.content.FOSBlocks.*;
+
 public class FOSAsteroidGenerator extends BlankPlanetGenerator {
     //schematic used as launch loadout
     public String launchSchem = "bXNjaAF4nFVQzWrDMAyWs5Kk6WBj0LteIA/RF9ilsMvYwXNEFnDlYMcNe/tJ9mGbDP7k78cyhiMcH+DA9kbwcsEruUgbXt0X3ey2ODhNlFxc1m0JDG+vdKeIc2C2OC93wu+QMa/DX95LXukp7PxPiJnRxpB5Gi48oVxMsVih9faTfIKn9z3smAKm8oyPAzzLcLuOu/V+9DbOBKcUpBlXy+Rh+JXh0YVII2fnKScAOEOpxuhWoZVGqoOmASO9UWjBmMILqWcj3yFLM+IsWq/xtlpatSh0lew121Wt05CCmgSKpa/Te53+A19tSSQ=";
@@ -30,9 +32,9 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
 
     void asteroid(int ax, int ay, int rad) {
         Floor floor = (
-            rand.chance(elithiteChance) ? FOSBlocks.elithite :
-            rand.chance(elbiumChance) ? FOSBlocks.elbium :
-            rand.chance(nethratiumChance) ? FOSBlocks.nethratium :
+            rand.chance(elithiteChance) ? elithite :
+            rand.chance(elbiumChance) ? elbium :
+            rand.chance(nethratiumChance) ? nethratium :
             defaultFloor
         ).asFloor();
 
@@ -47,6 +49,16 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
         centerTiles.add(tiles.getn(ax, ay));
     }
 
+    void asteroid(int ax, int ay, int rad, Floor floor) {
+        for(int x = ax - rad; x <= ax + rad; x++){
+            for (int y = ay - rad; y <= ay + rad; y++){
+                if (tiles.in(x, y) && Mathf.dst(x, y, ax, ay) / rad + Simplex.noise2d(seed, octaves, persistence, 1f / scale, x, y) * mag < thresh) {
+                    tiles.getn(x, y).setFloor(floor);
+                }
+            }
+        }
+    }
+
     @Override
     public void generate() {
         int sx = width/2, sy = height/2;
@@ -56,7 +68,8 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
 
         tiles.eachTile(t -> t.setFloor(bg));
 
-        asteroid(sx, sy, rand.random(40, 60));
+        //the center asteroid is always nethratium
+        asteroid(sx, sy, rand.random(40, 60), nethratium.asFloor());
 
         for(int i = 0; i < amount; i++){
             float rad = rand.random(radMin, radMax), ax = rand.random(rad, width - rad), ay = rand.random(rad, height - rad);
@@ -86,17 +99,17 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
         });
 
         //titanium around elithite walls
-        oreAround(Blocks.oreTitanium, FOSBlocks.elithiteWall, 2, 1f, 0.2f);
+        oreAround(Blocks.oreTitanium, elithiteWall, 2, 1f, 0.2f);
 
         //second cliff layer
         cliffs();
 
         //generate tin and lithium on elbium
-        ore(FOSBlocks.oreTin, FOSBlocks.elbium, 4f, 0.6f * tinScl);
-        ore(FOSBlocks.oreLithium, FOSBlocks.elbium, 4f, 0.8f * lithiumScl);
+        ore(oreTin, elbium, 4f, 0.6f * tinScl);
+        ore(oreLithium, elbium, 4f, 0.8f * lithiumScl);
 
         //generate silver and titanium on elithite
-        ore(FOSBlocks.oreSilver, FOSBlocks.elithite, 4f, 0.7f * silverScl);
+        ore(oreSilver, elithite, 4f, 0.7f * silverScl);
 
         //TODO place enemy spawn in the first place?
         /*int spawnSide = rand.random(3);
