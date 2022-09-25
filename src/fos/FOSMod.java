@@ -39,21 +39,23 @@ public class FOSMod extends Mod {
         });
 
         Events.run(Trigger.update, () -> {
-            boolean useDiscord = !OS.hasProp("nodiscord");
-            if (useDiscord) {
-                RichPresence presence = new RichPresence();
-                if (!state.isCampaign()) return;
-                if (state.rules.sector.planet == FOSPlanets.uxerd) {
-                    Building a = indexer.findTile(Team.sharded, 350 * 8, 350 * 8, 4000, b -> b instanceof OrbitalAcceleratorBuild);
+            if (!mobile) {
+                boolean useDiscord = !OS.hasProp("nodiscord");
+                if (useDiscord) {
+                    RichPresence presence = new RichPresence();
+                    if (!state.isCampaign()) return;
+                    if (state.rules.sector.planet == FOSPlanets.uxerd) {
+                        Building a = indexer.findTile(Team.sharded, 350 * 8, 350 * 8, 4000, b -> b instanceof OrbitalAcceleratorBuild);
 
-                    presence.state = "Orbital Accelerator Progress: " + (a != null ? Mathf.round((float) a.items().total() / (float) a.block().itemCapacity * 100) : "0") + "%";
-                    presence.details = "Uxerd (FOS)";
+                        presence.state = "Orbital Accelerator Progress: " + (a != null ? Mathf.round((float) a.items().total() / (float) a.block().itemCapacity * 100) : "0") + "%";
+                        presence.details = "Uxerd (FOS)";
 
-                    presence.largeImageKey = "logo";
+                        presence.largeImageKey = "logo";
 
-                    try {
-                        DiscordRPC.send(presence);
-                    } catch (Exception ignored) {
+                        try {
+                            DiscordRPC.send(presence);
+                        } catch (Exception ignored) {
+                        }
                     }
                 }
             }
