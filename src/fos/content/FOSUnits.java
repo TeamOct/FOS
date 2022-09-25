@@ -21,8 +21,8 @@ public class FOSUnits {
     temp, testBoss,
     //flying
     sergeant, lieutenant, captain, general, marshal,
-
-    hidden;
+    //payload
+    vulture;
 
     public static void load(){
         legion = new UnitType("legion"){{
@@ -173,6 +173,14 @@ public class FOSUnits {
             constructor = UnitEntity::create;
         }};
 
-        hidden = new HiddenUnitType("hidden");
+        vulture = new UnitType("vulture"){{
+            health = 400;
+            speed = 2f;
+            payloadCapacity = 256f;
+            flying = true;
+            omniMovement = true;
+            lowAltitude = true;
+            constructor = PayloadUnit::create;
+        }};
     }
 }

@@ -21,6 +21,9 @@ public class LuminaTechTree {
                     node(silverWallLarge);
                 });
             });
+            node(hovercraftFactory, () -> {
+                node(vulture);
+            });
             node(drillBase2, () -> {
                 node(tinDrill, () -> {
                     node(oreDetector);

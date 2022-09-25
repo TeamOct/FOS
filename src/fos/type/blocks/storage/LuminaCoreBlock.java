@@ -56,6 +56,9 @@ public class LuminaCoreBlock extends CoreBlock {
 
         @Override
         public void requestSpawn(Player player) {
+            //Core: Colony isn't supposed to spawn anything
+            if (name.equals("fos-core-colony")) return;
+
             //spawn cooldown
             if (!requested) {
                 timer = spawnCooldown;
@@ -118,8 +121,9 @@ public class LuminaCoreBlock extends CoreBlock {
                     //oh god so many conditions here
                     if (Mathf.within(x, y, x + i, y + j, range) && tile != null && tile.overlay() != null && tile.overlay() instanceof UndergroundOreBlock) {
                         Draw.z(1f);
-                        Draw.alpha(0.4f);
-                        Drawf.square(tile.x * 8, tile.y * 8, 3, Mathf.PI / 4, tile.drop().color);
+                        Draw.alpha(0.6f);
+                        Drawf.light(tile.x * 8, tile.y * 8, 6f, tile.overlay().itemDrop.color, 0.8f);
+                        Draw.rect(tile.overlay().region, tile.x * 8, tile.y * 8);
 
                         //show an item icon above the cursor/finger
                         Tile hoverTile = world.tileWorld(Core.input.mouseWorld().x, Core.input.mouseWorld().y);

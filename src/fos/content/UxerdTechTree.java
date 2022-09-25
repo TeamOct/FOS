@@ -1,6 +1,7 @@
 package fos.content;
 
 import arc.struct.*;
+import mindustry.content.Liquids;
 import mindustry.game.Objectives.*;
 import mindustry.type.*;
 
@@ -18,17 +19,23 @@ public class UxerdTechTree {
         costs.put(lithium, 0.06f);
         costs.put(tin, 0.05f);
         costs.put(silver, 0.04f);
-        costs.put(titanium, 0.12f); //should be abundant in Serpulo anyway
+        costs.put(cuberium, 0.03f);
+        costs.put(titanium, 0.2f); //should be abundant in Serpulo anyway
 
         FOSPlanets.uxerd.techTree = nodeRoot("@planet.fos-uxerd.name", coreNucleus, true, () -> {
             context().researchCostMultipliers = costs;
 
             node(coreColony, () -> node(coreFortress));
             node(spaceDuct, Seq.with(new OnPlanet(FOSPlanets.uxerd)), () -> {
+                node(spaceRouter);
+                node(spaceBridge);
                 node(itemCatapult, Seq.with(new Research(heatGenerator)), () -> {});
             });
             nodeProduce(rawNethratium, () -> {
-                nodeProduce(aluminium, () -> {});
+                nodeProduce(aluminium, () -> {
+                    nodeProduce(Liquids.hydrogen, () -> {});
+                    nodeProduce(FOSLiquids.oxygen, () -> {});
+                });
             });
             nodeProduce(rawElbium, () -> {
                 nodeProduce(tin, () -> {});
@@ -36,13 +43,17 @@ public class UxerdTechTree {
             });
             nodeProduce(rawElithite, () -> {
                 nodeProduce(titanium, () -> {});
-                nodeProduce(silver, () -> {});
+                nodeProduce(silver, () -> nodeProduce(cuberium, Seq.with(new Research(tin), new Research(titanium), new Research(FOSLiquids.oxygen)), () -> {}));
             });
             node(rockCrusher, Seq.with(new OnPlanet(FOSPlanets.uxerd)), () -> {
                 node(heatGenerator, () -> {
+                    node(solarPanelMedium);
                     node(resourceExtractor, () -> {
-                        node(orbitalAccelerator, Seq.with(new Research(coreFortress)), () -> {});
-                        node(bigBoy);
+                        node(sublimer, () -> node(gasPipe));
+                        node(cuberiumSynthesizer, () -> {
+                            node(orbitalAccelerator, Seq.with(new Research(coreFortress)), () -> {});
+                            node(bigBoy);
+                        });
                     });
                     node(plasmaLauncher);
                     node(oreDetectorSmall, () -> node(drillBase2, () -> node(tinDrill)));

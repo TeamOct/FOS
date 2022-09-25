@@ -29,10 +29,11 @@ allprojects{
 dependencies{
     compileOnly "com.github.Anuken.Arc:arc-core:$mindustryVersion"
     compileOnly "com.github.Anuken.Mindustry:core:$mindustryVersion"
+    compileOnly "com.github.Anuken.Arc:discord:v136"
     //flabel v138 is broken, yay!
     compileOnly "com.github.Anuken.Arc:flabel:v137"
 
-    implementation "com.github.liplum:MultiCrafterLib:v1.7"
+    compileOnly "com.github.liplum:MultiCrafterLib:v1.7"
 
     annotationProcessor "com.github.Anuken:jabel:$jabelVersion"
 }

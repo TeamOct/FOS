@@ -2,6 +2,7 @@ package fos.content;
 
 import arc.graphics.*;
 import arc.struct.*;
+import fos.type.blocks.distribution.*;
 import fos.type.blocks.environment.*;
 import fos.type.blocks.power.*;
 import fos.type.blocks.production.*;
@@ -18,7 +19,10 @@ import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.environment.*;
+import mindustry.world.blocks.liquid.*;
+import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
+import mindustry.world.blocks.units.*;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 import multicraft.*;
@@ -30,19 +34,21 @@ import static mindustry.type.ItemStack.*;
 public class FOSBlocks {
     public static Block
     //crafting
-    mechSeparator, resourceExtractor,
+    mechSeparator, resourceExtractor, cuberiumSynthesizer, sublimer,
     //production
     rockCrusher, drillBase2, tinDrill, oreDetectorSmall, oreDetector,
     //distribution
-    spaceDuct, itemCatapult, tinBelt,
+    spaceDuct, spaceRouter, spaceBridge, itemCatapult, tinBelt,
+    //liquids
+    gasPipe,
     //power
-    windTurbine, heatGenerator, plasmaLauncher,
+    windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     //defense
     tinWall, tinWallLarge, silverWall, silverWallLarge, particulator, pulse, thunder,
     //environment & ores
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall, annite, anniteWall, oreTin, oreTinSurface, oreSilver, oreLithium,
     //units
-    upgradeCenter,
+    upgradeCenter, hovercraftFactory,
     //storage
     coreColony, coreFortress, coreCity, coreMetropolis,
     //special
@@ -80,38 +86,66 @@ public class FOSBlocks {
             resolvedRecipes = Seq.with(
                 new Recipe(
                     new IOEntry(
-                        Seq.with(ItemStack.with(rawNethratium, 2)),
+                        Seq.with(with(rawNethratium, 2)),
                         Seq.with()
                     ),
                     new IOEntry(
-                        Seq.with(ItemStack.with(aluminium, 1)),
+                        Seq.with(with(aluminium, 1)),
                         Seq.with()
                     ),
                     60f
                 ),
                 new Recipe(
                     new IOEntry(
-                        Seq.with(ItemStack.with(rawElbium, 4)),
+                        Seq.with(with(rawElbium, 4)),
                         Seq.with()
                     ),
                     new IOEntry(
-                        Seq.with(ItemStack.with(tin, 1, lithium, 1)),
+                        Seq.with(with(tin, 1, lithium, 1)),
                         Seq.with()
                     ),
                     90f
                 ),
                 new Recipe(
                     new IOEntry(
-                        Seq.with(ItemStack.with(rawElithite, 6)),
+                        Seq.with(with(rawElithite, 6)),
                         Seq.with()
                     ),
                     new IOEntry(
-                        Seq.with(ItemStack.with(silver, 1, titanium, 1)),
+                        Seq.with(with(silver, 1, titanium, 1)),
                         Seq.with()
                     ),
                     120f
                 )
             );
+        }};
+        cuberiumSynthesizer = new GenericCrafter("cuberium-synthesizer"){{
+            scaledHealth = 10;
+            size = 3;
+            hasItems = true;
+            hasPower = consumesPower = true;
+            envEnabled = envRequired = Env.space;
+            consumePower(4f);
+            consumeItems(with(tin, 10, silver, 10, titanium, 5));
+            consumeLiquid(FOSLiquids.oxygen, 3f/60f);
+            outputItems = with(cuberium, 5);
+            craftTime = 60f;
+            requirements(Category.crafting, with(aluminium, 100, tin, 75, silver, 75, titanium, 100));
+        }};
+        sublimer = new AttributeCrafter("sublimer"){{
+            scaledHealth = 10;
+            size = 3;
+            rotate = invertFlip = true;
+            attribute = Attribute.water;
+            baseEfficiency = 0f;
+            minEfficiency = 0.1f;
+            boostScale = 0.3f;
+            consumePower(0.8f);
+            outputLiquids = LiquidStack.with(Liquids.hydrogen, 6f/60f, FOSLiquids.oxygen, 3f/60f);
+            liquidOutputDirections = new int[]{1, 3};
+            craftTime = 10f;
+            envEnabled = envRequired = Env.space;
+            requirements(Category.crafting, with(aluminium, 150, tin, 100, titanium, 100));
         }};
         //endregion
         //region production
@@ -279,23 +313,35 @@ public class FOSBlocks {
         }};*/
         //endregion
         //region distribution
-        spaceDuct = new Duct("space-duct"){{
+        spaceDuct = new SpaceDuct("space-duct"){{
             health = 10;
             size = 1;
             requirements(Category.distribution, with(rawNethratium, 1));
             envRequired = Env.space;
         }};
+        spaceRouter = new DuctRouter("space-router"){{
+            health = 10;
+            size = 1;
+            requirements(Category.distribution, with(rawNethratium, 3));
+            envRequired = Env.space;
+        }};
+        spaceBridge = new DuctBridge("space-bridge"){{
+            health = 10;
+            size = 1;
+            requirements(Category.distribution, with(rawNethratium, 5));
+            envRequired = Env.space;
+        }};
         itemCatapult = new MassDriver("item-catapult"){{
             health = 480;
             size = 2;
-            range = 60f * 8;
+            range = 120f * 8;
             bullet = new MassDriverBolt(){{
                 speed = 0.2f;
                 lifetime = 2400f;
                 damage = 1f;
             }};
             consumePower(1f / 6f);
-            requirements(Category.distribution, with(aluminium, 120, lithium, 50));
+            requirements(Category.distribution, with(aluminium, 120, lithium, 75, silver, 100, titanium, 125));
             envRequired = envEnabled = Env.space;
         }};
         tinBelt = new StackConveyor("tin-belt"){{
@@ -308,6 +354,14 @@ public class FOSBlocks {
             baseEfficiency = 1f;
             consumePower(1f / 60f);
             requirements(Category.distribution, with(tin, 1));
+        }};
+        //endregion
+        //region liquids
+        gasPipe = new Conduit("gas-pipe"){{
+            health = 5;
+            size = 1;
+            liquidCapacity = 20f;
+            requirements(Category.liquid, with(aluminium, 1));
         }};
         //endregion
         //region power
@@ -329,7 +383,12 @@ public class FOSBlocks {
             health = 1500;
             size = 3;
             envRequired = envEnabled = Env.space;
-            requirements(Category.power, with(aluminium, 125, lithium, 90, titanium, 75));
+            requirements(Category.power, with(aluminium, 125, lithium, 90, titanium, 75, cuberium, 50));
+        }};
+        solarPanelMedium = new SolarGenerator("solar-panel-medium"){{
+            size = 2;
+            powerProduction = 0.5f;
+            requirements(Category.power, with(lithium, 50, silver, 75));
         }};
         //endregion
         //region environment & ores
@@ -364,12 +423,14 @@ public class FOSBlocks {
         anniteWall = new StaticWall("annite-wall"){};
         oreTin = new UndergroundOreBlock("ore-tin"){{
             itemDrop = tin;
+            variants = 3;
         }};
         oreTinSurface = new OreBlock("ore-tin-surface"){{
             itemDrop = tin;
         }};
         oreSilver = new UndergroundOreBlock("ore-silver"){{
             itemDrop = silver;
+            variants = 3;
         }};
         oreLithium = new OreBlock("ore-lithium"){{
             itemDrop = lithium;
@@ -382,6 +443,15 @@ public class FOSBlocks {
             consumePower(3f);
             requirements(Category.units, with(tin, 250, silver, 200));
         }};
+        hovercraftFactory = new UnitFactory("hovercraft-factory"){{
+            scaledHealth = 120;
+            size = 3;
+            consumePower(5f);
+            requirements(Category.units, with(tin, 100, silver, 75));
+            plans.add(
+                new UnitPlan(FOSUnits.vulture, 20f * 60, with(tin, 35))
+            );
+        }};
         //endregion
         //region storage
         coreColony = new LuminaCoreBlock("core-colony"){{
@@ -391,9 +461,9 @@ public class FOSBlocks {
 
             health = 1920;
             size = 2;
+            breakable = true;
             itemCapacity = 250;
             unitCapModifier = 0;
-            unitType = FOSUnits.temp;
             requirements(Category.effect, with(tin, 1500));
         }};
         coreFortress = new LuminaCoreBlock("core-fortress"){{
@@ -444,9 +514,10 @@ public class FOSBlocks {
             solid = true;
             update = true;
             configurable = true;
+            buildCostMultiplier = 0.5f;
             consumePower(60);
             consumeItems(with(titanium, 5000, tin, 5000, silver, 5000));
-            requirements(Category.effect, with(aluminium, 10000, tin, 10000, silver, 10000));
+            requirements(Category.effect, with(aluminium, 10000, tin, 10000, silver, 10000, titanium, 10000, cuberium, 10000));
         }};
         cliffDetonator = new CliffExplosive("cliff-detonator"){{
             health = 40;
@@ -458,10 +529,13 @@ public class FOSBlocks {
             size = 5;
             envEnabled |= Env.space;
             hasPower = true;
+            hasLiquids = true;
+            liquidCapacity = 300;
             buildCostMultiplier = 0.2f;
             consumePower(10f);
+            consumeLiquid(Liquids.hydrogen, 300);
             launching = coreFortress;
-            requirements(Category.effect, BuildVisibility.campaignOnly, with(aluminium, 5000, titanium, 3000, lithium, 2500, tin, 2500, silver, 2000));
+            requirements(Category.effect, BuildVisibility.campaignOnly, with(aluminium, 5000, titanium, 3000, lithium, 2500, tin, 2500, silver, 2000, cuberium, 2000));
         }};
     }
 }

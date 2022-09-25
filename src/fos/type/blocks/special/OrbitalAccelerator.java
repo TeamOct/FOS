@@ -1,20 +1,17 @@
 package fos.type.blocks.special;
 
-import arc.Events;
-import arc.func.Prov;
-import arc.graphics.g2d.Draw;
-import arc.scene.ui.layout.Table;
-import arc.util.Reflect;
-import arc.util.Time;
-import fos.content.FOSBlocks;
-import mindustry.content.Fx;
-import mindustry.game.EventType;
-import mindustry.gen.Building;
-import mindustry.world.Tile;
-import mindustry.world.blocks.ConstructBlock;
-import mindustry.world.blocks.campaign.Accelerator;
-import mindustry.world.blocks.storage.CoreBlock;
-import mindustry.world.blocks.storage.CoreBlock.CoreBuild;
+import arc.*;
+import arc.func.*;
+import arc.graphics.g2d.*;
+import arc.scene.ui.layout.*;
+import arc.util.*;
+import fos.content.*;
+import mindustry.content.*;
+import mindustry.game.*;
+import mindustry.gen.*;
+import mindustry.world.*;
+import mindustry.world.blocks.campaign.*;
+import mindustry.world.blocks.storage.CoreBlock.*;
 
 import static arc.Core.camera;
 import static mindustry.Vars.*;
