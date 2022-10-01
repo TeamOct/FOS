@@ -1,11 +1,14 @@
 package fos.type.blocks.power;
 
-import arc.Core;
+import arc.*;
+import arc.graphics.*;
 import arc.graphics.g2d.*;
-import arc.math.geom.Point2;
+import arc.math.*;
+import arc.math.geom.*;
 import fos.content.*;
-import mindustry.Vars;
-import mindustry.gen.Building;
+import mindustry.*;
+import mindustry.gen.*;
+import mindustry.graphics.*;
 import mindustry.world.blocks.power.*;
 import mindustry.world.meta.*;
 
@@ -37,6 +40,8 @@ public class WindTurbine extends PowerGenerator {
             Building b = Vars.world.build(x + edge.x, y + edge.y);
             if (b != null && b.block.solid) {
                 a += 1 / (size * 4f);
+                Draw.z(Layer.blockOver);
+                Drawf.square((x + edge.x) * 8, (y + edge.y) * 8, 4f, Mathf.PI / 4, Color.valueOf("ff0000"));
             }
         }
 
@@ -62,7 +67,7 @@ public class WindTurbine extends PowerGenerator {
         public float rotatorAngle = 0f;
 
         @Override
-        public void updateTile(){
+        public void updateTile() {
             productionEfficiency = attr.env();
 
             Point2[] edges = block.getEdges();

@@ -12,6 +12,8 @@ import mindustry.gen.*;
 import mindustry.world.*;
 import mindustry.world.blocks.campaign.*;
 import mindustry.world.blocks.storage.CoreBlock.*;
+import mindustry.world.consumers.*;
+import mindustry.world.meta.*;
 
 import static arc.Core.camera;
 import static mindustry.Vars.*;
@@ -21,6 +23,23 @@ public class OrbitalAccelerator extends Accelerator {
     public OrbitalAccelerator(String name) {
         super(name);
         buildType = OrbitalAcceleratorBuild::new;
+    }
+
+    @Override
+    public void setStats() {
+        super.setStats();
+
+        stats.remove(Stat.input);
+        for (Consume c : consumers) {
+            //don't duplicate power use
+            if (c instanceof ConsumePower) continue;
+
+            if (c instanceof ConsumeLiquid l) {
+                stats.add(Stat.input, l.liquid, l.amount, false);
+            } else {
+                c.display(stats);
+            }
+        }
     }
 
     public class OrbitalAcceleratorBuild extends AcceleratorBuild {
@@ -49,7 +68,7 @@ public class OrbitalAccelerator extends Accelerator {
                 return;
             }
 
-            if (efficiency > 0) {
+            if (items.total() == itemCapacity && liquids.currentAmount() == liquidCapacity) {
                 ui.showConfirm("@accelerator.confirmtitle", "@accelerator.confirmtext", () -> {
                     isLaunched = true;
 
@@ -89,6 +108,11 @@ public class OrbitalAccelerator extends Accelerator {
                 Reflect.set(renderer, "landCore", build);
                 Reflect.set(renderer, "launchCoreType", launching);
             }
+        }
+
+        @Override
+        public boolean shouldConsume() {
+            return false;
         }
     }
 }
