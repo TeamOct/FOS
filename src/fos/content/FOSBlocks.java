@@ -368,7 +368,7 @@ public class FOSBlocks {
         windTurbine = new WindTurbine("wind-turbine"){{
             health = 480;
             size = 2;
-            powerProduction = 0.25f;
+            powerProduction = 0.8f;
             requirements(Category.power, with(tin, 40));
         }};
         heatGenerator = new HeatGenerator("heat-generator"){{

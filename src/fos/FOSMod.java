@@ -3,6 +3,7 @@ package fos;
 import arc.*;
 import arc.discord.DiscordRPC;
 import arc.discord.DiscordRPC.RichPresence;
+import arc.graphics.g2d.Font;
 import arc.math.*;
 import arc.util.*;
 import fos.content.*;

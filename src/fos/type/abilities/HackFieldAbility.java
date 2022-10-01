@@ -13,9 +13,11 @@ import mindustry.graphics.*;
 import mindustry.type.*;
 
 public class HackFieldAbility extends Ability {
+    public StatusEffect status;
     public float range, chance;
 
     public HackFieldAbility(StatusEffect status, float range, float chance) {
+        this.status = status;
         this.range = range;
         this.chance = chance;
     }
@@ -33,7 +35,7 @@ public class HackFieldAbility extends Ability {
                 if (other.isPlayer()) return;
                 other.team = unit.team;
                 if (other.isBoss()) other.unapply(StatusEffects.boss);
-                other.apply(FOSStatuses.hacked);
+                other.apply(status);
             }
         });
     }
@@ -42,7 +44,6 @@ public class HackFieldAbility extends Ability {
     public void draw(Unit unit) {
         super.draw(unit);
 
-        Draw.color(Color.valueOf("8ae3df"));
-        Drawf.circles(unit.x, unit.y, range);
+        Drawf.circles(unit.x, unit.y, range, Color.valueOf("8ae3df"));
     }
 }
