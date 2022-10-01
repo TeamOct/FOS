@@ -30,6 +30,11 @@ public class FOSMod extends Mod {
                     u.constructor.get() instanceof LegsUnit ? Core.bundle.get("unittype.spider") :
                     u.constructor.get() instanceof UnitWaterMove ? Core.bundle.get("unittype.ship") :
                     u.constructor.get() instanceof PayloadUnit ? Core.bundle.get("unittype.payload") :
+                    u.constructor.get() instanceof TimedKillUnit ? Core.bundle.get("unittype.timedkill") :
+                    u.constructor.get() instanceof TankUnit ? Core.bundle.get("unittype.tank") :
+                    u.constructor.get() instanceof ElevationMoveUnit ? Core.bundle.get("unittype.hover") :
+                    u.constructor.get() instanceof BuildingTetherPayloadUnit ? Core.bundle.get("unittype.tether") :
+                    u.constructor.get() instanceof CrawlUnit ? Core.bundle.get("unittype.crawl") :
                     ""
                     )
                 + (u.weapons.contains(w -> w.bullet.heals()) ? Core.bundle.get("unittype.support") : ""));
