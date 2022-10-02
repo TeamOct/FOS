@@ -14,6 +14,7 @@ import mindustry.world.meta.*;
 
 public class WindTurbine extends PowerGenerator {
     public float displayEfficiencyScale = 1f;
+    public float rotateSpeed = 1f;
     public Attribute attr = FOSAttributes.windPower;
     public TextureRegion rotatorRegion;
 
@@ -74,12 +75,12 @@ public class WindTurbine extends PowerGenerator {
             for (Point2 edge : edges) {
                 Building b = nearby(edge.x, edge.y);
                 if (b != null && b.block.solid) {
-                    productionEfficiency -= 1 / (size * 4f);
+                    productionEfficiency -= attr.env() / (size * 4f);
                 }
             }
             if (productionEfficiency < 0f) productionEfficiency = 0f;
 
-            rotatorAngle += productionEfficiency;
+            rotatorAngle += productionEfficiency * rotateSpeed;
         }
 
         @Override

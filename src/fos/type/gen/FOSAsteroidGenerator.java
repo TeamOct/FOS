@@ -23,8 +23,6 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
 
     public Block defaultFloor = Blocks.stone;
 
-    public final Seq<Tile> centerTiles = new Seq<>();
-
     public int amount = 28, octaves = 2;
     public float radMin = 32f, radMax = 59f, persistence = 0.4f, scale = 30f, mag = 0.46f, thresh = 0.8f;
     public float elithiteChance = 0f, elbiumChance = 0f, nethratiumChance = 0f;
@@ -45,8 +43,6 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
                 }
             }
         }
-
-        centerTiles.add(tiles.getn(ax, ay));
     }
 
     void asteroid(int ax, int ay, int rad, Floor floor) {
@@ -111,11 +107,6 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
         //generate silver and titanium on elithite
         ore(oreSilver, elithite, 4f, 0.7f * silverScl);
 
-        //TODO place enemy spawn in the first place?
-        /*int spawnSide = rand.random(3);
-        int sizeOffset = width / 2 - 1;
-        tiles.getn(sizeOffset * Geometry.d8edge[spawnSide].x + width/2, sizeOffset * Geometry.d8edge[spawnSide].y + height/2).setOverlay(Blocks.spawn);*/
-
         Schematics.placeLaunchLoadout(sx, sy);
 
         Vars.state.rules.planetBackground = new PlanetParams(){{
@@ -128,7 +119,6 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
         Vars.state.rules.borderDarkness = false;
         Vars.state.rules.waves = false;
         Vars.state.rules.waveTeam = FOSTeam.corru;
-        Vars.state.rules.enemyCoreBuildRadius = 360f;
     }
 
     @Override
@@ -139,12 +129,5 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
     @Override
     public int getSectorSize(Sector sector) {
         return 700;
-    }
-
-    @Override
-    public void postGenerate(Tiles tiles) {
-        for (Tile tile : centerTiles) {
-            //TODO
-        }
     }
 }

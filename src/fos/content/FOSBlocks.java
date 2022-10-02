@@ -369,6 +369,7 @@ public class FOSBlocks {
             health = 480;
             size = 2;
             powerProduction = 0.8f;
+            rotateSpeed = 1.8f;
             requirements(Category.power, with(tin, 40));
         }};
         heatGenerator = new HeatGenerator("heat-generator"){{

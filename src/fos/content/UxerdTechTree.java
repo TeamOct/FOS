@@ -31,12 +31,11 @@ public class UxerdTechTree {
                 node(spaceBridge);
                 node(itemCatapult, Seq.with(new Research(heatGenerator)), () -> {});
             });
-            nodeProduce(rawNethratium, () -> {
+            nodeProduce(rawNethratium, () ->
                 nodeProduce(aluminium, () -> {
                     nodeProduce(Liquids.hydrogen, () -> {});
                     nodeProduce(FOSLiquids.oxygen, () -> {});
-                });
-            });
+            }));
             nodeProduce(rawElbium, () -> {
                 nodeProduce(tin, () -> {});
                 nodeProduce(lithium, () -> {});
@@ -56,7 +55,9 @@ public class UxerdTechTree {
                         });
                     });
                     node(plasmaLauncher);
-                    node(oreDetectorSmall, () -> node(drillBase2, () -> node(tinDrill)));
+                    node(oreDetectorSmall, () ->
+                        node(drillBase2, () ->
+                            node(tinDrill)));
                 });
             });
         });
