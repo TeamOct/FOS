@@ -1,5 +1,8 @@
 package fos.type.blocks.production;
 
+import arc.Core;
+import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
 import arc.math.*;
 import fos.type.blocks.environment.UndergroundOreBlock;
 import fos.type.blocks.production.DrillBase;
@@ -12,8 +15,7 @@ import mindustry.world.blocks.production.*;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatValues;
 
-import static mindustry.Vars.indexer;
-import static mindustry.Vars.state;
+import static mindustry.Vars.*;
 
 public class UndergroundDrill extends Drill {
     public UndergroundDrill(String name){
@@ -22,7 +24,7 @@ public class UndergroundDrill extends Drill {
         buildType = UndergroundDrillBuild::new;
     }
 
-    //placeable on drill bases only
+    //placeable on drill bases only, or surface tin ores
     @Override
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {
         if (isMultiblock()) {
@@ -41,11 +43,49 @@ public class UndergroundDrill extends Drill {
     }
 
     @Override
+    public void drawPlace(int x, int y, int rotation, boolean valid) {
+        super.drawPlace(x, y, rotation, valid);
+
+        Tile tile = world.tile(x, y);
+        if(tile == null) return;
+
+        countOre(tile);
+
+        if(returnItem != null){
+            float width = drawPlaceText(Core.bundle.formatFloat("bar.drillspeed", 60f / getDrillTime(returnItem) * returnCount, 2), x, y, valid);
+            float dx = x * tilesize + offset - width/2f - 4f, dy = y * tilesize + offset + size * tilesize / 2f + 5, s = iconSmall / 4f;
+            Draw.mixcol(Color.darkGray, 1f);
+            Draw.rect(returnItem.fullIcon, dx, dy - 1, s, s);
+            Draw.reset();
+            Draw.rect(returnItem.fullIcon, dx, dy, s, s);
+
+            if(drawMineItem){
+                Draw.color(returnItem.color);
+                Draw.rect(itemRegion, tile.worldx() + offset, tile.worldy() + offset);
+                Draw.color();
+            }
+        }else{
+            Tile to = tile.getLinkedTilesAs(this, tempTiles).find(t -> getUnderDrop(t.overlay()) != null && (getUnderDrop(t.overlay()).hardness > tier || getUnderDrop(t.overlay()) == blockedItem));
+            Item item = to == null ? null : to.drop();
+            if(item != null){
+                drawPlaceText(Core.bundle.get("bar.drilltierreq"), x, y, valid);
+            }
+        }
+    }
+
+    @Override
     public void setStats() {
         super.setStats();
         stats.remove(Stat.drillTier);
         stats.add(Stat.drillTier, StatValues.blocks(b -> (b.name.equals("fos-ore-tin-surface") || b.itemDrop == Items.titanium || b instanceof UndergroundOreBlock) &&
-            b.itemDrop != null && b.itemDrop.hardness <= tier && b.itemDrop != blockedItem && (indexer.isBlockPresent(b) || state.isMenu())));
+            getUnderDrop(b) != null && getUnderDrop(b).hardness <= tier && getUnderDrop(b) != blockedItem && (indexer.isBlockPresent(b) || state.isMenu())));
+    }
+
+    @Override
+    public boolean canMine(Tile tile) {
+        if(tile == null || tile.block().isStatic()) return false;
+        Item drops = getUnderDrop(tile.overlay());
+        return drops != null && drops.hardness <= tier && drops != blockedItem;
     }
 
     @Override
@@ -58,7 +98,7 @@ public class UndergroundDrill extends Drill {
 
         for(Tile other : tile.getLinkedTilesAs(this, tempTiles)){
             if(canMine(other) && (other.overlay() instanceof UndergroundOreBlock || other.overlay().name.equals("fos-ore-tin-surface") || getDrop(other) == Items.titanium)){
-                oreCount.increment(getDrop(other), 0, 1);
+                oreCount.increment(getUnderDrop(other.overlay()), 0, 1);
             }
         }
 
@@ -87,6 +127,10 @@ public class UndergroundDrill extends Drill {
 
         //if nothing's under the drill, mine sand
         return returnItem != null ? returnItem : Items.sand;
+    }
+
+    public Item getUnderDrop(Block b) {
+        return b instanceof UndergroundOreBlock u ? u.drop : b.itemDrop;
     }
 
     public class UndergroundDrillBuild extends DrillBuild {

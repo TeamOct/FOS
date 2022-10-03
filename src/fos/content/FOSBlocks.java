@@ -423,14 +423,14 @@ public class FOSBlocks {
         }};
         anniteWall = new StaticWall("annite-wall"){};
         oreTin = new UndergroundOreBlock("ore-tin"){{
-            itemDrop = tin;
+            drop = tin;
             variants = 3;
         }};
         oreTinSurface = new OreBlock("ore-tin-surface"){{
             itemDrop = tin;
         }};
         oreSilver = new UndergroundOreBlock("ore-silver"){{
-            itemDrop = silver;
+            drop = silver;
             variants = 3;
         }};
         oreLithium = new OreBlock("ore-lithium"){{

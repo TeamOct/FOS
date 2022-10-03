@@ -119,10 +119,11 @@ public class LuminaCoreBlock extends CoreBlock {
                 for (float j = -range; j <= range; j+=8) {
                     Tile tile = world.tileWorld(x + i, y + j);
                     //oh god so many conditions here
-                    if (Mathf.within(x, y, x + i, y + j, range) && tile != null && tile.overlay() != null && tile.overlay() instanceof UndergroundOreBlock) {
+                    if (Mathf.within(x, y, x + i, y + j, range) && tile != null && tile.overlay() != null && tile.overlay() instanceof UndergroundOreBlock u) {
                         Draw.z(1f);
                         Draw.alpha(0.6f);
-                        Drawf.light(tile.x * 8, tile.y * 8, 6f, tile.overlay().itemDrop.color, 0.8f);
+
+                        Drawf.light(tile.x * 8, tile.y * 8, 6f, u.drop.color, 0.8f);
                         Draw.rect(tile.overlay().region, tile.x * 8, tile.y * 8);
 
                         //show an item icon above the cursor/finger
@@ -131,7 +132,7 @@ public class LuminaCoreBlock extends CoreBlock {
                         if (tile == hoverTile && tile.block() != null) {
                             Draw.z(Layer.max);
                             Draw.alpha(1f);
-                            Draw.rect(tile.drop().uiIcon, tile.x * 8, tile.y * 8 + 8);
+                            Draw.rect(u.drop.uiIcon, tile.x * 8, tile.y * 8 + 8);
                         }
                     }
                 }
