@@ -34,7 +34,7 @@ import static mindustry.type.ItemStack.*;
 public class FOSBlocks {
     public static Block
     //crafting
-    mechSeparator, resourceExtractor, cuberiumSynthesizer, sublimer,
+    resourceExtractor, cuberiumSynthesizer, sublimer,
     //production
     rockCrusher, drillBase2, tinDrill, oreDetectorSmall, oreDetector,
     //distribution
@@ -56,15 +56,6 @@ public class FOSBlocks {
 
     public static void load() {
         //region crafting
-        mechSeparator = new Separator("mechanical-separator"){{
-            hasItems = true;
-            size = 2;
-            itemCapacity = 10;
-            requirements(Category.crafting, with(tin, 200, silver, 50));
-            craftTime = 120;
-            spinnerSpeed = 1f;
-            results = with(tin, 3, silver, 1, silicon, 2);
-        }};
         resourceExtractor = new MultiCrafter("resource-extractor"){{
             itemCapacity = 15;
             size = 3;
