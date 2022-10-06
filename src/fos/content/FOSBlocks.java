@@ -46,7 +46,10 @@ public class FOSBlocks {
     //defense
     tinWall, tinWallLarge, silverWall, silverWallLarge, particulator, pulse, thunder,
     //environment & ores
-    cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall, annite, anniteWall, oreTin, oreTinSurface, oreSilver, oreLithium,
+    cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
+    annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
+    oreTin, oreTinSurface, oreSilver, oreLithium,
+    bugSpawn,
     //units
     upgradeCenter, hovercraftFactory,
     //storage
@@ -413,6 +416,14 @@ public class FOSBlocks {
             variants = 4;
         }};
         anniteWall = new StaticWall("annite-wall"){};
+        blublu = new Floor("blublu"){{
+            variants = 4;
+        }};
+        blubluWall = new StaticWall("blublu-wall"){};
+        purpur = new Floor("purpur"){{
+            variants = 4;
+        }};
+        purpurWall = new StaticWall("purpur-wall"){};
         oreTin = new UndergroundOreBlock("ore-tin"){{
             drop = tin;
             variants = 3;
@@ -426,6 +437,10 @@ public class FOSBlocks {
         }};
         oreLithium = new OreBlock("ore-lithium"){{
             itemDrop = lithium;
+        }};
+        bugSpawn = new BugSpawnBlock("bug-spawn"){{
+            solid = false;
+            size = 3;
         }};
         //endregion
         //region units

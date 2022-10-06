@@ -79,6 +79,7 @@ public class FOSMod extends Mod {
         int n = Mathf.floor((float) Math.random() * SplashTexts.splashes.size);
         if (mod != null) mod.meta.subtitle = SplashTexts.splashes.get(n);
 
+        FOSIcons.load();
         FOSTeam.load();
 
         handler = new MusicHandler();

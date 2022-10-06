@@ -27,6 +27,7 @@ public class FOSPlanets {
             hasAtmosphere = true;
             bloom = false;
             atmosphereColor = Color.valueOf("b0dcb76d");
+            iconColor = FOSBlocks.annite.mapColor;
             meshLoader = () -> new HexMesh(this, 5);
             startSector = 9;
             generator = new LuminaPlanetGenerator();
@@ -36,7 +37,8 @@ public class FOSPlanets {
             cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 7, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
             ruleSetter = r -> {
                 r.fog = true;
-                r.waveTeam = FOSTeam.corru;
+                r.defaultTeam = FOSTeam.corru;
+                r.waveTeam = FOSTeam.bessin;
                 r.waves = true;
                 r.enemyCoreBuildRadius = 300;
                 WeatherEntry weather = new WeatherEntry(FOSWeathers.wind);
@@ -62,6 +64,7 @@ public class FOSPlanets {
         return new Planet(name, parent, 0.12f){{
             hasAtmosphere = false;
             updateLighting = false;
+            icon = "fos-asteroids";
             sectors.add(new Sector(this, PlanetGrid.Ptile.empty));
             camRadius = 0.68f * scale;
             minZoom = 0.6f;

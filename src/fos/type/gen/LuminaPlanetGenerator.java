@@ -24,10 +24,14 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
     float scl = 8f;
 
     Block[][] arr = {
-            {crimsonStone, annite, crimsonStone, annite},
-            {crimsonStone, annite, annite, crimsonStone},
-            {annite, annite, cyanium, cyanium},
-            {cyanium, annite, cyanium, annite}
+        {crimsonStone, purpur, crimsonStone, purpur},
+        {crimsonStone, purpur, purpur, crimsonStone},
+        {purpur, purpur, blublu, blublu},
+        {purpur, blublu, purpur, blublu, blublu},
+        {blublu, blublu, blublu, annite},
+        {blublu, annite, blublu, annite, blublu},
+        {annite, annite, cyanium, cyanium},
+        {cyanium, annite, cyanium, annite}
     };
 
     @Override
