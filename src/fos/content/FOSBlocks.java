@@ -22,6 +22,7 @@ import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.liquid.*;
 import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
+import mindustry.world.blocks.storage.*;
 import mindustry.world.blocks.units.*;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
@@ -48,12 +49,13 @@ public class FOSBlocks {
     //environment & ores
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
+    alienMoss,
     oreTin, oreTinSurface, oreSilver, oreLithium,
     bugSpawn,
     //units
     upgradeCenter, hovercraftFactory,
     //storage
-    coreColony, coreFortress, coreCity, coreMetropolis,
+    coreColony, coreFortress, coreCity, coreMetropolis, lightUnloader,
     //special
     nukeLauncher, bigBoy, cliffDetonator, orbitalAccelerator;
 
@@ -424,6 +426,7 @@ public class FOSBlocks {
             variants = 4;
         }};
         purpurWall = new StaticWall("purpur-wall"){};
+        alienMoss = new OverlayFloor("alien-moss"){};
         oreTin = new UndergroundOreBlock("ore-tin"){{
             drop = tin;
             variants = 3;
@@ -438,9 +441,9 @@ public class FOSBlocks {
         oreLithium = new OreBlock("ore-lithium"){{
             itemDrop = lithium;
         }};
-        bugSpawn = new BugSpawnBlock("bug-spawn"){{
-            solid = false;
+        bugSpawn = new BugSpawn("bug-spawn"){{
             size = 3;
+            interval = 1 * 60;
         }};
         //endregion
         //region units
@@ -496,6 +499,11 @@ public class FOSBlocks {
             itemCapacity = 8000;
             unitType = FOSUnits.temp;
             requirements(Category.effect, with(tin, 4500, silver, 3500 /*TODO*/));
+        }};
+        lightUnloader = new Unloader("light-unloader"){{
+            health = 60;
+            size = 1;
+            requirements(Category.effect, with(tin, 20, silver, 25));
         }};
         //endregion
         //region special

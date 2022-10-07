@@ -6,6 +6,7 @@ import arc.math.geom.*;
 import arc.struct.*;
 import arc.util.*;
 import arc.util.noise.*;
+import fos.content.FOSTeam;
 import mindustry.ai.*;
 import mindustry.content.*;
 import mindustry.game.*;
@@ -20,18 +21,16 @@ import static mindustry.graphics.g3d.PlanetGrid.*;
 public class LuminaPlanetGenerator extends PlanetGenerator {
     //schematic used as launch loadout
     String launchSchem = "bXNjaAF4nGNgZmBmZmDJS8xNZeBzSizOTFZwyy8qKUotLmbgTkktTi7KLCjJzM9jYGBgy0lMSs0pZmCKjmVkEEzLL9ZNzi9K1U2DKWdgYAQhIAEAzp0V0Q==";
-    BaseGenerator basegen = new BaseGenerator();
+    LuminaBaseGenerator basegen = new LuminaBaseGenerator();
     float scl = 8f;
 
     Block[][] arr = {
-        {crimsonStone, purpur, crimsonStone, purpur},
-        {crimsonStone, purpur, purpur, crimsonStone},
-        {purpur, purpur, blublu, blublu},
-        {purpur, blublu, purpur, blublu, blublu},
-        {blublu, blublu, blublu, annite},
-        {blublu, annite, blublu, annite, blublu},
-        {annite, annite, cyanium, cyanium},
-        {cyanium, annite, cyanium, annite}
+        {crimsonStone, purpur, crimsonStone, purpur, crimsonStone, purpur},
+        {crimsonStone, purpur, purpur, crimsonStone, purpur, purpur},
+        {purpur, blublu, purpur, blublu, purpur, blublu},
+        {blublu, annite, blublu, annite, annite, annite},
+        {annite, cyanium, cyanium, cyanium, annite, annite},
+        {cyanium, cyanium, cyanium, annite, cyanium, cyanium}
     };
 
     @Override
@@ -203,15 +202,11 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
 
         inverseFloodFill(tiles.getn(spawn.x, spawn.y));
 
-        Seq<Block> ores = Seq.with(oreTin, oreTinSurface);
+        Seq<Block> ores = Seq.with(oreTin, oreTinSurface, oreSilver);
         float poles = Math.abs(sector.tile.v.y);
         float nmag = 0.5f;
         float scl = 0.8f;
         float addscl = 1.3f;
-
-        if (Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x + 1, sector.tile.v.y, sector.tile.v.z) * nmag + poles > 0.5f * addscl){
-            ores.add(oreSilver);
-        }
 
         FloatSeq frequencies = new FloatSeq();
         for(int i = 0; i < ores.size; i++){
@@ -231,14 +226,12 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
                     break;
                 }
             }
-
-            if (ore == Blocks.oreScrap && rand.chance(0.5)) {
-                floor = Blocks.metalFloorDamaged;
-            }
         });
 
         trimDark();
         median(2);
+
+        oreAround(alienMoss, blubluWall, 2, 1f, 0f);
 
         float difficulty = sector.threat;
         ints.clear();
@@ -246,19 +239,27 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
 
         Schematics.placeLaunchLoadout(spawn.x, spawn.y);
 
-        enemies.each(espawn -> tiles.getn(espawn.x, espawn.y).setOverlay(Blocks.spawn));
+        enemies.each(espawn -> {
+            tiles.getn(espawn.x, espawn.y).setBlock(bugSpawn, FOSTeam.bessin);
+            tiles.getn(espawn.x, espawn.y).setOverlay(Blocks.spawn);
+        });
 
         if (sector.hasEnemyBase()){
-            basegen.generate(tiles, enemies.map(r -> tiles.getn(r.x, r.y)), tiles.get(spawn.x, spawn.y), state.rules.waveTeam, sector, difficulty);
+            basegen.generate(tiles, enemies.map(r -> tiles.getn(r.x, r.y)), tiles.get(spawn.x, spawn.y), Team.sharded, sector, difficulty);
             state.rules.attackMode = sector.info.attack = true;
-        } else {
-            state.rules.winWave = sector.info.winWave = 10 + 5 * (int)Math.max(difficulty * 10, 10);
+            state.rules.waveTeam = Team.sharded;
         }
 
         float waveTimeDec = 0.4f;
 
-        state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2, 60 * 60, (float)Math.floor(Math.max(difficulty - waveTimeDec, 0) / 0.8f));
+        state.rules.waveSpacing = Mathf.lerp(60 * 360, 60 * 120, (float)Math.floor(Math.max(difficulty - waveTimeDec, 0) / 0.8f));
         state.rules.spawns = LuminaWaves.generate(difficulty, new Rand(), state.rules.attackMode);
+    }
+
+    //TODO because the generator is not complete, I do not allow you to enter, unless you know what you're doing
+    @Override
+    public boolean allowLanding(Sector sector) {
+        return false;
     }
 
     @Override
