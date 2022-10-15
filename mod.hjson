@@ -2,7 +2,10 @@ name: "fos"
 displayName: "Fictional Octo System"
 author: "Team Oct"
 main: "fos.FOSMod"
+repo: "TeamOct/fictional-octo-system"
 description: "A space themed mod. Adds landable asteroids as well as a brand-new planet with unique gameplay.\n\nUses liplum/MultiCrafterLib, but you aren't required to install it."
 version: "1.1 pre-alpha"
 minGameVersion: 139
 java: true
+hidden: false
+hideBrowser: true

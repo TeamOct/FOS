@@ -1,6 +1,5 @@
 package fos.content;
 
-import arc.func.*;
 import arc.graphics.*;
 import arc.math.*;
 import arc.math.geom.*;
@@ -9,6 +8,7 @@ import arc.util.*;
 import fos.type.gen.*;
 import mindustry.Vars;
 import mindustry.content.*;
+import mindustry.game.Team;
 import mindustry.graphics.g3d.*;
 import mindustry.type.*;
 import mindustry.world.meta.*;
@@ -26,7 +26,7 @@ public class FOSPlanets {
             defaultCore = FOSBlocks.coreFortress;
             hasAtmosphere = true;
             bloom = false;
-            atmosphereColor = Color.valueOf("b0dcb76d");
+            atmosphereColor = Color.valueOf("288a5d27");
             iconColor = FOSBlocks.annite.mapColor;
             meshLoader = () -> new HexMesh(this, 5);
             startSector = 9;
@@ -36,9 +36,10 @@ public class FOSPlanets {
             camRadius += 0.4f;
             cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 5, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
             ruleSetter = r -> {
+                r.loadout = ItemStack.list();
                 r.fog = true;
                 r.defaultTeam = FOSTeam.corru;
-                r.waveTeam = FOSTeam.bessin;
+                r.waveTeam = r.attackMode ? Team.sharded : FOSTeam.bessin;
                 r.waves = true;
                 r.enemyCoreBuildRadius = 300;
                 WeatherEntry weather = new WeatherEntry(FOSWeathers.wind);
@@ -58,7 +59,6 @@ public class FOSPlanets {
             clipRadius = 2f;
             defaultEnv = Env.space;
             launchCandidates.add(lumina);
-
             generator = new FOSAsteroidGenerator(){{
                 seed = 8;
                 defaultFloor = Blocks.ice;
@@ -66,7 +66,18 @@ public class FOSPlanets {
                 elbiumChance = 0.5f;
                 nethratiumChance = 0.4f;
             }};
-
+            ruleSetter = r -> {
+                r.loadout = ItemStack.list();
+                r.planetBackground = new PlanetParams(){{
+                    planet = parent;
+                    zoom = 0.8f;
+                    camPos = new Vec3(0f, 0f, 0.5f);
+                }};
+                r.dragMultiplier = 0.2f;
+                r.borderDarkness = false;
+                r.waves = false;
+                r.waveTeam = FOSTeam.corru;
+            };
             meshLoader = () -> {
                 Rand rand = new Rand(8);
                 Seq<GenericMesh> meshes = new Seq<>();

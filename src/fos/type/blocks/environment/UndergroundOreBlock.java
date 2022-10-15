@@ -17,6 +17,17 @@ public class UndergroundOreBlock extends OverlayFloor {
         variants = 1;
     }
 
+    @Override
+    public void load() {
+        super.load();
+
+        //just in case somebody decides to declare itemDrop
+        if (itemDrop != null) {
+            drop = itemDrop;
+            itemDrop = null;
+        }
+    }
+
     //can't see in-game
     @Override
     public void drawBase(Tile tile) {}

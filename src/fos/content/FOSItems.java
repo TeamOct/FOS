@@ -2,11 +2,12 @@ package fos.content;
 
 import arc.graphics.Color;
 import arc.struct.Seq;
-import mindustry.content.Items;
 import mindustry.type.Item;
 
+import static mindustry.content.Items.*;
+
 public class FOSItems {
-    public static Item rawNethratium, rawElbium, rawElithite, aluminium, tin, silver, lithium, cuberium;
+    public static Item rawNethratium, rawElbium, rawElithite, aluminium, tin, silver, lithium, cuberium, diamond;
 
     public static Seq<Item> uxerdItems = new Seq<>(), luminaItems = new Seq<>();
 
@@ -39,8 +40,12 @@ public class FOSItems {
         cuberium = new Item("cuberium", Color.valueOf("000000")){{
             cost = 3f;
         }};
+        diamond = new Item("diamond", Color.valueOf("000000")){{
+            cost = 2.8f;
+            hardness = 4;
+        }};
 
-        uxerdItems.addAll(rawNethratium, rawElbium, rawElithite, aluminium, tin, silver, lithium, Items.titanium, cuberium);
-        luminaItems.addAll(tin, silver);
+        uxerdItems.addAll(rawNethratium, rawElbium, rawElithite, aluminium, tin, silver, lithium, titanium, cuberium);
+        luminaItems.addAll(tin, silver, diamond, silicon);
     }
 }

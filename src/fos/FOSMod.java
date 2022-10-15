@@ -3,43 +3,42 @@ package fos;
 import arc.*;
 import arc.discord.DiscordRPC;
 import arc.discord.DiscordRPC.RichPresence;
-import arc.graphics.g2d.Font;
 import arc.math.*;
 import arc.util.*;
 import fos.content.*;
-import fos.type.audio.MusicHandler;
-import fos.type.blocks.special.OrbitalAccelerator.OrbitalAcceleratorBuild;
+import fos.type.blocks.special.OrbitalAccelerator.*;
 import mindustry.content.SectorPresets;
 import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.mod.*;
 import mindustry.mod.Mods.*;
-import mindustry.type.*;
+import mindustry.world.meta.Env;
 
+import static arc.Core.*;
 import static mindustry.Vars.*;
 import static mindustry.game.EventType.*;
 
 public class FOSMod extends Mod {
-    public MusicHandler handler;
-
     public FOSMod() {
         Events.on(ClientLoadEvent.class, e -> {
-            content.units().each(u -> {
-                u.description += ("\n" + Core.bundle.get("unittype") + (
-                    u.constructor.get() instanceof MechUnit ? Core.bundle.get("unittype.infantry") :
-                    u.constructor.get() instanceof UnitEntity ? Core.bundle.get("unittype.flying") :
-                    u.constructor.get() instanceof LegsUnit ? Core.bundle.get("unittype.spider") :
-                    u.constructor.get() instanceof UnitWaterMove ? Core.bundle.get("unittype.ship") :
-                    u.constructor.get() instanceof PayloadUnit ? Core.bundle.get("unittype.payload") :
-                    u.constructor.get() instanceof TimedKillUnit ? Core.bundle.get("unittype.timedkill") :
-                    u.constructor.get() instanceof TankUnit ? Core.bundle.get("unittype.tank") :
-                    u.constructor.get() instanceof ElevationMoveUnit ? Core.bundle.get("unittype.hover") :
-                    u.constructor.get() instanceof BuildingTetherPayloadUnit ? Core.bundle.get("unittype.tether") :
-                    u.constructor.get() instanceof CrawlUnit ? Core.bundle.get("unittype.crawl") :
+            loadSettings();
+
+            content.units().each(u ->
+                u.description += ("\n" + bundle.get("unittype") + (
+                    u.constructor.get() instanceof MechUnit ? bundle.get("unittype.infantry") :
+                    u.constructor.get() instanceof UnitEntity ? bundle.get("unittype.flying") :
+                    u.constructor.get() instanceof LegsUnit ? bundle.get("unittype.spider") :
+                    u.constructor.get() instanceof UnitWaterMove ? bundle.get("unittype.ship") :
+                    u.constructor.get() instanceof PayloadUnit ? bundle.get("unittype.payload") :
+                    u.constructor.get() instanceof TimedKillUnit ? bundle.get("unittype.timedkill") :
+                    u.constructor.get() instanceof TankUnit ? bundle.get("unittype.tank") :
+                    u.constructor.get() instanceof ElevationMoveUnit ? bundle.get("unittype.hover") :
+                    u.constructor.get() instanceof BuildingTetherPayloadUnit ? bundle.get("unittype.tether") :
+                    u.constructor.get() instanceof CrawlUnit ? bundle.get("unittype.crawl") :
                     ""
                     )
-                + (u.weapons.contains(w -> w.bullet.heals()) ? Core.bundle.get("unittype.support") : ""));
-            });
+                + (u.weapons.contains(w -> w.bullet.heals()) ? bundle.get("unittype.support") : ""))
+            );
 
             ui.showOkText("@fos.earlyaccesstitle", "@fos.earlyaccess", () -> {});
         });
@@ -66,7 +65,15 @@ public class FOSMod extends Mod {
                 }
             }
 
-            if (SectorPresets.planetaryTerminal.sector.info.wasCaptured && !FOSPlanets.uxerd.unlocked()) FOSPlanets.uxerd.unlock();
+            if (SectorPresets.planetaryTerminal.sector.info.wasCaptured && !FOSPlanets.uxerd.unlocked()) {
+                FOSPlanets.uxerd.unlock();
+            }
+
+            if (settings.getBool("fos-realisticmode") && state.rules.sector != null && state.rules.sector.planet.defaultEnv == Env.space) {
+                audio.soundBus.setVolume(0f);
+            } else {
+                audio.soundBus.setVolume(settings.getInt("sfxvol") / 100f);
+            }
         });
     }
 
@@ -74,15 +81,21 @@ public class FOSMod extends Mod {
     public void init() {
         LoadedMod mod = mods.locateMod("fos");
 
-        SplashTexts.load(12);
-
+        SplashTexts.load(13);
         int n = Mathf.floor((float) Math.random() * SplashTexts.splashes.size);
-        if (mod != null) mod.meta.subtitle = SplashTexts.splashes.get(n);
+        mod.meta.subtitle = SplashTexts.splashes.get(n);
+
+        mod.meta.description += "\n\nCurrent Version: " + mod.meta.version;
 
         FOSIcons.load();
         FOSTeam.load();
 
-        handler = new MusicHandler();
+        FOSVars.load();
+
+        LoadedMod xf = mods.list().find(m -> m.meta.author.equals("XenoTale"));
+        if (xf != null) {
+            ui.showOkText("@fos.errortitle", bundle.format("fos.errortext", xf.meta.displayName), () -> app.exit());
+        }
     }
 
     @Override
@@ -103,5 +116,11 @@ public class FOSMod extends Mod {
         LuminaTechTree.load();
         SerpuloTechTree.load();
         UxerdTechTree.load();
+    }
+
+    void loadSettings() {
+        ui.settings.addCategory("@setting.fos-title", "fos-settings-icon", t -> {
+            t.checkPref("fos-realisticmode", false);
+        });
     }
 }

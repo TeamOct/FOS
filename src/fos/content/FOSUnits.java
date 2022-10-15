@@ -173,14 +173,17 @@ public class FOSUnits {
             constructor = UnitEntity::create;
         }};
 
-        vulture = new UnitType("vulture"){{
+        vulture = new CarrierUnitType("vulture"){{
             health = 400;
             speed = 2f;
-            payloadCapacity = 256f;
+            hitSize = 16f;
+            payloadCapacity = 8f * 8f;
+            engineOffset = 10f;
             flying = true;
             omniMovement = true;
             lowAltitude = true;
             constructor = PayloadUnit::create;
+            controller = u -> new CarrierAI();
         }};
     }
 }

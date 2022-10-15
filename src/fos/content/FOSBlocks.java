@@ -2,6 +2,7 @@ package fos.content;
 
 import arc.graphics.*;
 import arc.struct.*;
+import fos.type.blocks.campaign.ResearchCore;
 import fos.type.blocks.distribution.*;
 import fos.type.blocks.environment.*;
 import fos.type.blocks.power.*;
@@ -57,7 +58,7 @@ public class FOSBlocks {
     //storage
     coreColony, coreFortress, coreCity, coreMetropolis, lightUnloader,
     //special
-    nukeLauncher, bigBoy, cliffDetonator, orbitalAccelerator;
+    nukeLauncher, bigBoy, cliffDetonator, orbitalAccelerator, mechResearchCore, bioResearchCore;
 
     public static void load() {
         //region crafting
@@ -443,7 +444,7 @@ public class FOSBlocks {
         }};
         bugSpawn = new BugSpawn("bug-spawn"){{
             size = 3;
-            interval = 1 * 60;
+            interval = 20 * 60;
         }};
         //endregion
         //region units
@@ -551,6 +552,15 @@ public class FOSBlocks {
             consumeLiquid(Liquids.hydrogen, 300);
             launching = coreFortress;
             requirements(Category.effect, BuildVisibility.campaignOnly, with(aluminium, 5000, titanium, 3000, lithium, 2500, tin, 2500, silver, 2000, cuberium, 2000));
+        }};
+        mechResearchCore = new ResearchCore("mech-research-core"){{
+            scaledHealth = 160;
+            size = 3;
+            hasPower = true;
+            acceptsPayload = true;
+            outputsPayload = false;
+            consumePower(3f);
+            requirements(Category.effect, with(tin, 250, silver, 300, diamond, 150));
         }};
     }
 }

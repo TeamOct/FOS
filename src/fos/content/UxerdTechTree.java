@@ -15,12 +15,12 @@ public class UxerdTechTree {
     static ObjectFloatMap<Item> costs = new ObjectFloatMap<>();
 
     public static void load() {
-        costs.put(aluminium, 0.08f);
-        costs.put(lithium, 0.06f);
-        costs.put(tin, 0.05f);
-        costs.put(silver, 0.04f);
+        costs.put(aluminium, 0.05f);
+        costs.put(lithium, 0.08f);
+        costs.put(tin, 0.06f);
+        costs.put(silver, 0.06f);
         costs.put(cuberium, 0.03f);
-        costs.put(titanium, 0.2f); //should be abundant in Serpulo anyway
+        costs.put(titanium, 0.08f);
 
         FOSPlanets.uxerd.techTree = nodeRoot("@planet.fos-uxerd.name", coreNucleus, true, () -> {
             context().researchCostMultipliers = costs;
@@ -48,6 +48,7 @@ public class UxerdTechTree {
                 node(heatGenerator, () -> {
                     node(solarPanelMedium);
                     node(resourceExtractor, () -> {
+                        node(cliffDetonator);
                         node(sublimer, () -> node(gasPipe));
                         node(cuberiumSynthesizer, () -> {
                             node(orbitalAccelerator, Seq.with(new Research(coreFortress)), () -> {});

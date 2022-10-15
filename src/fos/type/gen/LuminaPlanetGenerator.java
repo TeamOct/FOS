@@ -230,6 +230,7 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
 
         trimDark();
         median(2);
+        tech(Blocks.metalFloor, Blocks.metalFloor2, Blocks.darkMetal);
 
         oreAround(alienMoss, blubluWall, 2, 1f, 0f);
 

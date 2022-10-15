@@ -116,7 +116,8 @@ public class LuminaBaseGenerator {
         Seq<Block> wallsSmall = content.blocks().select(b -> b instanceof Wall && b.size == size
             && !b.insulated && b.buildVisibility == BuildVisibility.shown
             && !(b instanceof Door)
-            && !(Structs.contains(b.requirements, i -> state.rules.hiddenBuildItems.contains(i.item))));
+            && !(Structs.contains(b.requirements, i -> state.rules.hiddenBuildItems.contains(i.item)))
+            && b.minfo.mod.name.equals("fos"));
         wallsSmall.sort(b -> b.buildCost);
         return wallsSmall.getFrac(difficulty * 0.91f);
     }

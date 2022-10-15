@@ -100,6 +100,28 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
         //second cliff layer
         cliffs();
 
+        //second wall layer
+        pass((x, y) -> {
+            if (floor == bg || block == Blocks.cliff || Ridged.noise2d(seed + 1, x, y, 4, 0.7f, 1f / 60f) > 0.45f || Mathf.within(x, y, sx, sy, 20 + Ridged.noise2d(seed, x, y, 3, 0.5f, 1f / 30f) * 6f)) return;
+
+            for (Point2 p : Geometry.d8) {
+                Tile other = tiles.get(x + p.x, y + p.y);
+                if (other != null && other.block() == Blocks.cliff) {
+                    return;
+                }
+            }
+
+            int rad = 6;
+            for (int dx = x-rad; dx <= x-rad; dx++) {
+                for (int dy = y-rad; dy <= y+rad; dy++) {
+                    if(Mathf.within(dx, dy, x, y, rad + 0.0001f) && tiles.in(dx, dy) && tiles.getn(dx, dy).floor() == bg) {
+                        return;
+                    }
+                }
+            }
+            block = floor.asFloor().wall;
+        });
+
         //generate tin and lithium on elbium
         ore(oreTin, elbium, 4f, 0.6f * tinScl);
         ore(oreLithium, elbium, 4f, 0.8f * lithiumScl);
@@ -108,17 +130,6 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
         ore(oreSilver, elithite, 4f, 0.7f * silverScl);
 
         Schematics.placeLaunchLoadout(sx, sy);
-
-        Vars.state.rules.planetBackground = new PlanetParams(){{
-            planet = sector.planet.parent;
-            zoom = 0.3f;
-            camPos = new Vec3(0f, 0f, 45f);
-        }};
-
-        Vars.state.rules.dragMultiplier = 0.2f; //it's space after all, so very little drag
-        Vars.state.rules.borderDarkness = false;
-        Vars.state.rules.waves = false;
-        Vars.state.rules.waveTeam = FOSTeam.corru;
     }
 
     @Override
