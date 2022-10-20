@@ -10,13 +10,14 @@ import fos.type.units.weapons.*;
 import mindustry.ai.types.*;
 import mindustry.content.*;
 import mindustry.entities.abilities.*;
+import mindustry.entities.bullet.BasicBulletType;
 import mindustry.gen.*;
 import mindustry.type.*;
 
 public class FOSUnits {
     public static UnitType
     //mechs
-    legion,
+    legion, citadel,
     //legs
     temp, testBoss,
     //flying
@@ -40,6 +41,40 @@ public class FOSUnits {
                 abilities.add(new UnitSpawnAbility(UnitTypes.atrax, 600, x, y));
                 angle += Mathf.PI2 / 8;
             }
+            constructor = MechUnit::create;
+        }};
+        citadel = new UnitType("citadel"){{
+            health = 7500;
+            armor = 40;
+            hitSize = 40;
+            speed = 0.05f;
+            flying = false;
+            canBoost = false;
+            abilities.add(
+                new ArmorPlateAbility(){{
+                    healthMultiplier = 0.5f;
+                }}
+            );
+            weapons.add(
+                new Weapon("citadel-shotgun"){{
+                    x = 24; y = 4;
+                    rotate = false;
+                    mirror = true;
+                    alternate = true;
+                    recoil = 4f;
+                    recoilTime = 60f;
+                    reload = 30f;
+                    inaccuracy = 10f;
+                    shoot.shots = 6;
+                    bullet = new BasicBulletType(4f, 30f){{
+                        lifetime = 40f;
+                        width = 4f; height = 8f;
+                        trailWidth = 2f;
+                        trailLength = 12;
+                        velocityRnd = 0.1f;
+                    }};
+                }}
+            );
             constructor = MechUnit::create;
         }};
 

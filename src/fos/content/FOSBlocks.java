@@ -491,7 +491,7 @@ public class FOSBlocks {
             unitCapModifier = 7;
             itemCapacity = 5000;
             unitType = FOSUnits.temp;
-            requirements(Category.effect, with(tin, 2500, silver, 2000 /*TODO more items soon(tm)*/));
+            requirements(Category.effect, with(tin, 2500, silver, 2000, diamond, 1500));
         }};
         coreMetropolis = new LuminaCoreBlock("core-metropolis"){{
             health = 8000;
@@ -499,11 +499,12 @@ public class FOSBlocks {
             unitCapModifier = 10;
             itemCapacity = 8000;
             unitType = FOSUnits.temp;
-            requirements(Category.effect, with(tin, 4500, silver, 3500 /*TODO*/));
+            requirements(Category.effect, with(tin, 4500, silver, 3500, diamond, 3000));
         }};
         lightUnloader = new Unloader("light-unloader"){{
             health = 60;
             size = 1;
+            speed = 60f / 5f;
             requirements(Category.effect, with(tin, 20, silver, 25));
         }};
         //endregion

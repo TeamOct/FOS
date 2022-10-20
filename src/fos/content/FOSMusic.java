@@ -6,13 +6,14 @@ import mindustry.Vars;
 public class FOSMusic {
     public static Music
         /* Uxerd */ dive,
-        /* Lumina */ abandoned, luminaBoss;
+        /* Lumina */ abandoned,
+        /* bosses */ livingSteam;
 
     public static void load() {
         dive = Vars.tree.loadMusic("dive");
 
         abandoned = Vars.tree.loadMusic("abandoned");
-        //TODO replace, unfinished and short
-        luminaBoss = Vars.tree.loadMusic("boss3");
+
+        livingSteam = Vars.tree.loadMusic("living-steam");
     }
 }

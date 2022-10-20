@@ -22,7 +22,7 @@ public class ResearchCore extends PayloadBlock {
     public class ResearchCoreBuild extends PayloadBlockBuild<Payload> {
         @Override
         public boolean acceptPayload(Building source, Payload payload) {
-            return true;
+            return items.total() < itemCapacity;
         }
 
         @Override

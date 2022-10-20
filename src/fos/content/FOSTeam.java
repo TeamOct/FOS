@@ -8,7 +8,7 @@ public class FOSTeam {
 
     public static void load() {
         corru = newTeam(69, "corru", Color.valueOf("8ae3df"));
-        bessin = newTeam(70, "bessin", Color.valueOf("ff9ee1"));
+        bessin = newTeam(70, "bessin", Color.valueOf("b8d15c"));
     }
 
     //modify any of 256 teams' properties

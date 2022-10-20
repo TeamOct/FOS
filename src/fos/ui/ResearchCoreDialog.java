@@ -1,28 +1,39 @@
 package fos.ui;
 
-import arc.struct.Seq;
 import fos.content.FOSVars;
-import mindustry.content.Items;
-import mindustry.gen.Building;
-import mindustry.type.ItemSeq;
-import mindustry.type.ItemStack;
-import mindustry.ui.dialogs.ResearchDialog;
+import fos.type.blocks.campaign.ResearchCore.ResearchCoreBuild;
+import mindustry.content.*;
+import mindustry.type.*;
+import mindustry.ui.dialogs.*;
 
 public class ResearchCoreDialog extends ResearchDialog {
-    public Building rc;
+    public ResearchCoreBuild rc;
 
     public ResearchCoreDialog() {
         super();
-        titleTable.clear();
 
-        switchTree(FOSVars.mechTree);
+        shown(() -> {
+            switchTree(FOSVars.mechTree);
+            if (titleTable.hasChildren()) titleTable.getChildren().first().remove();
+        });
     }
 
     @Override
     public void rebuildItems() {
-        items = new ItemSeq(
-            Seq.with(ItemStack.with(Items.scrap, rc.items.get(Items.scrap))
-            )
-        );
+        items = new ItemSeq(){
+            {
+                values[Items.scrap.id] = Math.max(rc.items.get(Items.scrap), 0);
+            }
+            @Override
+            public void add(Item item, int amount) {
+                if (amount < 0) {
+                    amount = -amount;
+                    rc.items.remove(item, amount);
+
+                    amount = -amount;
+                }
+                super.add(item, amount);
+            }
+        };
     }
 }

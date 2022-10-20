@@ -4,21 +4,28 @@ import arc.*;
 import arc.discord.DiscordRPC;
 import arc.discord.DiscordRPC.RichPresence;
 import arc.math.*;
+import arc.scene.ui.*;
+import arc.scene.ui.layout.*;
 import arc.util.*;
 import fos.content.*;
 import fos.type.blocks.special.OrbitalAccelerator.*;
+import fos.ui.menus.*;
 import mindustry.content.SectorPresets;
 import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.mod.*;
 import mindustry.mod.Mods.*;
-import mindustry.world.meta.Env;
+import mindustry.ui.Styles;
+import mindustry.ui.fragments.MenuFragment;
 
 import static arc.Core.*;
+import static fos.ui.menus.FOSMenus.*;
 import static mindustry.Vars.*;
 import static mindustry.game.EventType.*;
 
 public class FOSMod extends Mod {
+    private boolean editorChanged = false;
+
     public FOSMod() {
         Events.on(ClientLoadEvent.class, e -> {
             loadSettings();
@@ -41,6 +48,15 @@ public class FOSMod extends Mod {
             );
 
             ui.showOkText("@fos.earlyaccesstitle", "@fos.earlyaccess", () -> {});
+
+            int tn = settings.getInt("fos-menutheme");
+            MenuBackground bg = (
+                tn == 2 ? uxerdSpace :
+                tn == 3 ? luminaSpace :
+                null);
+            if (tn != 1) {
+                Reflect.set(MenuFragment.class, ui.menufrag, "renderer", new FOSMenuRenderer(bg));
+            }
         });
 
         Events.run(Trigger.update, () -> {
@@ -69,7 +85,7 @@ public class FOSMod extends Mod {
                 FOSPlanets.uxerd.unlock();
             }
 
-            if (settings.getBool("fos-realisticmode") && state.rules.sector != null && state.rules.sector.planet.defaultEnv == Env.space) {
+            if (settings.getBool("fos-realisticmode") && state.rules.sector != null && !state.rules.sector.planet.hasAtmosphere) {
                 audio.soundBus.setVolume(0f);
             } else {
                 audio.soundBus.setVolume(settings.getInt("sfxvol") / 100f);
@@ -89,8 +105,15 @@ public class FOSMod extends Mod {
 
         FOSIcons.load();
         FOSTeam.load();
-
+        load();
         FOSVars.load();
+
+        ui.editor.shown(() -> {
+            if (!editorChanged) {
+                addEditorTeams();
+                editorChanged = true;
+            }
+        });
 
         LoadedMod xf = mods.list().find(m -> m.meta.author.equals("XenoTale"));
         if (xf != null) {
@@ -120,7 +143,33 @@ public class FOSMod extends Mod {
 
     void loadSettings() {
         ui.settings.addCategory("@setting.fos-title", "fos-settings-icon", t -> {
+            t.sliderPref("fos-menutheme", 2, 1, 3, i ->
+                i == 2 ? "@setting.fos-menutheme.uxerdspace" :
+                i == 3 ? "@setting.fos-menutheme.luminaspace" :
+                "@setting.fos-menutheme.default");
             t.checkPref("fos-realisticmode", false);
         });
+    }
+
+    void addEditorTeams() {
+        //thanks java.
+        WidgetGroup teambuttons = (WidgetGroup) ui.editor.getChildren().get(0);
+        teambuttons = (WidgetGroup) teambuttons.getChildren().get(0);
+        teambuttons = (WidgetGroup) teambuttons.getChildren().get(0);
+
+        ((Table) teambuttons).row();
+
+        for(int i = 69; i <= 70; i++){
+            Team team = Team.get(i);
+
+            ImageButton button = new ImageButton(Tex.whiteui, Styles.clearNoneTogglei);
+            button.margin(4f);
+            button.getImageCell().grow();
+            button.getStyle().imageUpColor = team.color;
+            button.clicked(() -> editor.drawTeam = team);
+            button.update(() -> button.setChecked(editor.drawTeam == team));
+
+            ((Table) teambuttons).add(button);
+        }
     }
 }

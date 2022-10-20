@@ -21,7 +21,7 @@ public class FOSPlanets {
         /* planets */ lumina,
         /* asteroids */ uxerd;
 
-    public static void load(){
+    public static void load() {
         lumina = new Planet("lumina", Planets.serpulo, 0.9f, 2){{
             defaultCore = FOSBlocks.coreFortress;
             hasAtmosphere = true;
@@ -34,6 +34,7 @@ public class FOSPlanets {
             defaultEnv = Env.terrestrial | Env.oxygen;
             minZoom = 0.8f;
             camRadius += 0.4f;
+            orbitSpacing = 6f;
             cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 5, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
             ruleSetter = r -> {
                 r.loadout = ItemStack.list();

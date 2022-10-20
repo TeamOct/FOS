@@ -234,6 +234,21 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
 
         oreAround(alienMoss, blubluWall, 2, 1f, 0f);
 
+        pass((x, y) -> {
+            if (floor == purpur && block == Blocks.air) {
+                if (rand.chance(0.01)){
+                    for (Point2 p : Geometry.d8) {
+                        Tile other = tiles.get(x + p.x, y + p.y);
+                        //if there's already a tree nearby, return
+                        if (other.block() == Blocks.whiteTree) return;
+                    }
+                    if (rand.chance(0.1)) {
+                        block = Blocks.whiteTree;
+                    }
+                }
+            }
+        });
+
         float difficulty = sector.threat;
         ints.clear();
         ints.ensureCapacity(width * height / 4);

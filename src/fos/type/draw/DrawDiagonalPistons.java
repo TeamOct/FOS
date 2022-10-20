@@ -32,10 +32,6 @@ public class DrawDiagonalPistons extends DrawBlock {
                 regiont.found() && (Mathf.equal(angle, 315) || Mathf.equal(angle, 135)) ? regiont :
                     angle >= 135 && angle < 315 ? region2 : region1;
 
-            if(Mathf.equal(angle, 315)){
-                Draw.yscl = -1f;
-            }
-
             Draw.rect(reg, build.x + Angles.trnsx(angle, len), build.y + Angles.trnsy(angle, len), angle - 45f);
 
             Draw.yscl = 1f;
