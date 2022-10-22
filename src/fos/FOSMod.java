@@ -53,6 +53,8 @@ public class FOSMod extends Mod {
             MenuBackground bg = (
                 tn == 2 ? uxerdSpace :
                 tn == 3 ? luminaSpace :
+                tn == 4 ? random :
+                tn == 5 ? luminaTerrain :
                 null);
             if (tn != 1) {
                 Reflect.set(MenuFragment.class, ui.menufrag, "renderer", new FOSMenuRenderer(bg));
@@ -105,7 +107,7 @@ public class FOSMod extends Mod {
 
         FOSIcons.load();
         FOSTeam.load();
-        load();
+        FOSMenus.load();
         FOSVars.load();
 
         ui.editor.shown(() -> {
@@ -143,9 +145,11 @@ public class FOSMod extends Mod {
 
     void loadSettings() {
         ui.settings.addCategory("@setting.fos-title", "fos-settings-icon", t -> {
-            t.sliderPref("fos-menutheme", 2, 1, 3, i ->
+            t.sliderPref("fos-menutheme", 2, 1, 5, i ->
                 i == 2 ? "@setting.fos-menutheme.uxerdspace" :
                 i == 3 ? "@setting.fos-menutheme.luminaspace" :
+                i == 4 ? "@setting.fos-menutheme.randomplanet" :
+                i == 5 ? "@setting.fos-menutheme.luminaterrain" :
                 "@setting.fos-menutheme.default");
             t.checkPref("fos-realisticmode", false);
         });

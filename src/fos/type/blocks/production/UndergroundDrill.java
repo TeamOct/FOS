@@ -33,7 +33,7 @@ public class UndergroundDrill extends Drill {
                 if (other.overlay().name.equals("fos-ore-tin-surface")) return true;
 
                 Building block = other.build;
-                return block != null && block.block() instanceof DrillBase && block.team == team;
+                if (block != null && block.block() instanceof DrillBase && block.team == team) return true;
             }
             return false;
         } else {

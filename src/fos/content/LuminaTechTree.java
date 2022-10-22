@@ -8,6 +8,7 @@ import static fos.content.FOSItems.*;
 import static fos.content.FOSObjectives.*;
 import static fos.content.FOSUnits.*;
 import static fos.content.FOSWeaponModules.*;
+import static mindustry.content.Items.*;
 import static mindustry.content.TechTree.*;
 
 public class LuminaTechTree {
@@ -26,6 +27,9 @@ public class LuminaTechTree {
             });
             node(drillBase2, () -> {
                 node(tinDrill, () -> {
+                    node(silverDrill, () -> {
+                        node(siliconSynthesizer);
+                    });
                     node(oreDetector);
                     node(upgradeCenter);
                 });
@@ -35,7 +39,16 @@ public class LuminaTechTree {
                     node(standard2, Seq.with(new DefeatBoss((LuminaBossType) testBoss)), () -> {}));
             });
             nodeProduce(tin, () -> {
-                nodeProduce(silver, () -> {});
+                nodeProduce(silver, () -> {
+                    nodeProduce(diamond, () -> {
+                        nodeProduce(silicon, () -> {});
+                        nodeProduce(vanadium, () -> {
+                            nodeProduce(iridium, () -> {
+                                nodeProduce(luminium, () -> {});
+                            });
+                        });
+                    });
+                });
             });
         });
     }

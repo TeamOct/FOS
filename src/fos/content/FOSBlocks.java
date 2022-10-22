@@ -36,9 +36,9 @@ import static mindustry.type.ItemStack.*;
 public class FOSBlocks {
     public static Block
     //crafting
-    resourceExtractor, cuberiumSynthesizer, sublimer,
+    resourceExtractor, cuberiumSynthesizer, sublimer, siliconSynthesizer,
     //production
-    rockCrusher, drillBase2, tinDrill, oreDetectorSmall, oreDetector,
+    rockCrusher, drillBase2, tinDrill, silverDrill, oreDetectorSmall, oreDetector,
     //distribution
     spaceDuct, spaceRouter, spaceBridge, itemCatapult, tinBelt,
     //liquids
@@ -51,7 +51,7 @@ public class FOSBlocks {
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
     alienMoss,
-    oreTin, oreTinSurface, oreSilver, oreLithium,
+    oreTin, oreTinSurface, oreSilver, oreLithium, oreDiamond, oreVanadium, oreIridium, oreLuminium,
     bugSpawn,
     //units
     upgradeCenter, hovercraftFactory,
@@ -144,6 +144,15 @@ public class FOSBlocks {
             envEnabled = envRequired = Env.space;
             requirements(Category.crafting, with(aluminium, 150, tin, 100, titanium, 100));
         }};
+        siliconSynthesizer = new GenericCrafter("silicon-synthesizer"){{
+            scaledHealth = 40;
+            size = 4;
+            craftTime = 120f;
+            consumePower(8f);
+            consumeItems(with(diamond, 1, sand, 1));
+            outputItems = with(silicon, 8);
+            requirements(Category.crafting, with(tin, 360, silver, 300, diamond, 200));
+        }};
         //endregion
         //region production
         rockCrusher = new HeatProducerDrill("rock-crusher"){{
@@ -164,8 +173,16 @@ public class FOSBlocks {
             health = 480;
             size = 2;
             tier = 3;
+            drillTime = 360f;
             envEnabled |= Env.space;
             requirements(Category.production, with(tin, 5));
+        }};
+        silverDrill = new UndergroundDrill("silver-drill"){{
+            health = 720;
+            size = 2;
+            tier = 4;
+            drillTime = 300f;
+            requirements(Category.production, with(silver, 10));
         }};
         oreDetectorSmall = new OreDetector("ore-detector-small"){{
             health = 480;
@@ -441,6 +458,19 @@ public class FOSBlocks {
         }};
         oreLithium = new OreBlock("ore-lithium"){{
             itemDrop = lithium;
+        }};
+        oreDiamond = new OreBlock("ore-diamond"){{
+            itemDrop = diamond;
+        }};
+        oreVanadium = new UndergroundOreBlock("ore-vanadium"){{
+            drop = vanadium;
+        }};
+        oreIridium = new UndergroundOreBlock("ore-iridium"){{
+            drop = iridium;
+        }};
+        //TODO we haven't decided yet, should it be underground or not
+        oreLuminium = new OreBlock("ore-luminium"){{
+            itemDrop = luminium;
         }};
         bugSpawn = new BugSpawn("bug-spawn"){{
             size = 3;

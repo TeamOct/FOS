@@ -1,18 +1,12 @@
 package fos.ui.menus;
 
-import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.graphics.gl.FrameBuffer;
 import arc.math.Mathf;
 import mindustry.content.Blocks;
-import mindustry.graphics.g3d.PlanetParams;
 import mindustry.world.Block;
 import mindustry.world.CachedTile;
 import mindustry.world.Tile;
 import mindustry.world.Tiles;
 
-import static arc.Core.graphics;
-import static fos.content.FOSVars.*;
 import static mindustry.Vars.*;
 
 // Original code from Project Unity
@@ -41,14 +35,14 @@ public class MenuBackground {
                 Block floor = Blocks.air;
                 Block block = Blocks.empty;
                 Block overlay = Blocks.air;
-                setTile(x, y, floor, block, overlay);
+                setTile(x, y, floor, block, overlay, tiles);
             }
         }
     }
 
-    protected void setTile(int x, int y, Block floor, Block block, Block overlay) {
+    protected void setTile(int x, int y, Block floor, Block block, Block overlay, Tiles tiles) {
         Tile tile;
-        world.tiles.set(x, y, (tile = new CachedTile()));
+        tiles.set(x, y, (tile = new CachedTile()));
         tile.x = (short) x;
         tile.y = (short) y;
         tile.setFloor(floor.asFloor());
