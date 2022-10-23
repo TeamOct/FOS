@@ -163,7 +163,7 @@ public class FOSBlocks {
             requirements(Category.production, with(rawNethratium, 30));
             envRequired = envEnabled = Env.space;
         }};
-        drillBase2 = new DrillBase("drill-base"){{
+        drillBase = new DrillBase("drill-base"){{
             health = 120;
             size = 2;
             envEnabled |= Env.space;
