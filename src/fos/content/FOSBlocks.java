@@ -375,7 +375,7 @@ public class FOSBlocks {
             health = 5;
             size = 1;
             liquidCapacity = 20f;
-            requirements(Category.liquid, with(aluminium, 1, rawElbium, 2));
+            requirements(Category.liquid, with(aluminium, 1, rawElithite, 2));
         }};
         //endregion
         //region power
