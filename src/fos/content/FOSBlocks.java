@@ -32,6 +32,7 @@ import multicraft.*;
 import static fos.content.FOSItems.*;
 import static mindustry.content.Items.*;
 import static mindustry.type.ItemStack.*;
+import static fos.type.blocks.production.*;
 
 public class FOSBlocks {
     public static Block
