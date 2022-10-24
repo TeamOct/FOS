@@ -229,7 +229,6 @@ public class FOSBlocks {
             recoil = 2;
             reload = 40;
             inaccuracy = 5;
-            basePrefix = "luminous-";
             outlineColor = Color.valueOf("302326");
             shootSound = Sounds.shootBig;
             ammo(
@@ -307,7 +306,6 @@ public class FOSBlocks {
             damage = 0;
             force = 0;
             scaledForce = 0;
-            basePrefix = "luminous-";
             outlineColor = Color.valueOf("302326");
             consumePower(4);
             requirements(Category.turret, BuildVisibility.editorOnly, with());
