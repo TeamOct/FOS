@@ -57,7 +57,7 @@ public class UxerdTechTree {
                     });
                     node(plasmaLauncher);
                     node(oreDetectorSmall, () ->
-                        node(drillBase2, () ->
+                        node(drillBase, () ->
                             node(tinDrill)));
                 });
             });
