@@ -32,14 +32,13 @@ import multicraft.*;
 import static fos.content.FOSItems.*;
 import static mindustry.content.Items.*;
 import static mindustry.type.ItemStack.*;
-import static fos.type.blocks.production.*;
 
 public class FOSBlocks {
     public static Block
     //crafting
     resourceExtractor, cuberiumSynthesizer, sublimator, siliconSynthesizer,
     //production
-    rockCrusher, drillBase2, tinDrill, silverDrill, oreDetectorSmall, oreDetector,
+    rockCrusher, drillBase, tinDrill, silverDrill, oreDetectorSmall, oreDetector,
     //distribution
     spaceDuct, spaceRouter, spaceBridge, itemCatapult, tinBelt,
     //liquids
