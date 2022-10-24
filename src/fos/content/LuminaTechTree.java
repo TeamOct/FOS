@@ -25,7 +25,7 @@ public class LuminaTechTree {
             node(hovercraftFactory, () -> {
                 node(vulture);
             });
-            node(drillBase2, () -> {
+            node(drillBase, () -> {
                 node(tinDrill, () -> {
                     node(silverDrill, () -> {
                         node(siliconSynthesizer);
