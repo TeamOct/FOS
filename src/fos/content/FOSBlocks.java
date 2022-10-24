@@ -229,8 +229,8 @@ public class FOSBlocks {
             recoil = 2;
             reload = 40;
             inaccuracy = 5;
-            drawer = new DrawTurret("luminous-")
-            outlineColor = Color.valueOf("302326")
+            drawer = new DrawTurret("luminous-");
+            outlineColor = Color.valueOf("302326");
             shootSound = Sounds.shootBig;
             ammo(
                 tin, new BasicBulletType(2f, 80){{
@@ -307,8 +307,8 @@ public class FOSBlocks {
             damage = 0;
             force = 0;
             scaledForce = 0;
-            drawer = new DrawTurret("luminous-")
-            outlineColor = Color.valueOf("302326")
+            drawer = new DrawTurret("luminous-");
+            outlineColor = Color.valueOf("302326");
             consumePower(4);
             requirements(Category.turret, BuildVisibility.editorOnly, with());
         }};
