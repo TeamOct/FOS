@@ -18,8 +18,8 @@ public class LuminaTechTree {
             node(windTurbine, () -> {});
             node(tinWall, () -> {
                 node(tinWallLarge);
-                node(silverWall, () -> {
-                    node(silverWallLarge);
+                node(diamondWall, () -> {
+                    node(diamondWallLarge);
                 });
             });
             node(hovercraftFactory, () -> {
