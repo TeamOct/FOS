@@ -568,7 +568,7 @@ public class FOSBlocks {
             buildCostMultiplier = 0.5f;
             consumePower(60);
             consumeItems(with(titanium, 5000, tin, 5000, silver, 5000));
-            requirements(Category.effect, with(aluminium, 10000, rawElithite, 8000 tin, 16000, silver, 15000, titanium, 10000, cuberium, 8000));
+            requirements(Category.effect, with(aluminium, 10000, rawElithite, 8000, tin, 16000, silver, 15000, titanium, 10000, cuberium, 8000));
         }};
         cliffDetonator = new CliffExplosive("cliff-detonator"){{
             health = 40;
