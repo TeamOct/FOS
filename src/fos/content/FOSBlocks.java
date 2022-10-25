@@ -169,6 +169,7 @@ public class FOSBlocks {
             size = 2;
             envEnabled |= Env.space;
             requirements(Category.production, with(tin, 10));
+            researchCost = with(tin, 100);
         }};
         tinDrill = new UndergroundDrill("tin-drill"){{
             health = 480;
@@ -199,6 +200,7 @@ public class FOSBlocks {
             size = 3;
             requirements(Category.production, with(tin, 50));
             consumePower(0.5f);
+            researchCost = with(tin, 150);
         }};
         //endregion
         //region defense
@@ -389,6 +391,7 @@ public class FOSBlocks {
             powerProduction = 0.8f;
             rotateSpeed = 1.8f;
             requirements(Category.power, with(tin, 40));
+            researchCost = with(tin, 160);
         }};
         heatGenerator = new HeatGenerator("heat-generator"){{
             health = 480;
