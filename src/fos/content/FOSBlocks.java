@@ -36,9 +36,9 @@ import static mindustry.type.ItemStack.*;
 public class FOSBlocks {
     public static Block
     //crafting
-    resourceExtractor, cuberiumSynthesizer, sublimer, siliconSynthesizer,
+    resourceExtractor, cuberiumSynthesizer, sublimator, siliconSynthesizer,
     //production
-    rockCrusher, drillBase2, tinDrill, silverDrill, oreDetectorSmall, oreDetector,
+    rockCrusher, drillBase, tinDrill, silverDrill, oreDetectorSmall, oreDetector,
     //distribution
     spaceDuct, spaceRouter, spaceBridge, itemCatapult, tinBelt,
     //liquids
@@ -46,7 +46,7 @@ public class FOSBlocks {
     //power
     windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     //defense
-    tinWall, tinWallLarge, silverWall, silverWallLarge, particulator, pulse, thunder,
+    tinWall, tinWallLarge, diamondWall, diamondWallLarge, particulator, pulse, thunder,
     //environment & ores
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
@@ -77,7 +77,7 @@ public class FOSBlocks {
                 }},
                 new DrawDefault()
             );
-            requirements(Category.crafting, with(rawNethratium, 50));
+            requirements(Category.crafting, with(rawNethratium, 50, rawElithite, 25));
             consumePower(2f);
 
             resolvedRecipes = Seq.with(
@@ -129,7 +129,7 @@ public class FOSBlocks {
             craftTime = 60f;
             requirements(Category.crafting, with(aluminium, 100, tin, 75, silver, 75, titanium, 100));
         }};
-        sublimer = new AttributeCrafter("sublimer"){{
+        sublimator = new AttributeCrafter("sublimator"){{
             scaledHealth = 10;
             size = 3;
             rotate = invertFlip = true;
@@ -163,7 +163,7 @@ public class FOSBlocks {
             requirements(Category.production, with(rawNethratium, 30));
             envRequired = envEnabled = Env.space;
         }};
-        drillBase2 = new DrillBase("drill-base-2"){{
+        drillBase = new DrillBase("drill-base"){{
             health = 120;
             size = 2;
             envEnabled |= Env.space;
@@ -210,15 +210,15 @@ public class FOSBlocks {
             size = 2;
             requirements(Category.defense, with(tin, 24));
         }};
-        silverWall = new Wall("silver-wall"){{
-            scaledHealth = 600;
+        diamondWall = new Wall("diamond-wall"){{
+            scaledHealth = 625;
             size = 1;
-            requirements(Category.defense, with(silver, 6));
+            requirements(Category.defense, with(diamond, 6));
         }};
-        silverWallLarge = new Wall("silver-wall-large"){{
-            scaledHealth = 600;
+        diamondWallLarge = new Wall("diamond-wall-large"){{
+            scaledHealth = 625;
             size = 2;
-            requirements(Category.defense, with(silver, 24));
+            requirements(Category.defense, with(diamond, 24));
         }};
 
         particulator = new ItemTurret("particulator"){{
@@ -229,7 +229,8 @@ public class FOSBlocks {
             recoil = 2;
             reload = 40;
             inaccuracy = 5;
-            shootSound = Sounds.pew;
+            outlineColor = Color.valueOf("302326");
+            shootSound = Sounds.shootBig;
             ammo(
                 tin, new BasicBulletType(2f, 80){{
                     lifetime = 60f;
@@ -305,8 +306,9 @@ public class FOSBlocks {
             damage = 0;
             force = 0;
             scaledForce = 0;
+            outlineColor = Color.valueOf("302326");
             consumePower(4);
-            requirements(Category.turret, with(copper, 5));
+            requirements(Category.turret, BuildVisibility.editorOnly, with());
         }};
         /*TODO currently crashes the game
         thunder = new LaserTurret("thunder"){{
@@ -342,7 +344,7 @@ public class FOSBlocks {
         spaceBridge = new DuctBridge("space-bridge"){{
             health = 10;
             size = 1;
-            requirements(Category.distribution, with(rawNethratium, 5));
+            requirements(Category.distribution, with(rawNethratium, 5, rawElithite, 3));
             envRequired = Env.space;
         }};
         itemCatapult = new MassDriver("item-catapult"){{
@@ -361,7 +363,7 @@ public class FOSBlocks {
         tinBelt = new StackConveyor("tin-belt"){{
             health = 10;
             size = 1;
-            speed = 0.2f;
+            speed = 0.18f;
             itemCapacity = 5;
             consumesPower = true;
             conductivePower = true;
@@ -375,7 +377,7 @@ public class FOSBlocks {
             health = 5;
             size = 1;
             liquidCapacity = 20f;
-            requirements(Category.liquid, with(aluminium, 1));
+            requirements(Category.liquid, with(aluminium, 1, rawElithite, 2));
         }};
         //endregion
         //region power
@@ -403,7 +405,7 @@ public class FOSBlocks {
         solarPanelMedium = new SolarGenerator("solar-panel-medium"){{
             size = 2;
             powerProduction = 0.5f;
-            requirements(Category.power, with(lithium, 50, silver, 75));
+            requirements(Category.power, with(lithium, 50, silver, 75, rawElithite, 50));
         }};
         //endregion
         //region environment & ores
@@ -564,7 +566,7 @@ public class FOSBlocks {
             buildCostMultiplier = 0.5f;
             consumePower(60);
             consumeItems(with(titanium, 5000, tin, 5000, silver, 5000));
-            requirements(Category.effect, with(aluminium, 10000, tin, 10000, silver, 10000, titanium, 10000, cuberium, 10000));
+            requirements(Category.effect, with(aluminium, 10000, rawElithite, 8000, tin, 16000, silver, 15000, titanium, 10000, cuberium, 8000));
         }};
         cliffDetonator = new CliffExplosive("cliff-detonator"){{
             health = 40;
@@ -591,7 +593,7 @@ public class FOSBlocks {
             acceptsPayload = true;
             outputsPayload = false;
             consumePower(3f);
-            requirements(Category.effect, with(tin, 250, silver, 300, diamond, 150));
+            requirements(Category.effect, with(tin, 250, silver, 300, silicon, 150));
         }};
     }
 }
