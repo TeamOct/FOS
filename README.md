@@ -1,5 +1,5 @@
 # Fictional Octo System
-***REQUIRES [liplum/MultiCrafterLib](https://github.com/liplum/MultiCrafterLib) TO WORK!***
+***Uses [liplum/MultiCrafterLib](https://github.com/liplum/MultiCrafterLib), though you don't need to install it into your client in order for this mod to work.***
 
 Update 1.1 brings you a _new_ asteroid group and a planet for you to explore with brand-new blocks and mechanics such as underground ores, gameplay unique from Serpulo/Erekir, etc.
 ## Credits
@@ -7,6 +7,10 @@ Update 1.1 brings you a _new_ asteroid group and a planet for you to explore wit
 - Programmer: [@Slotterleet](https://github.com/Slotterleet) (Slotterleet#7897)
 - Artist: [@NotTheGrawx](https://github.com/NotTheGrawx) (MyatiyMotilyok#8455)
 - Composer: Saigo no-nozomi#1206
+- Translator: [@Slotterleet](https://github.com/Slotterleet) (Slotterleet#7897)
+
+## Special Thanks
+- [@kapzduke](https://github.com/kapzduke) - Contributor & Pre-alpha Tester
 
 ## Building for Desktop Testing
 

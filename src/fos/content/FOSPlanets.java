@@ -13,6 +13,7 @@ import mindustry.graphics.g3d.*;
 import mindustry.type.*;
 import mindustry.world.meta.*;
 
+import static fos.content.FOSBlocks.*;
 import static fos.content.FOSItems.*;
 import static mindustry.type.Weather.*;
 
@@ -23,11 +24,11 @@ public class FOSPlanets {
 
     public static void load() {
         lumina = new Planet("lumina", Planets.serpulo, 0.9f, 2){{
-            defaultCore = FOSBlocks.coreFortress;
+            defaultCore = coreFortress;
             hasAtmosphere = true;
             bloom = false;
             atmosphereColor = Color.valueOf("288a5d27");
-            iconColor = FOSBlocks.annite.mapColor;
+            iconColor = annite.mapColor;
             meshLoader = () -> new HexMesh(this, 5);
             startSector = 9;
             generator = new LuminaPlanetGenerator();
@@ -83,12 +84,17 @@ public class FOSPlanets {
                 Rand rand = new Rand(8);
                 Seq<GenericMesh> meshes = new Seq<>();
                 Color color = (
-                    rand.chance(0.33f) ? FOSBlocks.elithite :
-                    rand.chance(0.5f) ? FOSBlocks.elbium :
-                    rand.chance(0.4f) ? FOSBlocks.nethratium :
+                    rand.chance(0.33f) ? elithite :
+                    rand.chance(0.5f) ? elbium :
+                    rand.chance(0.4f) ? nethratium :
                     Blocks.ice
                 ).mapColor;
-                Color tinted = color.cpy().a(1f - color.a);
+                Color tinted = (
+                    color == elithite.mapColor ? Blocks.ferricStone :
+                    color == elbium.mapColor ? Blocks.rhyolite :
+                    color == nethratium.mapColor ? Blocks.yellowStone :
+                    Blocks.ice
+                    ).mapColor;
 
                 meshes.add(new NoiseMesh(
                     this, 8, 2, radius, 2, 0.55f, 0.45f, 14f,
@@ -97,12 +103,17 @@ public class FOSPlanets {
 
                 for(int j = 0; j < 28; j++){
                     color = (
-                        rand.chance(0.33f) ? FOSBlocks.elithite :
-                        rand.chance(0.5f) ? FOSBlocks.elbium :
-                        rand.chance(0.4f) ? FOSBlocks.nethratium :
+                        rand.chance(0.33f) ? elithite :
+                        rand.chance(0.5f) ? elbium :
+                        rand.chance(0.4f) ? nethratium :
                         Blocks.ice
                     ).mapColor;
-                    tinted = color.cpy().a(1f - color.a);
+                    tinted = (
+                        color == elithite.mapColor ? Blocks.ferricStone :
+                        color == elbium.mapColor ? Blocks.rhyolite :
+                        color == nethratium.mapColor ? Blocks.yellowStone :
+                        Blocks.ice
+                    ).mapColor;
 
                     meshes.add(new MatMesh(
                         new NoiseMesh(this, 8, 1, 0.03f + rand.random(0.045f) * 1.3f, 2, 0.6f, 0.38f, 20f,

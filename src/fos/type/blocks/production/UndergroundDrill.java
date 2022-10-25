@@ -24,13 +24,13 @@ public class UndergroundDrill extends Drill {
         buildType = UndergroundDrillBuild::new;
     }
 
-    //placeable on drill bases only, or surface tin ores
+    //placeable on drill bases or surface ores
     @Override
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {
         if (isMultiblock()) {
             for(Tile other : tile.getLinkedTilesAs(this, tempTiles)) {
-                //if mining surface tin, place immediately
-                if (other.overlay().name.equals("fos-ore-tin-surface")) return true;
+                //if mining surface ores (only works with FOS's ones), place immediately
+                if (other.overlay().minfo.mod.name.equals("fos")) return true;
 
                 Building block = other.build;
                 if (block != null && block.block() instanceof DrillBase && block.team == team) return true;
@@ -129,7 +129,7 @@ public class UndergroundDrill extends Drill {
         return returnItem != null ? returnItem : Items.sand;
     }
 
-    public Item getUnderDrop(Block b) {
+    protected Item getUnderDrop(Block b) {
         return b instanceof UndergroundOreBlock u ? u.drop : b.itemDrop;
     }
 

@@ -161,6 +161,7 @@ public class FOSBlocks {
             tier = 2;
             heatOutput = 4f;
             requirements(Category.production, with(rawNethratium, 30));
+            researchCost = with(rawNethratium, 150);
             envRequired = envEnabled = Env.space;
         }};
         drillBase2 = new DrillBase("drill-base-2"){{
@@ -176,6 +177,7 @@ public class FOSBlocks {
             drillTime = 360f;
             envEnabled |= Env.space;
             requirements(Category.production, with(tin, 5));
+            researchCost = with(tin, 50);
         }};
         silverDrill = new UndergroundDrill("silver-drill"){{
             health = 720;
@@ -393,6 +395,7 @@ public class FOSBlocks {
             powerProduction = 3f;
             envEnabled |= Env.space;
             requirements(Category.power, with(rawNethratium, 45));
+            researchCost = with(rawNethratium, 135);
         }};
         plasmaLauncher = new PlasmaLauncher("plasma-launcher"){{
             health = 1500;

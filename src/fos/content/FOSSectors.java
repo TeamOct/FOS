@@ -13,9 +13,10 @@ public class FOSSectors {
             difficulty = 7;
         }};
 
-        beginning = new SectorPreset("beginning", FOSPlanets.lumina, 9){{
+        //FIXME
+        /*beginning = new SectorPreset("beginning", FOSPlanets.lumina, 9){{
             captureWave = 2;
             difficulty = 2;
-        }};
+        }};*/
     }
 }

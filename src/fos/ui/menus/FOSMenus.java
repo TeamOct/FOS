@@ -6,7 +6,9 @@ import arc.struct.Seq;
 import arc.util.noise.Simplex;
 import mindustry.Vars;
 import mindustry.content.Blocks;
+import mindustry.content.Planets;
 import mindustry.graphics.g3d.PlanetParams;
+import mindustry.type.Planet;
 import mindustry.world.Block;
 import mindustry.world.Tiles;
 
@@ -14,27 +16,31 @@ import static fos.content.FOSBlocks.*;
 import static fos.content.FOSPlanets.*;
 
 public class FOSMenus {
-    public static MenuBackground uxerdSpace, luminaSpace, random, luminaTerrain;
+    public static MenuBackground uxerdSpace, luminaSpace, random, solarSystem, luminaTerrain;
 
     public static void load() {
         uxerdSpace = new SpaceMenuBackground(){{
             params = new PlanetParams(){{
                 planet = uxerd;
-                zoom = 0.8f;
-                camPos = new Vec3(0f, 0f, 0.5f);
+                zoom = 1.2f;
             }};
         }};
         luminaSpace = new SpaceMenuBackground(){{
             params = new PlanetParams(){{
                 planet = lumina;
-                zoom = 0.8f;
-                camPos = new Vec3(0f, 0f, 0.5f);
             }};
         }};
         random = new SpaceMenuBackground(){{
             params = new PlanetParams(){{
-                planet = Vars.content.planets().get(Mathf.floor((float) (Math.random() * Vars.content.planets().size)));
-                zoom = 0.8f;
+                Seq<Planet> visible = Vars.content.planets().copy().filter(p -> p.visible);
+                planet = visible.get(Mathf.floor((float) (Math.random() * visible.size)));
+            }};
+        }};
+        solarSystem = new SpaceMenuBackground(){{
+            params = new PlanetParams(){{
+                planet = Planets.sun;
+                camPos = new Vec3(0.01, 1, 0);
+                zoom = 12f;
             }};
         }};
         luminaTerrain = new TerrainMenuBackground(){

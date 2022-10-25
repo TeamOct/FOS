@@ -1,12 +1,15 @@
 package fos.ui.menus;
 
+import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.gl.FrameBuffer;
+import arc.math.geom.Vec3;
 import mindustry.graphics.g3d.PlanetParams;
 
 import static arc.Core.graphics;
-import static fos.content.FOSVars.menuBuffer;
+import static fos.FOSVars.menuBuffer;
+import static fos.FOSVars.menuParams;
 import static mindustry.Vars.renderer;
 
 public class SpaceMenuBackground extends MenuBackground {
@@ -25,7 +28,15 @@ public class SpaceMenuBackground extends MenuBackground {
         params.alwaysDrawAtmosphere = true;
         params.drawUi = false;
 
-        renderer.planets.render(params);
+        if (menuParams == null){
+            menuParams = params;
+        }
+
+        if (Core.settings.getBool("fos-rotatemenucamera")){
+            menuParams.camPos.rotate(Vec3.Y, 0.1f);
+        }
+
+        renderer.planets.render(menuParams);
 
         menuBuffer.end();
 

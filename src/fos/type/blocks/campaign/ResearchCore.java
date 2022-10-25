@@ -2,7 +2,7 @@ package fos.type.blocks.campaign;
 
 import arc.math.Mathf;
 import arc.scene.ui.layout.Table;
-import fos.content.FOSVars;
+import fos.FOSVars;
 import mindustry.content.Items;
 import mindustry.gen.Building;
 import mindustry.type.ItemStack;

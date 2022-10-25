@@ -1,6 +1,6 @@
 package fos.ui;
 
-import fos.content.FOSVars;
+import fos.FOSVars;
 import fos.type.blocks.campaign.ResearchCore.ResearchCoreBuild;
 import mindustry.content.*;
 import mindustry.type.*;

@@ -1,9 +1,10 @@
-package fos.content;
+package fos;
 
 import arc.graphics.gl.FrameBuffer;
 import fos.type.audio.MusicHandler;
 import fos.ui.ResearchCoreDialog;
 import mindustry.content.TechTree;
+import mindustry.graphics.g3d.PlanetParams;
 
 import static fos.content.FOSBlocks.*;
 import static fos.content.FOSUnits.*;
@@ -16,7 +17,11 @@ public class FOSVars {
     public static ResearchCoreDialog rcdialog;
     public static MusicHandler handler;
     public static TechTree.TechNode mechTree, bioTree;
+
+    /** Used in modded menu renderer. A buffer for rendering planets. */
     public static FrameBuffer menuBuffer;
+    /** Used in modded menu renderer. Planet params used in menuBuffer. */
+    public static PlanetParams menuParams;
 
     public static void load() {
         rcdialog = new ResearchCoreDialog();

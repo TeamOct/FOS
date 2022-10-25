@@ -122,6 +122,22 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
             block = floor.asFloor().wall;
         });
 
+        //add a bit more environment
+        pass((x, y) -> {
+            if (Ridged.noise2d(8, x, y, 5, 0.6f, 1f / 60f) > 0.3f) {
+                Block replace = (
+                    floor == nethratium ? Blocks.yellowStone :
+                    floor == elbium ? Blocks.rhyolite :
+                    floor == elithite ? Blocks.ferricStone :
+                    Blocks.empty
+                );
+                if (replace == Blocks.empty) return;
+
+                floor = replace.asFloor();
+                if (block != Blocks.empty && block != Blocks.air && block != Blocks.cliff) block = replace.asFloor().wall;
+            }
+        });
+
         //generate tin and lithium on elbium
         ore(oreTin, elbium, 4f, 0.6f * tinScl);
         ore(oreLithium, elbium, 4f, 0.8f * lithiumScl);
@@ -129,7 +145,7 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
         //generate silver and titanium on elithite
         ore(oreSilver, elithite, 4f, 0.7f * silverScl);
 
-        Schematics.placeLaunchLoadout(sx, sy);
+        Schematics.placeLoadout(Schematics.readBase64(launchSchem), sx, sy, Team.sharded);
     }
 
     @Override
