@@ -47,7 +47,7 @@ public class FOSMod extends Mod {
                 + (u.weapons.contains(w -> w.bullet.heals()) ? bundle.get("unittype.support") : ""))
             );
 
-            ui.showOkText("@fos.earlyaccesstitle", Core.bundle.get("fos.earlyaccess") + (steamPlayerName.equals("Slotterleet") ? "\n\nGet off your ass and fix the upgrade center, Slotterleet" : ""), () -> {});
+            ui.showOkText("@fos.earlyaccesstitle", Core.bundle.get("fos.earlyaccess"), () -> {});
 
             int tn = settings.getInt("fos-menutheme");
             MenuBackground bg = (
