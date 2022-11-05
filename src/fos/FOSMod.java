@@ -8,7 +8,7 @@ import arc.scene.ui.*;
 import arc.scene.ui.layout.*;
 import arc.util.*;
 import fos.content.*;
-import fos.type.blocks.special.OrbitalAccelerator.*;
+import fos.type.blocks.campaign.OrbitalAccelerator.*;
 import fos.ui.menus.*;
 import mindustry.content.SectorPresets;
 import mindustry.game.*;
@@ -47,7 +47,7 @@ public class FOSMod extends Mod {
                 + (u.weapons.contains(w -> w.bullet.heals()) ? bundle.get("unittype.support") : ""))
             );
 
-            ui.showOkText("@fos.earlyaccesstitle", "@fos.earlyaccess", () -> {});
+            ui.showOkText("@fos.earlyaccesstitle", Core.bundle.get("fos.earlyaccess") + (steamPlayerName.equals("Slotterleet") ? "\n\nGet off your ass and fix the upgrade center, Slotterleet" : ""), () -> {});
 
             int tn = settings.getInt("fos-menutheme");
             MenuBackground bg = (
@@ -126,6 +126,7 @@ public class FOSMod extends Mod {
 
     @Override
     public void loadContent() {
+        FOSSchematics.load();
         FOSMusic.load();
         FOSAttributes.load();
         FOSWeathers.load();

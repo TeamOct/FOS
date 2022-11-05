@@ -1,10 +1,8 @@
-package fos.type.audio;
+package fos.audio;
 
 import arc.*;
 import arc.audio.*;
-import arc.math.Mathf;
 import arc.struct.*;
-import arc.util.Time;
 import fos.content.*;
 import mindustry.Vars;
 import mindustry.audio.SoundControl;

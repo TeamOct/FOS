@@ -5,7 +5,7 @@ import arc.math.*;
 import arc.math.geom.*;
 import arc.struct.*;
 import arc.util.*;
-import fos.type.gen.*;
+import fos.gen.*;
 import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.game.Team;
@@ -15,6 +15,7 @@ import mindustry.world.meta.*;
 
 import static fos.content.FOSBlocks.*;
 import static fos.content.FOSItems.*;
+import static mindustry.content.Planets.*;
 import static mindustry.type.Weather.*;
 
 public class FOSPlanets {
@@ -23,7 +24,7 @@ public class FOSPlanets {
         /* asteroids */ uxerd;
 
     public static void load() {
-        lumina = new Planet("lumina", Planets.serpulo, 0.9f, 2){{
+        lumina = new Planet("lumina", serpulo, 0.9f, 2){{
             defaultCore = coreFortress;
             hasAtmosphere = true;
             bloom = false;
@@ -36,6 +37,7 @@ public class FOSPlanets {
             minZoom = 0.8f;
             camRadius += 0.4f;
             orbitSpacing = 6f;
+            allowLaunchLoadout = true;
             cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 5, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
             ruleSetter = r -> {
                 r.loadout = ItemStack.list();
@@ -125,6 +127,10 @@ public class FOSPlanets {
                 return new MultiMesh(meshes.toArray(GenericMesh.class));
             };
         }};
+
+        //hide modded items from vanilla planets
+        serpulo.hiddenItems.addAll(uxerdItems).addAll(luminaItems);
+        erekir.hiddenItems.addAll(uxerdItems).addAll(luminaItems);
 
         //TODO Anuke said it's temporary but it works for now
         uxerd.hiddenItems.addAll(Vars.content.items()).removeAll(uxerdItems);

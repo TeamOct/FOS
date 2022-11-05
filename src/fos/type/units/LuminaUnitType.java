@@ -1,6 +1,5 @@
 package fos.type.units;
 
-import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.world.meta.*;
 

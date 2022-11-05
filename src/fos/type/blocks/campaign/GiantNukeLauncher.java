@@ -1,7 +1,8 @@
-package fos.type.blocks.special;
+package fos.type.blocks.campaign;
 
 import arc.Core;
 import arc.scene.ui.layout.Table;
+import fos.type.blocks.campaign.NukeLauncher;
 import mindustry.Vars;
 import mindustry.gen.Icon;
 import mindustry.ui.Styles;

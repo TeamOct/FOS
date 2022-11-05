@@ -1,14 +1,13 @@
 package fos;
 
 import arc.graphics.gl.FrameBuffer;
-import fos.type.audio.MusicHandler;
+import fos.audio.MusicHandler;
 import fos.ui.ResearchCoreDialog;
 import mindustry.content.TechTree;
 import mindustry.graphics.g3d.PlanetParams;
 
 import static fos.content.FOSBlocks.*;
 import static fos.content.FOSUnits.*;
-import static mindustry.content.Blocks.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.TechTree.node;
 import static mindustry.type.ItemStack.*;
@@ -27,10 +26,11 @@ public class FOSVars {
         rcdialog = new ResearchCoreDialog();
         handler = new MusicHandler();
 
-        mechTree = TechTree.nodeRoot("", mechResearchCore, true, () -> {
+        mechTree = TechTree.nodeRoot("", mechResearchCore, true, () ->
             node(hovercraftFactory, with(scrap, 700), () ->
-                node(vulture, with(scrap, 1400000), () -> {}));
-        });
+                node(vulture, with(scrap, 1400000), () -> {})
+            )
+        );
 
         TechTree.roots.remove(mechTree);
     }

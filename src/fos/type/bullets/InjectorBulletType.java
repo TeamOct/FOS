@@ -2,10 +2,8 @@ package fos.type.bullets;
 
 import arc.math.Mathf;
 import fos.content.*;
-import fos.type.statuses.HackedEffect;
 import mindustry.content.StatusEffects;
 import mindustry.entities.bullet.*;
-import mindustry.game.Team;
 import mindustry.gen.*;
 
 public class InjectorBulletType extends BasicBulletType {

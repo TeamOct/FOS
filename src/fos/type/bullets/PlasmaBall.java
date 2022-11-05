@@ -7,9 +7,7 @@ import arc.math.Mathf;
 import fos.type.blocks.power.PlasmaLauncher;
 import mindustry.content.Fx;
 import mindustry.entities.bullet.BasicBulletType;
-import mindustry.entities.bullet.MassDriverBolt;
 import mindustry.gen.Bullet;
-import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
 
 public class PlasmaBall extends BasicBulletType {

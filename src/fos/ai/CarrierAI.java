@@ -1,7 +1,8 @@
-package fos.type.ai;
+package fos.ai;
 
 import mindustry.content.*;
 import mindustry.entities.units.AIController;
+import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.world.blocks.distribution.Router;
 import mindustry.world.blocks.payloads.PayloadVoid;
@@ -13,7 +14,7 @@ public class CarrierAI extends AIController {
     public void updateMovement() {
         PayloadUnit u = (PayloadUnit) unit;
         
-        Building a = indexer.findTile(u.team, u.x, u.y, 320f, build -> build.block instanceof Router);
+        Building a = indexer.findTile(Team.derelict, u.x, u.y, 320f, build -> build.block instanceof Router);
         Building b = indexer.findTile(u.team, u.x, u.y, 320f, build -> build.block instanceof PayloadVoid);
         
         if (!u.hasPayload()) {

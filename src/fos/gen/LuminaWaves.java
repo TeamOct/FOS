@@ -1,4 +1,4 @@
-package fos.type.gen;
+package fos.gen;
 
 import arc.func.Intc;
 import arc.math.Mathf;
@@ -7,7 +7,6 @@ import arc.struct.Seq;
 import arc.util.Structs;
 import mindustry.content.StatusEffects;
 import mindustry.game.SpawnGroup;
-import mindustry.game.Waves;
 import mindustry.type.UnitType;
 
 import static mindustry.content.UnitTypes.*;

@@ -1,32 +1,41 @@
 package fos.ui.menus;
 
 import arc.Core;
-import arc.graphics.Camera;
-import arc.graphics.Color;
+import arc.graphics.*;
 import arc.graphics.g2d.*;
-import arc.graphics.gl.FrameBuffer;
-import arc.math.Mat;
-import arc.scene.ui.layout.Scl;
-import arc.struct.Seq;
-import arc.util.Time;
+import arc.graphics.gl.*;
+import arc.math.*;
+import arc.scene.ui.layout.*;
 import mindustry.content.Blocks;
-import mindustry.world.Block;
-import mindustry.world.Tile;
-import mindustry.world.Tiles;
+import mindustry.world.*;
 
-import static fos.content.FOSBlocks.*;
-import static mindustry.Vars.tilesize;
-import static mindustry.Vars.world;
+import static mindustry.Vars.*;
 
 public class TerrainMenuBackground extends MenuBackground {
+    protected int width, height, seed;
     private FrameBuffer shadows;
     private CacheBatch batch;
     private int cacheFloor, cacheWall;
-    private Camera camera = new Camera();
-    private Mat mat = new Mat();
+    private final Camera camera = new Camera();
+    private final Mat mat = new Mat();
 
     @Override
-    protected void cache() {
+    public void generateWorld(int width, int height) {
+        this.width = width;
+        this.height = height;
+        seed = Mathf.rand.nextInt();
+
+        world.beginMapLoad();
+
+        world.tiles = new Tiles(width, height);
+
+        generate(world.tiles);
+
+        world.endMapLoad();
+        cache();
+    }
+
+    private void cache() {
         //draw shadows
         shadows = new FrameBuffer(width, height);
 
@@ -66,6 +75,16 @@ public class TerrainMenuBackground extends MenuBackground {
         cacheWall = batch.endCache();
 
         Core.batch = prev;
+    }
+
+    protected void setTile(int x, int y, Block floor, Block block, Block overlay, Tiles tiles) {
+        Tile tile;
+        tiles.set(x, y, (tile = new CachedTile()));
+        tile.x = (short) x;
+        tile.y = (short) y;
+        tile.setFloor(floor.asFloor());
+        tile.setBlock(block);
+        tile.setOverlay(overlay);
     }
 
     @Override

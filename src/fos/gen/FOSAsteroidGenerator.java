@@ -1,15 +1,10 @@
-package fos.type.gen;
+package fos.gen;
 
 import arc.math.*;
 import arc.math.geom.*;
-import arc.struct.Seq;
 import arc.util.noise.*;
-import fos.content.FOSBlocks;
-import fos.content.FOSTeam;
-import mindustry.*;
 import mindustry.content.*;
 import mindustry.game.*;
-import mindustry.graphics.g3d.*;
 import mindustry.maps.generators.*;
 import mindustry.type.*;
 import mindustry.world.*;
@@ -146,11 +141,6 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
         ore(oreSilver, elithite, 4f, 0.7f * silverScl);
 
         Schematics.placeLoadout(Schematics.readBase64(launchSchem), sx, sy, Team.sharded);
-    }
-
-    @Override
-    public Schematic getDefaultLoadout() {
-        return Schematics.readBase64(launchSchem);
     }
 
     @Override

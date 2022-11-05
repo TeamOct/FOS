@@ -1,4 +1,4 @@
-package fos.type.blocks.special;
+package fos.type.blocks.campaign;
 
 import arc.*;
 import arc.func.*;
@@ -6,14 +6,18 @@ import arc.graphics.g2d.*;
 import arc.scene.ui.layout.*;
 import arc.util.*;
 import fos.content.*;
+import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.world.*;
 import mindustry.world.blocks.campaign.*;
+import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.blocks.storage.CoreBlock.*;
 import mindustry.world.consumers.*;
 import mindustry.world.meta.*;
+
+import java.io.IOException;
 
 import static arc.Core.camera;
 import static mindustry.Vars.*;
@@ -85,7 +89,12 @@ public class OrbitalAccelerator extends Accelerator {
                             consume();
 
                             universe.clearLoadoutInfo();
-                            universe.updateLoadout(sector.planet.generator.getDefaultLoadout().findCore(), sector.planet.generator.getDefaultLoadout());
+                            //this try-catch is necessary I guess
+                            try {
+                                universe.updateLoadout((CoreBlock) sector.planet.defaultCore, Schematics.read(Vars.tree.get("schematics/" + sector.planet.name + ".msch")));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
 
                             Events.fire(EventType.Trigger.acceleratorUse);
                         });

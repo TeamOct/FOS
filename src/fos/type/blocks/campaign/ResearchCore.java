@@ -17,6 +17,7 @@ public class ResearchCore extends PayloadBlock {
         hasItems = true;
         itemCapacity = 5000;
         acceptsPayload = true;
+        buildType = ResearchCoreBuild::new;
     }
 
     public class ResearchCoreBuild extends PayloadBlockBuild<Payload> {

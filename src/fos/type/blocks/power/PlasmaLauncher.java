@@ -1,7 +1,6 @@
 package fos.type.blocks.power;
 
 import arc.*;
-import arc.audio.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.*;

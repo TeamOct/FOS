@@ -1,6 +1,5 @@
 package fos.type.blocks.environment;
 
-import mindustry.graphics.MultiPacker;
 import mindustry.type.Item;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;

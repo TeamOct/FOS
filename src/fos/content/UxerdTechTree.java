@@ -44,23 +44,21 @@ public class UxerdTechTree {
                 nodeProduce(titanium, () -> {});
                 nodeProduce(silver, () -> nodeProduce(cuberium, Seq.with(new Research(tin), new Research(titanium), new Research(FOSLiquids.oxygen)), () -> {}));
             });
-            node(rockCrusher, Seq.with(new OnPlanet(FOSPlanets.uxerd)), () -> {
-                node(heatGenerator, () -> {
-                    node(solarPanelMedium);
-                    node(resourceExtractor, () -> {
-                        node(cliffDetonator);
-                        node(sublimator, () -> node(gasPipe));
-                        node(cuberiumSynthesizer, () -> {
-                            node(orbitalAccelerator, Seq.with(new Research(coreFortress)), () -> {});
-                            node(bigBoy);
-                        });
+            node(rockCrusher, Seq.with(new OnPlanet(FOSPlanets.uxerd)), () -> node(heatGenerator, () -> {
+                node(solarPanelMedium);
+                node(resourceExtractor, () -> {
+                    node(cliffDetonator);
+                    node(sublimator, () -> node(gasPipe));
+                    node(cuberiumSynthesizer, () -> {
+                        node(orbitalAccelerator, Seq.with(new Research(coreFortress)), () -> {});
+                        node(bigBoy);
                     });
-                    node(plasmaLauncher);
-                    node(oreDetectorSmall, () ->
-                        node(drillBase, () ->
-                            node(tinDrill)));
                 });
-            });
+                node(plasmaLauncher);
+                node(oreDetectorSmall, () ->
+                    node(drillBase, () ->
+                        node(tinDrill)));
+            }));
         });
         FOSPlanets.uxerd.unlockedOnLand = Seq.with(spaceDuct, rockCrusher, heatGenerator);
     }

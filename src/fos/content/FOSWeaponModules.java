@@ -7,8 +7,10 @@ import mindustry.entities.bullet.*;
 import mindustry.type.Weapon;
 
 //why the heck I added FOS to class's name if weapon modules are unique to this mod anyway
+//just because it looks nicer :)
 public class FOSWeaponModules {
-    public static WeaponModule standard1, standard2, standard5;
+    public static WeaponModule
+        standard1, standard2, standard3, standard4, standard5;
 
     public static void load() {
         standard1 = new WeaponModule("standard1", new Weapon("standard-weapon1"){{
@@ -48,11 +50,26 @@ public class FOSWeaponModules {
                 }};
             }};
         }});
-        standard5 = new WeaponModule("standard5", new Weapon("standard-weapon5"){{
+        standard3 = new WeaponModule("standard3", new Weapon("standard-weapon3"){{
             x = 0; y = 0;
             alternate = mirror = false;
             rotate = true;
             recoil = 2f;
+            reload = 15f;
+            inaccuracy = 8f;
+            cooldownTime = 30f;
+            bullet = new BasicBulletType(3.5f, 60f){{
+                width = 7f; height = 9f;
+                trailLength = 12;
+                lifetime = 60f;
+                homingPower = 0.8f;
+            }};
+        }});
+        standard5 = new WeaponModule("standard5", new Weapon("standard-weapon5"){{
+            x = 0; y = 0;
+            alternate = mirror = false;
+            rotate = true;
+            recoil = 4f;
             reload = 10f;
             bullet = new BasicBulletType(13f, 240){{
                 pierce = true;

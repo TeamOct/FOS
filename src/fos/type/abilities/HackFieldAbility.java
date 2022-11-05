@@ -2,7 +2,6 @@ package fos.type.abilities;
 
 import arc.*;
 import arc.graphics.*;
-import arc.graphics.g2d.*;
 import arc.math.*;
 import fos.content.*;
 import mindustry.content.StatusEffects;

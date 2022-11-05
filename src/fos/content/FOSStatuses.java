@@ -1,6 +1,6 @@
 package fos.content;
 
-import arc.graphics.Color;
+import fos.graphics.FOSPal;
 import fos.type.statuses.*;
 import mindustry.type.*;
 
@@ -9,7 +9,7 @@ public class FOSStatuses {
 
     public static void load() {
         hacked = new HackedEffect("hacked"){{
-            color = Color.valueOf("51a0b0");
+            color = FOSPal.hackedBack;
         }};
     }
 }

@@ -2,6 +2,10 @@ package fos.content;
 
 import arc.graphics.*;
 import arc.struct.*;
+import fos.graphics.FOSPal;
+import fos.type.blocks.campaign.GiantNukeLauncher;
+import fos.type.blocks.campaign.NukeLauncher;
+import fos.type.blocks.campaign.OrbitalAccelerator;
 import fos.type.blocks.campaign.ResearchCore;
 import fos.type.blocks.distribution.*;
 import fos.type.blocks.environment.*;
@@ -10,6 +14,7 @@ import fos.type.blocks.production.*;
 import fos.type.blocks.special.*;
 import fos.type.blocks.storage.*;
 import fos.type.blocks.units.*;
+import fos.type.bullets.StickyBulletType;
 import fos.type.draw.*;
 import mindustry.content.*;
 import mindustry.entities.bullet.*;
@@ -46,10 +51,11 @@ public class FOSBlocks {
     //power
     windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     //defense
-    tinWall, tinWallLarge, diamondWall, diamondWallLarge, particulator, pulse, thunder,
+    tinWall, tinWallLarge, diamondWall, diamondWallLarge, sticker, particulator, pulse, thunder,
     //environment & ores
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
+    tokiciteBlock,
     alienMoss,
     oreTin, oreTinSurface, oreSilver, oreLithium, oreDiamond, oreVanadium, oreIridium, oreLuminium,
     bugSpawn,
@@ -148,8 +154,9 @@ public class FOSBlocks {
             scaledHealth = 40;
             size = 4;
             craftTime = 120f;
+            itemCapacity = 16;
             consumePower(8f);
-            consumeItems(with(diamond, 1, sand, 1));
+            consumeItems(with(diamond, 1, sand, 8));
             outputItems = with(silicon, 8);
             requirements(Category.crafting, with(tin, 360, silver, 300, diamond, 200));
         }};
@@ -183,7 +190,7 @@ public class FOSBlocks {
         silverDrill = new UndergroundDrill("silver-drill"){{
             health = 720;
             size = 2;
-            tier = 4;
+            tier = 5;
             drillTime = 300f;
             requirements(Category.production, with(silver, 10));
         }};
@@ -225,6 +232,44 @@ public class FOSBlocks {
             requirements(Category.defense, with(diamond, 24));
         }};
 
+        sticker = new ItemTurret("sticker"){{
+            scaledHealth = 480;
+            size = 2;
+            range = 150;
+            targetAir = true;
+            targetGround = false;
+            recoil = 2f;
+            reload = 30f;
+            inaccuracy = 4f;
+            outlineColor = Color.valueOf("302326");
+            shootSound = Sounds.mud;
+            consumeLiquid(FOSLiquids.tokicite, 0.1f);
+            ammo(
+                tin, new StickyBulletType(3f, 10, 300){{
+                    lifetime = 50f;
+                    width = height = 12f;
+                    trailColor = FOSPal.tin;
+                    frontColor = backColor = FOSPal.tokicite;
+                    trailWidth = 3f;
+                    trailLength = 8;
+                    ammoMultiplier = 2f;
+                    splashDamage = 40;
+                    splashDamageRadius = 12f;
+                }},
+                diamond, new StickyBulletType(3f, 30, 300){{
+                    lifetime = 50f;
+                    width = height = 12f;
+                    trailColor = FOSPal.diamond;
+                    frontColor = backColor = FOSPal.tokicite;
+                    trailWidth = 3f;
+                    trailLength = 8;
+                    ammoMultiplier = 3f;
+                    splashDamage = 50;
+                    splashDamageRadius = 16f;
+                }}
+            );
+            requirements(Category.turret, with(tin, 75, silver, 100));
+        }};
         particulator = new ItemTurret("particulator"){{
             health = 2400;
             size = 3;
@@ -239,10 +284,10 @@ public class FOSBlocks {
                 tin, new BasicBulletType(2f, 80){{
                     lifetime = 60f;
                     width = 16f; height = 24f;
-                    backColor = Color.valueOf("347043");
-                    frontColor = trailColor = lightColor = Color.valueOf("85b374");
+                    backColor = FOSPal.tinBack;
+                    frontColor = trailColor = lightColor = FOSPal.tin;
                     trailEffect = Fx.artilleryTrail;
-                    trailWidth = 16;
+                    trailWidth = 4;
                     trailLength = 20;
                     ammoMultiplier = 1;
                     splashDamage = 10f;
@@ -255,8 +300,8 @@ public class FOSBlocks {
                         lifetime = 60f * 30; //frags will stay for pretty long
                         drag = 0.024f;
                         width = height = 6f;
-                        backColor = Color.valueOf("347043");
-                        frontColor = trailColor = Color.valueOf("85b374");
+                        backColor = FOSPal.tinBack;
+                        frontColor = trailColor = FOSPal.tin;
                         trailEffect = Fx.artilleryTrail;
                         trailLength = 8;
                         pierceArmor = true;
@@ -269,10 +314,10 @@ public class FOSBlocks {
                 silver, new BasicBulletType(2f, 120){{
                     lifetime = 60f;
                     width = 16f; height = 24f;
-                    backColor = Color.valueOf("813ba1");
-                    frontColor = trailColor = lightColor = Color.valueOf("b38bb3");
+                    backColor = FOSPal.silverBack;
+                    frontColor = trailColor = lightColor = FOSPal.silver;
                     trailEffect = Fx.artilleryTrail;
-                    trailWidth = 16;
+                    trailWidth = 4;
                     trailLength = 20;
                     ammoMultiplier = 1;
                     splashDamage = 25f;
@@ -285,8 +330,8 @@ public class FOSBlocks {
                         lifetime = 60f * 30; //frags will stay for pretty long
                         drag = 0.024f;
                         width = height = 6f;
-                        backColor = Color.valueOf("813ba1");
-                        frontColor = trailColor = Color.valueOf("b38bb3");
+                        backColor = FOSPal.silverBack;
+                        frontColor = trailColor = FOSPal.silver;
                         trailEffect = Fx.artilleryTrail;
                         trailLength = 8;
                         pierceArmor = true;
@@ -368,7 +413,7 @@ public class FOSBlocks {
             health = 10;
             size = 1;
             speed = 0.18f;
-            itemCapacity = 5;
+            itemCapacity = 1;
             consumesPower = true;
             conductivePower = true;
             baseEfficiency = 1f;
@@ -452,6 +497,10 @@ public class FOSBlocks {
             variants = 4;
         }};
         purpurWall = new StaticWall("purpur-wall"){};
+        tokiciteBlock = new Floor("tokicite-block"){{
+            liquidDrop = FOSLiquids.tokicite;
+            isLiquid = true;
+        }};
         alienMoss = new OverlayFloor("alien-moss"){};
         oreTin = new UndergroundOreBlock("ore-tin"){{
             drop = tin;

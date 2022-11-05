@@ -1,4 +1,4 @@
-package fos.type.ai;
+package fos.ai;
 
 import fos.type.units.LuminaUnitType;
 import mindustry.ai.Pathfinder;

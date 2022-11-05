@@ -1,12 +1,10 @@
-package fos.type.gen;
+package fos.gen;
 
 import arc.func.*;
 import arc.math.*;
 import arc.math.geom.*;
 import arc.struct.*;
 import arc.util.*;
-import fos.content.FOSBlocks;
-import fos.content.FOSItems;
 import fos.type.blocks.environment.UndergroundOreBlock;
 import mindustry.ai.*;
 import mindustry.content.*;
@@ -22,8 +20,6 @@ import mindustry.world.blocks.sandbox.*;
 import mindustry.world.blocks.storage.*;
 import mindustry.world.meta.*;
 
-import static fos.content.FOSBlocks.*;
-import static fos.content.FOSItems.*;
 import static mindustry.Vars.*;
 import static mindustry.ai.BaseRegistry.*;
 

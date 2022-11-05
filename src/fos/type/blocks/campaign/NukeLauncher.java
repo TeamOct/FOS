@@ -1,4 +1,4 @@
-package fos.type.blocks.special;
+package fos.type.blocks.campaign;
 
 import arc.*;
 import arc.graphics.g2d.*;
@@ -43,7 +43,7 @@ public class NukeLauncher extends Block {
                     chosen.info.waves = false;
                     chosen.info.wasCaptured = true;
                     Fx.launchPod.at(this);
-                    Events.fire(new EventType.SectorCaptureEvent(chosen));
+                    Events.fire(new EventType.SectorCaptureEvent(chosen, true));
                 } else {
                     if (!Vars.state.isCampaign()){
                         Vars.ui.showInfo("@silo.campaignonly");

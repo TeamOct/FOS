@@ -1,9 +1,9 @@
 package fos.content;
 
-import arc.graphics.*;
 import arc.math.*;
+import fos.graphics.FOSPal;
 import fos.type.abilities.*;
-import fos.type.ai.*;
+import fos.ai.*;
 import fos.type.bullets.*;
 import fos.type.units.*;
 import fos.type.units.weapons.*;
@@ -12,6 +12,7 @@ import mindustry.content.*;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.BasicBulletType;
 import mindustry.gen.*;
+import mindustry.graphics.Pal;
 import mindustry.type.*;
 
 public class FOSUnits {
@@ -50,11 +51,6 @@ public class FOSUnits {
             speed = 0.05f;
             flying = false;
             canBoost = false;
-            abilities.add(
-                new ArmorPlateAbility(){{
-                    healthMultiplier = 0.5f;
-                }}
-            );
             weapons.add(
                 new Weapon("citadel-shotgun"){{
                     x = 24; y = 4;
@@ -72,6 +68,31 @@ public class FOSUnits {
                         trailWidth = 2f;
                         trailLength = 12;
                         velocityRnd = 0.1f;
+                    }};
+                }},
+                new Weapon("citadel-launcher"){{
+                    x = 18; y = -20;
+                    rotate = true;
+                    mirror = true;
+                    alternate = true;
+                    recoil = 2f;
+                    reload = 90f;
+                    inaccuracy = 3f;
+                    bullet = new StickyBulletType(2f, 1f, 180){{
+                        lifetime = 120f;
+                        width = height = 16f;
+                        trailWidth = 4f;
+                        trailLength = 12;
+                        trailColor = Pal.plastaniumBack;
+                        backColor = Pal.plastaniumBack;
+                        frontColor = Pal.plastaniumFront;
+                        ejectEffect = Fx.smokeCloud;
+                        hitSound = Sounds.mud;
+                        despawnEffect = Fx.explosion;
+                        splashDamage = 80f;
+                        splashDamageRadius = 16f;
+                        collidesGround = collidesAir = true;
+                        collidesTiles = true;
                     }};
                 }}
             );
@@ -163,8 +184,8 @@ public class FOSUnits {
                         damage = 25f;
                         speed = 2.4f; lifetime = 90f;
                         width = 6f; height = 12f;
-                        backColor = Color.valueOf("51a0b0");
-                        frontColor = Color.valueOf("8ae3df");
+                        backColor = FOSPal.hackedBack;
+                        frontColor = FOSPal.hacked;
                         homingPower = 1;
                         weaveScale = 0.8f;
                         weaveMag = 1.8f;
@@ -200,8 +221,8 @@ public class FOSUnits {
                         width = height = 18f;
                         homingRange = 280f;
                         homingPower = 1f;
-                        backColor = Color.valueOf("51a0b0");
-                        frontColor = Color.valueOf("8ae3df");
+                        backColor = FOSPal.hackedBack;
+                        frontColor = FOSPal.hacked;
                     }};
                 }}
             );

@@ -2,7 +2,6 @@ package fos.type.units;
 
 import arc.util.io.Reads;
 import arc.util.io.Writes;
-import mindustry.entities.units.WeaponMount;
 import mindustry.gen.LegsUnit;
 import mindustry.io.TypeIO;
 

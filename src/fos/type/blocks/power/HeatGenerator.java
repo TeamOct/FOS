@@ -2,8 +2,6 @@ package fos.type.blocks.power;
 
 import arc.*;
 import arc.graphics.*;
-import arc.struct.IntSet;
-import mindustry.gen.Building;
 import mindustry.graphics.*;
 import mindustry.ui.Bar;
 import mindustry.world.blocks.heat.*;

@@ -1,4 +1,4 @@
-package fos.type.gen;
+package fos.gen;
 
 import arc.graphics.*;
 import arc.math.*;
@@ -19,8 +19,6 @@ import static mindustry.Vars.*;
 import static mindustry.graphics.g3d.PlanetGrid.*;
 
 public class LuminaPlanetGenerator extends PlanetGenerator {
-    //schematic used as launch loadout
-    String launchSchem = "bXNjaAF4nGNgZmBmZmDJS8xNZeBzSizOTFZwyy8qKUotLmbgTkktTi7KLCjJzM9jYGBgy0lMSs0pZmCKjmVkEEzLL9ZNzi9K1U2DKWdgYAQhIAEAzp0V0Q==";
     LuminaBaseGenerator basegen = new LuminaBaseGenerator();
     float scl = 8f;
 
@@ -36,7 +34,7 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
     @Override
     public float getHeight(Vec3 position) {
         position = Tmp.v33.set(position).scl(scl);
-        return Mathf.pow(Simplex.noise3d(seed, 7, 0.5f, 1f/3f, position.x, position.y, position.z), 3f);
+        return Mathf.pow(Simplex.noise3d(seed, 5, 0.5f, 1f/3f, position.x, position.y, position.z), 3f);
     }
 
     @Override
@@ -235,6 +233,7 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
         oreAround(alienMoss, blubluWall, 2, 1f, 0f);
 
         pass((x, y) -> {
+            //trees on purpur biome
             if (floor == purpur && block == Blocks.air) {
                 if (rand.chance(0.01)){
                     for (Point2 p : Geometry.d8) {
@@ -245,6 +244,12 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
                     if (rand.chance(0.1)) {
                         block = Blocks.whiteTree;
                     }
+                }
+            }
+            //tokicite
+            if (floor == annite || floor == blublu) {
+                if (noise(x + 69, y - 69, 2, 0.6, 80) > 0.67f) {
+                    floor = tokiciteBlock;
                 }
             }
         });
@@ -276,11 +281,6 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
     @Override
     public boolean allowLanding(Sector sector) {
         return false;
-    }
-
-    @Override
-    public Schematic getDefaultLoadout() {
-        return Schematics.readBase64(launchSchem);
     }
 
     @Override

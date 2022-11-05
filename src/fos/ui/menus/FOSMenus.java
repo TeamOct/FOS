@@ -45,10 +45,10 @@ public class FOSMenus {
         }};
         luminaTerrain = new TerrainMenuBackground(){
             @Override
-            protected void generate(Tiles tiles) {
+            public void generate(Tiles tiles) {
                 Seq<Block> ores = Seq.with(oreTinSurface, oreDiamond, oreLuminium);
                 int offset = Mathf.floor((float) (Math.random() * 100000));
-                int s1 = offset, s2 = offset + 1, s3 = offset + 2;
+                int s2 = offset + 1, s3 = offset + 2;
                 Block[][] blocks = new Block[][]{
                     {cyanium, cyaniumWall},
                     {annite, anniteWall},
@@ -88,7 +88,7 @@ public class FOSMenus {
                         Block ore = Blocks.air;
                         Block wall = Blocks.air;
 
-                        if (Simplex.noise2d(s1, 3, 0.5, 1 / 20.0, x, y) > 0.5) {
+                        if (Simplex.noise2d(offset, 3, 0.5, 1 / 20.0, x, y) > 0.5) {
                             wall = walld;
                         }
 
@@ -109,7 +109,7 @@ public class FOSMenus {
                         if (tech) {
                             int mx = x % 10, my = y % 10;
                             int sclx = x / 10, scly = y / 10;
-                            if (Simplex.noise2d(s1, 2, 1f / 10f, 0.5f, sclx, scly) > 0.4f && (mx == 0 || my == 0 || mx == 10 - 1 || my == 10 - 1)) {
+                            if (Simplex.noise2d(offset, 2, 1f / 10f, 0.5f, sclx, scly) > 0.4f && (mx == 0 || my == 0 || mx == 10 - 1 || my == 10 - 1)) {
                                 floor = Blocks.darkPanel3;
                                 if (Mathf.dst(mx, my, 5, 5) > 10 / 2f + 1) {
                                     floor = Blocks.darkPanel4;

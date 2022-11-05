@@ -24,21 +24,22 @@ public class UndergroundDrill extends Drill {
         buildType = UndergroundDrillBuild::new;
     }
 
-    //placeable on drill bases or surface ores
+    //placeable on drill bases or surface ores, or replaceable by other underground drills
     @Override
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {
         if (isMultiblock()) {
             for(Tile other : tile.getLinkedTilesAs(this, tempTiles)) {
                 //if mining surface ores (only works with FOS's ones), place immediately
-                if (other.overlay().minfo.mod.name.equals("fos")) return true;
+                if (other.overlay().minfo.mod != null && (!(other.overlay() instanceof UndergroundOreBlock) && other.overlay().minfo.mod.name.equals("fos"))) return true;
 
                 Building block = other.build;
-                if (block != null && block.block() instanceof DrillBase && block.team == team) return true;
+                if (block != null && (block.block() instanceof DrillBase || block.block() instanceof UndergroundDrill) && block.team == team) return true;
             }
             return false;
         } else {
             Building block = tile.build;
-            return (block != null && block.block() instanceof DrillBase && block.team == team) || tile.overlay().name.equals("fos-ore-tin-surface");
+            return (block != null && (block.block() instanceof DrillBase || block.block() instanceof UndergroundDrill) && block.team == team) ||
+                (tile.overlay().minfo.mod != null && (!(tile.overlay() instanceof UndergroundOreBlock) && tile.overlay().minfo.mod.name.equals("fos")));
         }
     }
 
@@ -97,7 +98,7 @@ public class UndergroundDrill extends Drill {
         itemArray.clear();
 
         for(Tile other : tile.getLinkedTilesAs(this, tempTiles)){
-            if(canMine(other) && (other.overlay() instanceof UndergroundOreBlock || other.overlay().name.equals("fos-ore-tin-surface") || getDrop(other) == Items.titanium)){
+            if(canMine(other) && (other.overlay() instanceof UndergroundOreBlock || (other.overlay().minfo != null && other.overlay().minfo.mod.name.equals("fos")) || getDrop(other) == Items.titanium)){
                 oreCount.increment(getUnderDrop(other.overlay()), 0, 1);
             }
         }

@@ -18,38 +18,33 @@ public class LuminaTechTree {
             node(windTurbine, () -> {});
             node(tinWall, () -> {
                 node(tinWallLarge);
-                node(diamondWall, () -> {
-                    node(diamondWallLarge);
-                });
+                node(diamondWall, () ->
+                    node(diamondWallLarge));
             });
-            node(hovercraftFactory, () -> {
-                node(vulture);
-            });
-            node(drillBase, () -> {
-                node(tinDrill, () -> {
-                    node(silverDrill, () -> {
-                        node(siliconSynthesizer);
-                    });
-                    node(oreDetector);
-                    node(upgradeCenter);
-                });
-            });
-            node(FOSUnits.temp, () -> {
+            node(hovercraftFactory, () ->
+                node(vulture));
+            node(drillBase, () -> node(tinDrill, () -> {
+                node(silverDrill, () ->
+                    node(siliconSynthesizer));
+                node(oreDetector);
+                node(upgradeCenter);
+            }));
+            node(FOSUnits.temp, () ->
                 node(standard1, () ->
-                    node(standard2, Seq.with(new DefeatBoss((LuminaBossType) testBoss)), () -> {}));
-            });
-            nodeProduce(tin, () -> {
-                nodeProduce(silver, () -> {
-                    nodeProduce(diamond, () -> {
-                        nodeProduce(silicon, () -> {});
-                        nodeProduce(vanadium, () -> {
-                            nodeProduce(iridium, () -> {
-                                nodeProduce(luminium, () -> {});
-                            });
-                        });
-                    });
-                });
-            });
+                    node(standard2, Seq.with(new DefeatBoss((LuminaBossType) testBoss)), () -> {})
+                )
+            );
+            nodeProduce(tin, () ->
+                nodeProduce(silver, () -> nodeProduce(diamond, () -> {
+                    nodeProduce(silicon, () -> {});
+                    nodeProduce(vanadium, () ->
+                        nodeProduce(iridium, () ->
+                            nodeProduce(luminium, () -> {})
+                            )
+                        );
+                    })
+                )
+            );
         });
     }
 }
