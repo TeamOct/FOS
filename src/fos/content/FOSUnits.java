@@ -20,7 +20,7 @@ public class FOSUnits {
     //mechs
     legion, citadel,
     //legs
-    temp, testBoss,
+    lord, testBoss,
     //flying
     sergeant, lieutenant, captain, general, marshal,
     //payload
@@ -99,7 +99,7 @@ public class FOSUnits {
             constructor = MechUnit::create;
         }};
 
-        temp = new LuminaUnitType("TEMP-NAME"){{
+        lord = new LuminaUnitType("lord"){{
             health = 2400;
             armor = 6;
             hitSize = 10;

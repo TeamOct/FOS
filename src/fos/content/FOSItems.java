@@ -40,7 +40,7 @@ public class FOSItems {
         cuberium = new Item("cuberium", Color.valueOf("000000")){{
             cost = 3f;
         }};
-        diamond = new Item("diamond", Color.valueOf("000000")){{
+        diamond = new Item("diamond", Color.valueOf("b6cdec")){{
             cost = 2.8f;
             hardness = 4;
         }};

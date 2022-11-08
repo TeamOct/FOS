@@ -24,4 +24,8 @@ public class FOSSchematics {
         }
         return s;
     }
+
+    static Schematic loadBase64(String b64) {
+        return Schematics.readBase64(b64);
+    }
 }

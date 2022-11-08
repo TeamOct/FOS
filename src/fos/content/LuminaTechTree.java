@@ -2,6 +2,7 @@ package fos.content;
 
 import arc.struct.Seq;
 import fos.type.units.LuminaBossType;
+import mindustry.type.ItemStack;
 
 import static fos.content.FOSBlocks.*;
 import static fos.content.FOSItems.*;
@@ -29,9 +30,9 @@ public class LuminaTechTree {
                 node(oreDetector);
                 node(upgradeCenter);
             }));
-            node(FOSUnits.temp, () ->
+            node(FOSUnits.lord, () ->
                 node(standard1, () ->
-                    node(standard2, Seq.with(new DefeatBoss((LuminaBossType) testBoss)), () -> {})
+                    node(standard2, ItemStack.with(tin, 750, silver, 600), () -> {})
                 )
             );
             nodeProduce(tin, () ->

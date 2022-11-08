@@ -16,6 +16,7 @@ import mindustry.world.*;
 
 import static fos.content.FOSBlocks.*;
 import static mindustry.Vars.*;
+import static mindustry.content.Blocks.*;
 import static mindustry.graphics.g3d.PlanetGrid.*;
 
 public class LuminaPlanetGenerator extends PlanetGenerator {
@@ -43,7 +44,7 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
         tile.block = tile.floor.asFloor().wall;
 
         if (Ridged.noise3d(seed, position.x, position.y, position.z, 22) > 0.18f) {
-            tile.block = Blocks.air;
+            tile.block = air;
         }
     }
 
@@ -228,28 +229,29 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
 
         trimDark();
         median(2);
-        tech(Blocks.metalFloor, Blocks.metalFloor2, Blocks.darkMetal);
+        tech(metalFloor, metalFloor2, darkMetal);
 
         oreAround(alienMoss, blubluWall, 2, 1f, 0f);
 
         pass((x, y) -> {
             //trees on purpur biome
-            if (floor == purpur && block == Blocks.air) {
+            if (floor == purpur && block == air) {
                 if (rand.chance(0.01)){
                     for (Point2 p : Geometry.d8) {
                         Tile other = tiles.get(x + p.x, y + p.y);
                         //if there's already a tree nearby, return
-                        if (other.block() == Blocks.whiteTree) return;
+                        if (other.block() == whiteTree) return;
                     }
                     if (rand.chance(0.1)) {
-                        block = Blocks.whiteTree;
+                        block = whiteTree;
                     }
                 }
             }
             //tokicite
-            if (floor == annite || floor == blublu) {
-                if (noise(x + 69, y - 69, 2, 0.6, 80) > 0.67f) {
-                    floor = tokiciteBlock;
+            if ((floor == annite || floor == blublu) && block == air) {
+                if (noise(x + 69, y - 69, 2, 0.6, 80) > 0.86f) {
+                    floor = tokiciteFloor;
+                    ore = air;
                 }
             }
         });
@@ -267,8 +269,6 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
 
         if (sector.hasEnemyBase()){
             basegen.generate(tiles, enemies.map(r -> tiles.getn(r.x, r.y)), tiles.get(spawn.x, spawn.y), Team.sharded, sector, difficulty);
-            state.rules.attackMode = sector.info.attack = true;
-            state.rules.waveTeam = Team.sharded;
         }
 
         float waveTimeDec = 0.4f;

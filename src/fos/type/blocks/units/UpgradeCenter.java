@@ -45,7 +45,6 @@ public class UpgradeCenter extends Block {
         public Weapon weapon;
         public int weaponIndex = -1;
 
-        //TODO currently non-functional
         @Override
         public void buildConfiguration(Table table) {
             Seq<WeaponModule> modules = new Seq<>();

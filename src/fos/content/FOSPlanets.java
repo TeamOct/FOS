@@ -32,7 +32,9 @@ public class FOSPlanets {
             iconColor = annite.mapColor;
             meshLoader = () -> new HexMesh(this, 5);
             startSector = 9;
-            generator = new LuminaPlanetGenerator();
+            generator = new LuminaPlanetGenerator(){{
+                defaultLoadout = FOSSchematics.luminaLoadout;
+            }};
             defaultEnv = Env.terrestrial | Env.oxygen;
             minZoom = 0.8f;
             camRadius += 0.4f;
@@ -46,6 +48,7 @@ public class FOSPlanets {
                 r.waveTeam = r.attackMode ? Team.sharded : FOSTeam.bessin;
                 r.waves = true;
                 r.enemyCoreBuildRadius = 300;
+                r.coreCapture = false;
                 WeatherEntry weather = new WeatherEntry(FOSWeathers.wind);
                 weather.always = true; //always windy
                 r.weather.add(weather);
@@ -63,6 +66,7 @@ public class FOSPlanets {
             clipRadius = 2f;
             defaultEnv = Env.space;
             launchCandidates.add(lumina);
+            allowLaunchLoadout = false;
             generator = new FOSAsteroidGenerator(){{
                 seed = 8;
                 defaultFloor = Blocks.ice;

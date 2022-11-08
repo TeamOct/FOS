@@ -5,6 +5,7 @@ import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.content.Fx;
 import mindustry.gen.Building;
+import mindustry.gen.Sounds;
 import mindustry.graphics.Drawf;
 import mindustry.world.Block;
 import mindustry.world.Tile;
@@ -50,7 +51,9 @@ public class CliffExplosive extends Block {
                 }
             }
 
-            this.damage(Float.MAX_VALUE);
+            Sounds.explosionbig.at(this);
+            Fx.explosion.at(this);
+            tile.remove();
         }
     }
 }

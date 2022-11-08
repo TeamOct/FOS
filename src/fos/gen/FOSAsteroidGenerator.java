@@ -3,6 +3,7 @@ package fos.gen;
 import arc.math.*;
 import arc.math.geom.*;
 import arc.util.noise.*;
+import fos.content.FOSSchematics;
 import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.maps.generators.*;
@@ -13,9 +14,6 @@ import mindustry.world.blocks.environment.*;
 import static fos.content.FOSBlocks.*;
 
 public class FOSAsteroidGenerator extends BlankPlanetGenerator {
-    //schematic used as launch loadout
-    public String launchSchem = "bXNjaAF4nFVQzWrDMAyWs5Kk6WBj0LteIA/RF9ilsMvYwXNEFnDlYMcNe/tJ9mGbDP7k78cyhiMcH+DA9kbwcsEruUgbXt0X3ey2ODhNlFxc1m0JDG+vdKeIc2C2OC93wu+QMa/DX95LXukp7PxPiJnRxpB5Gi48oVxMsVih9faTfIKn9z3smAKm8oyPAzzLcLuOu/V+9DbOBKcUpBlXy+Rh+JXh0YVII2fnKScAOEOpxuhWoZVGqoOmASO9UWjBmMILqWcj3yFLM+IsWq/xtlpatSh0lew121Wt05CCmgSKpa/Te53+A19tSSQ=";
-
     public Block defaultFloor = Blocks.stone;
 
     public int amount = 28, octaves = 2;
@@ -140,7 +138,7 @@ public class FOSAsteroidGenerator extends BlankPlanetGenerator {
         //generate silver and titanium on elithite
         ore(oreSilver, elithite, 4f, 0.7f * silverScl);
 
-        Schematics.placeLoadout(Schematics.readBase64(launchSchem), sx, sy, Team.sharded);
+        Schematics.placeLoadout(FOSSchematics.uxerdLoadout, sx, sy, Team.sharded);
     }
 
     @Override

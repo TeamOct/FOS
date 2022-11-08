@@ -40,10 +40,13 @@ public class LuminaCoreBlock extends CoreBlock {
     }
 
     @Override
-    public boolean canPlaceOn(Tile tile, Team team, int rotation) {
-        if (this.name.equals("fos-core-colony")) return true;
+    public boolean canBreak(Tile tile) {
+        return super.canBreak(tile) || name.equals("fos-core-colony");
+    }
 
-        return super.canPlaceOn(tile, team, rotation);
+    @Override
+    public boolean canPlaceOn(Tile tile, Team team, int rotation) {
+        return super.canPlaceOn(tile, team, rotation) || name.equals("fos-core-colony");
     }
 
     public class LuminaCoreBuild extends CoreBuild {

@@ -3,9 +3,12 @@ package fos;
 import arc.*;
 import arc.discord.DiscordRPC;
 import arc.discord.DiscordRPC.RichPresence;
+import arc.graphics.g2d.*;
 import arc.math.*;
+import arc.math.geom.Vec2;
 import arc.scene.ui.*;
 import arc.scene.ui.layout.*;
+import arc.struct.*;
 import arc.util.*;
 import fos.content.*;
 import fos.type.blocks.campaign.OrbitalAccelerator.*;
@@ -15,10 +18,11 @@ import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.mod.*;
 import mindustry.mod.Mods.*;
-import mindustry.ui.Styles;
+import mindustry.ui.*;
 import mindustry.ui.fragments.MenuFragment;
 
 import static arc.Core.*;
+import static arc.graphics.g2d.Font.*;
 import static fos.ui.menus.FOSMenus.*;
 import static mindustry.Vars.*;
 import static mindustry.game.EventType.*;
@@ -47,7 +51,7 @@ public class FOSMod extends Mod {
                 + (u.weapons.contains(w -> w.bullet.heals()) ? bundle.get("unittype.support") : ""))
             );
 
-            ui.showOkText("@fos.earlyaccesstitle", Core.bundle.get("fos.earlyaccess"), () -> {});
+            ui.showOkText("@fos.earlyaccesstitle", bundle.get("fos.earlyaccess"), () -> {});
 
             int tn = settings.getInt("fos-menutheme");
             MenuBackground bg = (
@@ -60,6 +64,8 @@ public class FOSMod extends Mod {
             if (tn != 1) {
                 Reflect.set(MenuFragment.class, ui.menufrag, "renderer", new FOSMenuRenderer(bg));
             }
+
+            loadTeamIcons();
         });
 
         Events.run(Trigger.update, () -> {
@@ -98,16 +104,17 @@ public class FOSMod extends Mod {
 
     @Override
     public void init() {
+        if (headless) return;
+
         LoadedMod mod = mods.locateMod("fos");
 
         SplashTexts.load(13);
         int n = Mathf.floor((float) Math.random() * SplashTexts.splashes.size);
         mod.meta.subtitle = SplashTexts.splashes.get(n);
 
-        mod.meta.description += "\n\nCurrent Version: " + mod.meta.version;
+        mod.meta.description += "\n\n[gray]Current Version: []\n" + mod.meta.version;
 
         FOSIcons.load();
-        FOSTeam.load();
         FOSMenus.load();
         FOSVars.load();
 
@@ -118,7 +125,7 @@ public class FOSMod extends Mod {
             }
         });
 
-        LoadedMod xf = mods.list().find(m -> m.meta.author.equals("XenoTale"));
+        LoadedMod xf = mods.list().find(m -> m.meta.author.equals("XenoTale") || m.meta.author.equals("goldie"));
         if (xf != null) {
             ui.showOkText("@fos.errortitle", bundle.format("fos.errortext", xf.meta.displayName), () -> app.exit());
         }
@@ -126,7 +133,7 @@ public class FOSMod extends Mod {
 
     @Override
     public void loadContent() {
-        FOSSchematics.load();
+        FOSTeam.load();
         FOSMusic.load();
         FOSAttributes.load();
         FOSWeathers.load();
@@ -137,6 +144,7 @@ public class FOSMod extends Mod {
         FOSStatuses.load();
         FOSUnits.load();
         FOSBlocks.load();
+        FOSSchematics.load();
         FOSPlanets.load();
         FOSSectors.load();
 
@@ -179,5 +187,52 @@ public class FOSMod extends Mod {
 
             ((Table) teambuttons).add(button);
         }
+    }
+
+    void loadTeamIcons() {
+        // FIXME idk how to do this
+        // Original code from Dusted Lands
+        // Author: @KayyAyeAre
+        final int[] id = {63001};
+
+        Seq<Team> teams = Seq.with(
+            FOSTeam.corru, FOSTeam.bessin
+        );
+
+        //actually start loading the emojis
+        Seq<Font> fonts = Seq.with(Fonts.def, Fonts.outline);
+
+        teams.each(t -> {
+            TextureRegion region = atlas.find("fos-team-" + t.name);
+
+            Reflect.<ObjectIntMap<String>>get(Fonts.class, "unicodeIcons").put(t.name, id[0]);
+            Reflect.<ObjectMap<String, String>>get(Fonts.class, "stringIcons").put(t.name, ((char) id[0]) + "");
+
+            int size = (int) (Fonts.def.getData().lineHeight / Fonts.def.getData().scaleY);
+
+            Vec2 out = Scaling.fit.apply(region.width, region.height, size, size);
+
+            Glyph glyph = new Glyph();
+            glyph.id = id[0];
+            glyph.srcX = 0;
+            glyph.srcY = 0;
+            glyph.width = (int) out.x;
+            glyph.height = (int) out.y;
+            glyph.u = region.u;
+            glyph.v = region.v2;
+            glyph.u2 = region.u2;
+            glyph.v2 = region.v;
+            glyph.xoffset = 0;
+            glyph.yoffset = -size;
+            glyph.xadvance = size;
+            glyph.kerning = null;
+            glyph.fixedWidth = true;
+            glyph.page = 0;
+            fonts.each(f -> f.getData().setGlyph(id[0], glyph));
+
+            t.emoji = Reflect.<ObjectMap<String, String>>get(Fonts.class, "stringIcons").get(t.name);
+
+            id[0]--;
+        });
     }
 }

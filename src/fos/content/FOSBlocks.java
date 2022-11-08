@@ -18,7 +18,10 @@ import fos.type.bullets.StickyBulletType;
 import fos.type.draw.*;
 import mindustry.content.*;
 import mindustry.entities.bullet.*;
+import mindustry.entities.pattern.ShootBarrel;
+import mindustry.entities.pattern.ShootHelix;
 import mindustry.gen.*;
+import mindustry.graphics.CacheLayer;
 import mindustry.type.*;
 import mindustry.world.*;
 import mindustry.world.blocks.defense.*;
@@ -51,11 +54,11 @@ public class FOSBlocks {
     //power
     windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     //defense
-    tinWall, tinWallLarge, diamondWall, diamondWallLarge, sticker, particulator, pulse, thunder,
+    tinWall, tinWallLarge, diamondWall, diamondWallLarge, helix, sticker, particulator, pulse, thunder, cluster,
     //environment & ores
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
-    tokiciteBlock,
+    tokiciteFloor,
     alienMoss,
     oreTin, oreTinSurface, oreSilver, oreLithium, oreDiamond, oreVanadium, oreIridium, oreLuminium,
     bugSpawn,
@@ -232,6 +235,52 @@ public class FOSBlocks {
             requirements(Category.defense, with(diamond, 24));
         }};
 
+        helix = new ItemTurret("helix"){{
+            scaledHealth = 480;
+            size = 2;
+            range = 132;
+            targetAir = targetGround = true;
+            recoil = 1f;
+            reload = 30f;
+            inaccuracy = 0f;
+            shootSound = Sounds.pew;
+            shoot = new ShootHelix(){{
+                shots = 2;
+                mag = 2.5f;
+            }};
+            ammo(
+                tin, new BasicBulletType(3f, 20){{
+                    width = 3f; height = 6f;
+                    lifetime = 44f;
+                    trailColor = frontColor = FOSPal.tin;
+                    backColor = FOSPal.tinBack;
+                    trailWidth = 1.5f;
+                    trailLength = 8;
+                    ammoMultiplier = 4f;
+                }},
+                silver, new BasicBulletType(3f, 25){{
+                    width = 3f; height = 6f;
+                    lifetime = 44f;
+                    trailColor = frontColor = FOSPal.silver;
+                    backColor = FOSPal.silverBack;
+                    trailWidth = 1.5f;
+                    trailLength = 8;
+                    ammoMultiplier = 4f;
+                }},
+                diamond, new BasicBulletType(3f, 35){{
+                    width = 3f; height = 6f;
+                    lifetime = 44f;
+                    trailColor = frontColor = FOSPal.diamond;
+                    backColor = FOSPal.diamondBack;
+                    trailWidth = 1.5f;
+                    trailLength = 8;
+                    ammoMultiplier = 6f;
+                    pierce = true;
+                    pierceCap = 2;
+                }}
+            );
+            requirements(Category.turret, with(tin, 60, silver, 50));
+        }};
         sticker = new ItemTurret("sticker"){{
             scaledHealth = 480;
             size = 2;
@@ -376,6 +425,54 @@ public class FOSBlocks {
             loopSound = Sounds.beam;
             requirements(Category.turret, with(Items.silicon, 5));
         }};*/
+        cluster = new ItemTurret("cluster"){{
+            scaledHealth = 480;
+            size = 4;
+            range = 280f;
+            reload = 6f;
+            inaccuracy = 20f;
+            targetAir = targetGround = true;
+            recoil = 3f;
+            shootSound = Sounds.missile;
+            shoot = new ShootBarrel(){{
+                barrels = new float[]{
+                    -7f, 0f, 0f,
+                    -5f, 0f, 0f,
+                    -3f, 0f, 0f,
+                    -1f, 0f, 0f,
+                    1f, 0f, 0f,
+                    3f, 0f, 0f,
+                    5f, 0f, 0f,
+                    7f, 0f, 0f
+                };
+            }};
+            ammo(
+                diamond, new MissileBulletType(5f, 10){{
+                    lifetime = 56f;
+                    width = height = 8f;
+                    trailWidth = 3f;
+                    trailLength = 15;
+                    frontColor = trailColor = FOSPal.diamond;
+                    backColor = FOSPal.diamondBack;
+                    hitEffect = Fx.blastExplosion;
+                    ammoMultiplier = 1f;
+                    splashDamage = 120f;
+                    splashDamageRadius = 50f;
+                    homingPower = 0f;
+                    fragBullets = 3;
+                    fragBullet = new BasicBulletType(1f, 5){{
+                        lifetime = 20f;
+                        width = height = 8f;
+                        frontColor = FOSPal.diamond;
+                        backColor = FOSPal.diamondBack;
+                        hitEffect = Fx.explosion;
+                        splashDamage = 80f;
+                        splashDamageRadius = 38f;
+                    }};
+                }}
+            );
+            requirements(Category.turret, with(silicon, 500, vanadium, 300, iridium, 250, luminium, 200));
+        }};
         //endregion
         //region distribution
         spaceDuct = new SpaceDuct("space-duct"){{
@@ -497,9 +594,14 @@ public class FOSBlocks {
             variants = 4;
         }};
         purpurWall = new StaticWall("purpur-wall"){};
-        tokiciteBlock = new Floor("tokicite-block"){{
+        tokiciteFloor = new Floor("tokicite-floor"){{
+            drownTime = 360f;
+            status = StatusEffects.slow;
+            speedMultiplier = 0.15f;
+            variants = 0;
             liquidDrop = FOSLiquids.tokicite;
             isLiquid = true;
+            cacheLayer = CacheLayer.tar;
         }};
         alienMoss = new OverlayFloor("alien-moss"){};
         oreTin = new UndergroundOreBlock("ore-tin"){{
@@ -569,7 +671,7 @@ public class FOSBlocks {
             size = 3;
             unitCapModifier = 5;
             itemCapacity = 2500;
-            unitType = FOSUnits.temp;
+            unitType = FOSUnits.lord;
             requirements(Category.effect, with(tin, 2000, silver, 1250));
         }};
         coreCity = new LuminaCoreBlock("core-city"){{
@@ -577,7 +679,7 @@ public class FOSBlocks {
             size = 4;
             unitCapModifier = 7;
             itemCapacity = 5000;
-            unitType = FOSUnits.temp;
+            unitType = FOSUnits.lord;
             requirements(Category.effect, with(tin, 2500, silver, 2000, diamond, 1500));
         }};
         coreMetropolis = new LuminaCoreBlock("core-metropolis"){{
@@ -585,7 +687,7 @@ public class FOSBlocks {
             size = 5;
             unitCapModifier = 10;
             itemCapacity = 8000;
-            unitType = FOSUnits.temp;
+            unitType = FOSUnits.lord;
             requirements(Category.effect, with(tin, 4500, silver, 3500, diamond, 3000));
         }};
         lightUnloader = new Unloader("light-unloader"){{
