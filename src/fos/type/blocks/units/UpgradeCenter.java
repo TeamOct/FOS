@@ -1,8 +1,10 @@
 package fos.type.blocks.units;
 
 import arc.graphics.Color;
+import arc.scene.style.TextureRegionDrawable;
 import arc.scene.ui.layout.*;
 import arc.struct.Seq;
+import arc.util.Scaling;
 import fos.type.content.WeaponModule;
 import fos.type.units.LuminaUnitType;
 import mindustry.Vars;
@@ -29,9 +31,9 @@ public class UpgradeCenter extends Block {
         selectionColumns = 5;
 
         config(Integer.class, (UpgradeCenterBuild tile, Integer i) -> {
-            if (!configurable || tile.weaponIndex == i) return;
+            if (!configurable) return;
 
-            tile.weaponIndex = i < 0 ? -1 : i;
+            tile.weaponIndex = i >= 0 ? i : -1;
         });
 
         config(WeaponModule.class, (UpgradeCenterBuild tile, WeaponModule val) -> {
@@ -42,20 +44,35 @@ public class UpgradeCenter extends Block {
     }
 
     public class UpgradeCenterBuild extends Building {
+        public Seq<StatusEffect> modules = Vars.content.statusEffects().copy().filter(s -> s instanceof WeaponModule);
+
         public Weapon weapon;
         public int weaponIndex = -1;
 
         @Override
-        public void buildConfiguration(Table table) {
-            Seq<WeaponModule> modules = new Seq<>();
-            for(StatusEffect s : content.statusEffects()) {
-                if (s instanceof WeaponModule w && w.unlockedNow()) {
-                    modules.add(w);
-                }
-            }
+        public void display(Table table) {
+            super.display(table);
 
+            TextureRegionDrawable reg = new TextureRegionDrawable();
+            WeaponModule w = weaponIndex == -1 ? null : (WeaponModule) modules.get(weaponIndex);
+
+            table.row();
+            table.table(t -> {
+                t.left();
+                t.image().update(i -> {
+                    i.setDrawable(weaponIndex == -1 || w == null ? Icon.cancel : reg.set(w.weapon.region));
+                    i.setScaling(Scaling.fit);
+                    i.setColor(weaponIndex == -1 ? Color.lightGray : Color.white);
+                }).size(32).padBottom(-4).padRight(2);
+
+                t.label(() -> weaponIndex == -1 || w == null ? "@none" : w.localizedName).wrap().width(230f).color(Color.lightGray);
+            }).left();
+        }
+
+        @Override
+        public void buildConfiguration(Table table) {
             if (modules.any()) {
-                ItemSelection.buildTable(UpgradeCenter.this, table, modules, () -> weaponIndex == -1 ? null : modules.get(weaponIndex), this::configure, selectionRows, selectionColumns);
+                ItemSelection.buildTable(UpgradeCenter.this, table, modules, () -> weaponIndex == -1 ? null : modules.get(weaponIndex), wm -> configure(modules.indexOf(i -> i == wm)), selectionRows, selectionColumns);
             } else {
                 table.table(Styles.black3, t -> t.add("@none").color(Color.lightGray));
             }

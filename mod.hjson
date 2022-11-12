@@ -5,7 +5,7 @@ main: "fos.FOSMod"
 repo: "TeamOct/fictional-octo-system"
 description: "A mod focused on space exploration.\n\nUses liplum/MultiCrafterLib, but you aren't required to install it."
 version: "1.1 pre-alpha"
-minGameVersion: 140
+minGameVersion: 140.3
 java: true
 hidden: false
 hideBrowser: true
