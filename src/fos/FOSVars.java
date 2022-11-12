@@ -1,8 +1,11 @@
 package fos;
 
 import arc.graphics.gl.FrameBuffer;
+import arc.struct.Seq;
 import fos.audio.MusicHandler;
+import fos.type.content.WeaponModule;
 import fos.ui.ResearchCoreDialog;
+import mindustry.Vars;
 import mindustry.content.TechTree;
 import mindustry.graphics.g3d.PlanetParams;
 
@@ -21,6 +24,8 @@ public class FOSVars {
     public static FrameBuffer menuBuffer;
     /** Used in modded menu renderer. Planet params used in menuBuffer. */
     public static PlanetParams menuParams;
+
+    public static Seq<WeaponModule> weaponModules = Vars.content.statusEffects().copy().filter(s -> s instanceof WeaponModule).as();
 
     public static void load() {
         rcdialog = new ResearchCoreDialog();

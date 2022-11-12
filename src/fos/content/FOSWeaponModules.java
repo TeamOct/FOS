@@ -4,7 +4,11 @@ import fos.type.bullets.SmartBulletType;
 import fos.type.content.WeaponModule;
 import mindustry.content.Fx;
 import mindustry.entities.bullet.*;
+import mindustry.type.ItemStack;
 import mindustry.type.Weapon;
+
+import static fos.content.FOSItems.*;
+import static mindustry.type.ItemStack.*;
 
 //why the heck I added FOS to class's name if weapon modules are unique to this mod anyway
 //just because it looks nicer :)
@@ -25,7 +29,7 @@ public class FOSWeaponModules {
                 trailLength = 8;
                 lifetime = 60f;
             }};
-        }});
+        }}).reqs(with(tin, 75, silver, 75));
         standard2 = new WeaponModule("standard2", new Weapon("standard-weapon2"){{
             x = 0; y = 0;
             alternate = mirror = false;
@@ -49,7 +53,7 @@ public class FOSWeaponModules {
                     collidesTiles = true;
                 }};
             }};
-        }});
+        }}).reqs(with(tin, 150, silver, 150));
         standard3 = new WeaponModule("standard3", new Weapon("standard-weapon3"){{
             x = 0; y = 0;
             alternate = mirror = false;
@@ -64,7 +68,7 @@ public class FOSWeaponModules {
                 lifetime = 60f;
                 homingPower = 0.8f;
             }};
-        }});
+        }}).reqs(with(tin, 250, silver, 250, diamond, 150));
         standard5 = new WeaponModule("standard5", new Weapon("standard-weapon5"){{
             x = 0; y = 0;
             alternate = mirror = false;
@@ -102,6 +106,6 @@ public class FOSWeaponModules {
                     splashDamageRadius = 10f;
                 }};
             }};
-        }});
+        }}).reqs(with(tin, 500, silver, 500, vanadium, 300, iridium, 250, luminium, 200));
     }
 }

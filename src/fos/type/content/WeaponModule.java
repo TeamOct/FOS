@@ -7,6 +7,7 @@ import mindustry.type.*;
 //FOR MODDERS: applying this "status effect" will have no effect whatsoever
 public class WeaponModule extends StatusEffect {
     public Weapon weapon;
+    public ItemStack[] reqs;
 
     public WeaponModule(String name, Weapon weapon) {
         super(name);
@@ -31,5 +32,12 @@ public class WeaponModule extends StatusEffect {
     @Override
     public void applied(Unit unit, float time, boolean extend) {
         unit.unapply(this);
+    }
+
+    /** Sets the module's requirements. Returns the weapon module for chaining. */
+    public WeaponModule reqs(ItemStack[] reqs) {
+        this.reqs = reqs;
+
+        return this;
     }
 }
