@@ -3,10 +3,8 @@ package fos.content;
 import arc.graphics.*;
 import arc.struct.*;
 import fos.graphics.FOSPal;
-import fos.type.blocks.campaign.GiantNukeLauncher;
-import fos.type.blocks.campaign.NukeLauncher;
-import fos.type.blocks.campaign.OrbitalAccelerator;
-import fos.type.blocks.campaign.ResearchCore;
+import fos.type.blocks.campaign.*;
+import fos.type.blocks.defense.PolyForceProjector;
 import fos.type.blocks.distribution.*;
 import fos.type.blocks.environment.*;
 import fos.type.blocks.power.*;
@@ -18,8 +16,7 @@ import fos.type.bullets.StickyBulletType;
 import fos.type.draw.*;
 import mindustry.content.*;
 import mindustry.entities.bullet.*;
-import mindustry.entities.pattern.ShootBarrel;
-import mindustry.entities.pattern.ShootHelix;
+import mindustry.entities.pattern.*;
 import mindustry.gen.*;
 import mindustry.graphics.CacheLayer;
 import mindustry.type.*;
@@ -54,7 +51,7 @@ public class FOSBlocks {
     //power
     windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     //defense
-    tinWall, tinWallLarge, diamondWall, diamondWallLarge, helix, sticker, particulator, pulse, thunder, cluster,
+    tinWall, tinWallLarge, diamondWall, diamondWallLarge, helix, sticker, particulator, pulse, thunder, cluster, testForceProj,
     //environment & ores
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
@@ -472,6 +469,34 @@ public class FOSBlocks {
                 }}
             );
             requirements(Category.turret, with(silicon, 500, vanadium, 300, iridium, 250, luminium, 200));
+        }};
+
+        testForceProj = new PolyForceProjector("test-force-proj"){{
+            health = 480;
+            shieldHealth = 3500;
+            polygon = new float[]{
+                4f, -52f,
+                36f, -20f,
+                36f, 4f,
+                28f, 12f,
+                44f, 28f,
+                44f, 52f,
+                36f, 60f,
+                20f, 44f,
+                4f, 60f,
+                -4f, 60f,
+                -20f, 44f,
+                -36f, 60f,
+                -44f, 52f,
+                -44f, 28f,
+                -28f, 12f,
+                -36f, 4f,
+                -36f, -20f,
+                -4f, -52f
+            };
+            consumePower(4f);
+            requirements(Category.effect, with(tin, 100));
+            buildVisibility = BuildVisibility.sandboxOnly;
         }};
         //endregion
         //region distribution
