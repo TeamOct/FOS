@@ -13,10 +13,10 @@ import mindustry.world.blocks.defense.ForceProjector;
 import static mindustry.Vars.*;
 
 public class PolyForceProjector extends ForceProjector {
-    public float[] polygon;
+    public float[] polygon = new float[]{0, 0};
     protected static Vec2[] polyLines;
     protected static final Cons<Bullet> customShieldConsumer = bullet -> {
-        if(bullet.team != paramEntity.team && bullet.type.absorbable && Intersector.isInPolygon(((PolyForceBuild) paramEntity).hitbox, new Vec2(bullet.x - paramEntity.x, bullet.y - paramEntity.y))){
+        if(bullet.team != paramEntity.team && bullet.type.absorbable && Intersector.isInPolygon(((PolyForceBuild) paramEntity).hitbox, new Vec2(bullet.x, bullet.y))){
             bullet.absorb();
             paramEffect.at(bullet);
             paramEntity.hit = 1f;
@@ -84,16 +84,16 @@ public class PolyForceProjector extends ForceProjector {
         public void updateTile() {
             super.updateTile();
 
-            for(int i = 0; i < polygon.length; i += 2) {
+            for(int i = 0; i < curPolygon.length; i += 2) {
                 Vec2 v = new Vec2(polygon[i], polygon[i+1]).rotate(rotation * 90);
                 curPolygon[i] = x + v.x; curPolygon[i+1] = y + v.y;
             }
 
-            for(int i = 0; i < polygon.length; i += 2) {
+            for(int i = 0; i < curPolygon.length; i += 2) {
                 int n = Mathf.floor(i / 2f);
                 Vec2 v = new Vec2(curPolygon[i], curPolygon[i+1]);
                 polyLines[n] = v;
-                hitbox.set(n, v.add(-x, -y));
+                hitbox.set(n, v);
             }
         }
 

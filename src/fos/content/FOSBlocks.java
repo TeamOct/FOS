@@ -51,7 +51,7 @@ public class FOSBlocks {
     //power
     windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     //defense
-    tinWall, tinWallLarge, diamondWall, diamondWallLarge, helix, sticker, particulator, pulse, thunder, cluster, testForceProj,
+    tinWall, tinWallLarge, diamondWall, diamondWallLarge, helix, sticker, particulator, pulse, thunder, cluster, testForceProj, rectangle, arrow, shield,
     //environment & ores
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
@@ -498,6 +498,47 @@ public class FOSBlocks {
             requirements(Category.effect, with(tin, 100));
             buildVisibility = BuildVisibility.sandboxOnly;
         }};
+        /*
+        rectangle = new PolyForceProjector("test-rectangle"){{
+            health = 480;
+            shieldHealth = 3500;
+            polygon = new float[]{
+                -120f, -40f,
+                120f, -40f,
+                120f, 40f,
+                -120f, 40f
+            };
+            requirements(Category.effect, with(tin, 100));
+            buildVisibility = BuildVisibility.sandboxOnly;
+        }};
+        arrow = new PolyForceProjector("test-arrow"){{
+            health = 480;
+            shieldHealth = 3500;
+            polygon = new float[]{
+                -120f, -40f,
+                120f, -40f,
+                160f, 0f,
+                120f, 40f,
+                -120f, 40f,
+                -80f, 0f
+            };
+            requirements(Category.effect, with(tin, 100));
+            buildVisibility = BuildVisibility.sandboxOnly;
+        }};
+        shield = new PolyForceProjector("test-shield"){{
+            health = 480;
+            shieldHealth = 3500;
+            polygon = new float[]{
+                0f, -120f,
+                60f, -60f,
+                60f, 120f,
+                -60f, 120f,
+                -60f, -60f
+            };
+            requirements(Category.effect, with(tin, 100));
+            buildVisibility = BuildVisibility.sandboxOnly;
+        }};
+        */
         //endregion
         //region distribution
         spaceDuct = new SpaceDuct("space-duct"){{
