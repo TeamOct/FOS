@@ -3,7 +3,7 @@ displayName: "Fictional Octo System"
 author: "Team Oct"
 main: "fos.FOSMod"
 repo: "TeamOct/fictional-octo-system"
-description: "A mod focused on space exploration.\n\nUses liplum/MultiCrafterLib, but you aren't required to install it."
+description: "A mod focused on space exploration."
 version: "1.1 pre-alpha"
 minGameVersion: 140.3
 java: true

@@ -1,29 +1,29 @@
-apply plugin: "java"
-
 version '1.0'
 
-targetCompatibility = 8
-sourceCompatibility = JavaVersion.VERSION_17
+buildscript{
+    repositories{
+        mavenCentral()
+    }
+
+    ext{
+        mindustryVersion = 'v140.3'
+        kotlinVersion = "1.5.21"
+        sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
+    }
+
+    dependencies{
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+apply plugin: "kotlin"
 
 sourceSets.main.java.srcDirs = ["src/"]
+sourceSets.main.kotlin.srcDirs = ["src"]
 
 repositories{
     mavenCentral()
     maven{ url 'https://www.jitpack.io' }
-}
-
-ext{
-    //the build number that this mod is made for
-    mindustryVersion = 'v140.3'
-    jabelVersion = "93fde537c7"
-    sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
-}
-
-//java 8 backwards compatibility flag
-allprojects{
-    tasks.withType(JavaCompile){
-        options.compilerArgs.addAll(['--release', '8'])
-    }
 }
 
 dependencies{
@@ -32,8 +32,16 @@ dependencies{
     compileOnly "com.github.Anuken.Arc:discord:v136"
 
     implementation "com.github.liplum:MultiCrafterLib:v1.7"
+}
 
-    annotationProcessor "com.github.Anuken:jabel:$jabelVersion"
+compileJava{
+    targetCompatibility = JavaVersion.VERSION_16
+    sourceCompatibility = JavaVersion.VERSION_16
+}
+
+compileKotlin{
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 task jarAndroid{
@@ -56,6 +64,8 @@ task jarAndroid{
 }
 
 jar{
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
     archiveFileName = "${project.archivesBaseName}-desktop.jar"
 
     from{
