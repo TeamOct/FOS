@@ -7,7 +7,7 @@ buildscript{
 
     ext{
         mindustryVersion = 'v140.3'
-        kotlinVersion = "1.5.21"
+        kotlinVersion = "1.5.31"
         sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
     }
 
@@ -40,8 +40,8 @@ compileJava{
 }
 
 compileKotlin{
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_16
+    targetCompatibility = JavaVersion.VERSION_16
 }
 
 task jarAndroid{
