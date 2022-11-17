@@ -167,6 +167,7 @@ public class FOSBlocks {
             size = 2;
             tier = 2;
             heatOutput = 4f;
+            squareSprite = false;
             requirements(Category.production, with(rawNethratium, 30));
             researchCost = with(rawNethratium, 150);
             envRequired = envEnabled = Env.space;
@@ -326,6 +327,7 @@ public class FOSBlocks {
             inaccuracy = 5;
             outlineColor = Color.valueOf("302326");
             shootSound = Sounds.shootBig;
+            squareSprite = false;
             ammo(
                 tin, new BasicBulletType(2f, 80){{
                     lifetime = 60f;
@@ -402,6 +404,7 @@ public class FOSBlocks {
             force = 0;
             scaledForce = 0;
             outlineColor = Color.valueOf("302326");
+            squareSprite = false;
             consumePower(4);
             requirements(Category.turret, BuildVisibility.editorOnly, with());
         }};
@@ -678,6 +681,7 @@ public class FOSBlocks {
             breakable = true;
             itemCapacity = 250;
             unitCapModifier = 0;
+            squareSprite = false;
             requirements(Category.effect, with(tin, 1500));
         }};
         coreFortress = new LuminaCoreBlock("core-fortress"){{
@@ -686,6 +690,7 @@ public class FOSBlocks {
             unitCapModifier = 5;
             itemCapacity = 2500;
             unitType = FOSUnits.lord;
+            squareSprite = false;
             requirements(Category.effect, with(tin, 2000, silver, 1250));
         }};
         coreCity = new LuminaCoreBlock("core-city"){{
