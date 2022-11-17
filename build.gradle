@@ -16,6 +16,7 @@ buildscript{
     }
 }
 
+apply plugin: "java"
 apply plugin: "kotlin"
 
 sourceSets.main.java.srcDirs = ["src/"]
@@ -36,12 +37,12 @@ dependencies{
 
 compileJava{
     targetCompatibility = JavaVersion.VERSION_16
-    sourceCompatibility = JavaVersion.VERSION_16
+    sourceCompatibility = JavaVersion.VERSION_1_8
 }
 
 compileKotlin{
     sourceCompatibility = JavaVersion.VERSION_16
-    targetCompatibility = JavaVersion.VERSION_16
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 task jarAndroid{
