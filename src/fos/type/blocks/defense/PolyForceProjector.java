@@ -12,10 +12,12 @@ import mindustry.world.blocks.defense.ForceProjector;
 
 import static mindustry.Vars.*;
 
+// I already know this code's gonna be yoinked.
+// If you do yoink this, PLEASE consider giving me a credit
 public class PolyForceProjector extends ForceProjector {
     public float[] polygon = new float[]{0, 0};
-    protected static Vec2[] polyLines;
-    protected static final Cons<Bullet> customShieldConsumer = bullet -> {
+    protected Vec2[] polyLines = new Vec2[]{};
+    protected final Cons<Bullet> customShieldConsumer = bullet -> {
         if(bullet.team != paramEntity.team && bullet.type.absorbable && Intersector.isInPolygon(((PolyForceBuild) paramEntity).hitbox, new Vec2(bullet.x, bullet.y))){
             bullet.absorb();
             paramEffect.at(bullet);
@@ -43,7 +45,7 @@ public class PolyForceProjector extends ForceProjector {
 
         polyLines = new Vec2[polygon.length / 2];
         for(int i = 0; i < polygon.length; i += 2) {
-            int n = Mathf.floor(i / 2f);
+            int n = i / 2;
             polyLines[n] = new Vec2(polygon[i], polygon[i+1]);
         }
     }
@@ -56,7 +58,7 @@ public class PolyForceProjector extends ForceProjector {
         }
 
         drawPotentialLinks(x, y);
-        //drawOverlay(x * 8 + offset, y * 8 + offset, rotation);
+        drawOverlay(x * 8 + offset, y * 8 + offset, rotation);
 
         Draw.color(Pal.gray);
         Lines.stroke(3f);
@@ -69,32 +71,41 @@ public class PolyForceProjector extends ForceProjector {
 
     public class PolyForceBuild extends ForceBuild {
         public float[] curPolygon;
+        public Vec2[] curPolyLines;
         public Seq<Vec2> hitbox = new Seq<>();
 
         @Override
         public void created() {
             curPolygon = new float[polygon.length];
+            curPolyLines = new Vec2[polyLines.length + 1];
 
-            for (Vec2 point : polyLines) {
+            for (int i = 0; i < polyLines.length; i++) {
+                Vec2 point = polyLines[i];
+
                 hitbox.add(point);
+                curPolyLines[i] = polyLines[i].cpy();
             }
+
+            curPolyLines[polyLines.length] = curPolyLines[0].cpy();
         }
 
         @Override
         public void updateTile() {
             super.updateTile();
 
-            for(int i = 0; i < curPolygon.length; i += 2) {
-                Vec2 v = new Vec2(polygon[i], polygon[i+1]).rotate(rotation * 90);
+            for(int i = 0; i < polygon.length; i += 2) {
+                Vec2 v = new Vec2(polygon[i] * efficiency, polygon[i+1] * efficiency).rotate(rotation * 90);
                 curPolygon[i] = x + v.x; curPolygon[i+1] = y + v.y;
             }
 
             for(int i = 0; i < curPolygon.length; i += 2) {
-                int n = Mathf.floor(i / 2f);
+                int n = i / 2;
                 Vec2 v = new Vec2(curPolygon[i], curPolygon[i+1]);
-                polyLines[n] = v;
+                curPolyLines[n].set(v);
                 hitbox.set(n, v);
             }
+
+            curPolyLines[polyLines.length] = curPolyLines[0].cpy();
         }
 
         @Override
@@ -110,7 +121,7 @@ public class PolyForceProjector extends ForceProjector {
 
         @Override
         public void drawShield() {
-            if(!broken){
+            if (!broken || efficiency > 0) {
                 Polygon poly = new Polygon(curPolygon);
 
                 Draw.z(Layer.shields);
@@ -124,7 +135,7 @@ public class PolyForceProjector extends ForceProjector {
                     Draw.alpha(0.09f + Mathf.clamp(0.08f * hit));
                     Fill.poly(poly);
                     Draw.alpha(1f);
-                    Lines.poly(polyLines, x, y, realRadius() / radius);
+                    Lines.poly(curPolyLines, 0, 0, realRadius() / radius);
                     Draw.reset();
                 }
             }

@@ -1,12 +1,9 @@
 package fos.content;
 
-import arc.struct.Seq;
-import fos.type.units.LuminaBossType;
 import mindustry.type.ItemStack;
 
 import static fos.content.FOSBlocks.*;
 import static fos.content.FOSItems.*;
-import static fos.content.FOSObjectives.*;
 import static fos.content.FOSUnits.*;
 import static fos.content.FOSWeaponModules.*;
 import static mindustry.content.Items.*;

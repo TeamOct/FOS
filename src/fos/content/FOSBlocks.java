@@ -51,7 +51,7 @@ public class FOSBlocks {
     //power
     windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     //defense
-    tinWall, tinWallLarge, diamondWall, diamondWallLarge, helix, sticker, particulator, pulse, thunder, cluster, testForceProj, rectangle, arrow, shield,
+    tinWall, tinWallLarge, diamondWall, diamondWallLarge, helix, sticker, particulator, pulse, thunder, cluster, matrixShieldProj, rectangle, arrow, shield,
     //environment & ores
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
@@ -471,74 +471,22 @@ public class FOSBlocks {
             requirements(Category.turret, with(silicon, 500, vanadium, 300, iridium, 250, luminium, 200));
         }};
 
-        testForceProj = new PolyForceProjector("test-force-proj"){{
+        matrixShieldProj = new PolyForceProjector("matrix-shield-projector"){{
             health = 480;
-            shieldHealth = 3500;
+            size = 3;
+            shieldHealth = 500f;
+            cooldownNormal = 2f;
+            cooldownLiquid = 1.6f;
+            cooldownBrokenBase = 0.5f;
             polygon = new float[]{
-                4f, -52f,
-                36f, -20f,
-                36f, 4f,
-                28f, 12f,
-                44f, 28f,
-                44f, 52f,
-                36f, 60f,
-                20f, 44f,
-                4f, 60f,
-                -4f, 60f,
-                -20f, 44f,
-                -36f, 60f,
-                -44f, 52f,
-                -44f, 28f,
-                -28f, 12f,
-                -36f, 4f,
-                -36f, -20f,
-                -4f, -52f
+                -120, -40,
+                120, -40,
+                120, 40,
+                -120, 40,
             };
             consumePower(4f);
-            requirements(Category.effect, with(tin, 100));
-            buildVisibility = BuildVisibility.sandboxOnly;
+            requirements(Category.effect, with(diamond, 150, silicon, 200, vanadium, 125));
         }};
-        /*
-        rectangle = new PolyForceProjector("test-rectangle"){{
-            health = 480;
-            shieldHealth = 3500;
-            polygon = new float[]{
-                -120f, -40f,
-                120f, -40f,
-                120f, 40f,
-                -120f, 40f
-            };
-            requirements(Category.effect, with(tin, 100));
-            buildVisibility = BuildVisibility.sandboxOnly;
-        }};
-        arrow = new PolyForceProjector("test-arrow"){{
-            health = 480;
-            shieldHealth = 3500;
-            polygon = new float[]{
-                -120f, -40f,
-                120f, -40f,
-                160f, 0f,
-                120f, 40f,
-                -120f, 40f,
-                -80f, 0f
-            };
-            requirements(Category.effect, with(tin, 100));
-            buildVisibility = BuildVisibility.sandboxOnly;
-        }};
-        shield = new PolyForceProjector("test-shield"){{
-            health = 480;
-            shieldHealth = 3500;
-            polygon = new float[]{
-                0f, -120f,
-                60f, -60f,
-                60f, 120f,
-                -60f, 120f,
-                -60f, -60f
-            };
-            requirements(Category.effect, with(tin, 100));
-            buildVisibility = BuildVisibility.sandboxOnly;
-        }};
-        */
         //endregion
         //region distribution
         spaceDuct = new SpaceDuct("space-duct"){{
