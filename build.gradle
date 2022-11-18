@@ -6,17 +6,25 @@ buildscript{
     ext{
         sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
 
+        //the build number that this mod is made for
+        //version of SDK you will be using
+        sdkVersion = '30'
+
         mindustryPath = "com.github.Anuken.Mindustry"
         //the build number that this mod is made for
         mindustryVersion = "v140.4"
         arcVersion =mindustryVersion
 
         kotlinVersion = "1.6.0"
-        jabelVersion = "0.7.0"
+        jabelVersion = "34e4c172e65b3928cd9eabe1993654ea79c409cd"
         arcModule = { String name ->
             //skip to last submodule
             if(name.contains(':')) name = name.split(':').last()
             return "com.github.Anuken.Arc:$name:$arcVersion"
+        }
+        doExec = { cmd ->
+            def proc = cmd.execute(null, new File("$buildDir/libs"))
+            proc.waitForProcessOutput(System.out, System.err)
         }
     }
     repositories {
@@ -42,7 +50,11 @@ repositories{
 
 
 
-
+allprojects(){
+    tasks.withType(JavaCompile){
+        options.compilerArgs.addAll(['--release', '8'])
+    }
+}
 
 apply plugin: "java"
 apply plugin: "java-library"
@@ -52,13 +64,6 @@ sourceSets.main.java.srcDirs = ["src/", "$buildDir/generated/sources/annotationP
 sourceSets.main.kotlin.srcDirs = ["src/", "$buildDir/generated/sources/annotationProcessor/java/main"]
 sourceSets.main.resources.srcDirs = ["assets"]
 version '1.0'
-
-kapt{
-    javacOptions{
-        option("-source", "16")
-        option("-target", "1.8")
-    }
-}
 
 compileJava.options.fork = true
 
@@ -75,22 +80,27 @@ dependencies{
 
     //you may uncomment this dependency to properly use Java 17 features while still targeting Java 8.
     //note that this fails on some systems for as-of-yet unknown reasons - if this happens to you, revert the changes
-    //annotationProcessor "com.github.Anuken:jabel:$jabelVersion"
+    annotationProcessor "com.github.Anuken:jabel:$jabelVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
 }
+
 task jarAndroid{
     dependsOn "jar"
 
     doLast{
-        if(!sdkRoot || !new File(sdkRoot).exists()) throw new GradleException("No valid Android SDK found. Ensure that ANDROID_HOME is set to your Android SDK directory.")
+        if(!sdkRoot || !new File(sdkRoot).exists()) throw new GradleException("No valid Android SDK found. Ensure that ANDROID_HOME is set to your Android SDK directory.");
 
         def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find{ f -> new File(f, "android.jar").exists() }
 
         if(!platformRoot) throw new GradleException("No android.jar found. Ensure that you have an Android platform installed.")
 
         //collect dependencies needed for desugaring
-        def dependencies = (configurations.compileClasspath.asList() + configurations.runtimeClasspath.asList() + [new File(platformRoot, "android.jar")])
+        def dependencies = (
+                configurations.compileClasspath.asList() +
+                        configurations.runtimeClasspath.asList() +
+                        [new File("$sdkRoot/platforms/android-$sdkVersion/android.jar")]
+        )
                 .collect{ "--classpath $it.path" }.join(" ")
 
         //dex and desugar files - this requires d8 in your PATH
