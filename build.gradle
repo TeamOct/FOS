@@ -94,7 +94,7 @@ task jarAndroid{
                 .collect{ "--classpath $it.path" }.join(" ")
 
         //dex and desugar files - this requires d8 in your PATH
-        "d8 $dependencies --min-api 14 --output ${project.archivesBaseName}Android.jar ${project.archivesBaseName}Desktop.jar"
+        "d8 $dependencies --min-api 14 --output ${project.archivesBaseName}-android.jar ${project.archivesBaseName}-desktop.jar"
                 .execute(null, new File("$buildDir/libs")).waitForProcessOutput(System.out, System.err)
     }
 }
