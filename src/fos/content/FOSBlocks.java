@@ -43,7 +43,7 @@ public class FOSBlocks {
     //crafting
     resourceExtractor, cuberiumSynthesizer, sublimator, siliconSynthesizer,
     //production
-    rockCrusher, drillBase, tinDrill, silverDrill, oreDetectorSmall, oreDetector,
+    rockCrusher, drillBase, drillBaseLarge, tinDrill, silverDrill, diamondDrill, oreDetectorSmall, oreDetector,
     //distribution
     spaceDuct, spaceRouter, spaceBridge, itemCatapult, tinBelt,
     //liquids
@@ -51,7 +51,7 @@ public class FOSBlocks {
     //power
     windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     //defense
-    tinWall, tinWallLarge, diamondWall, diamondWallLarge, helix, sticker, particulator, pulse, thunder, cluster, matrixShieldProj, rectangle, arrow, shield,
+    tinWall, tinWallLarge, diamondWall, diamondWallLarge, helix, sticker, particulator, pulse, thunder, cluster, matrixShieldProj,
     //environment & ores
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
@@ -173,11 +173,16 @@ public class FOSBlocks {
             envRequired = envEnabled = Env.space;
         }};
         drillBase = new DrillBase("drill-base"){{
-            health = 120;
+            scaledHealth = 30;
             size = 2;
             envEnabled |= Env.space;
             requirements(Category.production, with(tin, 10));
             researchCost = with(tin, 100);
+        }};
+        drillBaseLarge = new DrillBase("drill-base-large"){{
+            scaledHealth = 30;
+            size = 3;
+            requirements(Category.production, with(silver, 45, silicon, 50));
         }};
         tinDrill = new UndergroundDrill("tin-drill"){{
             health = 480;
@@ -194,6 +199,13 @@ public class FOSBlocks {
             tier = 5;
             drillTime = 300f;
             requirements(Category.production, with(silver, 10));
+        }};
+        diamondDrill = new UndergroundDrill("diamond-drill"){{
+            health = 2250;
+            size = 3;
+            tier = 6;
+            drillTime = 300f;
+            requirements(Category.production, with(silicon, 25, diamond, 40));
         }};
         oreDetectorSmall = new OreDetector("ore-detector-small"){{
             health = 480;

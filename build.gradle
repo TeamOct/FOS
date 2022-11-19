@@ -6,14 +6,13 @@ buildscript{
     ext{
         sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
 
-        //the build number that this mod is made for
         //version of SDK you will be using
         sdkVersion = '30'
 
         mindustryPath = "com.github.Anuken.Mindustry"
         //the build number that this mod is made for
         mindustryVersion = "v140.4"
-        arcVersion =mindustryVersion
+        arcVersion = mindustryVersion
 
         kotlinVersion = "1.6.0"
         jabelVersion = "34e4c172e65b3928cd9eabe1993654ea79c409cd"
@@ -52,7 +51,7 @@ repositories{
 
 allprojects(){
     tasks.withType(JavaCompile){
-        options.compilerArgs.addAll(['--release', '8'])
+        options.compilerArgs.addAll(['--release', '16'])
     }
 }
 
@@ -80,7 +79,7 @@ dependencies{
 
     //you may uncomment this dependency to properly use Java 17 features while still targeting Java 8.
     //note that this fails on some systems for as-of-yet unknown reasons - if this happens to you, revert the changes
-    annotationProcessor "com.github.Anuken:jabel:$jabelVersion"
+    //annotationProcessor "com.github.Anuken:jabel:$jabelVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 
 }
@@ -178,9 +177,9 @@ task mjar(){
 
 compileKotlin{
     sourceCompatibility = JavaVersion.VERSION_16
-    targetCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_16
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "16"
     }
 }
 allprojects{
@@ -196,7 +195,7 @@ allprojects{
     }
     compileKotlin{
         sourceCompatibility = JavaVersion.VERSION_16
-        targetCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_16
     }
     tasks.withType(JavaCompile){
         targetCompatibility = JavaVersion.VERSION_16
