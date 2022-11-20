@@ -43,15 +43,15 @@ public class FOSBlocks {
     //crafting
     resourceExtractor, cuberiumSynthesizer, sublimator, siliconSynthesizer,
     //production
-    rockCrusher, drillBase, drillBaseLarge, tinDrill, silverDrill, diamondDrill, oreDetectorSmall, oreDetector,
+    rockCrusher, drillBase, drillBaseLarge, tinDrill, silverDrill, diamondDrill, vanadiumDrill, oreDetectorSmall, oreDetector,
     //distribution
     spaceDuct, spaceRouter, spaceBridge, itemCatapult, tinBelt,
     //liquids
-    gasPipe,
+    fluidPipe,
     //power
     windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     //defense
-    tinWall, tinWallLarge, diamondWall, diamondWallLarge, helix, sticker, particulator, pulse, thunder, cluster, matrixShieldProj,
+    tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, helix, sticker, particulator, pulse, thunder, cluster, matrixShieldProj,
     //environment & ores
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
@@ -185,7 +185,6 @@ public class FOSBlocks {
             requirements(Category.production, with(silver, 45, silicon, 50));
         }};
         tinDrill = new UndergroundDrill("tin-drill"){{
-            health = 480;
             size = 2;
             tier = 3;
             drillTime = 360f;
@@ -194,18 +193,24 @@ public class FOSBlocks {
             researchCost = with(tin, 50);
         }};
         silverDrill = new UndergroundDrill("silver-drill"){{
-            health = 720;
             size = 2;
-            tier = 5;
+            tier = 4;
             drillTime = 300f;
             requirements(Category.production, with(silver, 10));
         }};
         diamondDrill = new UndergroundDrill("diamond-drill"){{
-            health = 2250;
+            size = 3;
+            tier = 5;
+            drillTime = 300f;
+            consumePower(2f);
+            requirements(Category.production, with(silicon, 25, diamond, 40));
+        }};
+        vanadiumDrill = new UndergroundDrill("vanadium-drill"){{
             size = 3;
             tier = 6;
-            drillTime = 300f;
-            requirements(Category.production, with(silicon, 25, diamond, 40));
+            drillTime = 270f;
+            consumePower(3f);
+            requirements(Category.production, with(tin, 30, silver, 50, vanadium, 50));
         }};
         oreDetectorSmall = new OreDetector("ore-detector-small"){{
             health = 480;
@@ -243,6 +248,16 @@ public class FOSBlocks {
             scaledHealth = 625;
             size = 2;
             requirements(Category.defense, with(diamond, 24));
+        }};
+        vanadiumWall = new Wall("vanadium-wall"){{
+            scaledHealth = 800;
+            size = 1;
+            requirements(Category.defense, with(vanadium, 6));
+        }};
+        vanadiumWallLarge = new Wall("vanadium-wall-large"){{
+            scaledHealth = 800;
+            size = 2;
+            requirements(Category.defense, with(vanadium, 24));
         }};
 
         helix = new ItemTurret("helix"){{
@@ -548,11 +563,11 @@ public class FOSBlocks {
         }};
         //endregion
         //region liquids
-        gasPipe = new Conduit("gas-pipe"){{
+        fluidPipe = new Conduit("fluid-pipe"){{
             health = 5;
             size = 1;
             liquidCapacity = 20f;
-            requirements(Category.liquid, with(aluminium, 1, rawElithite, 2));
+            requirements(Category.liquid, with(tin, 1, silver, 1));
         }};
         //endregion
         //region power
