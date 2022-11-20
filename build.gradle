@@ -28,8 +28,11 @@ buildscript{
     }
     repositories {
         mavenCentral()
+        maven{ url 'https://jitpack.io' }
     }
     dependencies {
+        classpath arcModule("arc-core")
+
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }

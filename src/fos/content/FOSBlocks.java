@@ -497,7 +497,7 @@ public class FOSBlocks {
                 -120, -40,
                 120, -40,
                 120, 40,
-                -120, 40,
+                -120, 40
             };
             consumePower(4f);
             requirements(Category.effect, with(diamond, 150, silicon, 200, vanadium, 125));

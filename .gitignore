@@ -37,6 +37,8 @@ config/
 
 version.properties
 
+modsDirectories.txt
+
 .attach_*
 ## Java
 

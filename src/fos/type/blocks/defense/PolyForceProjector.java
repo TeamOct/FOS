@@ -1,11 +1,16 @@
 package fos.type.blocks.defense;
 
+import arc.Events;
 import arc.func.Cons;
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.math.geom.*;
 import arc.struct.Seq;
+import arc.util.Time;
+import fos.content.FOSFx;
+import mindustry.content.Fx;
+import mindustry.game.EventType;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.world.blocks.defense.ForceProjector;
@@ -30,6 +35,7 @@ public class PolyForceProjector extends ForceProjector {
         super(name);
         rotate = true;
         rotateDraw = false;
+        shieldBreakEffect = FOSFx.rectShieldBreak;
         buildType = PolyForceBuild::new;
     }
 
@@ -91,21 +97,75 @@ public class PolyForceProjector extends ForceProjector {
 
         @Override
         public void updateTile() {
-            super.updateTile();
+            //I just copied the entire updateTile() from the superclass so that I could modify ONE FREAKING THING in here.
+            boolean phaseValid = itemConsumer != null && itemConsumer.efficiency(this) > 0;
+
+            phaseHeat = Mathf.lerpDelta(phaseHeat, Mathf.num(phaseValid), 0.1f);
+
+            if(phaseValid && !broken && timer(timerUse, phaseUseTime) && efficiency > 0){
+                consume();
+            }
+
+            radscl = Mathf.lerpDelta(radscl, broken ? 0f : warmup, 0.05f);
+
+            if(Mathf.chanceDelta(buildup / shieldHealth * 0.1f)){
+                Fx.reactorsmoke.at(x + Mathf.range(tilesize / 2f), y + Mathf.range(tilesize / 2f));
+            }
+
+            warmup = Mathf.lerpDelta(warmup, efficiency, 0.1f);
+
+            if(buildup > 0){
+                float scale = !broken ? cooldownNormal : cooldownBrokenBase;
+
+                //Anuke hates this system
+                if(coolantConsumer != null){
+                    if(coolantConsumer.efficiency(this) > 0){
+                        coolantConsumer.update(this);
+                        scale *= (cooldownLiquid * (1f + (liquids.current().heatCapacity - 0.4f) * 0.9f));
+                    }
+                }
+
+                buildup -= delta() * scale;
+            }
+
+            if(broken && buildup <= 0){
+                broken = false;
+            }
+
+            if(buildup >= shieldHealth + phaseShieldBoost * phaseHeat && !broken){
+                broken = true;
+                buildup = shieldHealth;
+                shieldBreakEffect.at(x, y, realRadius(), team.color, rotation % 2);
+                if(team != state.rules.defaultTeam){
+                    Events.fire(EventType.Trigger.forceProjectorBreak);
+                }
+            }
+
+            if(hit > 0f){
+                hit -= 1f / 5f * Time.delta;
+            }
+
+            deflectBullets();
 
             for(int i = 0; i < polygon.length; i += 2) {
-                Vec2 v = new Vec2(polygon[i] * efficiency, polygon[i+1] * efficiency).rotate(rotation * 90);
-                curPolygon[i] = x + v.x; curPolygon[i+1] = y + v.y;
+                Vec2 v = new Vec2(polygon[i], polygon[i+1]).rotate(rotation * 90);
+                curPolygon[i] = x + v.x * (realRadius() / radius); curPolygon[i+1] = y + v.y * (realRadius() / radius);
             }
 
             for(int i = 0; i < curPolygon.length; i += 2) {
                 int n = i / 2;
                 Vec2 v = new Vec2(curPolygon[i], curPolygon[i+1]);
-                curPolyLines[n].set(v);
+                curPolyLines[n].set(v).add(-x, -y);
                 hitbox.set(n, v);
             }
 
             curPolyLines[polyLines.length] = curPolyLines[0].cpy();
+        }
+
+        @Override
+        public void onRemoved() {
+            float radius = realRadius();
+            if(!broken && radius > 1f) FOSFx.rectForceShrink.at(x, y, radius, team.color, rotation % 2);
         }
 
         @Override
@@ -121,7 +181,7 @@ public class PolyForceProjector extends ForceProjector {
 
         @Override
         public void drawShield() {
-            if (!broken || efficiency > 0) {
+            if (!broken && efficiency > 0) {
                 Polygon poly = new Polygon(curPolygon);
 
                 Draw.z(Layer.shields);
@@ -135,7 +195,7 @@ public class PolyForceProjector extends ForceProjector {
                     Draw.alpha(0.09f + Mathf.clamp(0.08f * hit));
                     Fill.poly(poly);
                     Draw.alpha(1f);
-                    Lines.poly(curPolyLines, 0, 0, realRadius() / radius);
+                    Lines.poly(curPolyLines, x, y, 1f);
                     Draw.reset();
                 }
             }
