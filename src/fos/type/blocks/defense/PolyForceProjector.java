@@ -21,6 +21,8 @@ import static mindustry.Vars.*;
 // If you do yoink this, PLEASE consider giving me a credit
 public class PolyForceProjector extends ForceProjector {
     public float[] polygon = new float[]{0, 0};
+    public float shockwaveDelay = 40f;
+    public float shockwaveDuration = 20f;
     protected Vec2[] polyLines = new Vec2[]{};
     protected final Cons<Bullet> customShieldConsumer = bullet -> {
         if(bullet.team != paramEntity.team && bullet.type.absorbable && Intersector.isInPolygon(((PolyForceBuild) paramEntity).hitbox, new Vec2(bullet.x, bullet.y))){
@@ -80,6 +82,8 @@ public class PolyForceProjector extends ForceProjector {
         public Vec2[] curPolyLines;
         public Seq<Vec2> hitbox = new Seq<>();
 
+        protected float shockwaveTimer = 0f;
+
         @Override
         public void created() {
             curPolygon = new float[polygon.length];
@@ -98,23 +102,24 @@ public class PolyForceProjector extends ForceProjector {
         @Override
         public void updateTile() {
             //I just copied the entire updateTile() from the superclass so that I could modify ONE FREAKING THING in here.
+            //okay, now two things have changed here
             boolean phaseValid = itemConsumer != null && itemConsumer.efficiency(this) > 0;
 
             phaseHeat = Mathf.lerpDelta(phaseHeat, Mathf.num(phaseValid), 0.1f);
 
-            if(phaseValid && !broken && timer(timerUse, phaseUseTime) && efficiency > 0){
+            if (phaseValid && !broken && timer(timerUse, phaseUseTime) && efficiency > 0) {
                 consume();
             }
 
-            radscl = Mathf.lerpDelta(radscl, broken ? 0f : warmup, 0.05f);
+            radscl = shockwaveTimer > 0 ? 2 - shockwaveTimer * 2 : Mathf.lerpDelta(radscl, broken ? 0f : warmup, 0.05f);
 
-            if(Mathf.chanceDelta(buildup / shieldHealth * 0.1f)){
+            if (Mathf.chanceDelta(buildup / shieldHealth * 0.1f)) {
                 Fx.reactorsmoke.at(x + Mathf.range(tilesize / 2f), y + Mathf.range(tilesize / 2f));
             }
 
             warmup = Mathf.lerpDelta(warmup, efficiency, 0.1f);
 
-            if(buildup > 0){
+            if (buildup > 0) {
                 float scale = !broken ? cooldownNormal : cooldownBrokenBase;
 
                 //Anuke hates this system
@@ -128,21 +133,31 @@ public class PolyForceProjector extends ForceProjector {
                 buildup -= delta() * scale;
             }
 
-            if(broken && buildup <= 0){
+            if (broken && buildup <= 0) {
                 broken = false;
             }
 
-            if(buildup >= shieldHealth + phaseShieldBoost * phaseHeat && !broken){
+            if (buildup >= shieldHealth + phaseShieldBoost * phaseHeat && !broken) {
                 broken = true;
                 buildup = shieldHealth;
+                //broken shield
                 shieldBreakEffect.at(x, y, realRadius(), team.color, rotation % 2);
-                if(team != state.rules.defaultTeam){
+                //shockwave
+                Time.run(shockwaveDelay, () -> {
+                    shockwaveTimer = 1f;
+                    FOSFx.rectShockwave.at(x, y, realRadius(), Pal.lancerLaser, rotation % 2);
+                });
+                if(team != state.rules.defaultTeam) {
                     Events.fire(EventType.Trigger.forceProjectorBreak);
                 }
             }
 
-            if(hit > 0f){
+            if (hit > 0f) {
                 hit -= 1f / 5f * Time.delta;
+            }
+
+            if (shockwaveTimer > 0f) {
+                shockwaveTimer -= Time.delta / shockwaveDuration;
             }
 
             deflectBullets();
@@ -155,8 +170,9 @@ public class PolyForceProjector extends ForceProjector {
             for(int i = 0; i < curPolygon.length; i += 2) {
                 int n = i / 2;
                 Vec2 v = new Vec2(curPolygon[i], curPolygon[i+1]);
+                Vec2 v2 = new Vec2(x + polygon[i] * (2 - shockwaveTimer), y + polygon[i+1] * (2 - shockwaveTimer));
                 curPolyLines[n].set(v).add(-x, -y);
-                hitbox.set(n, v);
+                hitbox.set(n, shockwaveTimer > 0 ? v2 : v);
             }
 
             curPolyLines[polyLines.length] = curPolyLines[0].cpy();
@@ -172,7 +188,7 @@ public class PolyForceProjector extends ForceProjector {
         public void deflectBullets() {
             float realRadius = realRadius();
 
-            if(realRadius > 0 && !broken){
+            if ((realRadius > 0 && !broken) || shockwaveTimer > 0) {
                 paramEntity = this;
                 paramEffect = absorbEffect;
                 Groups.bullet.intersect(x - realRadius, y - realRadius, realRadius * 2f, realRadius * 2f, customShieldConsumer);

@@ -2,9 +2,9 @@ package fos.content;
 
 import arc.graphics.*;
 import arc.struct.*;
-import fos.graphics.FOSPal;
+import fos.graphics.*;
 import fos.type.blocks.campaign.*;
-import fos.type.blocks.defense.PolyForceProjector;
+import fos.type.blocks.defense.*;
 import fos.type.blocks.distribution.*;
 import fos.type.blocks.environment.*;
 import fos.type.blocks.power.*;
@@ -12,7 +12,7 @@ import fos.type.blocks.production.*;
 import fos.type.blocks.special.*;
 import fos.type.blocks.storage.*;
 import fos.type.blocks.units.*;
-import fos.type.bullets.StickyBulletType;
+import fos.type.bullets.*;
 import fos.type.draw.*;
 import mindustry.content.*;
 import mindustry.entities.bullet.*;
@@ -35,7 +35,9 @@ import mindustry.world.meta.*;
 import multicraft.*;
 
 import static fos.content.FOSItems.*;
+import static fos.content.FOSFluids.*;
 import static mindustry.content.Items.*;
+import static mindustry.content.Liquids.*;
 import static mindustry.type.ItemStack.*;
 
 public class FOSBlocks {
@@ -130,7 +132,7 @@ public class FOSBlocks {
             envEnabled = envRequired = Env.space;
             consumePower(4f);
             consumeItems(with(tin, 10, silver, 10, titanium, 5));
-            consumeLiquid(FOSLiquids.oxygen, 3f/60f);
+            consumeLiquid(oxygen, 3f/60f);
             outputItems = with(cuberium, 5);
             craftTime = 60f;
             requirements(Category.crafting, with(aluminium, 100, tin, 75, silver, 75, titanium, 100));
@@ -144,7 +146,7 @@ public class FOSBlocks {
             minEfficiency = 0.1f;
             boostScale = 0.3f;
             consumePower(0.8f);
-            outputLiquids = LiquidStack.with(Liquids.hydrogen, 6f/60f, FOSLiquids.oxygen, 3f/60f);
+            outputLiquids = LiquidStack.with(hydrogen, 6f/60f, oxygen, 3f/60f);
             liquidOutputDirections = new int[]{1, 3};
             craftTime = 10f;
             envEnabled = envRequired = Env.space;
@@ -191,12 +193,14 @@ public class FOSBlocks {
             envEnabled |= Env.space;
             requirements(Category.production, with(tin, 5));
             researchCost = with(tin, 50);
+            consumeLiquid(water, 0.08f).boost();
         }};
         silverDrill = new UndergroundDrill("silver-drill"){{
             size = 2;
             tier = 4;
             drillTime = 300f;
             requirements(Category.production, with(silver, 10));
+            consumeLiquid(water, 0.1f).boost();
         }};
         diamondDrill = new UndergroundDrill("diamond-drill"){{
             size = 3;
@@ -204,6 +208,7 @@ public class FOSBlocks {
             drillTime = 300f;
             consumePower(2f);
             requirements(Category.production, with(silicon, 25, diamond, 40));
+            consumeLiquid(tokicite, 0.2f).boost();
         }};
         vanadiumDrill = new UndergroundDrill("vanadium-drill"){{
             size = 3;
@@ -211,6 +216,7 @@ public class FOSBlocks {
             drillTime = 270f;
             consumePower(3f);
             requirements(Category.production, with(tin, 30, silver, 50, vanadium, 50));
+            consumeLiquid(tokicite, 0.25f).boost();
         }};
         oreDetectorSmall = new OreDetector("ore-detector-small"){{
             health = 480;
@@ -317,7 +323,7 @@ public class FOSBlocks {
             inaccuracy = 4f;
             outlineColor = Color.valueOf("302326");
             shootSound = Sounds.mud;
-            consumeLiquid(FOSLiquids.tokicite, 0.1f);
+            consumeLiquid(tokicite, 0.1f);
             ammo(
                 tin, new StickyBulletType(3f, 10, 300){{
                     lifetime = 50f;
@@ -643,7 +649,7 @@ public class FOSBlocks {
             status = StatusEffects.slow;
             speedMultiplier = 0.15f;
             variants = 0;
-            liquidDrop = FOSLiquids.tokicite;
+            liquidDrop = tokicite;
             isLiquid = true;
             cacheLayer = CacheLayer.tar;
         }};
@@ -785,7 +791,7 @@ public class FOSBlocks {
             liquidCapacity = 300;
             buildCostMultiplier = 0.2f;
             consumePower(10f);
-            consumeLiquid(Liquids.hydrogen, 300);
+            consumeLiquid(hydrogen, 300);
             launching = coreFortress;
             requirements(Category.effect, BuildVisibility.campaignOnly, with(aluminium, 5000, titanium, 3000, lithium, 2500, tin, 2500, silver, 2000, cuberium, 2000));
         }};

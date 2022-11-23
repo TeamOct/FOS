@@ -98,7 +98,7 @@ public class UndergroundDrill extends Drill {
         itemArray.clear();
 
         for(Tile other : tile.getLinkedTilesAs(this, tempTiles)){
-            if(canMine(other) && (other.overlay() instanceof UndergroundOreBlock || (other.overlay().minfo != null && other.overlay().minfo.mod.name.equals("fos")) || getDrop(other) == Items.titanium)){
+            if(canMine(other) && (other.overlay() instanceof UndergroundOreBlock || (other.overlay().minfo.mod != null && other.overlay().minfo.mod.name.equals("fos")) || getDrop(other) == Items.titanium)){
                 oreCount.increment(getUnderDrop(other.overlay()), 0, 1);
             }
         }

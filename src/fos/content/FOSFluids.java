@@ -4,7 +4,7 @@ import arc.graphics.Color;
 import mindustry.content.StatusEffects;
 import mindustry.type.Liquid;
 
-public class FOSLiquids {
+public class FOSFluids {
     public static Liquid oxygen, tokicite;
 
     public static void load() {
@@ -14,8 +14,9 @@ public class FOSLiquids {
         }};
         tokicite = new Liquid("tokicite", Color.valueOf("d16792")){{
             viscosity = 1.1f;
+            heatCapacity = 0.65f;
+            temperature = 0.4f;
             effect = StatusEffects.slow;
-            capPuddles = false;
         }};
     }
 }

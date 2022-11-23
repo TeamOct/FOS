@@ -34,7 +34,7 @@ public class UxerdTechTree {
             nodeProduce(rawNethratium, () ->
                 nodeProduce(aluminium, () -> {
                     nodeProduce(Liquids.hydrogen, () -> {});
-                    nodeProduce(FOSLiquids.oxygen, () -> {});
+                    nodeProduce(FOSFluids.oxygen, () -> {});
             }));
             nodeProduce(rawElbium, () -> {
                 nodeProduce(tin, () -> {});
@@ -42,7 +42,7 @@ public class UxerdTechTree {
             });
             nodeProduce(rawElithite, () -> {
                 nodeProduce(titanium, () -> {});
-                nodeProduce(silver, () -> nodeProduce(cuberium, Seq.with(new Research(tin), new Research(titanium), new Research(FOSLiquids.oxygen)), () -> {}));
+                nodeProduce(silver, () -> nodeProduce(cuberium, Seq.with(new Research(tin), new Research(titanium), new Research(FOSFluids.oxygen)), () -> {}));
             });
             node(rockCrusher, Seq.with(new OnPlanet(FOSPlanets.uxerd)), () -> node(heatGenerator, () -> {
                 node(solarPanelMedium);

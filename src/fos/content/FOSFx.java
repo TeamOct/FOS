@@ -1,10 +1,7 @@
 package fos.content;
 
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.Fill;
-import arc.graphics.g2d.Lines;
-import arc.math.geom.Polygon;
-import arc.math.geom.Vec2;
+import arc.graphics.g2d.*;
+import arc.math.geom.*;
 import mindustry.entities.Effect;
 import mindustry.graphics.Layer;
 
@@ -61,6 +58,26 @@ public class FOSFx {
         }
         color(e.color);
         stroke(3f * r);
-        Lines.poly(polyLines, e.x, e.y, r);
-    }).followParent(true);
+        Lines.poly(polyLines, e.x, e.y, 1f);
+    }).followParent(true),
+    rectShockwave = new Effect(20, e -> {
+        float r = e.fin() * 2;
+        float[] poly = new float[]{
+            -120*r, -40*r,
+            120*r, -40*r,
+            120*r, 40*r,
+            -120*r, 40*r
+        };
+        boolean isVertical = e.data.equals(1);
+        Vec2[] polyLines = new Vec2[poly.length / 2];
+        for(int i = 0; i < polyLines.length; i++) {
+            int n = i * 2;
+            Vec2 v = new Vec2(poly[n], poly[n+1]);
+            if (isVertical) v.rotate(90);
+            polyLines[i] = v;
+        }
+        color(e.color);
+        stroke(3f * e.fout());
+        Lines.poly(polyLines, e.x, e.y, 1f);
+    }).followParent(true).layer(Layer.shields);
 }
