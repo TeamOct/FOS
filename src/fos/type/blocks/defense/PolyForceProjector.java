@@ -170,7 +170,7 @@ public class PolyForceProjector extends ForceProjector {
             for(int i = 0; i < curPolygon.length; i += 2) {
                 int n = i / 2;
                 Vec2 v = new Vec2(curPolygon[i], curPolygon[i+1]);
-                Vec2 v2 = new Vec2(x + polygon[i] * (2 - shockwaveTimer), y + polygon[i+1] * (2 - shockwaveTimer));
+                Vec2 v2 = new Vec2(x + polygon[i] * (2 - shockwaveTimer * 2), y + polygon[i+1] * (2 - shockwaveTimer * 2));
                 curPolyLines[n].set(v).add(-x, -y);
                 hitbox.set(n, shockwaveTimer > 0 ? v2 : v);
             }

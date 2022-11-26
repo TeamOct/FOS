@@ -7,6 +7,7 @@ import arc.util.pooling.Pools;
 import mindustry.entities.bullet.BasicBulletType;
 import mindustry.gen.*;
 import mindustry.graphics.Layer;
+import mindustry.type.unit.MissileUnitType;
 
 public class StickyBulletType extends BasicBulletType {
     /** An interval between the contact with an enemy and the explosion. */
@@ -17,51 +18,67 @@ public class StickyBulletType extends BasicBulletType {
         this.explosionDelay = explosionDelay;
         layer = Layer.flyingUnit + 1f;
         despawnHit = true;
-        lifetime += explosionDelay;
         pierce = true;
     }
 
     @Override
     public void init(Bullet b) {
         super.init(b);
-        b.data = Pools.obtain(StickyBulletData.class, StickyBulletData::new);
+        b.data = null;
     }
 
     @Override
     public void hitEntity(Bullet b, Hitboxc entity, float health) {
+        //do not target missiles.
+        if (((Unit) entity).type instanceof MissileUnitType) return;
+
         super.hitEntity(b, entity, health);
 
-        StickyBulletData data = (StickyBulletData) b.data;
-        if (data.hit) return;
+        b.hit(true);
 
+        StickyBulletData data = Pools.obtain(StickyBulletData.class, StickyBulletData::new);
         data.target = (Teamc) entity;
+        b.data = data;
+
         b.lifetime = explosionDelay;
-        data.hit = true;
     }
 
+    @Override
+    public void hitTile(Bullet b, Building build, float x, float y, float initialHealth, boolean direct) {
+        super.hitTile(b, build, x, y, initialHealth, direct);
+
+        //the bullet just stops.
+        b.vel(Vec2.ZERO);
+        b.lifetime = explosionDelay;
+    }
+
+    //FIXME
     @Override
     public void update(Bullet b) {
         super.update(b);
 
         StickyBulletData data = (StickyBulletData) b.data;
 
-        if (data == null || data.target == null) return;
-
-        float bx = b.x(), by = b.y();
-        float ox = data.target.x(), oy = data.target.y();
-
-        if (data.initialAngle == null) data.initialAngle = Mathf.angle(bx - ox, by - oy);
-        if (data.target instanceof Unit u && data.targetRot == null) data.targetRot = u.rotation;
-
-        b.vel(Vec2.ZERO);
+        if (data == null || !b.hit) return;
 
         if (data.target instanceof Unit u) {
+            if (u.dead()) {
+                data.reset();
+                return;
+            }
+
+            float bx = b.x(), by = b.y();
+            float ox = data.target.x(), oy = data.target.y();
+
+            if (data.initialAngle == null) data.initialAngle = Mathf.angle(bx - ox, by - oy);
+            if (data.targetRot == null) data.targetRot = u.rotation;
+
             float angle = data.initialAngle - data.targetRot + u.rotation;
 
             b.x = u.x + Mathf.cos(angle * Mathf.degreesToRadians) * u.hitSize / 2;
             b.y = u.y + Mathf.sin(angle * Mathf.degreesToRadians) * u.hitSize / 2;
 
-            if (u.dead()) b.vel(Vec2.ZERO);
+            b.vel(Vec2.ZERO);
         }
     }
 
@@ -69,18 +86,24 @@ public class StickyBulletType extends BasicBulletType {
     public void removed(Bullet b) {
         super.removed(b);
         createSplashDamage(b, b.x, b.y);
+        if (b.data != null) ((StickyBulletData) b.data).reset();
     }
 
-    public static class StickyBulletData implements Poolable {
-        public boolean hit = false;
+    @Override
+    public void despawned(Bullet b) {
+        super.despawned(b);
+        createSplashDamage(b, b.x, b.y);
+        if (b.data != null) ((StickyBulletData) b.data).reset();
+    }
+
+    public class StickyBulletData implements Poolable {
         public Teamc target;
         public Float initialAngle, targetRot;
 
         @Override
         public void reset() {
-            hit = false;
-            initialAngle = null;
             target = null;
+            initialAngle = null;
             targetRot = null;
         }
     }
