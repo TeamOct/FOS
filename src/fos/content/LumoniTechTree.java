@@ -9,9 +9,9 @@ import static fos.content.FOSWeaponModules.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.TechTree.*;
 
-public class LuminaTechTree {
+public class LumoniTechTree {
     public static void load() {
-        FOSPlanets.lumina.techTree = nodeRoot("@planet.fos-lumina.name", FOSBlocks.coreFortress, true, () -> {
+        FOSPlanets.lumoni.techTree = nodeRoot("@planet.fos-lumina.name", FOSBlocks.coreFortress, true, () -> {
             node(tinBelt, () -> {});
             node(windTurbine, () -> {});
             node(tinWall, () -> {

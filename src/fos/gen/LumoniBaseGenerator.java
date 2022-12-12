@@ -23,7 +23,7 @@ import mindustry.world.meta.*;
 import static mindustry.Vars.*;
 import static mindustry.ai.BaseRegistry.*;
 
-public class LuminaBaseGenerator {
+public class LumoniBaseGenerator {
     public String[] schematics;
     public Seq<BasePart> coreParts = new Seq<>(), parts = new Seq<>();
     public ObjectMap<Content, Seq<BasePart>> reqParts = new ObjectMap<>();
@@ -33,7 +33,7 @@ public class LuminaBaseGenerator {
     private Seq<Tile> cores;
     private static final Vec2 axis = new Vec2(), rotator = new Vec2();
 
-    public LuminaBaseGenerator() {
+    public LumoniBaseGenerator() {
         schematics = new String[]{
             //cores
             "bXNjaAF4nF2QsW7DMAxET7YjVLCj1EPRr9CQsd9SdHBipTWg2IGUNL9fnrgVAvxoiiceiRFji26drhHv6XFd1imUnynPcQ7nLcdwDEf0cyznvNzuy7YCsGk6xVTQfH7t8HbZSihL+o05PKeUQpryd8ThXxqvTDyXdQ73Rz4ta4Rj5vZIJWJkWNtdtnzPsRRp8wEYOS3YUuEIA4/WoJHYEJ1iB9MILEA4NEz2Wjko9kQrgXw6ORUDahNPQcc7vmgVTpP1bsc7wjOwtMNuYoPoFD1NWGlkWHKA5F/kVOtV4FTgVOBU4FTgKDCSkgFa8dWhTmAVjnYHtdurpYGVRP3b849DVsGeAiarXc8Z6+K4LK8789wZ0SsGRfXia60Ysgp57A+okDUt",

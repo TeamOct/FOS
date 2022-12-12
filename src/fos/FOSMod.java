@@ -56,10 +56,10 @@ public class FOSMod extends Mod {
             int tn = settings.getInt("fos-menutheme");
             MenuBackground bg = (
                 tn == 2 ? uxerdSpace :
-                tn == 3 ? luminaSpace :
+                tn == 3 ? lumoniSpace :
                 tn == 4 ? random :
                 tn == 5 ? solarSystem :
-                tn == 6 ? luminaTerrain :
+                tn == 6 ? lumoniTerrain :
                 null);
             if (tn != 1) {
                 Reflect.set(MenuFragment.class, ui.menufrag, "renderer", new FOSMenuRenderer(bg));
@@ -148,7 +148,7 @@ public class FOSMod extends Mod {
         FOSPlanets.load();
         FOSSectors.load();
 
-        LuminaTechTree.load();
+        LumoniTechTree.load();
         SerpuloTechTree.load();
         UxerdTechTree.load();
     }
@@ -157,10 +157,10 @@ public class FOSMod extends Mod {
         ui.settings.addCategory("@setting.fos-title", "fos-settings-icon", t -> {
             t.sliderPref("fos-menutheme", 2, 1, 6, i ->
                 i == 2 ? "@setting.fos-menutheme.uxerdspace" :
-                i == 3 ? "@setting.fos-menutheme.luminaspace" :
+                i == 3 ? "@setting.fos-menutheme.lumonispace" :
                 i == 4 ? "@setting.fos-menutheme.randomplanet" :
                 i == 5 ? "@setting.fos-menutheme.solarsystem" :
-                i == 6 ? "@setting.fos-menutheme.luminaterrain" :
+                i == 6 ? "@setting.fos-menutheme.lumoniterrain" :
                 "@setting.fos-menutheme.default");
             t.checkPref("fos-rotatemenucamera", true);
             t.checkPref("fos-realisticmode", false);

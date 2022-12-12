@@ -13,7 +13,7 @@ import mindustry.world.blocks.environment.*;
 
 import static fos.content.FOSBlocks.*;
 
-public class FOSAsteroidGenerator extends BlankPlanetGenerator {
+public class UxerdAsteroidGenerator extends BlankPlanetGenerator {
     public Block defaultFloor = Blocks.stone;
 
     public int amount = 28, octaves = 2;

@@ -13,14 +13,15 @@ import mindustry.game.*;
 import mindustry.maps.generators.*;
 import mindustry.type.*;
 import mindustry.world.*;
+import mindustry.world.meta.Env;
 
 import static fos.content.FOSBlocks.*;
 import static mindustry.Vars.*;
 import static mindustry.content.Blocks.*;
 import static mindustry.graphics.g3d.PlanetGrid.*;
 
-public class LuminaPlanetGenerator extends PlanetGenerator {
-    LuminaBaseGenerator basegen = new LuminaBaseGenerator();
+public class LumoniPlanetGenerator extends PlanetGenerator {
+    LumoniBaseGenerator basegen = new LumoniBaseGenerator();
     float scl = 8f;
 
     Block[][] arr = {
@@ -34,18 +35,36 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
 
     @Override
     public float getHeight(Vec3 position) {
+        if (isWater(position, 0.37f)) return 0.1f;
+
         position = Tmp.v33.set(position).scl(scl);
-        return Mathf.pow(Simplex.noise3d(seed, 5, 0.5f, 1f/3f, position.x, position.y, position.z), 3f);
+        return Mathf.pow(Simplex.noise3d(seed, 5, 0.5f, 1f/3f, position.x, position.y, position.z), 2f);
     }
 
     @Override
     protected void genTile(Vec3 position, TileGen tile) {
         tile.floor = getBlock(position);
         tile.block = tile.floor.asFloor().wall;
+        if (tile.block == sandWall) tile.block = air;
 
         if (Ridged.noise3d(seed, position.x, position.y, position.z, 22) > 0.18f) {
             tile.block = air;
         }
+    }
+
+    protected float waterNoise(Vec3 pos, double octaves, double falloff, double scl, float mag) {
+        return waterNoise(pos, octaves, falloff, scl, mag, 0f);
+    }
+
+    protected float waterNoise(Vec3 pos, double octaves, double falloff, double scl, float mag, float offset) {
+        return Simplex.noise3d(seed, octaves, falloff, scl, (pos.x + offset) / 15, (pos.y + offset) / 15, pos.z + offset) * mag;
+    }
+
+    protected boolean isWater(Vec3 position, float value) {
+        float wnoise1 = waterNoise(position, 7, 0.7, 1f, 0.76f);
+        float wnoise2 = waterNoise(position, 9, 0.62, 1f/3f, 0.83f, 69f);
+        float wnoise3 = waterNoise(position, 8, 0.66, 1f/6f, 0.81f, 420f);
+        return wnoise1 < value || wnoise2 < value || wnoise3 < value;
     }
 
     @Override
@@ -67,6 +86,12 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
 
     Block getBlock(Vec3 position) {
         float height = getHeight(position);
+
+        if (isWater(position, 0.32f)) return deepwater;
+        if (isWater(position, 0.37f)) return water;
+
+        if (Simplex.noise3d(seed, 5, 0.8f, 1, position.x, position.y, position.z) > 0.8f) return tokiciteFloor;
+
         Tmp.v31.set(position);
 
         position = Tmp.v33.set(position).scl(scl);
@@ -178,6 +203,7 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
 
                     Tmp.v1.set(cx - width / 2f, cy - height / 2f).rotate(180 + enemyOffset).add(width / 2f, height / 2f);
                     Room espawn = new Room((int)Math.floor(Tmp.v1.x), (int)Math.floor(Tmp.v1.y), rand.random(10, 16));
+                    if (tiles.get(espawn.x, espawn.y).floor() == deepwater) continue;
                     roomseq.add(espawn);
                     enemies.add(espawn);
                 }
@@ -249,6 +275,12 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
             }
             //tokicite
             if ((floor == annite || floor == blublu) && block == air) {
+                //tokicite and water don't mix.
+                for (Point2 p : Geometry.d4) {
+                    Tile other = tiles.get(x + p.x, y + p.y);
+                    if (other.floor() == water || other.floor() == deepwater) return;
+                }
+
                 if (noise(x + 69, y - 69, 2, 0.6, 80) > 0.86f) {
                     floor = tokiciteFloor;
                     ore = air;
@@ -262,6 +294,8 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
 
         Schematics.placeLaunchLoadout(spawn.x, spawn.y);
 
+        if (tiles.getn(spawn.x, spawn.y).floor() == deepwater) state.rules.env |= Env.underwater;
+
         enemies.each(espawn -> {
             tiles.getn(espawn.x, espawn.y).setBlock(bugSpawn, FOSTeam.bessin);
             tiles.getn(espawn.x, espawn.y).setOverlay(Blocks.spawn);
@@ -274,7 +308,7 @@ public class LuminaPlanetGenerator extends PlanetGenerator {
         float waveTimeDec = 0.4f;
 
         state.rules.waveSpacing = Mathf.lerp(60 * 360, 60 * 120, (float)Math.floor(Math.max(difficulty - waveTimeDec, 0) / 0.8f));
-        state.rules.spawns = LuminaWaves.generate(difficulty, new Rand(), state.rules.attackMode);
+        state.rules.spawns = LumoniWaves.generate(difficulty, new Rand(), state.rules.attackMode);
     }
 
     //TODO because the generator is not complete, I do not allow you to enter, unless you know what you're doing

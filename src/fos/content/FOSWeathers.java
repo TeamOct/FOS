@@ -18,10 +18,10 @@ public class FOSWeathers {
         wind = new ParticleWeather("wind"){{
             drawParticles = false;
             drawNoise = true;
-            noiseColor = Color.valueOf("b0dcb73b");
+            noiseColor = Color.valueOf("b0dcb71b");
             useWindVector = true;
             baseSpeed = 3.6f;
-            force = 0.2f;
+            force = 0f;
             sound = Sounds.wind;
             soundVol = 0.9f;
             duration = 7f * Time.toMinutes;

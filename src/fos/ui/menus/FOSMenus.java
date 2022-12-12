@@ -16,7 +16,7 @@ import static fos.content.FOSBlocks.*;
 import static fos.content.FOSPlanets.*;
 
 public class FOSMenus {
-    public static MenuBackground uxerdSpace, luminaSpace, random, solarSystem, luminaTerrain;
+    public static MenuBackground uxerdSpace, lumoniSpace, random, solarSystem, lumoniTerrain;
 
     public static void load() {
         uxerdSpace = new SpaceMenuBackground(){{
@@ -25,9 +25,9 @@ public class FOSMenus {
                 zoom = 1.2f;
             }};
         }};
-        luminaSpace = new SpaceMenuBackground(){{
+        lumoniSpace = new SpaceMenuBackground(){{
             params = new PlanetParams(){{
-                planet = lumina;
+                planet = lumoni;
             }};
         }};
         random = new SpaceMenuBackground(){{
@@ -43,7 +43,7 @@ public class FOSMenus {
                 zoom = 12f;
             }};
         }};
-        luminaTerrain = new TerrainMenuBackground(){
+        lumoniTerrain = new TerrainMenuBackground(){
             @Override
             public void generate(Tiles tiles) {
                 Seq<Block> ores = Seq.with(oreTinSurface, oreDiamond, oreLuminium);

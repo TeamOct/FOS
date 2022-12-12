@@ -20,11 +20,11 @@ import static mindustry.type.Weather.*;
 
 public class FOSPlanets {
     public static Planet
-        /* planets */ lumina,
+        /* planets */ lumoni,
         /* asteroids */ uxerd;
 
     public static void load() {
-        lumina = new Planet("lumina", serpulo, 0.9f, 2){{
+        lumoni = new Planet("lumoni", serpulo, 0.9f, 2){{
             defaultCore = coreFortress;
             hasAtmosphere = true;
             bloom = false;
@@ -32,10 +32,10 @@ public class FOSPlanets {
             iconColor = annite.mapColor;
             meshLoader = () -> new HexMesh(this, 5);
             startSector = 9;
-            generator = new LuminaPlanetGenerator(){{
+            generator = new LumoniPlanetGenerator(){{
                 defaultLoadout = FOSSchematics.luminaLoadout;
             }};
-            defaultEnv = Env.terrestrial | Env.oxygen;
+            defaultEnv = Env.terrestrial | Env.oxygen | Env.groundWater;
             minZoom = 0.8f;
             camRadius += 0.4f;
             orbitSpacing = 6f;
@@ -54,7 +54,7 @@ public class FOSPlanets {
                 r.weather.add(weather);
             };
         }};
-        uxerd = new Planet("uxerd", lumina, 0.12f){{
+        uxerd = new Planet("uxerd", lumoni, 0.12f){{
             hasAtmosphere = false;
             updateLighting = false;
             icon = "fos-asteroids";
@@ -65,9 +65,9 @@ public class FOSPlanets {
             accessible = true;
             clipRadius = 2f;
             defaultEnv = Env.space;
-            launchCandidates.add(lumina);
+            launchCandidates.add(lumoni);
             allowLaunchLoadout = false;
-            generator = new FOSAsteroidGenerator(){{
+            generator = new UxerdAsteroidGenerator(){{
                 seed = 8;
                 defaultFloor = Blocks.ice;
                 elithiteChance = 0.33f;
@@ -133,11 +133,11 @@ public class FOSPlanets {
         }};
 
         //hide modded items from vanilla planets
-        serpulo.hiddenItems.addAll(uxerdItems).addAll(luminaItems);
-        erekir.hiddenItems.addAll(uxerdItems).addAll(luminaItems);
+        serpulo.hiddenItems.addAll(uxerdItems).addAll(lumoniItems);
+        erekir.hiddenItems.addAll(uxerdItems).addAll(lumoniItems);
 
         //TODO Anuke said it's temporary but it works for now
         uxerd.hiddenItems.addAll(Vars.content.items()).removeAll(uxerdItems);
-        lumina.hiddenItems.addAll(Vars.content.items()).removeAll(luminaItems);
+        lumoni.hiddenItems.addAll(Vars.content.items()).removeAll(lumoniItems);
     }
 }

@@ -9,7 +9,7 @@ import static mindustry.content.Items.*;
 public class FOSItems {
     public static Item rawNethratium, rawElbium, rawElithite, aluminium, tin, silver, lithium, cuberium, diamond, vanadium, iridium, luminium;
 
-    public static Seq<Item> uxerdItems = new Seq<>(), luminaItems = new Seq<>();
+    public static Seq<Item> uxerdItems = new Seq<>(), lumoniItems = new Seq<>();
 
     public static void load(){
         rawNethratium = new Item("raw-nethratium", Color.valueOf("de8900")){{
@@ -58,6 +58,6 @@ public class FOSItems {
         }};
 
         uxerdItems.addAll(rawNethratium, rawElbium, rawElithite, aluminium, tin, silver, lithium, titanium, cuberium);
-        luminaItems.addAll(tin, silver, diamond, sand, silicon, vanadium, iridium, luminium);
+        lumoniItems.addAll(tin, silver, diamond, sand, silicon, vanadium, iridium, luminium);
     }
 }

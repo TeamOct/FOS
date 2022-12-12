@@ -12,7 +12,7 @@ import mindustry.type.UnitType;
 import static mindustry.content.UnitTypes.*;
 import static fos.content.FOSUnits.*;
 
-public class LuminaWaves {
+public class LumoniWaves {
     public static Seq<SpawnGroup> generate(float difficulty, Rand rand, boolean attack) {
         UnitType[][] species = {
             {dagger, mace, fortress, scepter, reign}, //TODO temp

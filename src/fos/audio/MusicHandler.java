@@ -33,7 +33,7 @@ public class MusicHandler {
 
             if (curPlanet == FOSPlanets.uxerd) {
                 control.ambientMusic = control.darkMusic = uxerdAmbient;
-            } else if (curPlanet == FOSPlanets.lumina) {
+            } else if (curPlanet == FOSPlanets.lumoni) {
                 control.ambientMusic = control.darkMusic = luminaAmbient;
             }
         });
@@ -49,7 +49,7 @@ public class MusicHandler {
         });
         //this should hopefully reset the music back to vanilla
         Events.on(StateChangeEvent.class, e -> {
-            if (curPlanet == FOSPlanets.uxerd || curPlanet == FOSPlanets.lumina) return;
+            if (curPlanet == FOSPlanets.uxerd || curPlanet == FOSPlanets.lumoni) return;
 
             control.ambientMusic = vAmbient;
             control.darkMusic = vDark;
