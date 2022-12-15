@@ -112,7 +112,7 @@ public class FOSMod extends Mod {
         int n = Mathf.floor((float) Math.random() * SplashTexts.splashes.size);
         mod.meta.subtitle = SplashTexts.splashes.get(n);
 
-        mod.meta.description += "\n\n[gray]Current Version: []\n" + mod.meta.version;
+        mod.meta.description += "\n\n" + bundle.get("mod.currentversion") + "\n" + mod.meta.version;
 
         FOSIcons.load();
         FOSMenus.load();

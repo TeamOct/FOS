@@ -1,5 +1,6 @@
 package fos.content;
 
+import arc.Events;
 import arc.graphics.*;
 import arc.struct.*;
 import fos.graphics.*;
@@ -17,6 +18,7 @@ import fos.type.draw.*;
 import mindustry.content.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.pattern.*;
+import mindustry.game.EventType;
 import mindustry.gen.*;
 import mindustry.graphics.CacheLayer;
 import mindustry.type.*;
@@ -38,6 +40,7 @@ import static fos.content.FOSItems.*;
 import static fos.content.FOSFluids.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.Liquids.*;
+import static mindustry.game.EventType.*;
 import static mindustry.type.ItemStack.*;
 
 public class FOSBlocks {
@@ -58,6 +61,7 @@ public class FOSBlocks {
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
     tokiciteFloor,
+    cyaniumWater, crimsonStoneWater, anniteWater, blubluWater, purpurWater,
     alienMoss,
     oreTin, oreTinSurface, oreSilver, oreLithium, oreDiamond, oreVanadium, oreIridium, oreLuminium,
     bugSpawn,
@@ -652,6 +656,66 @@ public class FOSBlocks {
             liquidDrop = tokicite;
             isLiquid = true;
             cacheLayer = CacheLayer.tar;
+            albedo = 1f;
+        }};
+        cyaniumWater = new Floor("cyanium-water"){{
+            variants = 4;
+            isLiquid = true;
+            status = StatusEffects.wet;
+            liquidDrop = water;
+            cacheLayer = CacheLayer.water;
+            wall = cyaniumWall;
+            speedMultiplier = 0.8f;
+            statusDuration = 50f;
+            albedo = 0.9f;
+            supportsOverlay = true;
+        }};
+        crimsonStoneWater = new Floor("crimson-stone-water"){{
+            isLiquid = true;
+            status = StatusEffects.wet;
+            liquidDrop = water;
+            cacheLayer = CacheLayer.water;
+            wall = crimsonStoneWall;
+            speedMultiplier = 0.8f;
+            statusDuration = 50f;
+            albedo = 0.9f;
+            supportsOverlay = true;
+        }};
+        anniteWater = new Floor("annite-water"){{
+            variants = 4;
+            isLiquid = true;
+            status = StatusEffects.wet;
+            liquidDrop = water;
+            cacheLayer = CacheLayer.water;
+            wall = anniteWall;
+            speedMultiplier = 0.8f;
+            statusDuration = 50f;
+            albedo = 0.9f;
+            supportsOverlay = true;
+        }};
+        blubluWater = new Floor("blublu-water"){{
+            variants = 4;
+            isLiquid = true;
+            status = StatusEffects.wet;
+            liquidDrop = water;
+            cacheLayer = CacheLayer.water;
+            wall = blubluWall;
+            speedMultiplier = 0.8f;
+            statusDuration = 50f;
+            albedo = 0.9f;
+            supportsOverlay = true;
+        }};
+        purpurWater = new Floor("purpur-water"){{
+            variants = 4;
+            isLiquid = true;
+            status = StatusEffects.wet;
+            liquidDrop = water;
+            cacheLayer = CacheLayer.water;
+            wall = purpurWall;
+            speedMultiplier = 0.8f;
+            statusDuration = 50f;
+            albedo = 0.9f;
+            supportsOverlay = true;
         }};
         alienMoss = new OverlayFloor("alien-moss"){};
         oreTin = new UndergroundOreBlock("ore-tin"){{

@@ -10,12 +10,13 @@ import mindustry.content.StatusEffects;
 import mindustry.game.SpawnGroup;
 import mindustry.type.*;
 
+import static fos.content.FOSMusic.*;
 import static mindustry.game.EventType.*;
 import static mindustry.Vars.state;
 
 public class MusicHandler {
     public Seq<Music> uxerdAmbient = new Seq<>();
-    public Seq<Music> luminaAmbient = new Seq<>();
+    public Seq<Music> lumoniAmbient = new Seq<>();
 
     public Seq<Music> vAmbient, vDark, vBoss;
 
@@ -34,7 +35,7 @@ public class MusicHandler {
             if (curPlanet == FOSPlanets.uxerd) {
                 control.ambientMusic = control.darkMusic = uxerdAmbient;
             } else if (curPlanet == FOSPlanets.lumoni) {
-                control.ambientMusic = control.darkMusic = luminaAmbient;
+                control.ambientMusic = control.darkMusic = lumoniAmbient;
             }
         });
         Events.on(WaveEvent.class, e -> {
@@ -42,7 +43,9 @@ public class MusicHandler {
             if (boss == null) return;
 
             if (boss.type == FOSUnits.citadel) {
-                control.bossMusic = Seq.with(FOSMusic.livingSteam);
+                control.bossMusic = Seq.with(livingSteam);
+            } else if (boss.type == FOSUnits.legion) {
+                control.bossMusic = Seq.with(uncountable);
             } else {
                 control.bossMusic = vBoss;
             }
@@ -58,8 +61,8 @@ public class MusicHandler {
     }
 
     public void reload(){
-        uxerdAmbient = Seq.with(FOSMusic.dive);
-        luminaAmbient = Seq.with(FOSMusic.abandoned);
+        uxerdAmbient = Seq.with(dive);
+        lumoniAmbient = Seq.with(abandoned, scavenger);
 
         vAmbient = control.ambientMusic;
         vDark = control.darkMusic;

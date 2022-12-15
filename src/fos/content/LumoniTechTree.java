@@ -11,7 +11,7 @@ import static mindustry.content.TechTree.*;
 
 public class LumoniTechTree {
     public static void load() {
-        FOSPlanets.lumoni.techTree = nodeRoot("@planet.fos-lumina.name", FOSBlocks.coreFortress, true, () -> {
+        FOSPlanets.lumoni.techTree = nodeRoot("@planet.fos-lumoni.name", FOSBlocks.coreFortress, true, () -> {
             node(tinBelt, () -> {});
             node(windTurbine, () -> {});
             node(tinWall, () -> {

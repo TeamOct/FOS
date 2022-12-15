@@ -13,6 +13,7 @@ import mindustry.game.*;
 import mindustry.maps.generators.*;
 import mindustry.type.*;
 import mindustry.world.*;
+import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.meta.Env;
 
 import static fos.content.FOSBlocks.*;
@@ -21,6 +22,9 @@ import static mindustry.content.Blocks.*;
 import static mindustry.graphics.g3d.PlanetGrid.*;
 
 public class LumoniPlanetGenerator extends PlanetGenerator {
+    /** Sector IDs that just don't work. */
+    int[] idBlacklist = new int[]{8, 45, 48, 72, 76, 86};
+    /** Enemy base generator. */
     LumoniBaseGenerator basegen = new LumoniBaseGenerator();
     float scl = 8f;
 
@@ -35,7 +39,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
     @Override
     public float getHeight(Vec3 position) {
-        if (isWater(position, 0.37f)) return 0.1f;
+        if (isWater(position, 0.34f)) return 0.1f;
 
         position = Tmp.v33.set(position).scl(scl);
         return Mathf.pow(Simplex.noise3d(seed, 5, 0.5f, 1f/3f, position.x, position.y, position.z), 2f);
@@ -72,6 +76,10 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         Ptile tile = sector.tile;
         float meridian = tile.v.x, poles = tile.v.y;
 
+        for (int i : idBlacklist) {
+            if (sector.id == i) return;
+        }
+
         //an arc of enemy bases
         if ((meridian < -0.32f && poles < -0.27f && poles > -0.9f) || (meridian > -0.29f && meridian < 0.21f && poles > -0.12f && poles < 0.68f)){
             sector.generateEnemyBase = true;
@@ -87,8 +95,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
     Block getBlock(Vec3 position) {
         float height = getHeight(position);
 
-        if (isWater(position, 0.32f)) return deepwater;
-        if (isWater(position, 0.37f)) return water;
+        if (isWater(position, 0.31f)) return deepwater;
 
         if (Simplex.noise3d(seed, 5, 0.8f, 1, position.x, position.y, position.z) > 0.8f) return tokiciteFloor;
 
@@ -103,7 +110,16 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         height *= 1.2f;
         height = Mathf.clamp(height);
 
-        return arr[Mathf.clamp((int)(temp * arr.length), 0, arr[0].length - 1)][Mathf.clamp((int)(height * arr[0].length), 0, arr[0].length - 1)];
+        Block b = arr[Mathf.clamp((int)(temp * arr.length), 0, arr[0].length - 1)][Mathf.clamp((int)(height * arr[0].length), 0, arr[0].length - 1)];
+        if (isWater(position, 0.34f)) {
+            b = b == annite ? anniteWater :
+                b == blublu ? blubluWater :
+                b == crimsonStone ? crimsonStoneWater :
+                b == cyanium ? cyaniumWater :
+                b == purpur ? purpurWater : b;
+        }
+
+        return b;
     }
 
     @Override
@@ -203,7 +219,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
                     Tmp.v1.set(cx - width / 2f, cy - height / 2f).rotate(180 + enemyOffset).add(width / 2f, height / 2f);
                     Room espawn = new Room((int)Math.floor(Tmp.v1.x), (int)Math.floor(Tmp.v1.y), rand.random(10, 16));
-                    if (tiles.get(espawn.x, espawn.y).floor() == deepwater) continue;
+                    //if (tiles.get(espawn.x, espawn.y).floor() == deepwater) continue;
                     roomseq.add(espawn);
                     enemies.add(espawn);
                 }
@@ -239,7 +255,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         }
 
         pass((x, y) -> {
-            if (!floor.asFloor().hasSurface()) return;
+            if ((!floor.asFloor().hasSurface() && !floor.asFloor().supportsOverlay) || floor == deepwater) return;
 
             float offsetX = x - 4, offsetY = y + 23;
             for(int i = ores.size - 1; i >= 0; i--){
@@ -294,8 +310,6 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
         Schematics.placeLaunchLoadout(spawn.x, spawn.y);
 
-        if (tiles.getn(spawn.x, spawn.y).floor() == deepwater) state.rules.env |= Env.underwater;
-
         enemies.each(espawn -> {
             tiles.getn(espawn.x, espawn.y).setBlock(bugSpawn, FOSTeam.bessin);
             tiles.getn(espawn.x, espawn.y).setOverlay(Blocks.spawn);
@@ -307,18 +321,38 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
         float waveTimeDec = 0.4f;
 
+        state.rules.attackMode = sector.hasEnemyBase();
         state.rules.waveSpacing = Mathf.lerp(60 * 360, 60 * 120, (float)Math.floor(Math.max(difficulty - waveTimeDec, 0) / 0.8f));
         state.rules.spawns = LumoniWaves.generate(difficulty, new Rand(), state.rules.attackMode);
     }
 
-    //TODO because the generator is not complete, I do not allow you to enter, unless you know what you're doing
+    @Override
+    public void trimDark() {
+        for (Tile tile : tiles){
+            boolean any = world.getDarkness(tile.x, tile.y) > 0;
+            for (int i = 0; i < 4 && !any; i++){
+                any = world.getDarkness(tile.x + Geometry.d4[i].x, tile.y + Geometry.d4[i].y) > 0;
+            }
+
+            if (any && tile.floor() != deepwater) {
+                tile.setBlock(tile.floor().wall);
+            }
+        }
+    }
+
     @Override
     public boolean allowLanding(Sector sector) {
+        for (int i : idBlacklist) {
+            if (sector.id == i) return false;
+        }
+
+        //TODO still don't allow landing, the planet isn't finished
         return false;
     }
 
     @Override
     public void postGenerate(Tiles tiles) {
-        //TODO add something later...
+        CoreBlock.CoreBuild core = state.rules.defaultTeam.core();
+        if (tiles.get(core.tile.x, core.tile.y).block() == deepwater) state.rules.env |= Env.underwater;
     }
 }
