@@ -17,7 +17,7 @@ public class FOSWeaponModules {
         standard1, standard2, standard3, standard4, standard5;
 
     public static void load() {
-        standard1 = new WeaponModule("standard1", new Weapon("standard-weapon1"){{
+        standard1 = new WeaponModule("standard1", new Weapon("fos-standard-weapon1"){{
             x = 0; y = 0;
             alternate = mirror = false;
             rotate = true;
@@ -30,7 +30,7 @@ public class FOSWeaponModules {
                 lifetime = 60f;
             }};
         }}).reqs(with(tin, 75, silver, 75));
-        standard2 = new WeaponModule("standard2", new Weapon("standard-weapon2"){{
+        standard2 = new WeaponModule("standard2", new Weapon("fos-standard-weapon2"){{
             x = 0; y = 0;
             alternate = mirror = false;
             rotate = true;

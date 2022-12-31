@@ -124,11 +124,6 @@ public class FOSMod extends Mod {
                 editorChanged = true;
             }
         });
-
-        LoadedMod xf = mods.list().find(m -> m.meta.author.equals("XenoTale") || m.meta.author.equals("goldie"));
-        if (xf != null) {
-            ui.showOkText("@fos.errortitle", bundle.format("fos.errortext", xf.meta.displayName), () -> app.exit());
-        }
     }
 
     @Override

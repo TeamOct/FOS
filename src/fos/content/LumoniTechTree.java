@@ -12,7 +12,11 @@ import static mindustry.content.TechTree.*;
 public class LumoniTechTree {
     public static void load() {
         FOSPlanets.lumoni.techTree = nodeRoot("@planet.fos-lumoni.name", FOSBlocks.coreFortress, true, () -> {
-            node(tinBelt, () -> {});
+            node(tinBelt, () -> {
+                node(lightUnloader, () -> {
+
+                });
+            });
             node(windTurbine, () -> {});
             node(tinWall, () -> {
                 node(tinWallLarge);
@@ -43,6 +47,16 @@ public class LumoniTechTree {
                     })
                 )
             );
+            node(helix, () -> {
+                node(particulator, () -> {
+                    node(cluster, () -> {
+
+                    });
+                });
+                node(sticker, () -> {
+
+                });
+            });
         });
     }
 }
