@@ -1,11 +1,14 @@
 package fos.content;
 
+import arc.struct.Seq;
+import mindustry.game.Objectives;
 import mindustry.type.ItemStack;
 
 import static fos.content.FOSBlocks.*;
 import static fos.content.FOSItems.*;
 import static fos.content.FOSUnits.*;
 import static fos.content.FOSWeaponModules.*;
+import static fos.content.FOSSectors.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.TechTree.*;
 
@@ -59,6 +62,11 @@ public class LumoniTechTree {
                     });
                 });
                 node(sticker, () -> {
+
+                });
+            });
+            node(beginning, () -> {
+                node(island, Seq.with(new Objectives.SectorComplete(beginning)),() -> {
 
                 });
             });
