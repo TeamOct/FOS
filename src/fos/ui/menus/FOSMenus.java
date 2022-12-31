@@ -16,7 +16,7 @@ import static fos.content.FOSBlocks.*;
 import static fos.content.FOSPlanets.*;
 
 public class FOSMenus {
-    public static MenuBackground uxerdSpace, lumoniSpace, random, solarSystem, lumoniTerrain;
+    public static MenuBackground uxerdSpace, lumoniSpace, random, solarSystem, caldemoltSystem, lumoniTerrain;
 
     public static void load() {
         uxerdSpace = new SpaceMenuBackground(){{
@@ -41,6 +41,13 @@ public class FOSMenus {
                 planet = Planets.sun;
                 camPos = new Vec3(0.01, 1, 0);
                 zoom = 12f;
+            }};
+        }};
+        caldemoltSystem = new SpaceMenuBackground(){{
+            params = new PlanetParams(){{
+                planet = caldemolt;
+                camPos = new Vec3(0.01, 1, 0);
+                zoom = 6f;
             }};
         }};
         lumoniTerrain = new TerrainMenuBackground(){

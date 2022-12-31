@@ -26,6 +26,11 @@ public class LumoniTechTree {
                     node(siliconSynthesizer));
                 node(oreDetector);
                 node(upgradeCenter);
+                node(hovercraftFactory, () ->
+                    node(vulture, () ->
+                        node(mechResearchCore)
+                    )
+                );
             }));
             node(FOSUnits.lord, () ->
                 node(standard1, () ->

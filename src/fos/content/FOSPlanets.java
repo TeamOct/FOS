@@ -1,5 +1,6 @@
 package fos.content;
 
+import arc.Events;
 import arc.graphics.*;
 import arc.math.*;
 import arc.math.geom.*;
@@ -8,6 +9,7 @@ import arc.util.*;
 import fos.gen.*;
 import mindustry.Vars;
 import mindustry.content.*;
+import mindustry.game.EventType;
 import mindustry.game.Team;
 import mindustry.graphics.g3d.*;
 import mindustry.type.*;
@@ -20,11 +22,23 @@ import static mindustry.type.Weather.*;
 
 public class FOSPlanets {
     public static Planet
+        /* star */ caldemolt,
         /* planets */ lumoni,
         /* asteroids */ uxerd;
 
     public static void load() {
-        lumoni = new Planet("lumoni", serpulo, 0.9f, 2){{
+        caldemolt = new Planet("caldemolt", sun, 5f, 0){{
+            bloom = true;
+            accessible = false;
+            hasAtmosphere = false;
+            tidalLock = true;
+            orbitRadius = 250f;
+            drawOrbit = false;
+            meshLoader = () -> new SunMesh(this, 5, 5, 0.3, 1.7, 1.2, 1, 1.1f,
+                Color.valueOf("f7c265"), Color.valueOf("ffb380"), Color.valueOf("e8d174"), Color.valueOf("ffa95e"));
+            solarSystem = this;
+        }};
+        lumoni = new Planet("lumoni", caldemolt, 0.9f, 2){{
             defaultCore = coreFortress;
             hasAtmosphere = true;
             bloom = false;
@@ -40,6 +54,8 @@ public class FOSPlanets {
             camRadius += 0.4f;
             orbitSpacing = 6f;
             allowLaunchLoadout = true;
+            //TODO you'll see why I did this :)
+            launchCandidates.add(uxerd);
             cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 5, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
             ruleSetter = r -> {
                 r.loadout = ItemStack.list();
@@ -91,16 +107,16 @@ public class FOSPlanets {
                 Seq<GenericMesh> meshes = new Seq<>();
                 Color color = (
                     rand.chance(0.33f) ? elithite :
-                    rand.chance(0.5f) ? elbium :
-                    rand.chance(0.4f) ? nethratium :
-                    Blocks.ice
+                        rand.chance(0.5f) ? elbium :
+                            rand.chance(0.4f) ? nethratium :
+                                Blocks.ice
                 ).mapColor;
                 Color tinted = (
                     color == elithite.mapColor ? Blocks.ferricStone :
-                    color == elbium.mapColor ? Blocks.rhyolite :
-                    color == nethratium.mapColor ? Blocks.yellowStone :
-                    Blocks.ice
-                    ).mapColor;
+                        color == elbium.mapColor ? Blocks.rhyolite :
+                            color == nethratium.mapColor ? Blocks.yellowStone :
+                                Blocks.ice
+                ).mapColor;
 
                 meshes.add(new NoiseMesh(
                     this, 8, 2, radius, 2, 0.55f, 0.45f, 14f,
@@ -110,15 +126,15 @@ public class FOSPlanets {
                 for(int j = 0; j < 28; j++){
                     color = (
                         rand.chance(0.33f) ? elithite :
-                        rand.chance(0.5f) ? elbium :
-                        rand.chance(0.4f) ? nethratium :
-                        Blocks.ice
+                            rand.chance(0.5f) ? elbium :
+                                rand.chance(0.4f) ? nethratium :
+                                    Blocks.ice
                     ).mapColor;
                     tinted = (
                         color == elithite.mapColor ? Blocks.ferricStone :
-                        color == elbium.mapColor ? Blocks.rhyolite :
-                        color == nethratium.mapColor ? Blocks.yellowStone :
-                        Blocks.ice
+                            color == elbium.mapColor ? Blocks.rhyolite :
+                                color == nethratium.mapColor ? Blocks.yellowStone :
+                                    Blocks.ice
                     ).mapColor;
 
                     meshes.add(new MatMesh(
@@ -133,11 +149,12 @@ public class FOSPlanets {
         }};
 
         //hide modded items from vanilla planets
-        serpulo.hiddenItems.addAll(uxerdItems).addAll(lumoniItems);
-        erekir.hiddenItems.addAll(uxerdItems).addAll(lumoniItems);
+        serpulo.hiddenItems.addAll(uxerdItems).addAll(lumoniItems).removeAll(Items.serpuloItems);
+        erekir.hiddenItems.addAll(uxerdItems).addAll(lumoniItems).removeAll(Items.erekirItems);
 
-        //TODO Anuke said it's temporary but it works for now
-        uxerd.hiddenItems.addAll(Vars.content.items()).removeAll(uxerdItems);
-        lumoni.hiddenItems.addAll(Vars.content.items()).removeAll(lumoniItems);
+        Events.on(EventType.ContentInitEvent.class, e -> {
+            uxerd.hiddenItems.addAll(Vars.content.items()).removeAll(uxerdItems);
+            lumoni.hiddenItems.addAll(Vars.content.items()).removeAll(lumoniItems);
+        });
     }
 }
