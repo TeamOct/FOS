@@ -21,6 +21,8 @@ import mindustry.mod.Mods.*;
 import mindustry.ui.*;
 import mindustry.ui.fragments.MenuFragment;
 
+import java.util.Date;
+
 import static arc.Core.*;
 import static arc.graphics.g2d.Font.*;
 import static fos.ui.menus.FOSMenus.*;
@@ -53,19 +55,23 @@ public class FOSMod extends Mod {
 
             ui.showOkText("@fos.earlyaccesstitle", bundle.get("fos.earlyaccess"), () -> {});
 
+            LoadedMod ost = mods.locateMod("fosost");
+            if (ost == null) ui.showCustomConfirm("@fos.noosttitle", bundle.get("fos.noost"), "@mods.browser.add", "@no", () -> {}, () -> {});
+
             int tn = settings.getInt("fos-menutheme");
             MenuBackground bg = (
                 tn == 2 ? uxerdSpace :
                 tn == 3 ? lumoniSpace :
                 tn == 4 ? random :
                 tn == 5 ? solarSystem :
-                tn == 6 ? lumoniTerrain :
+                tn == 6 ? caldemoltSystem :
+                tn == 7 ? lumoniTerrain :
                 null);
             if (tn != 1) {
                 Reflect.set(MenuFragment.class, ui.menufrag, "renderer", new FOSMenuRenderer(bg));
             }
 
-            loadTeamIcons();
+            //loadTeamIcons();
         });
 
         Events.run(Trigger.update, () -> {
@@ -110,7 +116,7 @@ public class FOSMod extends Mod {
 
         SplashTexts.load(13);
         int n = Mathf.floor((float) Math.random() * SplashTexts.splashes.size);
-        mod.meta.subtitle = SplashTexts.splashes.get(n);
+        mod.meta.subtitle = bundle.get("splashnewyear"); //SplashTexts.splashes.get(n);
 
         mod.meta.description += "\n\n" + bundle.get("mod.currentversion") + "\n" + mod.meta.version;
 
@@ -148,21 +154,22 @@ public class FOSMod extends Mod {
         UxerdTechTree.load();
     }
 
-    private void loadSettings() {
+    void loadSettings() {
         ui.settings.addCategory("@setting.fos-title", "fos-settings-icon", t -> {
-            t.sliderPref("fos-menutheme", 2, 1, 6, i ->
+            t.sliderPref("fos-menutheme", 2, 1, 7, i ->
                 i == 2 ? "@setting.fos-menutheme.uxerdspace" :
                 i == 3 ? "@setting.fos-menutheme.lumonispace" :
                 i == 4 ? "@setting.fos-menutheme.randomplanet" :
                 i == 5 ? "@setting.fos-menutheme.solarsystem" :
-                i == 6 ? "@setting.fos-menutheme.lumoniterrain" :
+                i == 6 ? "@setting.fos-menutheme.caldemoltsystem" :
+                i == 7 ? "@setting.fos-menutheme.lumoniterrain" :
                 "@setting.fos-menutheme.default");
             t.checkPref("fos-rotatemenucamera", true);
             t.checkPref("fos-realisticmode", false);
         });
     }
 
-    private void addEditorTeams() {
+    void addEditorTeams() {
         //thanks java.
         WidgetGroup teambuttons = (WidgetGroup) ui.editor.getChildren().get(0);
         teambuttons = (WidgetGroup) teambuttons.getChildren().get(0);
@@ -184,7 +191,7 @@ public class FOSMod extends Mod {
         }
     }
 
-    private void loadTeamIcons() {
+    void loadTeamIcons() {
         // FIXME idk how to do this
         // Original code from Dusted Lands
         // Author: @KayyAyeAre
