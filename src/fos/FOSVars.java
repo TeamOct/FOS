@@ -2,7 +2,6 @@ package fos;
 
 import arc.graphics.gl.FrameBuffer;
 import arc.struct.Seq;
-import fos.audio.MusicHandler;
 import fos.content.FOSFluids;
 import fos.type.content.WeaponModule;
 import fos.ui.ResearchCoreDialog;
@@ -19,7 +18,6 @@ import static mindustry.type.ItemStack.*;
 
 public class FOSVars {
     public static ResearchCoreDialog rcdialog;
-    public static MusicHandler handler;
     public static TechTree.TechNode mechTree, bioTree;
 
     /** Used in modded menu renderer. A buffer for rendering planets. */
@@ -31,7 +29,6 @@ public class FOSVars {
 
     public static void load() {
         rcdialog = new ResearchCoreDialog();
-        handler = new MusicHandler();
 
         mechTree = TechTree.nodeRoot("", mechResearchCore, true, () -> {
             node(helix, with(scrap, 250), () -> {
