@@ -56,6 +56,7 @@ public class FOSPlanets {
             allowLaunchLoadout = true;
             //TODO you'll see why I did this :)
             launchCandidates.add(uxerd);
+            solarSystem = caldemolt;
             cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 5, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
             ruleSetter = r -> {
                 r.loadout = ItemStack.list();
@@ -82,6 +83,7 @@ public class FOSPlanets {
             clipRadius = 2f;
             defaultEnv = Env.space;
             launchCandidates.add(lumoni);
+            solarSystem = caldemolt;
             allowLaunchLoadout = false;
             generator = new UxerdAsteroidGenerator(){{
                 seed = 8;
