@@ -16,7 +16,7 @@ public class CarrierAI extends AIController {
         PayloadUnit u = (PayloadUnit) unit;
 
         //derelict block a unit could pick up
-        Building a = indexer.findTile(Team.derelict, u.x, u.y, 320f, build -> build.block instanceof Router && build.block.size * 8 * build.block.size * 8 <= unit.type.payloadCapacity);
+        Building a = indexer.findTile(Team.derelict, u.x, u.y, 320f, build -> build.block.size * 8 * build.block.size * 8 <= unit.type.payloadCapacity);
         //nearest research core
         Building b = indexer.findTile(u.team, u.x, u.y, 320f, build -> build.block instanceof ResearchCore);
         

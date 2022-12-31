@@ -21,6 +21,8 @@ import mindustry.mod.Mods.*;
 import mindustry.ui.*;
 import mindustry.ui.fragments.MenuFragment;
 
+import java.util.Date;
+
 import static arc.Core.*;
 import static arc.graphics.g2d.Font.*;
 import static fos.ui.menus.FOSMenus.*;
@@ -52,6 +54,9 @@ public class FOSMod extends Mod {
             );
 
             ui.showOkText("@fos.earlyaccesstitle", bundle.get("fos.earlyaccess"), () -> {});
+
+            LoadedMod ost = mods.locateMod("fosost");
+            if (ost == null) ui.showCustomConfirm("@fos.noosttitle", bundle.get("fos.noost"), "@mods.browser.add", "@no", () -> {}, () -> {});
 
             int tn = settings.getInt("fos-menutheme");
             MenuBackground bg = (
@@ -111,7 +116,7 @@ public class FOSMod extends Mod {
 
         SplashTexts.load(13);
         int n = Mathf.floor((float) Math.random() * SplashTexts.splashes.size);
-        mod.meta.subtitle = SplashTexts.splashes.get(n);
+        mod.meta.subtitle = bundle.get("splashnewyear"); //SplashTexts.splashes.get(n);
 
         mod.meta.description += "\n\n" + bundle.get("mod.currentversion") + "\n" + mod.meta.version;
 
