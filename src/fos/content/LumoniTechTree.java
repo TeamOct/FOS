@@ -55,16 +55,6 @@ public class LumoniTechTree {
                     })
                 )
             );
-            node(helix, () -> {
-                node(particulator, () -> {
-                    node(cluster, () -> {
-
-                    });
-                });
-                node(sticker, () -> {
-
-                });
-            });
             node(beginning, () -> {
                 node(island, Seq.with(new Objectives.SectorComplete(beginning)),() -> {
 

@@ -129,7 +129,7 @@ public class FOSMod extends Mod {
                 editorChanged = true;
             }
         });
-
+        //I hate this -RouterXdd
         LoadedMod xf = mods.list().find(m -> m.meta.author.equals("XenoTale") || m.meta.author.equals("goldie"));
         if (xf != null) {
             ui.showOkText("@fos.errortitle", bundle.format("fos.errortext", xf.meta.displayName), () -> app.exit());
@@ -158,7 +158,7 @@ public class FOSMod extends Mod {
         UxerdTechTree.load();
     }
 
-    private void loadSettings() {
+    void loadSettings() {
         ui.settings.addCategory("@setting.fos-title", "fos-settings-icon", t -> {
             t.sliderPref("fos-menutheme", 2, 1, 7, i ->
                 i == 2 ? "@setting.fos-menutheme.uxerdspace" :
@@ -173,7 +173,7 @@ public class FOSMod extends Mod {
         });
     }
 
-    private void addEditorTeams() {
+    void addEditorTeams() {
         //thanks java.
         WidgetGroup teambuttons = (WidgetGroup) ui.editor.getChildren().get(0);
         teambuttons = (WidgetGroup) teambuttons.getChildren().get(0);
@@ -195,7 +195,7 @@ public class FOSMod extends Mod {
         }
     }
 
-    private void loadTeamIcons() {
+    void loadTeamIcons() {
         // FIXME idk how to do this
         // Original code from Dusted Lands
         // Author: @KayyAyeAre
