@@ -5,8 +5,6 @@ import mindustry.content.*;
 import mindustry.entities.units.AIController;
 import mindustry.game.Team;
 import mindustry.gen.*;
-import mindustry.world.blocks.distribution.Router;
-import mindustry.world.blocks.payloads.PayloadVoid;
 
 import static mindustry.Vars.indexer;
 

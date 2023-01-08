@@ -1,7 +1,7 @@
 package fos.type.blocks.production;
 
 import arc.math.Mathf;
-import fos.type.blocks.storage.LuminaCoreBlock;
+import fos.type.blocks.storage.DetectorCoreBlock;
 import mindustry.entities.*;
 import mindustry.game.Team;
 import mindustry.gen.Building;
@@ -23,7 +23,7 @@ public class DrillBase extends Block {
     @Override
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {
         Building build = indexer.findTile(player.team(), tile.worldx(), tile.worldy(), 999f, b ->
-            b instanceof OreDetector.OreDetectorBuild || b instanceof LuminaCoreBlock.LuminaCoreBuild);
+            b instanceof OreDetector.OreDetectorBuild || b instanceof DetectorCoreBlock.LuminaCoreBuild);
         if (build instanceof OreDetector.OreDetectorBuild) {
             return Mathf.within(tile.worldx(), tile.worldy(), build.x, build.y, ((OreDetector.OreDetectorBuild) build).range());
         } else {

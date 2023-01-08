@@ -11,7 +11,6 @@ import mindustry.game.Objectives;
 import mindustry.graphics.g3d.PlanetParams;
 
 import static fos.content.FOSBlocks.*;
-import static fos.content.FOSUnits.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.TechTree.node;
 import static mindustry.type.ItemStack.*;

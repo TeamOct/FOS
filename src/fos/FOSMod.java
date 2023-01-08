@@ -21,7 +21,9 @@ import mindustry.mod.Mods.*;
 import mindustry.ui.*;
 import mindustry.ui.fragments.MenuFragment;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import static arc.Core.*;
 import static arc.graphics.g2d.Font.*;
@@ -116,7 +118,13 @@ public class FOSMod extends Mod {
 
         SplashTexts.load(13);
         int n = Mathf.floor((float) Math.random() * SplashTexts.splashes.size);
-        mod.meta.subtitle = bundle.get("splashnewyear"); //SplashTexts.splashes.get(n);
+        Calendar c = new GregorianCalendar();
+        boolean isNewYear = c.get(Calendar.MONTH) == Calendar.JANUARY && c.get(Calendar.DAY_OF_MONTH) == 1;
+        mod.meta.subtitle =
+            isNewYear ? bundle.get("splashnewyear")
+            : SplashTexts.splashes.get(n);
+        boolean isAprilFools = c.get(Calendar.MONTH) == Calendar.APRIL && c.get(Calendar.DAY_OF_MONTH) == 1;
+        if (isAprilFools) Musics.menu = tree.loadMusic("mistake");
 
         mod.meta.description += "\n\n" + bundle.get("mod.currentversion") + "\n" + mod.meta.version;
 
@@ -159,7 +167,7 @@ public class FOSMod extends Mod {
         UxerdTechTree.load();
     }
 
-    void loadSettings() {
+    private void loadSettings() {
         ui.settings.addCategory("@setting.fos-title", "fos-settings-icon", t -> {
             t.sliderPref("fos-menutheme", 2, 1, 7, i ->
                 i == 2 ? "@setting.fos-menutheme.uxerdspace" :
@@ -174,7 +182,7 @@ public class FOSMod extends Mod {
         });
     }
 
-    void addEditorTeams() {
+    private void addEditorTeams() {
         //thanks java.
         WidgetGroup teambuttons = (WidgetGroup) ui.editor.getChildren().get(0);
         teambuttons = (WidgetGroup) teambuttons.getChildren().get(0);
@@ -196,7 +204,7 @@ public class FOSMod extends Mod {
         }
     }
 
-    void loadTeamIcons() {
+    private void loadTeamIcons() {
         // FIXME idk how to do this
         // Original code from Dusted Lands
         // Author: @KayyAyeAre

@@ -2,8 +2,12 @@ package fos.content;
 
 import arc.graphics.g2d.*;
 import arc.math.geom.*;
+import arc.util.Tmp;
 import mindustry.entities.Effect;
+import mindustry.gen.Groups;
+import mindustry.gen.WeatherState;
 import mindustry.graphics.Layer;
+import mindustry.type.weather.ParticleWeather;
 
 import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.stroke;
@@ -28,11 +32,10 @@ public class FOSFx {
             if (isVertical) v.rotate(90);
             polyLines[n] = v;
         }
-
         color(e.color, r);
-        if(renderer.animateShields){
+        if(renderer.animateShields) {
             Fill.poly(poly);
-        }else{
+        } else {
             stroke(1.5f);
             Draw.alpha(0.09f);
             Fill.poly(poly);
@@ -40,6 +43,7 @@ public class FOSFx {
             Lines.poly(polyLines, e.x, e.y, r);
         }
     }).layer(Layer.shields),
+
     rectShieldBreak = new Effect(40, e -> {
         float r = e.fout();
         float[] poly = new float[]{
@@ -60,6 +64,7 @@ public class FOSFx {
         stroke(3f * r);
         Lines.poly(polyLines, e.x, e.y, 1f);
     }).followParent(true),
+
     rectShockwave = new Effect(20, e -> {
         float r = e.fin() * 2;
         float[] poly = new float[]{
@@ -79,5 +84,26 @@ public class FOSFx {
         color(e.color);
         stroke(3f * e.fout());
         Lines.poly(polyLines, e.x, e.y, 1f);
-    }).followParent(true).layer(Layer.shields);
+    }).followParent(true).layer(Layer.shields),
+
+    tokiciteBoil = new Effect(240f, e -> {
+        if (Groups.weather.contains(we -> we.weather instanceof ParticleWeather p && p.useWindVector)) {
+            WeatherState w = Groups.weather.find(ws -> ws.weather instanceof ParticleWeather p && p.useWindVector);
+            e.x += w.windVector.x * 24f * w.intensity * e.fin();
+            e.y += w.windVector.y * 24f * w.intensity * e.fin();
+        } else {
+            Vec2 v = new Vec2(1, 1);
+            e.x += v.x * 12f * e.fin();
+            e.y += v.y * 12f * e.fin();
+        }
+        Draw.color(FOSFluids.tokicite.color, 0.4f * e.fout());
+        Fill.circle(e.x, e.y, 4f * (1 + e.fin()));
+    }),
+
+    brassSmelterCraft = new Effect(1f, e -> {
+        tokiciteBoil.at(e.x - 8f, e.y - 8f);
+        tokiciteBoil.at(e.x + 8f, e.y - 8f);
+        tokiciteBoil.at(e.x - 8f, e.y + 8f);
+        tokiciteBoil.at(e.x + 8f, e.y + 8f);
+    });
 }

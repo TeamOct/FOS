@@ -12,7 +12,6 @@ import mindustry.content.*;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.BasicBulletType;
 import mindustry.gen.*;
-import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.type.*;
 

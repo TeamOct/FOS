@@ -1,6 +1,5 @@
 package fos.content;
 
-import arc.Events;
 import arc.graphics.*;
 import arc.struct.*;
 import fos.graphics.*;
@@ -18,7 +17,6 @@ import fos.type.draw.*;
 import mindustry.content.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.pattern.*;
-import mindustry.game.EventType;
 import mindustry.gen.*;
 import mindustry.graphics.CacheLayer;
 import mindustry.type.*;
@@ -40,13 +38,12 @@ import static fos.content.FOSItems.*;
 import static fos.content.FOSFluids.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.Liquids.*;
-import static mindustry.game.EventType.*;
 import static mindustry.type.ItemStack.*;
 
 public class FOSBlocks {
     public static Block
     //crafting
-    resourceExtractor, cuberiumSynthesizer, sublimator, siliconSynthesizer,
+    resourceExtractor, cuberiumSynthesizer, sublimator, siliconSynthesizer, brassSmelter,
     //production
     rockCrusher, drillBase, drillBaseLarge, tinDrill, silverDrill, diamondDrill, vanadiumDrill, oreDetectorSmall, oreDetector,
     //distribution
@@ -54,7 +51,7 @@ public class FOSBlocks {
     //liquids
     fluidPipe,
     //power
-    windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
+    tinWire, copperWire, brassWire, windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     //defense
     tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, helix, sticker, particulator, pulse, thunder, cluster, matrixShieldProj,
     //environment & ores
@@ -63,7 +60,7 @@ public class FOSBlocks {
     tokiciteFloor,
     cyaniumWater, crimsonStoneWater, anniteWater, blubluWater, purpurWater,
     alienMoss,
-    oreTin, oreTinSurface, oreSilver, oreLithium, oreDiamond, oreVanadium, oreIridium, oreLuminium,
+    oreCopper, oreTin, oreTinSurface, oreSilver, oreLithium, oreDiamond, oreVanadium, oreIridium, oreLuminium,
     bugSpawn,
     //units
     upgradeCenter, hovercraftFactory,
@@ -165,6 +162,27 @@ public class FOSBlocks {
             consumeItems(with(diamond, 1, sand, 8));
             outputItems = with(silicon, 8);
             requirements(Category.crafting, with(tin, 360, silver, 300, diamond, 200));
+        }};
+        brassSmelter = new GenericCrafter("brass-smelter"){{
+            scaledHealth = 40;
+            size = 3;
+            craftTime = 40f;
+            hasItems = true;
+            hasPower = true;
+            hasLiquids = true;
+            liquidCapacity = 60f;
+            squareSprite = false;
+            consumePower(4.5f);
+            consumeItems(with(copper, 3, tin, 1));
+            consumeLiquid(tokicite, 0.5f);
+            outputItems = with(brass, 1);
+            requirements(Category.crafting, with(tin, 120, copper, 80, silicon, 160));
+            craftEffect = FOSFx.brassSmelterCraft;
+            drawer = new DrawMulti(
+                //new DrawRegion("-bottom"),
+                //new DrawLiquidRegion(tokicite),
+                new DrawDefault()
+            );
         }};
         //endregion
         //region production
@@ -560,15 +578,9 @@ public class FOSBlocks {
             requirements(Category.distribution, with(aluminium, 120, lithium, 75, silver, 100, titanium, 125));
             envRequired = envEnabled = Env.space;
         }};
-        tinBelt = new StackConveyor("tin-belt"){{
+        //TODO something???
+        tinBelt = new Duct("tin-belt"){{
             health = 10;
-            size = 1;
-            speed = 0.18f;
-            itemCapacity = 1;
-            consumesPower = true;
-            conductivePower = true;
-            baseEfficiency = 1f;
-            consumePower(1f / 60f);
             requirements(Category.distribution, with(tin, 1));
         }};
         //endregion
@@ -581,6 +593,23 @@ public class FOSBlocks {
         }};
         //endregion
         //region power
+        tinWire = new PowerWire("tin-wire"){{
+            health = 3;
+            consumesPower = true;
+            consumePower(2f / 60f);
+            requirements(Category.power, with(tin, 1));
+        }};
+        copperWire = new PowerWire("copper-wire"){{
+            health = 5;
+            consumesPower = true;
+            consumePower(0.5f / 60f);
+            requirements(Category.power, with(copper, 1));
+        }};
+        brassWire = new PowerWire("brass-wire"){{
+            health = 8;
+            //does not consume any power
+            requirements(Category.power, with(brass, 1));
+        }};
         windTurbine = new WindTurbine("wind-turbine"){{
             health = 480;
             size = 2;
@@ -718,6 +747,9 @@ public class FOSBlocks {
             supportsOverlay = true;
         }};
         alienMoss = new OverlayFloor("alien-moss"){};
+        oreCopper = new OreBlock("ore-copper-surface"){{
+            itemDrop = copper;
+        }};
         oreTin = new UndergroundOreBlock("ore-tin"){{
             drop = tin;
             variants = 3;
@@ -768,7 +800,7 @@ public class FOSBlocks {
         }};
         //endregion
         //region storage
-        coreColony = new LuminaCoreBlock("core-colony"){{
+        coreColony = new DetectorCoreBlock("core-colony"){{
             //no radar
             radarRange = 0f;
             configurable = false;
@@ -781,7 +813,7 @@ public class FOSBlocks {
             squareSprite = false;
             requirements(Category.effect, with(tin, 1500));
         }};
-        coreFortress = new LuminaCoreBlock("core-fortress"){{
+        coreFortress = new DetectorCoreBlock("core-fortress"){{
             health = 2800;
             size = 3;
             unitCapModifier = 5;
@@ -790,7 +822,7 @@ public class FOSBlocks {
             squareSprite = false;
             requirements(Category.effect, with(tin, 2000, silver, 1250));
         }};
-        coreCity = new LuminaCoreBlock("core-city"){{
+        coreCity = new DetectorCoreBlock("core-city"){{
             health = 4600;
             size = 4;
             unitCapModifier = 7;
@@ -798,7 +830,7 @@ public class FOSBlocks {
             unitType = FOSUnits.lord;
             requirements(Category.effect, with(tin, 2500, silver, 2000, diamond, 1500));
         }};
-        coreMetropolis = new LuminaCoreBlock("core-metropolis"){{
+        coreMetropolis = new DetectorCoreBlock("core-metropolis"){{
             health = 8000;
             size = 5;
             unitCapModifier = 10;
