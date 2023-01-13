@@ -54,8 +54,7 @@ public class LumoniTechTree {
                     nodeProduce(silicon, () -> {});
                     nodeProduce(vanadium, () ->
                             nodeProduce(iridium, () ->
-                                nodeProduce(luminium, () -> {
-                                })
+                                nodeProduce(luminium, () -> {})
                             )
                         );
                     })

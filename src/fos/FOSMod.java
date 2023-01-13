@@ -22,7 +22,6 @@ import mindustry.ui.*;
 import mindustry.ui.fragments.MenuFragment;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import static arc.Core.*;
@@ -92,8 +91,7 @@ public class FOSMod extends Mod {
 
                         try {
                             DiscordRPC.send(presence);
-                        } catch (Exception ignored) {
-                        }
+                        } catch (Exception ignored) {}
                     }
                 }
             }
@@ -139,7 +137,9 @@ public class FOSMod extends Mod {
             }
         });
 
-        LoadedMod xf = mods.list().find(m -> m.meta.author.equals("XenoTale") || m.meta.author.equals("goldie"));
+        LoadedMod xf = mods.list().find(m ->
+            /* some mods don't even have the author field apparently */ m.meta.author != null &&
+            (m.meta.author.equals("XenoTale") || m.meta.author.equals("goldie")));
         if (xf != null) {
             ui.showOkText("@fos.errortitle", bundle.format("fos.errortext", xf.meta.displayName), () -> app.exit());
         }

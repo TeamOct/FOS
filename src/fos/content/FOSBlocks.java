@@ -161,7 +161,7 @@ public class FOSBlocks {
             consumePower(8f);
             consumeItems(with(diamond, 1, sand, 8));
             outputItems = with(silicon, 8);
-            requirements(Category.crafting, with(tin, 360, silver, 300, diamond, 200));
+            requirements(Category.crafting, with(tin, 180, silver, 150, diamond, 100));
         }};
         brassSmelter = new GenericCrafter("brass-smelter"){{
             scaledHealth = 40;
@@ -227,7 +227,7 @@ public class FOSBlocks {
         diamondDrill = new UndergroundDrill("diamond-drill"){{
             size = 3;
             tier = 5;
-            drillTime = 300f;
+            drillTime = 255f;
             consumePower(2f);
             requirements(Category.production, with(silicon, 25, diamond, 40));
             consumeLiquid(tokicite, 0.2f).boost();
@@ -235,7 +235,7 @@ public class FOSBlocks {
         vanadiumDrill = new UndergroundDrill("vanadium-drill"){{
             size = 3;
             tier = 6;
-            drillTime = 270f;
+            drillTime = 210f;
             consumePower(3f);
             requirements(Category.production, with(tin, 30, silver, 50, vanadium, 50));
             consumeLiquid(tokicite, 0.25f).boost();
@@ -332,6 +332,7 @@ public class FOSBlocks {
                     pierceCap = 2;
                 }}
             );
+            consumeCoolant(0.25f).boost();
             requirements(Category.turret, with(tin, 60, silver, 50));
         }};
         sticker = new ItemTurret("sticker"){{
@@ -445,7 +446,9 @@ public class FOSBlocks {
                     }};
                 }}
             );
-            requirements(Category.turret, with(tin, 200, silver, 75));
+            consumeCoolant(0.5f).boost();
+            coolantMultiplier = 2f;
+            requirements(Category.turret, with(tin, 200, silver, 125, silicon, 275));
         }};
         pulse = new TractorBeamTurret("pulse"){{
             health = 2400;
@@ -461,25 +464,26 @@ public class FOSBlocks {
             outlineColor = Color.valueOf("302326");
             squareSprite = false;
             consumePower(4);
-            requirements(Category.turret, BuildVisibility.editorOnly, with());
+            requirements(Category.turret, with(silver, 300, diamond, 250, silicon, 250, vanadium, 175));
         }};
-        /*TODO currently crashes the game
-        thunder = new LaserTurret("thunder"){{
+        thunder = new PowerTurret("thunder"){{
             health = 3200;
             size = 5;
-            shake = 4;
-            recoil = 5;
-            range = 190;
-            reload = 50;
-            shootCone = 5;
-            firingMoveFract = 0.5f;
-            shootDuration = 220;
-            shootType = FOSBullets.thunderLaser;
-            shootEffect = Fx.shootBigSmoke2;
-            shootSound = Sounds.laserbig;
-            loopSound = Sounds.beam;
-            requirements(Category.turret, with(Items.silicon, 5));
-        }};*/
+            shake = 4f;
+            recoil = 5f;
+            range = 190f;
+            reload = 60f;
+            minWarmup = 0.99f;
+            shootWarmupSpeed = 0.05f;
+            shootCone = 20f;
+            shootType = FOSBullets.thunderLightning;
+            shootEffect = Fx.lightningShoot;
+            shootSound = Sounds.spark;
+            consumePower(10f);
+            consumeCoolant(2f).boost();
+            coolantMultiplier = 0.5f;
+            requirements(Category.turret, with(tin, 300, silver, 300, diamond, 400, silicon, 250, vanadium, 250));
+        }};
         cluster = new ItemTurret("cluster"){{
             scaledHealth = 480;
             size = 4;
@@ -526,6 +530,8 @@ public class FOSBlocks {
                     }};
                 }}
             );
+            consumeCoolant(5f).boost();
+            coolantMultiplier = 0.25f;
             requirements(Category.turret, with(silicon, 500, vanadium, 300, iridium, 250, luminium, 200));
         }};
 

@@ -1,11 +1,10 @@
 package fos.content;
 
 import arc.graphics.Color;
-import mindustry.content.Fx;
 import mindustry.entities.bullet.*;
 
 public class FOSBullets {
-    public static BulletType meteorSpark, smallArtillery, smallStandard, smallStandardFlak, thunderLaser;
+    public static BulletType meteorSpark, smallArtillery, smallStandard, smallStandardFlak, thunderLightning;
 
     public static void load() {
         meteorSpark = new BasicBulletType(4f, 40f){{
@@ -30,15 +29,48 @@ public class FOSBullets {
             width = 2; height = 4;
             lifetime = 30;
         }};
-        thunderLaser = new ContinuousLaserBulletType(230f){{
-            length = 200;
-            hitSize = 18;
-            lifetime = 40;
-            drawSize = 420;
-            incendChance = 0.4f;
-            incendSpread = 5;
-            incendAmount = 1;
-            hitEffect = Fx.hitMeltdown;
+        thunderLightning = tLaser(0.1f, 5, "25d5ff",
+            tLaser(0.25f, 4, "3030ff",
+                tLaser(0.5f, 3, "ffff30",
+                    tLaser(0.7f, 2, "dc5b2e",
+                        tLaser(1f, 1, "ff3030", null)
+                    )
+                )
+            )
+        );
+    }
+
+    private static BulletType tLaser(float dmgMultiplier, int lenMultiplier, String color, BulletType frag) {
+        return new LaserBulletType(1200f * dmgMultiplier){{
+            lifetime = 1f;
+            width = 48f * (1f / lenMultiplier);
+            length = 38f * lenMultiplier;
+            colors = new Color[]{
+                Color.valueOf(color).mul(1, 1, 1, 0.4f),
+                Color.valueOf(color),
+                Color.white
+            };
+
+            lightningColor = colors[1];
+            lightningDamage = this.damage * 2;
+            lightningLength = 5;
+            lightningSpacing = 60f;
+            lightningDelay = 3f;
+            lightningAngleRand = 100f;
+
+            intervalAngle = 0f;
+            intervalSpread = intervalRandomSpread = 0f;
+            bulletInterval = 0f;
+            intervalBullets = 1;
+            intervalBullet = frag;
+
+            fragOnHit = false;
+            fragAngle = 0f;
+            fragSpread = fragRandomSpread = 0f;
+            fragBullets = 1;
+            fragBullet = this.copy();
+            fragBullet.lifetime = 30;
+            fragBullet.fragBullet = fragBullet.intervalBullet = null;
         }};
     }
 }
