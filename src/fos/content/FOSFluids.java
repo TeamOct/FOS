@@ -13,10 +13,11 @@ public class FOSFluids {
             flammability = 0.8f;
         }};
         tokicite = new Liquid("tokicite", Color.valueOf("d16792")){{
-            viscosity = 1.1f;
+            viscosity = 0.95f;
             heatCapacity = 0.65f;
             temperature = 0.4f;
             effect = StatusEffects.slow;
+            boilPoint = 0.8f;
         }};
     }
 }

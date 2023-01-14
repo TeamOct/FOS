@@ -1,8 +1,10 @@
 package fos.content;
 
-import arc.graphics.*;
-import arc.struct.*;
-import fos.graphics.*;
+import arc.Core;
+import arc.graphics.Color;
+import arc.struct.Seq;
+import arc.util.Strings;
+import fos.graphics.FOSPal;
 import fos.type.blocks.campaign.*;
 import fos.type.blocks.defense.*;
 import fos.type.blocks.distribution.*;
@@ -16,29 +18,30 @@ import fos.type.bullets.*;
 import fos.type.draw.*;
 import mindustry.content.*;
 import mindustry.entities.bullet.*;
+import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
 import mindustry.gen.*;
-import mindustry.graphics.CacheLayer;
+import mindustry.graphics.*;
 import mindustry.type.*;
-import mindustry.world.*;
+import mindustry.world.Block;
 import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.environment.*;
-import mindustry.world.blocks.liquid.*;
-import mindustry.world.blocks.power.*;
+import mindustry.world.blocks.liquid.Conduit;
+import mindustry.world.blocks.power.SolarGenerator;
 import mindustry.world.blocks.production.*;
-import mindustry.world.blocks.storage.*;
-import mindustry.world.blocks.units.*;
+import mindustry.world.blocks.storage.Unloader;
+import mindustry.world.blocks.units.UnitFactory;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 import multicraft.*;
 
-import static fos.content.FOSItems.*;
 import static fos.content.FOSFluids.*;
+import static fos.content.FOSItems.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.Liquids.*;
-import static mindustry.type.ItemStack.*;
+import static mindustry.type.ItemStack.with;
 
 public class FOSBlocks {
     public static Block
@@ -466,24 +469,79 @@ public class FOSBlocks {
             consumePower(4);
             requirements(Category.turret, with(silver, 300, diamond, 250, silicon, 250, vanadium, 175));
         }};
-        thunder = new PowerTurret("thunder"){{
-            health = 3200;
-            size = 5;
-            shake = 4f;
-            recoil = 5f;
-            range = 190f;
-            reload = 60f;
-            minWarmup = 0.99f;
-            shootWarmupSpeed = 0.05f;
-            shootCone = 20f;
-            shootType = FOSBullets.thunderLightning;
-            shootEffect = Fx.lightningShoot;
-            shootSound = Sounds.spark;
-            consumePower(10f);
-            consumeCoolant(2f).boost();
-            coolantMultiplier = 0.5f;
-            requirements(Category.turret, with(tin, 300, silver, 300, diamond, 400, silicon, 250, vanadium, 250));
-        }};
+        thunder = new PowerTurret("thunder"){
+            {
+                health = 3200;
+                size = 5;
+                shake = 4f;
+                recoil = 7.5f;
+                range = 240f;
+                reload = 60f;
+                targetAir = false;
+                targetGround = true;
+                minWarmup = 0.99f;
+                shootWarmupSpeed = 0.05f;
+                shootCone = 20f;
+                shootType = FOSBullets.thunderLightning;
+                shootEffect = Fx.lightningShoot;
+                shootSound = Sounds.laser;
+                chargeSound = Sounds.lasercharge;
+                consumePower(10f);
+                consumeCoolant(2f).boost();
+                coolantMultiplier = 0.5f;
+                drawer = new DrawTurret("reinforced-" /* TODO reinforced- is a placeholder */){{
+                    parts.addAll(
+                        new RegionPart("-mid"){{
+                            mirror = false;
+                            moveY = -6f;
+                        }},
+                        new RegionPart("-back"){{
+                            mirror = true;
+                            moveY = 7.5f;
+                        }},
+                        new ShapePart(){{
+                            circle = true;
+                            hollow = true;
+                            color = Color.valueOf("ff7070");
+                            radius = 0f;
+                            radiusTo = 3f;
+                            stroke = 0f;
+                            strokeTo = 3f;
+                            x = 0f; y = 20f;
+                            layer = Layer.effect;
+                        }}
+                    );
+                }};
+                requirements(Category.turret, with(tin, 300, silver, 300, diamond, 400, silicon, 250, vanadium, 250));
+            }
+
+            //hard-coding time
+            @Override
+            public void setStats() {
+                super.setStats();
+                stats.remove(Stat.ammo);
+
+                StatValue stat = table -> {
+                    table.row();
+
+                    table.table(bt -> {
+                        bt.left().defaults().padRight(3).left();
+
+                        bt.row();
+                        bt.add(Core.bundle.format("bullet.damage", shootType.damage + "~" + (shootType.damage * 10)));
+                        bt.row();
+                        int val = (int)(shootType.buildingDamageMultiplier * 100 - 100);
+                        bt.add(Core.bundle.format("bullet.buildingdamage", (val > 0 ? "[stat]+" : "[negstat]") + Strings.autoFixed(val, 1)));
+                        bt.row();
+                        bt.add("@bullet.infinitepierce");
+                    }).padTop(-9).padLeft(8).left().get().background(Tex.underline);
+
+                    table.row();
+                };
+
+                stats.add(Stat.ammo, stat);
+            }
+        };
         cluster = new ItemTurret("cluster"){{
             scaledHealth = 480;
             size = 4;

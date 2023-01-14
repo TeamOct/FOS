@@ -29,11 +29,11 @@ public class FOSBullets {
             width = 2; height = 4;
             lifetime = 30;
         }};
-        thunderLightning = tLaser(0.1f, 5, "25d5ff",
-            tLaser(0.25f, 4, "3030ff",
-                tLaser(0.5f, 3, "ffff30",
-                    tLaser(0.7f, 2, "dc5b2e",
-                        tLaser(1f, 1, "ff3030", null)
+        thunderLightning = tLaser(0.1f, 5, "3030ff",
+            tLaser(0.15f, 4, "25d5ff",
+                tLaser(0.25f, 3, "ffff30",
+                    tLaser(0.2f, 2, "dc5b2e",
+                        tLaser(0.3f, 1, "ff3030", null)
                     )
                 )
             )
@@ -41,26 +41,31 @@ public class FOSBullets {
     }
 
     private static BulletType tLaser(float dmgMultiplier, int lenMultiplier, String color, BulletType frag) {
-        return new LaserBulletType(1200f * dmgMultiplier){{
+        return new LaserBulletType(1500f * dmgMultiplier){{
+            speed = 0f; //just in case
             lifetime = 1f;
             width = 48f * (1f / lenMultiplier);
-            length = 38f * lenMultiplier;
+            length = 48f * lenMultiplier;
             colors = new Color[]{
                 Color.valueOf(color).mul(1, 1, 1, 0.4f),
                 Color.valueOf(color),
                 Color.white
             };
+            buildingDamageMultiplier = 0.25f;
+            displayAmmoMultiplier = false;
+            collidesAir = false;
 
             lightningColor = colors[1];
             lightningDamage = this.damage * 2;
-            lightningLength = 5;
-            lightningSpacing = 60f;
+            lightningLength = 9;
+            lightningSpacing = 19f + (38f * (lenMultiplier - 1));
             lightningDelay = 3f;
-            lightningAngleRand = 100f;
+            lightningAngle = 20f;
+            lightningAngleRand = 0f;
 
             intervalAngle = 0f;
             intervalSpread = intervalRandomSpread = 0f;
-            bulletInterval = 0f;
+            bulletInterval = 1f;
             intervalBullets = 1;
             intervalBullet = frag;
 
