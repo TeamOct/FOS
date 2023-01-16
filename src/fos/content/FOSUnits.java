@@ -24,7 +24,10 @@ public class FOSUnits {
     //flying
     sergeant, lieutenant, captain, general, marshal,
     //payload
-    vulture;
+    vulture,
+    //get stickBUGged lol
+    smallBug, mediumBug, largeBug, hugeBug, titanBug,
+    smallFlying, mediumFlying, largeFlying, hugeFlying, titanFlying;
 
     public static void load(){
         legion = new UnitType("legion"){{
@@ -240,6 +243,13 @@ public class FOSUnits {
             lowAltitude = true;
             constructor = PayloadUnit::create;
             controller = u -> new CarrierAI();
+        }};
+
+        smallBug = new BugUnitType("bug-small"){{
+            health = 200;
+            armor = 8;
+            hitSize = 10f;
+            segments = 2;
         }};
     }
 }

@@ -44,16 +44,14 @@ public class BugSpawn extends UnitBlock {
 
         private UnitType getBug() {
             UnitType[][] units = {
-                {dagger, mace, fortress, scepter},
-                {flare, horizon, zenith, antumbra},
-                {crawler, atrax, spiroct, arkyid},
-                {sergeant, lieutenant, captain, general}
+                //I actually made ACTUAL bugs spawn, yay!
+                {smallBug}
             };
 
             int curTier = Mathf.round(Mathf.floor(
                 Vars.state.rules.sector != null ? ((Vars.state.wave / 20f) + Vars.state.rules.sector.threat / 2) / 2
                 : Vars.state.wave / 20f));
-            if (curTier > 3) curTier = 3;
+            if (curTier > units[0].length) curTier = units[0].length;
             return units[Mathf.random(units.length - 1)][curTier];
         }
     }
