@@ -471,7 +471,7 @@ public class FOSBlocks {
         }};
         thunder = new PowerTurret("thunder"){
             {
-                health = 3200;
+                health = 9000;
                 size = 5;
                 shake = 4f;
                 recoil = 7.5f;

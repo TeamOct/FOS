@@ -8,8 +8,13 @@ import mindustry.world.meta.BlockFlag;
 public class BugUnitType extends UnitType {
     public BugUnitType(String name) {
         super(name);
+        omniMovement = false;
+        crushDamage = 1f;
+        circleTarget = true;
         constructor = BugUnit::create;
-        targetFlags = new BlockFlag[]{BlockFlag.drill, BlockFlag.factory, null};
+        targetAir = false;
+        targetGround = true;
+        targetFlags = new BlockFlag[]{BlockFlag.drill, BlockFlag.factory, BlockFlag.core, null};
         controller = u -> new BugAI();
     }
 }

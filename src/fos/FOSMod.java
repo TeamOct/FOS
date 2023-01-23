@@ -3,6 +3,7 @@ package fos;
 import arc.*;
 import arc.discord.DiscordRPC;
 import arc.discord.DiscordRPC.RichPresence;
+import arc.func.Prov;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.Vec2;
@@ -13,6 +14,7 @@ import arc.util.*;
 import fos.content.*;
 import fos.type.blocks.campaign.OrbitalAccelerator.*;
 import fos.ui.menus.*;
+import mindustry.ai.Pathfinder;
 import mindustry.content.SectorPresets;
 import mindustry.game.*;
 import mindustry.gen.*;
@@ -143,6 +145,16 @@ public class FOSMod extends Mod {
         if (xf != null) {
             ui.showOkText("@fos.errortitle", bundle.format("fos.errortext", xf.meta.displayName), () -> app.exit());
         }
+
+        //required for modded AIs
+        Pathfinder.Flowfield pt = FOSVars.fpos;
+        Reflect.<Seq<Prov<Pathfinder.Flowfield>>>get(pathfinder, "fieldTypes").add(() -> pt);
+        Events.on(WorldLoadEvent.class, e -> {
+            if (!net.client()) {
+                Reflect.invoke(pathfinder, "preloadPath", new Object[]{pt}, Pathfinder.Flowfield.class);
+            }
+        });
+
     }
 
     @Override

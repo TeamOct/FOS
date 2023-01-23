@@ -3,22 +3,20 @@ package fos.ai;
 import arc.math.Mathf;
 import fos.type.units.BugUnit;
 import mindustry.Vars;
-import mindustry.ai.Pathfinder;
-import mindustry.ai.types.GroundAI;
 import mindustry.entities.Units;
-import mindustry.gen.Teamc;
+import mindustry.entities.units.AIController;
+import mindustry.gen.*;
 import mindustry.world.Tile;
+import mindustry.world.meta.BlockFlag;
 
-import static mindustry.Vars.pathfinder;
-
-public class BugAI extends GroundAI {
+public class BugAI extends AIController implements ITargetable {
     public BugUnit bug;
     @Override
     public void updateUnit() {
         bug = (BugUnit) unit;
 
         if (bug.isFollowed) {
-            int followers = Units.count(unit.x, unit.y, 60f, u -> u instanceof BugUnit);
+            int followers = Units.count(unit.x, unit.y, 240f, u -> u instanceof BugUnit);
 
             if (followers >= 10 + Mathf.floor(Vars.state.wave / 10f)) {
                 bug.invading = true;
@@ -28,7 +26,7 @@ public class BugAI extends GroundAI {
             bug.following = Units.closest(unit.team, unit.x, unit.y, u ->
                 u instanceof BugUnit b && b.isFollowed);
 
-            //become a swarm leader if none exist
+            //become a swarm leader if none exist, or if this bug is a boss
             if (bug.following == null) bug.isFollowed = true;
         }
 
@@ -37,24 +35,54 @@ public class BugAI extends GroundAI {
 
     @Override
     public void updateMovement() {
+        Tile tile = unit.tileOn();
+        Tile targetTile = tile;
+
         if (bug.invading) {
-            super.updateMovement();
+            target = findTarget(unit.x, unit.y, 1600f, false, true);
+
+            if (target != null) {
+                if (unit.within(target, 32f)) {
+                    circleAttack(60f);
+                    return;
+                } else {
+                    targetTile = pathfindTarget(target, unit);
+                }
+            }
         } else if (bug.following != null) {
+            //if already close enough to a swarm leader, stand still
+            if (Mathf.within(unit.x, unit.y, bug.following.x, bug.following.y, 32f)) return;
+
             bug.invading = ((BugUnit) bug.following).invading;
 
-            pathfindUnit(bug.following);
+            targetTile = pathfindTarget(bug.following, unit);
         }
+
+        if (targetTile == tile) return;
+        unit.movePref(vec.trns(unit.angleTo(targetTile.worldx(), targetTile.worldy()), unit.speed()));
+        faceTarget();
     }
 
-    public void pathfindUnit(Teamc target) {
-        int costType = unit.pathType();
+    @Override
+    public Teamc findTarget(float x, float y, float range, boolean air, boolean ground) {
+        Teamc result = findMainTarget(x, y, range, air, ground);
 
-        Tile tile = target.tileOn();
-        if(tile == null) return;
-        Tile targetTile = pathfinder.getTargetTile(tile, pathfinder.getField(unit.team, costType, Pathfinder.fieldCore));
+        return checkTarget(result, x, y, range) ? Units.closestEnemy(unit.team, unit.x, unit.y, 800f, Unitc::isPlayer) : result;
+    }
 
-        if(tile == targetTile) return;
+    @Override
+    public Teamc findMainTarget(float x, float y, float range, boolean air, boolean ground){
+        for(BlockFlag flag : unit.type.targetFlags) {
+            Teamc target;
+            if (flag != null) {
+                target = targetFlag(x, y, flag, true);
+            } else {
+                target = target(x, y, range, air, ground);
+            }
 
-        unit.movePref(vec.trns(unit.angleTo(targetTile.worldx(), targetTile.worldy()), unit.speed()));
+            if (target != null) return target;
+        }
+
+        return targetFlag(x, y, null, true);
     }
 }

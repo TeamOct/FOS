@@ -61,6 +61,6 @@ public class FOSItems {
         }};
 
         uxerdItems.addAll(rawNethratium, rawElbium, rawElithite, aluminium, tin, silver, lithium, titanium, cuberium);
-        lumoniItems.addAll(tin, silver, diamond, sand, silicon, vanadium, iridium, luminium);
+        lumoniItems.addAll(copper, tin, silver, diamond, sand, silicon, brass, vanadium, iridium, luminium);
     }
 }
