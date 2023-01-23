@@ -11,7 +11,6 @@ import mindustry.world.blocks.units.UnitBlock;
 import mindustry.world.meta.BuildVisibility;
 
 import static fos.content.FOSUnits.*;
-import static mindustry.content.UnitTypes.*;
 
 public class BugSpawn extends UnitBlock {
     public float interval;

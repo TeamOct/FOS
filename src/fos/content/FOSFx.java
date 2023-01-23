@@ -2,7 +2,6 @@ package fos.content;
 
 import arc.graphics.g2d.*;
 import arc.math.geom.*;
-import arc.util.Tmp;
 import mindustry.entities.Effect;
 import mindustry.gen.Groups;
 import mindustry.gen.WeatherState;

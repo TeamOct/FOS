@@ -5,11 +5,8 @@ import mindustry.ai.Pathfinder;
 import mindustry.entities.*;
 import mindustry.entities.units.*;
 import mindustry.gen.*;
-import mindustry.world.Tile;
 
-import static mindustry.Vars.pathfinder;
-
-public class GroundBossAI extends AIController {
+public class GroundBossAI extends AIController implements ITargetable {
     @Override
     public void updateMovement() {
         Building core = unit.closestEnemyCore();
@@ -31,22 +28,10 @@ public class GroundBossAI extends AIController {
             if (player == null) {
                 pathfind(Pathfinder.fieldCore);
             } else {
-                pathfindUnit(curTarget);
+                pathfindTarget(curTarget, unit);
             }
         }
 
         faceTarget();
-    }
-
-    public void pathfindUnit(Teamc target) {
-        int costType = unit.pathType();
-
-        Tile tile = target.tileOn();
-        if(tile == null) return;
-        Tile targetTile = pathfinder.getTargetTile(tile, pathfinder.getField(unit.team, costType, Pathfinder.fieldCore));
-
-        if(tile == targetTile) return;
-
-        unit.movePref(vec.trns(unit.angleTo(targetTile.worldx(), targetTile.worldy()), unit.speed()));
     }
 }

@@ -1,6 +1,5 @@
 package fos.type.units;
 
-import arc.math.geom.Vec2;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import fos.FOSVars;
