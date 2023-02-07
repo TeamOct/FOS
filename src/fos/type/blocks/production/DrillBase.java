@@ -23,7 +23,7 @@ public class DrillBase extends Block {
     @Override
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {
         Building build = indexer.findTile(player.team(), tile.worldx(), tile.worldy(), 999f, b ->
-            b instanceof OreDetector.OreDetectorBuild || b instanceof DetectorCoreBlock.LuminaCoreBuild);
+            b instanceof OreDetector.OreDetectorBuild || b instanceof DetectorCoreBlock.DetectorCoreBuild);
         if (build instanceof OreDetector.OreDetectorBuild) {
             return Mathf.within(tile.worldx(), tile.worldy(), build.x, build.y, ((OreDetector.OreDetectorBuild) build).range());
         } else {

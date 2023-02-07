@@ -26,7 +26,7 @@ public class DetectorCoreBlock extends CoreBlock {
     public DetectorCoreBlock(String name) {
         super(name);
         configurable = true;
-        buildType = LuminaCoreBuild::new;
+        buildType = DetectorCoreBuild::new;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class DetectorCoreBlock extends CoreBlock {
         return super.canPlaceOn(tile, team, rotation) || name.equals("fos-core-colony");
     }
 
-    public class LuminaCoreBuild extends CoreBuild {
+    public class DetectorCoreBuild extends CoreBuild {
         public float timer = 0f;
         public boolean showOres = true, requested = false;
 
@@ -67,7 +67,9 @@ public class DetectorCoreBlock extends CoreBlock {
                 timer = spawnCooldown;
                 requested = true;
                 Time.run(spawnCooldown, () -> {
-                    super.requestSpawn(player);
+                    if (player.dead()) {
+                        super.requestSpawn(player);
+                    }
                     requested = false;
                 });
             }
