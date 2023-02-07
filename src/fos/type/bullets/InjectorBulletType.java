@@ -50,7 +50,9 @@ public class InjectorBulletType extends BasicBulletType {
 
     @Override
     public void hitEntity(Bullet b, Hitboxc entity, float health) {
-        if (entity instanceof Unit u){
+        super.hitEntity(b, entity, health);
+
+        if (entity instanceof Unit u) {
             //if the target is a boss AND a projectile can't attack bosses, return
             if (u.isBoss() && !attacksGuardians) return;
             //no point of overriding the effect
@@ -59,7 +61,7 @@ public class InjectorBulletType extends BasicBulletType {
             if (u.isPlayer()) return;
 
             float chance = chance(entity);
-            if (Mathf.random(chance) <= chance){
+            if (Mathf.random(chance) < chance){
                 u.apply(FOSStatuses.hacked);
                 u.team = b.team;
                 if (u.isBoss()) u.unapply(StatusEffects.boss);

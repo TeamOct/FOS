@@ -134,7 +134,7 @@ public class FOSUnits {
 
         sergeant = new UnitType("sergeant"){{
             health = 150;
-            hitSize = 6;
+            hitSize = 12;
             speed = 1.2f;
             flying = true;
             omniMovement = true;
