@@ -414,6 +414,7 @@ public class FOSBlocks {
                         pierceArmor = true;
                         collidesAir = false;
                         collidesTiles = true;
+                        collideTerrain = false;
                         hitEffect = Fx.hitBulletSmall;
                         despawnEffect = Fx.none;
                     }};
@@ -444,6 +445,7 @@ public class FOSBlocks {
                         pierceArmor = true;
                         collidesAir = false;
                         collidesTiles = true;
+                        collideTerrain = false;
                         hitEffect = Fx.hitBulletSmall;
                         despawnEffect = Fx.none;
                     }};

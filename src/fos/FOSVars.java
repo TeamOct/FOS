@@ -5,6 +5,7 @@ import arc.math.geom.Vec2;
 import arc.struct.Seq;
 import fos.content.FOSFluids;
 import fos.type.content.WeaponModule;
+import fos.type.units.BugFlyingUnit;
 import fos.type.units.BugUnit;
 import fos.ui.ResearchCoreDialog;
 import mindustry.Vars;
@@ -35,6 +36,8 @@ public class FOSVars {
 
     /** ID of the {@link BugUnit} class. */
     public static int bugEntity;
+    /** ID of the {@link BugFlyingUnit} class. */
+    public static int bugFlyingEntity;
 
     /** A flowfield used in certain custom AIs. */
     public static Pathfinder.Flowfield fpos = new Pathfinder.PositionTarget(new Vec2());
@@ -56,5 +59,6 @@ public class FOSVars {
         TechTree.roots.remove(mechTree);
 
         bugEntity = EntityMapping.register("FOSBugUnit", BugUnit::new);
+        bugFlyingEntity = EntityMapping.register("FOSBugFlyingUnit", BugFlyingUnit::new);
     }
 }

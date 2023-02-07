@@ -11,9 +11,14 @@ import mindustry.ai.types.*;
 import mindustry.content.*;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.BasicBulletType;
+import mindustry.entities.bullet.LiquidBulletType;
+import mindustry.entities.part.RegionPart;
+import mindustry.entities.pattern.ShootSpread;
 import mindustry.gen.*;
+import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.type.*;
+import mindustry.world.meta.BlockFlag;
 
 public class FOSUnits {
     public static UnitType
@@ -203,7 +208,7 @@ public class FOSUnits {
             speed = 1.5f;
             flying = true;
             aiController = HugAI::new;
-            abilities.add(new HackFieldAbility(FOSStatuses.hacked, 40f, 0.005f));
+            abilities.add(new HackFieldAbility(FOSStatuses.hacked, 40f, 0.002f));
             constructor = UnitEntity::create;
         }};
         marshal = new UnitType("marshal"){{
@@ -245,11 +250,76 @@ public class FOSUnits {
             controller = u -> new CarrierAI();
         }};
 
-        smallBug = new BugUnitType("bug-small"){{
-            health = 200;
+        smallBug = new BugUnitType("bug-small", false){{
+            health = 80;
             armor = 8;
             hitSize = 10f;
+            speed = 0.3f;
             segments = 2;
+            crushDamage = 0.2f;
+        }};
+
+        smallFlying = new BugUnitType("bug-flying-small", true, true){{
+            health = 60;
+            armor = 1;
+            hitSize = 6f;
+            speed = 2f;
+            rotateSpeed = 6f;
+            range = 10f;
+            circleTarget = true;
+            weapons.add(
+                new Weapon(){{
+                    x = 0f; y = 5f;
+                    reload = 150f;
+                    shootSound = Sounds.rockBreak;
+                    rotate = false;
+                    shootWarmupSpeed = 0.3f;
+                    minWarmup = 0.9f;
+                    parts.addAll(
+                        new RegionPart("-stinger"){{
+                            x = 0f; y = -4f;
+                            moveX = 0f; moveY = 8f;
+                            layer = Layer.legUnit + 0.01f;
+                        }}
+                    );
+                    bullet = new BasicBulletType(0f, 75f){{
+                        instantDisappear = true;
+                        width = height = 1f;
+                        collidesAir = collidesGround = true;
+                        hitSound = Sounds.none;
+                        despawnSound = Sounds.none;
+                    }};
+                }}
+            );
+        }};
+        mediumFlying = new BugUnitType("bug-flying-medium", true){{
+            health = 200;
+            armor = 2;
+            hitSize = 12f;
+            speed = 0.8f;
+            rotateSpeed = 2f;
+            weapons.add(
+                new Weapon(){{
+                    x = 0f; y = 6f;
+                    reload = 180f;
+                    shootSound = Sounds.mud;
+                    rotate = false;
+                    shoot = new ShootSpread(){{
+                        shots = 3;
+                        spread = 20f;
+                    }};
+                    bullet = new LiquidBulletType(){{
+                        damage = 60f;
+                        speed = 1.33f;
+                        lifetime = 60f;
+                        collidesAir = collidesGround = true;
+                        trailColor = Liquids.slag.color;
+                        trailWidth = 3f;
+                        trailLength = 14;
+                        liquid = Liquids.slag;
+                    }};
+                }}
+            );
         }};
     }
 }

@@ -32,6 +32,8 @@ public class HackFieldAbility extends Ability {
             if (Mathf.chance(chance)) {
                 //do not take over players
                 if (other.isPlayer()) return;
+                //DO NOT affect bosses, it's extremely overpowered
+                if (other.isBoss()) return;
                 other.team = unit.team;
                 if (other.isBoss()) other.unapply(StatusEffects.boss);
                 other.apply(status);
