@@ -139,7 +139,7 @@ public class FOSUnits {
             flying = true;
             omniMovement = true;
             weapons.add(
-                    new InjectorWeapon("injector"){{
+                    new InjectorWeapon("fos-injector"){{
                         bullet = new InjectorBulletType(0, 0.3f, 50, 300, false){{
                             homingPower = 1;
                             speed = 1.2f;
@@ -179,7 +179,7 @@ public class FOSUnits {
             flying = true;
             aiController = MissileAI::new;
             weapons.add(
-                new InjectorWeapon("missile-launcher"){{
+                new InjectorWeapon("fos-missile-launcher"){{
                     x = -2; y = -1;
                     mirror = true;
                     alternate = false;

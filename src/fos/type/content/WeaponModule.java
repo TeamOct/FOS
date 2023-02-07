@@ -10,7 +10,7 @@ public class WeaponModule extends StatusEffect {
     public ItemStack[] reqs;
 
     public WeaponModule(String name, Weapon weapon) {
-        super(name);
+        super("fos-" + name);
         permanent = false;
         this.weapon = weapon;
     }
