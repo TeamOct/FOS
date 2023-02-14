@@ -30,7 +30,7 @@ public class FOSUnits {
     sergeant, lieutenant, captain, general, marshal,
     //payload
     vulture,
-    //get stickBUGged lol
+    //get stick-BUG-ged lol
     smallBug, mediumBug, largeBug, hugeBug, titanBug,
     smallFlying, mediumFlying, largeFlying, hugeFlying, titanFlying;
 

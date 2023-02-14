@@ -1,12 +1,22 @@
 package fos.type.blocks.power;
 
+import arc.Core;
 import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.TextureRegion;
+import arc.math.geom.Geometry;
+import arc.math.geom.Point2;
+import arc.util.Eachable;
+import mindustry.entities.units.BuildPlan;
+import mindustry.gen.Building;
 import mindustry.world.blocks.power.*;
 import mindustry.world.meta.*;
 
 import static mindustry.Vars.tilesize;
+import static mindustry.Vars.world;
 
 public class PowerWire extends PowerNode {
+    public TextureRegion[] regions = new TextureRegion[16];
+
     public PowerWire(String name) {
         super(name);
         conductivePower = true;
@@ -17,6 +27,8 @@ public class PowerWire extends PowerNode {
         underBullets = true;
         configurable = false;
         enableDrawStatus = false;
+        hasShadow = false;
+        swapDiagonalPlacement = false;
         group = BlockGroup.power;
         buildType = PowerWireBuild::new;
     }
@@ -39,9 +51,39 @@ public class PowerWire extends PowerNode {
     }
 
     @Override
+    public void load() {
+        super.load();
+
+        for (int i = 0; i < regions.length; i++) {
+            regions[i] = Core.atlas.find(name + "-" + i);
+        }
+    }
+
+    @Override
     public void drawPlace(int x, int y, int rotation, boolean valid) {
         drawPotentialLinks(x, y);
         drawOverlay(x * tilesize + offset, y * tilesize + offset, rotation);
+    }
+
+    @Override
+    public void drawPlanRegion(BuildPlan plan, Eachable<BuildPlan> list) {
+        if(plan.tile() == null) return;
+
+        byte[] b = {0, 0, 0, 0, 0};
+
+        list.each(other -> {
+            if (other.breaking || other == plan || !other.block.hasPower || other.samePos(plan)) return;
+            for (int i = 0; i < 4; i++) {
+                Point2 p = Geometry.d4[i];
+
+                if (other.x == plan.x + p.x && other.y == plan.y + p.y && b[i+1] == 0) {
+                    b[0] += 1 << 3 - i;
+                    b[i+1] = 1;
+                }
+            }
+        });
+
+        Draw.rect(/* it's broken for some reason */ b[0] >= 16 ? regions[0] : regions[b[0]], plan.drawx(), plan.drawy());
     }
 
     @Override
@@ -52,8 +94,19 @@ public class PowerWire extends PowerNode {
     public class PowerWireBuild extends PowerNodeBuild {
         @Override
         public void draw() {
-            //TODO when sprites are done, make a conveyor-like draw method
-            Draw.rect(region, x, y, drawrot());
+            byte b = 0;
+
+            for (int i = 0; i < 4; i++) {
+                Point2 p = Geometry.d4[i];
+                Building build = world.build(tileX() + p.x, tileY() + p.y);
+                if (build == null) continue;
+
+                if (build.block.hasPower) {
+                    b += 1 << 3 - i;
+                }
+            }
+
+            Draw.rect(regions[b], x, y);
         }
 
         @Override

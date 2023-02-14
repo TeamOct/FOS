@@ -2,6 +2,7 @@ package fos.type.bullets;
 
 import arc.math.Mathf;
 import fos.content.*;
+import fos.graphics.FOSPal;
 import mindustry.content.StatusEffects;
 import mindustry.entities.bullet.*;
 import mindustry.gen.*;
@@ -9,7 +10,7 @@ import mindustry.gen.*;
 public class InjectorBulletType extends BasicBulletType {
     public final float minChance, maxChance, minHP, maxHP;
     public final boolean attacksGuardians;
-    //chance varies, but with permanent effect (tiers 1, 3, 4)
+    //chance varies, but with permanent effect (tiers 1, 3)
     public InjectorBulletType(float minChance, float maxChance, float minHP, float maxHP, boolean attacksGuardians) {
         super(8, 10);
         lifetime = 20;
@@ -17,6 +18,8 @@ public class InjectorBulletType extends BasicBulletType {
         hittable = false;
         absorbable = true;
         collidesTiles = false;
+        frontColor = FOSPal.hacked;
+        backColor = FOSPal.hackedBack;
 
         this.minChance = minChance;
         this.maxChance = maxChance;
@@ -43,6 +46,7 @@ public class InjectorBulletType extends BasicBulletType {
         } else if (health >= maxHP) {
             return minChance;
         } else {
+            //this formula is really complicated, does it even make sense??
             return 1 - ((health - minHP) / (maxHP - minHP));
         }
 
@@ -61,7 +65,7 @@ public class InjectorBulletType extends BasicBulletType {
             if (u.isPlayer()) return;
 
             float chance = chance(entity);
-            if (Mathf.random(chance) < chance){
+            if (Mathf.random(chance) < chance) {
                 u.apply(FOSStatuses.hacked);
                 u.team = b.team;
                 if (u.isBoss()) u.unapply(StatusEffects.boss);
