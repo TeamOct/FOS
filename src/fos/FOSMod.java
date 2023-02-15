@@ -33,8 +33,6 @@ import static mindustry.Vars.*;
 import static mindustry.game.EventType.*;
 
 public class FOSMod extends Mod {
-    private boolean editorChanged = false;
-
     public FOSMod() {
         Events.on(ClientLoadEvent.class, e -> {
             loadSettings();
@@ -132,12 +130,7 @@ public class FOSMod extends Mod {
         FOSMenus.load();
         FOSVars.load();
 
-        ui.editor.shown(() -> {
-            if (!editorChanged) {
-                addEditorTeams();
-                editorChanged = true;
-            }
-        });
+        ui.editor.shown(this::addEditorTeams);
 
         LoadedMod xf = mods.list().find(m ->
             /* some mods don't even have the author field apparently */ m.meta.author != null &&

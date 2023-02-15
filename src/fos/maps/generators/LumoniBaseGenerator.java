@@ -1,4 +1,4 @@
-package fos.gen;
+package fos.maps.generators;
 
 import arc.func.*;
 import arc.math.*;

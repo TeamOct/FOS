@@ -195,6 +195,7 @@ public class FOSBlocks {
             tier = 2;
             heatOutput = 4f;
             squareSprite = false;
+            consumeLiquid(hydrogen, 0.01f).boost();
             requirements(Category.production, with(rawNethratium, 30));
             researchCost = with(rawNethratium, 150);
             envRequired = envEnabled = Env.space;
