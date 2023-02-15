@@ -83,7 +83,7 @@ public class PowerWire extends PowerNode {
             }
         });
 
-        Draw.rect(/* it's broken for some reason */ b[0] >= 16 ? regions[0] : regions[b[0]], plan.drawx(), plan.drawy());
+        Draw.rect(/* just in case this value somehow exceeds 15 */ b[0] >= 16 ? regions[0] : regions[b[0]], plan.drawx(), plan.drawy());
     }
 
     @Override
