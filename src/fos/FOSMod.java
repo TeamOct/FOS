@@ -71,8 +71,6 @@ public class FOSMod extends Mod {
             if (tn != 1) {
                 Reflect.set(MenuFragment.class, ui.menufrag, "renderer", new FOSMenuRenderer(bg));
             }
-
-            //loadTeamIcons();
         });
 
         Events.run(Trigger.update, () -> {
@@ -147,7 +145,6 @@ public class FOSMod extends Mod {
                 Reflect.invoke(pathfinder, "preloadPath", new Object[]{pt}, Pathfinder.Flowfield.class);
             }
         });
-
     }
 
     @Override
@@ -207,52 +204,5 @@ public class FOSMod extends Mod {
 
             ((Table) teambuttons).add(button);
         }
-    }
-
-    private void loadTeamIcons() {
-        // FIXME idk how to do this
-        // Original code from Dusted Lands
-        // Author: @KayyAyeAre
-        final int[] id = {63001};
-
-        Seq<Team> teams = Seq.with(
-            FOSTeam.corru, FOSTeam.bessin
-        );
-
-        //actually start loading the emojis
-        Seq<Font> fonts = Seq.with(Fonts.def, Fonts.outline);
-
-        teams.each(t -> {
-            TextureRegion region = atlas.find("fos-team-" + t.name);
-
-            Reflect.<ObjectIntMap<String>>get(Fonts.class, "unicodeIcons").put(t.name, id[0]);
-            Reflect.<ObjectMap<String, String>>get(Fonts.class, "stringIcons").put(t.name, ((char) id[0]) + "");
-
-            int size = (int) (Fonts.def.getData().lineHeight / Fonts.def.getData().scaleY);
-
-            Vec2 out = Scaling.fit.apply(region.width, region.height, size, size);
-
-            Glyph glyph = new Glyph();
-            glyph.id = id[0];
-            glyph.srcX = 0;
-            glyph.srcY = 0;
-            glyph.width = (int) out.x;
-            glyph.height = (int) out.y;
-            glyph.u = region.u;
-            glyph.v = region.v2;
-            glyph.u2 = region.u2;
-            glyph.v2 = region.v;
-            glyph.xoffset = 0;
-            glyph.yoffset = -size;
-            glyph.xadvance = size;
-            glyph.kerning = null;
-            glyph.fixedWidth = true;
-            glyph.page = 0;
-            fonts.each(f -> f.getData().setGlyph(id[0], glyph));
-
-            t.emoji = Reflect.<ObjectMap<String, String>>get(Fonts.class, "stringIcons").get(t.name);
-
-            id[0]--;
-        });
     }
 }
