@@ -11,7 +11,7 @@ buildscript{
 
         mindustryPath = "com.github.Anuken.Mindustry"
         //the build number that this mod is made for
-        mindustryVersion = "v141"
+        mindustryVersion = "v142"
         arcVersion = mindustryVersion
 
         kotlinVersion = "1.6.0"
