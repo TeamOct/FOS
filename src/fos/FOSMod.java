@@ -4,9 +4,7 @@ import arc.*;
 import arc.discord.DiscordRPC;
 import arc.discord.DiscordRPC.RichPresence;
 import arc.func.Prov;
-import arc.graphics.g2d.*;
 import arc.math.*;
-import arc.math.geom.Vec2;
 import arc.scene.ui.*;
 import arc.scene.ui.layout.*;
 import arc.struct.*;
@@ -27,7 +25,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import static arc.Core.*;
-import static arc.graphics.g2d.Font.*;
 import static fos.ui.menus.FOSMenus.*;
 import static mindustry.Vars.*;
 import static mindustry.game.EventType.*;

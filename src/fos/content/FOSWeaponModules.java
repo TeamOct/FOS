@@ -4,6 +4,9 @@ import fos.type.bullets.SmartBulletType;
 import fos.type.content.WeaponModule;
 import mindustry.content.Fx;
 import mindustry.entities.bullet.*;
+import mindustry.entities.pattern.ShootSpread;
+import mindustry.gen.Sounds;
+import mindustry.graphics.Pal;
 import mindustry.type.Weapon;
 
 import static fos.content.FOSItems.*;
@@ -13,10 +16,11 @@ import static mindustry.type.ItemStack.*;
 //just because it looks nicer :)
 public class FOSWeaponModules {
     public static WeaponModule
-        standard1, standard2, standard3, standard4, standard5;
+        standard1, standard2, standard3, standard4, standard5,
+        shotgun1, shotgun2, shotgun3, shotgun4, shotgun5;
 
     public static void load() {
-        standard1 = new WeaponModule("standard1", new Weapon("standard-weapon1"){{
+        standard1 = new WeaponModule("standard1", new Weapon("fos-standard-weapon1"){{
             x = 0; y = 0;
             alternate = mirror = false;
             rotate = true;
@@ -29,7 +33,7 @@ public class FOSWeaponModules {
                 lifetime = 60f;
             }};
         }}).reqs(with(tin, 75, silver, 75));
-        standard2 = new WeaponModule("standard2", new Weapon("standard-weapon2"){{
+        standard2 = new WeaponModule("standard2", new Weapon("fos-standard-weapon2"){{
             x = 0; y = 0;
             alternate = mirror = false;
             rotate = true;
@@ -53,7 +57,7 @@ public class FOSWeaponModules {
                 }};
             }};
         }}).reqs(with(tin, 150, silver, 150));
-        standard3 = new WeaponModule("standard3", new Weapon("standard-weapon3"){{
+        standard3 = new WeaponModule("standard3", new Weapon("fos-standard-weapon3"){{
             x = 0; y = 0;
             alternate = mirror = false;
             rotate = true;
@@ -68,7 +72,7 @@ public class FOSWeaponModules {
                 homingPower = 0.8f;
             }};
         }}).reqs(with(tin, 250, silver, 250, diamond, 150));
-        standard5 = new WeaponModule("standard5", new Weapon("standard-weapon5"){{
+        standard5 = new WeaponModule("standard5", new Weapon("fos-standard-weapon5"){{
             x = 0; y = 0;
             alternate = mirror = false;
             rotate = true;
@@ -106,5 +110,27 @@ public class FOSWeaponModules {
                 }};
             }};
         }}).reqs(with(tin, 500, silver, 500, vanadium, 300, iridium, 250, luminium, 200));
+
+        shotgun1 = new WeaponModule("shotgun1", new Weapon("fos-shotgun-mount1"){{
+            x = y = 0;
+            alternate = mirror = false;
+            rotate = true;
+            rotateSpeed = 5f;
+            inaccuracy = 30f;
+            shoot.shots = 4;
+            shoot.shotDelay = 0f;
+            reload = 90f;
+            shootSound = Sounds.shotgun;
+            ejectEffect = Fx.casing2;
+            bullet = new ShrapnelBulletType(){{
+                width = 2f;
+                length = 48f;
+                fromColor = Pal.accentBack;
+                toColor = Pal.accent;
+                damage = 75f;
+                lifetime = 20f;
+                hitEffect = Fx.hitBulletSmall;
+            }};
+        }}).reqs(with(tin, 60, silver, 50));
     }
 }

@@ -1,5 +1,6 @@
 package fos;
 
+import arc.Events;
 import arc.graphics.gl.FrameBuffer;
 import arc.math.geom.Vec2;
 import arc.struct.Seq;
@@ -11,6 +12,7 @@ import fos.ui.ResearchCoreDialog;
 import mindustry.Vars;
 import mindustry.ai.Pathfinder;
 import mindustry.content.TechTree;
+import mindustry.game.EventType;
 import mindustry.game.Objectives;
 import mindustry.gen.EntityMapping;
 import mindustry.graphics.g3d.PlanetParams;
@@ -30,9 +32,6 @@ public class FOSVars {
     public static FrameBuffer menuBuffer;
     /** Used in modded menu renderer. Planet params used in menuBuffer. */
     public static PlanetParams menuParams;
-
-    /** An array with all weapon modules. */
-    public static Seq<WeaponModule> weaponModules = Vars.content.statusEffects().copy().filter(s -> s instanceof WeaponModule).as();
 
     /** ID of the {@link BugUnit} class. */
     public static int bugEntity;

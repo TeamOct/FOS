@@ -10,7 +10,7 @@ public class WeaponModule extends StatusEffect {
     public ItemStack[] reqs;
 
     public WeaponModule(String name, Weapon weapon) {
-        super("fos-" + name);
+        super(name);
         permanent = false;
         this.weapon = weapon;
     }
@@ -34,7 +34,9 @@ public class WeaponModule extends StatusEffect {
         unit.unapply(this);
     }
 
-    /** Sets the module's requirements. Returns the weapon module for chaining. */
+    /**
+     * Sets the module's requirements.
+     * @return the weapon module for chaining. */
     public WeaponModule reqs(ItemStack[] reqs) {
         this.reqs = reqs;
 

@@ -3,6 +3,7 @@ package fos.type.blocks.units;
 import arc.graphics.Color;
 import arc.scene.style.TextureRegionDrawable;
 import arc.scene.ui.layout.*;
+import arc.struct.Seq;
 import arc.util.Log;
 import arc.util.Scaling;
 import arc.util.Structs;
@@ -28,6 +29,7 @@ import static mindustry.Vars.*;
 
 public class UpgradeCenter extends Block {
     public int[] capacities = {};
+    protected Seq<WeaponModule> weaponModules = Vars.content.statusEffects().copy().filter(s -> s instanceof WeaponModule).as();
 
     public UpgradeCenter(String name) {
         super(name);
@@ -98,12 +100,11 @@ public class UpgradeCenter extends Block {
             table.button(Icon.units, Styles.clearTogglei, () -> {
                 deselect();
 
+                if (weaponIndex == -1) return;
+
                 Weapon weapon = weaponModules.get(weaponIndex).weapon;
 
-                if (weapon == null) {
-                    Log.err("Weapon's not found, you dingus.");
-                    return;
-                }
+                if (weapon == null) return;
 
                 if (potentialEfficiency < 1 || !(Vars.player.unit().type instanceof LuminaUnitType)) return;
 
@@ -133,12 +134,15 @@ public class UpgradeCenter extends Block {
         }
 
         @Override
-        public int getMaximumAccepted(Item item){
-            return capacities[item.id];
+        public int getMaximumAccepted(Item item) {
+            Seq<ItemStack> seq = new Seq<>();
+            seq.add(weaponModules.get(weaponIndex).reqs);
+
+            return seq.find(s -> s.item == item).amount;
         }
 
         @Override
-        public boolean acceptItem(Building source, Item item){
+        public boolean acceptItem(Building source, Item item) {
             return weaponIndex != -1 && items.get(item) < getMaximumAccepted(item) &&
                 Structs.contains(weaponModules.get(weaponIndex).reqs, stack -> stack.item == item);
         }
