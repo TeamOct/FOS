@@ -55,9 +55,10 @@ public class FOSItems {
             cost = 4f;
             hardness = 6;
         }};
-        luminium = new Item("luminium", Color.valueOf("000000")){{
+        luminium = new Item("luminium", Color.valueOf("72cbcf")){{
             cost = 5.9f;
             hardness = 7;
+            /* animated */ frames = 12;
         }};
 
         uxerdItems.addAll(rawNethratium, rawElbium, rawElithite, aluminium, tin, silver, lithium, titanium, cuberium);
