@@ -71,6 +71,7 @@ public class FOSMod extends Mod {
         });
 
         Events.run(Trigger.update, () -> {
+            /* not sure if it will ever be useful now?
             if (!mobile) {
                 boolean useDiscord = !OS.hasProp("nodiscord");
                 if (useDiscord) {
@@ -79,8 +80,8 @@ public class FOSMod extends Mod {
                     if (state.rules.sector.planet == FOSPlanets.uxerd) {
                         Building a = indexer.findTile(Team.sharded, 350 * 8, 350 * 8, 4000, b -> b instanceof OrbitalAcceleratorBuild);
 
-                        presence.state = "Orbital Accelerator Progress: " + (a != null ? Mathf.round((float) a.items().total() / (float) a.block().itemCapacity * 100) : "0") + "%";
                         presence.details = "Uxerd (FOS)";
+                        presence.state = "Orbital Accelerator Progress: " + (a != null ? Mathf.round((float) a.items().total() / (float) a.block().itemCapacity * 100) : "0") + "%";
 
                         presence.largeImageKey = "logo";
 
@@ -90,6 +91,7 @@ public class FOSMod extends Mod {
                     }
                 }
             }
+            */
 
             if (SectorPresets.planetaryTerminal.sector.info.wasCaptured && !FOSPlanets.uxerd.unlocked()) {
                 FOSPlanets.uxerd.unlock();

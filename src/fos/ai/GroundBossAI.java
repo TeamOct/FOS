@@ -1,6 +1,6 @@
 package fos.ai;
 
-import fos.type.units.LuminaUnitType;
+import fos.type.units.LumoniPlayerUnitType;
 import mindustry.ai.Pathfinder;
 import mindustry.entities.*;
 import mindustry.entities.units.*;
@@ -10,7 +10,7 @@ public class GroundBossAI extends AIController implements ITargetable {
     @Override
     public void updateMovement() {
         Building core = unit.closestEnemyCore();
-        Unit player = Units.closestEnemy(unit.team, unit.x, unit.y, 999f, u -> u.type instanceof LuminaUnitType);
+        Unit player = Units.closestEnemy(unit.team, unit.x, unit.y, 999f, u -> u.type instanceof LumoniPlayerUnitType);
         Teamc curTarget = player != null ? player : core;
 
         if (curTarget == null) return;

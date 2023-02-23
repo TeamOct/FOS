@@ -1,15 +1,15 @@
 package fos.content;
 
 import arc.Core;
-import fos.type.units.LuminaBossType;
+import fos.type.units.BossUnitType;
 
 import static mindustry.game.Objectives.*;
 
 public class FOSObjectives {
     public static class DefeatBoss implements Objective {
-        public LuminaBossType type;
+        public BossUnitType type;
 
-        public DefeatBoss(LuminaBossType type) {
+        public DefeatBoss(BossUnitType type) {
             this.type = type;
         }
 

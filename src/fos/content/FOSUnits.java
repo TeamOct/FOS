@@ -18,7 +18,6 @@ import mindustry.gen.*;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.type.*;
-import mindustry.world.meta.BlockFlag;
 
 public class FOSUnits {
     public static UnitType
@@ -107,7 +106,7 @@ public class FOSUnits {
             constructor = MechUnit::create;
         }};
 
-        lord = new LuminaUnitType("lord"){{
+        lord = new LumoniPlayerUnitType("lord"){{
             health = 2400;
             armor = 6;
             hitSize = 10;
@@ -118,9 +117,9 @@ public class FOSUnits {
             mineSpeed = 8f;
             buildSpeed = 1f;
             weapons.add(FOSWeaponModules.standard1.weapon);
-            constructor = LuminaUnit::create;
+            constructor = LumoniPlayerUnit::create;
         }};
-        testBoss = new LuminaBossType("test-boss", FOSWeaponModules.standard2){{
+        testBoss = new BossUnitType("test-boss", FOSWeaponModules.standard2){{
             health = 2800;
             armor = 8;
             /* custom range to prevent cheesing */ range = 200f;

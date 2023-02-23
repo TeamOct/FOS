@@ -13,6 +13,7 @@ import mindustry.game.*;
 import mindustry.maps.generators.*;
 import mindustry.type.*;
 import mindustry.world.*;
+import mindustry.world.blocks.environment.Floor;
 import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.meta.Env;
 
@@ -22,8 +23,6 @@ import static mindustry.content.Blocks.*;
 import static mindustry.graphics.g3d.PlanetGrid.*;
 
 public class LumoniPlanetGenerator extends PlanetGenerator {
-    /** Sector IDs that just don't work. */
-    int[] idBlacklist = new int[]{8, 45, 48, 72, 76, 86};
     /** Enemy base generator. */
     LumoniBaseGenerator basegen = new LumoniBaseGenerator();
     float scl = 8f;
@@ -39,10 +38,10 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
     @Override
     public float getHeight(Vec3 position) {
-        if (isWater(position, 0.34f)) return 0.1f;
+        if (isWater(position, 0.2f)) return 0.1f;
 
         position = Tmp.v33.set(position).scl(scl);
-        return Mathf.pow(Simplex.noise3d(seed, 5, 0.5f, 1f/3f, position.x, position.y, position.z), 2f);
+        return Mathf.pow(Simplex.noise2d(seed, 5, 0.5f, 1f/3f, position.x, position.y), 2f);
     }
 
     @Override
@@ -61,13 +60,13 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
     }
 
     protected float waterNoise(Vec3 pos, double octaves, double falloff, double scl, float mag, float offset) {
-        return Simplex.noise3d(seed, octaves, falloff, scl, (pos.x + offset) / 15, (pos.y + offset) / 15, pos.z + offset) * mag;
+        return Simplex.noise2d(seed, octaves, falloff, scl, pos.x + offset, pos.y + offset) * mag;
     }
 
     protected boolean isWater(Vec3 position, float value) {
-        float wnoise1 = waterNoise(position, 7, 0.7, 1f, 0.76f);
-        float wnoise2 = waterNoise(position, 9, 0.62, 1f/3f, 0.83f, 69f);
-        float wnoise3 = waterNoise(position, 8, 0.66, 1f/6f, 0.81f, 420f);
+        float wnoise1 = waterNoise(position, 7, 0.5, 1f, 0.56f);
+        float wnoise2 = waterNoise(position, 9, 0.32, 1f/3f, 0.63f, 69f);
+        float wnoise3 = waterNoise(position, 8, 0.26, 1f/6f, 0.61f, 420f);
         return wnoise1 < value || wnoise2 < value || wnoise3 < value;
     }
 
@@ -75,10 +74,6 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
     public void generateSector(Sector sector) {
         Ptile tile = sector.tile;
         float meridian = tile.v.x, poles = tile.v.y;
-
-        for (int i : idBlacklist) {
-            if (sector.id == i) return;
-        }
 
         //an arc of enemy bases
         if ((meridian < -0.32f && poles < -0.27f && poles > -0.9f) || (meridian > -0.29f && meridian < 0.21f && poles > -0.12f && poles < 0.68f)){
@@ -92,12 +87,8 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         return Tmp.c1.set(block.mapColor).a(1 - block.albedo);
     }
 
-    Block getBlock(Vec3 position) {
+    Block getSolidBlock(Vec3 position) {
         float height = getHeight(position);
-
-        if (isWater(position, 0.31f)) return deepwater;
-
-        if (Simplex.noise3d(seed, 5, 0.8f, 1, position.x, position.y, position.z) > 0.8f) return tokiciteFloor;
 
         Tmp.v31.set(position);
 
@@ -111,15 +102,27 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         height = Mathf.clamp(height);
 
         Block b = arr[Mathf.clamp((int)(temp * arr.length), 0, arr[0].length - 1)][Mathf.clamp((int)(height * arr[0].length), 0, arr[0].length - 1)];
-        if (isWater(position, 0.34f)) {
-            b = b == annite ? anniteWater :
-                b == blublu ? blubluWater :
-                b == crimsonStone ? crimsonStoneWater :
-                b == cyanium ? cyaniumWater :
-                b == purpur ? purpurWater : b;
+        if (isWater(position, 0.2f)) {
+            b = getFlooded(b);
         }
 
         return b;
+    }
+
+    Block getFlooded(Block b) {
+        return b == annite ? anniteWater :
+            b == blublu ? blubluWater :
+                b == crimsonStone ? crimsonStoneWater :
+                    b == cyanium ? cyaniumWater :
+                        b == purpur ? purpurWater :
+                            b;
+    }
+
+    Block getBlock(Vec3 position) {
+        if (isWater(position, 0.18f)) return deepwater;
+        if (Simplex.noise2d(seed, 5, 0.8f, 1, position.x, position.y) > 0.8f) return tokiciteFloor;
+
+        return getSolidBlock(position);
     }
 
     @Override
@@ -219,7 +222,10 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
                     Tmp.v1.set(cx - width / 2f, cy - height / 2f).rotate(180 + enemyOffset).add(width / 2f, height / 2f);
                     Room espawn = new Room((int)Math.floor(Tmp.v1.x), (int)Math.floor(Tmp.v1.y), rand.random(10, 16));
-                    //if (tiles.get(espawn.x, espawn.y).floor() == deepwater) continue;
+                    if (tiles.get(espawn.x, espawn.y).floor() == deepwater) {
+                        int rad = rand.random(16, 38);
+                        island(espawn.x, espawn.y, rad);
+                    }
                     roomseq.add(espawn);
                     enemies.add(espawn);
                 }
@@ -245,9 +251,6 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
         Seq<Block> ores = Seq.with(oreTin, oreTinSurface, oreSilver);
         float poles = Math.abs(sector.tile.v.y);
-        float nmag = 0.5f;
-        float scl = 0.8f;
-        float addscl = 1.3f;
 
         FloatSeq frequencies = new FloatSeq();
         for(int i = 0; i < ores.size; i++){
@@ -271,7 +274,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
         trimDark();
         median(2);
-        tech(metalFloor, metalFloor2, darkMetal);
+        //tech(metalFloor, metalFloor2, darkMetal);
 
         oreAround(alienMoss, blubluWall, 2, 1f, 0f);
 
@@ -289,12 +292,24 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                     }
                 }
             }
+
+            //shallow water
+            if (floor == deepwater) {
+                for (Point2 p : Geometry.d8) {
+                    Tile other = tiles.get(x + p.x, y + p.y);
+                    if (other != null && other.floor() != deepwater && other.floor() != getFlooded(other.floor())) {
+                        floor = getFlooded(other.floor());
+                        break;
+                    }
+                }
+            }
+
             //tokicite
             if ((floor == annite || floor == blublu) && block == air) {
                 //tokicite and water don't mix.
                 for (Point2 p : Geometry.d4) {
                     Tile other = tiles.get(x + p.x, y + p.y);
-                    if (other.floor() == water || other.floor() == deepwater) return;
+                    if (other.floor().isLiquid && other.floor() != tokiciteFloor) return;
                 }
 
                 if (noise(x + 69, y - 69, 2, 0.6, 80) > 0.86f) {
@@ -340,12 +355,25 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         }
     }
 
+    public void island(int ix, int iy, int rad) {
+        Vec3 pos = sector.rect.project((float)ix / tiles.width, (float)iy / tiles.height);
+        Floor floor = getSolidBlock(pos).asFloor();
+
+        for(int x = ix - rad; x <= ix + rad; x++) {
+            for (int y = iy - rad; y <= iy + rad; y++) {
+                if (tiles.in(x, y) && Mathf.dst(x, y, ix, iy) / rad + Simplex.noise2d(seed, 2, 0.4f, 1f / 30f, x, y) * 0.41f < 0.75f) {
+                    tiles.getn(x, y).setFloor(floor);
+
+                    if (tiles.in(x, y) && Simplex.noise2d(seed + 44, 2, 0.4f, 1f / 30f, x, y) < 0.75f) {
+                        tiles.getn(x, y).setBlock(floor.wall);
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public boolean allowLanding(Sector sector) {
-        for (int i : idBlacklist) {
-            if (sector.id == i) return false;
-        }
-
         //TODO still don't allow landing, the planet isn't finished
         return false;
     }

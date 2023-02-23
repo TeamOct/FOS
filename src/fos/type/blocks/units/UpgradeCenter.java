@@ -4,13 +4,12 @@ import arc.graphics.Color;
 import arc.scene.style.TextureRegionDrawable;
 import arc.scene.ui.layout.*;
 import arc.struct.Seq;
-import arc.util.Log;
 import arc.util.Scaling;
 import arc.util.Structs;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import fos.type.content.WeaponModule;
-import fos.type.units.LuminaUnitType;
+import fos.type.units.LumoniPlayerUnitType;
 import mindustry.Vars;
 import mindustry.content.Fx;
 import mindustry.entities.units.*;
@@ -24,7 +23,6 @@ import mindustry.world.blocks.ItemSelection;
 import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.consumers.ConsumeItemDynamic;
 
-import static fos.FOSVars.*;
 import static mindustry.Vars.*;
 
 public class UpgradeCenter extends Block {
@@ -106,7 +104,7 @@ public class UpgradeCenter extends Block {
 
                 if (weapon == null) return;
 
-                if (potentialEfficiency < 1 || !(Vars.player.unit().type instanceof LuminaUnitType)) return;
+                if (potentialEfficiency < 1 || !(Vars.player.unit().type instanceof LumoniPlayerUnitType)) return;
 
                 Player player = Vars.player;
                 if(player == null || tile == null || !(tile.build instanceof UpgradeCenterBuild entity)) return;

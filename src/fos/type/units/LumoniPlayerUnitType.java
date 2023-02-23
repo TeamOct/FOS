@@ -3,8 +3,8 @@ package fos.type.units;
 import mindustry.type.*;
 import mindustry.world.meta.*;
 
-public class LuminaUnitType extends UnitType {
-    public LuminaUnitType(String name) {
+public class LumoniPlayerUnitType extends UnitType {
+    public LumoniPlayerUnitType(String name) {
         super(name);
     }
 

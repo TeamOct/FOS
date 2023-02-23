@@ -5,7 +5,7 @@ import arc.util.io.Writes;
 import mindustry.gen.LegsUnit;
 import mindustry.io.TypeIO;
 
-public class LuminaUnit extends LegsUnit {
+public class LumoniPlayerUnit extends LegsUnit {
 
     @Override
     public void write(Writes write) {

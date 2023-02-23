@@ -35,6 +35,10 @@ packr-out/
 config/
 *.gif
 
+# Aseprite files
+*.aseprite
+*.ase
+
 version.properties
 
 modsDirectories.txt

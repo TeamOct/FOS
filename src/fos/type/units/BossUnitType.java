@@ -4,10 +4,10 @@ import mindustry.ctype.UnlockableContent;
 import mindustry.gen.Unit;
 
 //Used for bosses that unlock certain contents upon defeat.
-public class LuminaBossType extends LuminaUnitType {
+public class BossUnitType extends LumoniPlayerUnitType {
     public UnlockableContent content;
 
-    public LuminaBossType(String name, UnlockableContent content) {
+    public BossUnitType(String name, UnlockableContent content) {
         super(name);
         this.content = content;
     }
