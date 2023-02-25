@@ -19,6 +19,8 @@ public class FOSWeathers {
             drawParticles = false;
             drawNoise = true;
             noiseColor = Color.valueOf("b0dcb71b");
+            //this thing is way too disturbing.
+            opacityMultiplier = 0.3f;
             useWindVector = true;
             baseSpeed = 3.6f;
             force = 0f;

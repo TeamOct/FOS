@@ -207,6 +207,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         int offset = rand.nextInt(360);
         float length = (float)(width / 2.55 - rand.random(13, 23));
         int angleStep = 5;
+        ObjectMap<Room, Integer> islands = new ObjectMap<>();
 
         for (int i = 0; i < 360; i += angleStep){
             int angle = offset + i;
@@ -215,6 +216,11 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
             if (i + angleStep >= 360){
                 spawn = new Room(cx, cy, rand.random(10, 18));
+                if (tiles.get(spawn.x, spawn.y).floor() == deepwater) {
+                    int rad = rand.random(48, 100);
+                    island(spawn.x, spawn.y, rad);
+                    islands.put(spawn, rad);
+                }
                 roomseq.add(spawn);
 
                 for(int j = 0; j < enemySpawns; j++){
@@ -223,8 +229,9 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                     Tmp.v1.set(cx - width / 2f, cy - height / 2f).rotate(180 + enemyOffset).add(width / 2f, height / 2f);
                     Room espawn = new Room((int)Math.floor(Tmp.v1.x), (int)Math.floor(Tmp.v1.y), rand.random(10, 16));
                     if (tiles.get(espawn.x, espawn.y).floor() == deepwater) {
-                        int rad = rand.random(16, 38);
+                        int rad = rand.random(24, 50);
                         island(espawn.x, espawn.y, rad);
+                        islands.put(espawn, rad);
                     }
                     roomseq.add(espawn);
                     enemies.add(espawn);
@@ -250,6 +257,10 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         inverseFloodFill(tiles.getn(spawn.x, spawn.y));
 
         Seq<Block> ores = Seq.with(oreTin, oreTinSurface, oreSilver);
+        if (this.sector.id != 91) {
+            ores.add(oreDiamond);
+        }
+
         float poles = Math.abs(sector.tile.v.y);
 
         FloatSeq frequencies = new FloatSeq();
@@ -257,20 +268,11 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
             frequencies.add(rand.random(-0.01f, 0.07f) - i * 0.01f + poles * 0.04f);
         }
 
-        pass((x, y) -> {
-            if ((!floor.asFloor().hasSurface() && !floor.asFloor().supportsOverlay) || floor == deepwater) return;
-
-            float offsetX = x - 4, offsetY = y + 23;
-            for(int i = ores.size - 1; i >= 0; i--){
-                Block entry = ores.get(i);
-                float freq = frequencies.get(i);
-                if (Math.abs(0.5 - noise(offsetX, offsetY + i * 999, 2, 0.7f, (40 + i * 2))) > 0.22f + i * 0.01 &&
-                Math.abs(0.5 - noise(offsetX, offsetY - i * 999, 1, 1, (30 + i * 4))) > 0.33f + freq){
-                    ore = entry;
-                    break;
-                }
-            }
-        });
+        //generate ores
+        for (ObjectMap.Entry<Room, Integer> r : islands) {
+            ores(ores, r.key.x, r.key.y, r.value);
+        }
+        ores(ores);
 
         trimDark();
         median(2);
@@ -317,6 +319,9 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                     ore = air;
                 }
             }
+
+            //NO SAND WALLS.
+            if (block == sandWall) block = air;
         });
 
         float difficulty = sector.threat;
@@ -341,9 +346,46 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         state.rules.spawns = LumoniWaves.generate(difficulty, new Rand(), state.rules.attackMode);
     }
 
+    /**
+     * This method should ensure that the given ores generate in a limited square area, no matter how many tries it takes.
+     * This probably hurts sector generation time quite a bit, but I dunno what else to try.
+     * @param ores List of ores to generate.
+     * @param cx Center X coordinate.
+     * @param cy Center Y coordinate.
+     * @param rad A "radius" of a square (very dumb description, I know.)
+     */
+    public void ores(Seq<Block> ores, int cx, int cy, int rad) {
+        for (Block cur : ores) {
+            boolean generated = false;
+            int offset = 0;
+
+            while (!generated) {
+                for (int x = -rad; x <= rad; x++) {
+                    for (int y = -rad; y <= rad; y++) {
+                        Tile tile = tiles.get(x + cx, y + cy);
+                        if (tile == null || !tile.floor().asFloor().hasSurface()) return;
+
+                        int i = ores.indexOf(cur);
+                        int offsetX = x - 4, offsetY = y + 23;
+                        if (Math.abs(0.5f - noise(offsetX + offset, offsetY + i * 999, 2, 0.7, (40 + i * 2))) > 0.26f &&
+                            Math.abs(0.5f - noise(offsetX + offset, offsetY - i * 999, 1, 1, (30 + i * 4))) > 0.37f &&
+                            tile.floor().supportsOverlay) {
+                            ore = cur;
+                            if (tile.block() == air) generated = true;
+                        }
+                    }
+                }
+
+                if (!generated) {
+                    offset += 1000;
+                }
+            }
+        }
+    }
+
     @Override
     public void trimDark() {
-        for (Tile tile : tiles){
+        for (Tile tile : tiles) {
             boolean any = world.getDarkness(tile.x, tile.y) > 0;
             for (int i = 0; i < 4 && !any; i++){
                 any = world.getDarkness(tile.x + Geometry.d4[i].x, tile.y + Geometry.d4[i].y) > 0;
