@@ -1,18 +1,14 @@
 package fos;
 
-import arc.Events;
 import arc.graphics.gl.FrameBuffer;
 import arc.math.geom.Vec2;
 import arc.struct.Seq;
 import fos.content.FOSFluids;
-import fos.type.content.WeaponModule;
 import fos.type.units.BugFlyingUnit;
 import fos.type.units.BugUnit;
 import fos.ui.ResearchCoreDialog;
-import mindustry.Vars;
 import mindustry.ai.Pathfinder;
 import mindustry.content.TechTree;
-import mindustry.game.EventType;
 import mindustry.game.Objectives;
 import mindustry.gen.EntityMapping;
 import mindustry.graphics.g3d.PlanetParams;

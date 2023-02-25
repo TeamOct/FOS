@@ -1,8 +1,6 @@
 package fos;
 
 import arc.*;
-import arc.discord.DiscordRPC;
-import arc.discord.DiscordRPC.RichPresence;
 import arc.func.Prov;
 import arc.math.*;
 import arc.scene.ui.*;
@@ -10,7 +8,6 @@ import arc.scene.ui.layout.*;
 import arc.struct.*;
 import arc.util.*;
 import fos.content.*;
-import fos.type.blocks.campaign.OrbitalAccelerator.*;
 import fos.ui.menus.*;
 import mindustry.ai.Pathfinder;
 import mindustry.content.SectorPresets;

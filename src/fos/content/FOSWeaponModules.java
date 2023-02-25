@@ -4,7 +4,6 @@ import fos.type.bullets.SmartBulletType;
 import fos.type.content.WeaponModule;
 import mindustry.content.Fx;
 import mindustry.entities.bullet.*;
-import mindustry.entities.pattern.ShootSpread;
 import mindustry.gen.Sounds;
 import mindustry.graphics.Pal;
 import mindustry.type.Weapon;
