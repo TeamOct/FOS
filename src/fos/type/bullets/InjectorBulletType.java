@@ -61,6 +61,8 @@ public class InjectorBulletType extends BasicBulletType {
             if (u.isBoss() && !attacksGuardians) return;
             //no point of overriding the effect
             if (u.hasEffect(FOSStatuses.hacked)) return;
+            //do not hack anyone immune to the effect
+            if (u.isImmune(FOSStatuses.hacked)) return;
             //do not take over players
             if (u.isPlayer()) return;
 

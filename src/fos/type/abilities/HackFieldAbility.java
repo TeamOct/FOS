@@ -34,6 +34,9 @@ public class HackFieldAbility extends Ability {
                 if (other.isPlayer()) return;
                 //DO NOT affect bosses, it's extremely overpowered
                 if (other.isBoss()) return;
+                //do not hack anyone immune to the effect
+                if (other.isImmune(FOSStatuses.hacked)) return;
+
                 other.team = unit.team;
                 if (other.isBoss()) other.unapply(StatusEffects.boss);
                 other.apply(status);

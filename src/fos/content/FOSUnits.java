@@ -19,6 +19,8 @@ import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.type.*;
 
+import static fos.content.FOSStatuses.hacked;
+
 public class FOSUnits {
     public static UnitType
     //mechs
@@ -137,16 +139,17 @@ public class FOSUnits {
             speed = 1.2f;
             flying = true;
             omniMovement = true;
+            immunities.add(hacked);
             weapons.add(
-                    new InjectorWeapon("fos-injector"){{
-                        bullet = new InjectorBulletType(0, 0.3f, 50, 300, false){{
-                            homingPower = 1;
-                            speed = 1.2f;
-                        }};
-                        x = 0; y = 0;
-                        reload = 60 * 5;
-                        ejectEffect = Fx.casing1;
-                    }}
+                new InjectorWeapon("fos-injector"){{
+                    bullet = new InjectorBulletType(0, 0.3f, 50, 300, false){{
+                        homingPower = 1;
+                        speed = 1.2f;
+                    }};
+                    x = 0; y = 0;
+                    reload = 60 * 5;
+                    ejectEffect = Fx.casing1;
+                }}
             );
             constructor = UnitEntity::create;
         }};
@@ -156,6 +159,7 @@ public class FOSUnits {
             speed = 1.4f;
             flying = true;
             aiController = SuicideAI::new;
+            immunities.add(hacked);
             weapons.add(
                 new InjectorWeapon(){{
                     x = y = 0;
@@ -177,6 +181,7 @@ public class FOSUnits {
             speed = 1.1f;
             flying = true;
             aiController = MissileAI::new;
+            immunities.add(hacked);
             weapons.add(
                 new InjectorWeapon("fos-missile-launcher"){{
                     x = -2; y = -1;
@@ -207,7 +212,8 @@ public class FOSUnits {
             speed = 1.5f;
             flying = true;
             aiController = HugAI::new;
-            abilities.add(new HackFieldAbility(FOSStatuses.hacked, 40f, 0.002f));
+            immunities.add(hacked);
+            abilities.add(new HackFieldAbility(hacked, 40f, 0.002f));
             constructor = UnitEntity::create;
         }};
         marshal = new UnitType("marshal"){{
@@ -216,6 +222,7 @@ public class FOSUnits {
             speed = 0.8f;
             range = 280f;
             flying = true;
+            immunities.add(hacked);
             weapons.add(
                 new InjectorWeapon(){{
                     x = 0; y = 4;
