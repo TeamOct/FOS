@@ -8,6 +8,7 @@ import arc.scene.ui.layout.*;
 import arc.struct.*;
 import arc.util.*;
 import fos.content.*;
+import fos.ui.DamageDisplay;
 import fos.ui.menus.*;
 import mindustry.ai.Pathfinder;
 import mindustry.content.SectorPresets;
@@ -104,7 +105,25 @@ public class FOSMod extends Mod {
 
     @Override
     public void init() {
+        FOSVars.load();
+
+        //required for modded AIs
+        Pathfinder.Flowfield pt = FOSVars.fpos;
+        Reflect.<Seq<Prov<Pathfinder.Flowfield>>>get(pathfinder, "fieldTypes").add(() -> pt);
+        Events.on(WorldLoadEvent.class, e -> {
+            if (!net.client()) {
+                Reflect.invoke(pathfinder, "preloadPath", new Object[]{pt}, Pathfinder.Flowfield.class);
+            }
+        });
+
         if (headless) return;
+
+        LoadedMod xf = mods.list().find(m ->
+            /* some mods don't even have the author field apparently */ m.meta.author != null &&
+            (m.meta.author.equals("XenoTale") || m.meta.author.equals("goldie")));
+        if (xf != null) {
+            ui.showOkText("@fos.errortitle", bundle.format("fos.errortext", xf.meta.displayName), () -> app.exit());
+        }
 
         LoadedMod mod = mods.locateMod("fos");
 
@@ -122,25 +141,10 @@ public class FOSMod extends Mod {
 
         FOSIcons.load();
         FOSMenus.load();
-        FOSVars.load();
 
         ui.editor.shown(this::addEditorTeams);
 
-        LoadedMod xf = mods.list().find(m ->
-            /* some mods don't even have the author field apparently */ m.meta.author != null &&
-            (m.meta.author.equals("XenoTale") || m.meta.author.equals("goldie")));
-        if (xf != null) {
-            ui.showOkText("@fos.errortitle", bundle.format("fos.errortext", xf.meta.displayName), () -> app.exit());
-        }
-
-        //required for modded AIs
-        Pathfinder.Flowfield pt = FOSVars.fpos;
-        Reflect.<Seq<Prov<Pathfinder.Flowfield>>>get(pathfinder, "fieldTypes").add(() -> pt);
-        Events.on(WorldLoadEvent.class, e -> {
-            if (!net.client()) {
-                Reflect.invoke(pathfinder, "preloadPath", new Object[]{pt}, Pathfinder.Flowfield.class);
-            }
-        });
+        new DamageDisplay();
     }
 
     @Override
@@ -177,6 +181,7 @@ public class FOSMod extends Mod {
                 "@setting.fos-menutheme.default");
             t.checkPref("fos-rotatemenucamera", true);
             t.checkPref("fos-realisticmode", false);
+            t.checkPref("fos-damagedisplay", true);
         });
     }
 
