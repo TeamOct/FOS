@@ -140,7 +140,7 @@ public class FOSUnits {
             omniMovement = true;
             immunities.add(hacked);
             circleTarget = true;
-            aiController = InjectorAI::new;
+            //aiController = InjectorAI::new;
             weapons.add(
                 new InjectorWeapon("fos-injector"){{
                     bullet = new InjectorBulletType(0, 0.3f, 50, 300, false){{
@@ -159,7 +159,7 @@ public class FOSUnits {
             hitSize = 8;
             speed = 1.4f;
             flying = true;
-            aiController = InjectorAI::new;
+            //aiController = InjectorAI::new;
             immunities.add(hacked);
             weapons.add(
                 new InjectorWeapon(){{
@@ -181,7 +181,7 @@ public class FOSUnits {
             hitSize = 12;
             speed = 1.1f;
             flying = true;
-            aiController = InjectorAI::new;
+            //aiController = InjectorAI::new;
             immunities.add(hacked);
             weapons.add(
                 new InjectorWeapon("fos-missile-launcher"){{
@@ -212,7 +212,7 @@ public class FOSUnits {
             hitSize = 20;
             speed = 1.5f;
             flying = true;
-            aiController = InjectorAI::new;
+            //aiController = InjectorAI::new;
             immunities.add(hacked);
             abilities.add(new HackFieldAbility(hacked, 40f, 0.002f));
             constructor = UnitEntity::create;
@@ -224,7 +224,7 @@ public class FOSUnits {
             range = 280f;
             flying = true;
             immunities.add(hacked);
-            aiController = InjectorAI::new;
+            //aiController = InjectorAI::new;
             weapons.add(
                 new InjectorWeapon(){{
                     x = 0; y = 4;
