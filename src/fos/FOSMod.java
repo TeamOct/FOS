@@ -1,26 +1,28 @@
 package fos;
 
-import arc.*;
+import arc.Events;
 import arc.func.Prov;
-import arc.math.*;
-import arc.scene.ui.*;
-import arc.scene.ui.layout.*;
-import arc.struct.*;
-import arc.util.*;
+import arc.math.Mathf;
+import arc.scene.ui.ImageButton;
+import arc.scene.ui.layout.Table;
+import arc.scene.ui.layout.WidgetGroup;
+import arc.struct.Seq;
+import arc.util.Reflect;
 import fos.content.*;
 import fos.ui.DamageDisplay;
-import fos.ui.menus.*;
+import fos.ui.menus.FOSMenuRenderer;
+import fos.ui.menus.FOSMenus;
+import fos.ui.menus.MenuBackground;
 import mindustry.ai.Pathfinder;
 import mindustry.content.SectorPresets;
-import mindustry.game.*;
+import mindustry.game.Team;
 import mindustry.gen.*;
-import mindustry.mod.*;
-import mindustry.mod.Mods.*;
-import mindustry.ui.*;
+import mindustry.mod.Mod;
+import mindustry.mod.Mods.LoadedMod;
+import mindustry.ui.Styles;
 import mindustry.ui.fragments.MenuFragment;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import static arc.Core.*;
 import static fos.ui.menus.FOSMenus.*;
@@ -51,8 +53,21 @@ public class FOSMod extends Mod {
 
             ui.showOkText("@fos.earlyaccesstitle", bundle.get("fos.earlyaccess"), () -> {});
 
-            LoadedMod ost = mods.locateMod("fosost");
-            if (ost == null) ui.showCustomConfirm("@fos.noosttitle", bundle.get("fos.noost"), "@mods.browser.add", "@no", () -> {}, () -> {});
+            LoadedMod ost = mods.getMod("fosost");
+            if (ost == null) {
+                if (!settings.getBool("fos-ostdontshowagain")) {
+                    ui.showCustomConfirm("@fos.noosttitle", bundle.get("fos.noost"),
+                        "@mods.browser.add", "@no",
+                        () -> ui.mods.githubImportMod("TeamOct/FOS-OST", true), () -> {});
+                }
+            } else if (!ost.enabled()) {
+                ui.showCustomConfirm("@fos.ostdisabledtitle", bundle.get("fos.ostdisabled"),
+                    "@yes", "@no",
+                    () -> {
+                        mods.setEnabled(ost, true);
+                        ui.showInfoOnHidden("@mods.reloadexit", () -> app.exit());
+                    }, () -> {});
+            }
 
             int tn = settings.getInt("fos-menutheme");
             MenuBackground bg = (
@@ -129,12 +144,13 @@ public class FOSMod extends Mod {
 
         SplashTexts.load(13);
         int n = Mathf.floor((float) Math.random() * SplashTexts.splashes.size);
-        Calendar c = new GregorianCalendar();
-        boolean isNewYear = c.get(Calendar.MONTH) == Calendar.JANUARY && c.get(Calendar.DAY_OF_MONTH) == 1;
+
+        var date = FOSVars.date;
+        boolean isNewYear = date.get(Calendar.MONTH) == Calendar.JANUARY && date.get(Calendar.DAY_OF_MONTH) == 1;
         mod.meta.subtitle =
             isNewYear ? bundle.get("splashnewyear")
             : SplashTexts.splashes.get(n);
-        boolean isAprilFools = c.get(Calendar.MONTH) == Calendar.APRIL && c.get(Calendar.DAY_OF_MONTH) == 1;
+        boolean isAprilFools = date.get(Calendar.MONTH) == Calendar.APRIL && date.get(Calendar.DAY_OF_MONTH) == 1;
         if (isAprilFools) Musics.menu = tree.loadMusic("mistake");
 
         mod.meta.description += "\n\n" + bundle.get("mod.currentversion") + "\n" + mod.meta.version;
@@ -180,8 +196,9 @@ public class FOSMod extends Mod {
                 i == 7 ? "@setting.fos-menutheme.lumoniterrain" :
                 "@setting.fos-menutheme.default");
             t.checkPref("fos-rotatemenucamera", true);
-            t.checkPref("fos-realisticmode", false);
             t.checkPref("fos-damagedisplay", true);
+            t.checkPref("fos-ostdontshowagain", false);
+            t.checkPref("fos-realisticmode", false);
         });
     }
 

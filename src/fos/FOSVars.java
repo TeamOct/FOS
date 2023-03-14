@@ -13,10 +13,13 @@ import mindustry.game.Objectives;
 import mindustry.gen.EntityMapping;
 import mindustry.graphics.g3d.PlanetParams;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import static fos.content.FOSBlocks.*;
-import static mindustry.content.Items.*;
+import static mindustry.content.Items.scrap;
 import static mindustry.content.TechTree.node;
-import static mindustry.type.ItemStack.*;
+import static mindustry.type.ItemStack.with;
 
 public class FOSVars {
     /** A research dialog that shows one of the two tech trees declared below. */
@@ -36,6 +39,9 @@ public class FOSVars {
 
     /** A flowfield used in certain custom AIs. */
     public static Pathfinder.Flowfield fpos = new Pathfinder.PositionTarget(new Vec2());
+
+    /** Current date & time. */
+    public static Calendar date = new GregorianCalendar();
 
     public static void load() {
         rcdialog = new ResearchCoreDialog();

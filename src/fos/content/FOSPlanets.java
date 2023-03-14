@@ -6,6 +6,8 @@ import arc.math.*;
 import arc.math.geom.*;
 import arc.struct.*;
 import arc.util.*;
+import fos.FOSVars;
+import fos.maps.generators.CaldemoltStarGenerator;
 import fos.maps.generators.LumoniPlanetGenerator;
 import fos.maps.generators.UxerdAsteroidGenerator;
 import mindustry.Vars;
@@ -15,6 +17,8 @@ import mindustry.game.Team;
 import mindustry.graphics.g3d.*;
 import mindustry.type.*;
 import mindustry.world.meta.*;
+
+import java.util.Calendar;
 
 import static fos.content.FOSBlocks.*;
 import static fos.content.FOSItems.*;
@@ -28,16 +32,30 @@ public class FOSPlanets {
         /* asteroids */ uxerd;
 
     public static void load() {
-        caldemolt = new Planet("caldemolt", sun, 5f, 0){{
+        caldemolt = new Planet("caldemolt", sun, 5f){{
             bloom = true;
-            accessible = false;
             hasAtmosphere = false;
             tidalLock = true;
-            orbitRadius = 250f;
+            orbitRadius = 500f;
             drawOrbit = false;
             meshLoader = () -> new SunMesh(this, 5, 5, 0.3, 1.7, 1.2, 1, 1.1f,
                 Color.valueOf("f7c265"), Color.valueOf("ffb380"), Color.valueOf("e8d174"), Color.valueOf("ffa95e"));
+            iconColor = Color.valueOf("f7c265");
             solarSystem = this;
+
+            boolean nya = FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
+            Log.info(nya);
+            accessible = nya;
+            alwaysUnlocked = nya;
+            if (nya) {
+                generator = new CaldemoltStarGenerator();
+                sectors.add(new Sector(this, PlanetGrid.Ptile.empty));
+                ruleSetter = r -> {
+                    r.loadout = ItemStack.list();
+                    r.defaultTeam = FOSTeam.corru;
+                };
+                defaultEnv = Env.space | Env.scorching;
+            }
         }};
         lumoni = new Planet("lumoni", caldemolt, 0.9f, 2){{
             defaultCore = coreFortress;
@@ -48,7 +66,7 @@ public class FOSPlanets {
             meshLoader = () -> new HexMesh(this, 5);
             startSector = 9;
             generator = new LumoniPlanetGenerator(){{
-                defaultLoadout = FOSSchematics.luminaLoadout;
+                defaultLoadout = FOSSchematics.lumoniLoadout;
             }};
             defaultEnv = Env.terrestrial | Env.oxygen | Env.groundWater;
             minZoom = 0.8f;

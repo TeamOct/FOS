@@ -4,6 +4,7 @@ import arc.Core;
 import arc.graphics.Color;
 import arc.struct.Seq;
 import arc.util.Strings;
+import arc.util.Time;
 import fos.graphics.FOSPal;
 import fos.type.blocks.campaign.*;
 import fos.type.blocks.defense.*;
@@ -39,6 +40,7 @@ import multicraft.*;
 
 import static fos.content.FOSFluids.*;
 import static fos.content.FOSItems.*;
+import static fos.content.FOSUnits.testOverdrive;
 import static mindustry.content.Items.*;
 import static mindustry.content.Liquids.*;
 import static mindustry.type.ItemStack.with;
@@ -56,7 +58,8 @@ public class FOSBlocks {
     //power
     tinWire, copperWire, brassWire, windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     //defense
-    tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, helix, sticker, particulator, pulse, thunder, cluster, matrixShieldProj,
+    tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge,
+    helix, sticker, particulator, pulse, thunder, cluster, matrixShieldProj,
     //environment & ores
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
@@ -66,7 +69,7 @@ public class FOSBlocks {
     oreCopper, oreTin, oreTinSurface, oreSilver, oreLithium, oreDiamond, oreVanadium, oreIridium, oreLuminium,
     bugSpawn,
     //units
-    upgradeCenter, hovercraftFactory,
+    upgradeCenter, hovercraftFactory, droidConstructor,
     //storage
     coreColony, coreFortress, coreCity, coreMetropolis, lightUnloader,
     //special
@@ -352,7 +355,7 @@ public class FOSBlocks {
             shootSound = Sounds.mud;
             consumeLiquid(tokicite, 0.1f);
             ammo(
-                tin, new StickyBulletType(3f, 10, 300){{
+                tin, new StickyBulletType(3f, 10, 60){{
                     lifetime = 50f;
                     width = height = 12f;
                     trailColor = FOSPal.tin;
@@ -363,7 +366,7 @@ public class FOSBlocks {
                     splashDamage = 40;
                     splashDamageRadius = 12f;
                 }},
-                diamond, new StickyBulletType(3f, 30, 300){{
+                diamond, new StickyBulletType(3f, 30, 60){{
                     lifetime = 50f;
                     width = height = 12f;
                     trailColor = FOSPal.diamond;
@@ -864,6 +867,15 @@ public class FOSBlocks {
             plans.add(
                 new UnitPlan(FOSUnits.vulture, 20f * 60, with(tin, 35))
             );
+        }};
+        droidConstructor = new OverdriveDroneCenter("droid-constructor"){{
+            scaledHealth = 120;
+            size = 3;
+            unitsSpawned = 2;
+            droneConstructTime = 1 * Time.toMinutes;
+            droneRange = 80f;
+            droneType = testOverdrive;
+            requirements(Category.units, with(brass, 275, silicon, 400, iridium, 150));
         }};
         //endregion
         //region storage
