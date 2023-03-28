@@ -26,6 +26,7 @@ public class InternalFileTree {
         Log.info(classPath);
         String jarPath = classPath.substring(0, classPath.indexOf("!"));
         Log.info(jarPath);
+        Log.info("Is jar exists: " + new Fi(jarPath).exists());
 
         root = new ZipFi(new Fi(jarPath));
     }
