@@ -26,7 +26,6 @@ import static mindustry.Vars.*;
 public class OrbitalAccelerator extends Accelerator {
     public OrbitalAccelerator(String name) {
         super(name);
-        buildType = OrbitalAcceleratorBuild::new;
     }
 
     @Override
@@ -46,6 +45,7 @@ public class OrbitalAccelerator extends Accelerator {
         }
     }
 
+    @SuppressWarnings("unused")
     public class OrbitalAcceleratorBuild extends AcceleratorBuild {
         public CoreBuild build;
         public boolean isCoreUnlocked = FOSBlocks.coreFortress.unlocked();

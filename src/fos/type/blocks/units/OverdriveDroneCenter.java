@@ -58,6 +58,7 @@ public class OverdriveDroneCenter extends Block {
             () -> (float)entity.units.size / unitsSpawned));
     }
 
+    @SuppressWarnings("unused")
     public class DroneCenterBuild extends Building {
         protected IntSeq readUnits = new IntSeq();
 
@@ -94,9 +95,9 @@ public class OverdriveDroneCenter extends Block {
             //TODO draw more stuff
 
             if(droneWarmup > 0){
-                Draw.draw(Layer.blockOver + 0.2f, () -> {
-                    Drawf.construct(this, droneType.fullIcon, Pal.accent, 0f, droneProgress, droneWarmup, totalDroneProgress, 14f);
-                });
+                Draw.draw(Layer.blockOver + 0.2f, () ->
+                        Drawf.construct(this, droneType.fullIcon,
+                                Pal.accent, 0f, droneProgress, droneWarmup, totalDroneProgress, 14f));
             }
         }
 

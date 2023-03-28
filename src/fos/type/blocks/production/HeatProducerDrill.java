@@ -13,7 +13,6 @@ public class HeatProducerDrill extends Drill {
 
     public HeatProducerDrill(String name) {
         super(name);
-        buildType = HeatProducerDrillBuild::new;
     }
 
     @Override
@@ -28,6 +27,7 @@ public class HeatProducerDrill extends Drill {
         addBar("heat", (HeatProducerDrillBuild build) -> new Bar("bar.heat", Pal.lightOrange, build::heatFrac));
     }
 
+    @SuppressWarnings("unused")
     public class HeatProducerDrillBuild extends DrillBuild implements HeatBlock {
         public float heat;
 

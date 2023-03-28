@@ -11,7 +11,6 @@ import arc.util.Time;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import fos.type.blocks.environment.UndergroundOreBlock;
-import mindustry.content.Blocks;
 import mindustry.gen.Building;
 import mindustry.gen.Icon;
 import mindustry.graphics.Drawf;
@@ -25,6 +24,7 @@ import mindustry.world.meta.StatUnit;
 
 import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
+import static mindustry.content.Blocks.air;
 
 public class OreDetector extends Block {
     public float range = 15f * 8f;
@@ -37,7 +37,7 @@ public class OreDetector extends Block {
         hasPower = true;
         canOverdrive = false;
         fogRadius = (int)range / 8;
-        buildType = OreDetectorBuild::new;
+        clipSize = range * 2f;
     }
 
     @Override
@@ -53,6 +53,7 @@ public class OreDetector extends Block {
         Drawf.dashCircle(x * tilesize + offset, y * tilesize + offset, range, Color.valueOf("4b95ff"));
     }
 
+    @SuppressWarnings("unused")
     public class OreDetectorBuild extends Building implements Ranged {
         public boolean showOres = true;
 
@@ -100,34 +101,28 @@ public class OreDetector extends Block {
             Drawf.dashCircle(x, y, range, Color.valueOf("4b95ff"));
         }
 
-        protected void locateOres(float range) {
-            Draw.reset();
-            for (float i = -range; i <= range; i += 8) {
-                for (float j = -range; j <= range; j += 8) {
-                    Tile tile = world.tileWorld(x + i, y + j);
-                    //oh god so many conditions here
-                    if (Mathf.within(x, y, x + i, y + j, range) && tile != null && tile.overlay() != null && tile.overlay() instanceof UndergroundOreBlock u
-                        && tile.block() == Blocks.air) {
-                        Draw.z(Layer.blockProp);
+        public void locateOres(float radius) {
+            Tile hoverTile = world.tileWorld(Core.input.mouseWorld().x, Core.input.mouseWorld().y);
 
-                        int variants = tile.overlay().variants;
-                        int variant = Mathf.randomSeed(tile.pos(), 0, Math.max(0, variants - 1));
+            tile.circle((int) (radius / tilesize), (tile) -> {
+                if (tile != null && tile.overlay() != null && tile.overlay() instanceof UndergroundOreBlock u
+                    && tile.block() == air) {
+                    Draw.z(Layer.blockProp);
 
-                        Draw.draw(Layer.darkness + 1f, () -> Draw.rect(tile.overlay().variantRegions[variant], tile.x * 8, tile.y * 8));
-                        //Draw.z(Layer.effect);
-                        //Drawf.light(tile.x * 8, tile.y * 8, tile.overlay().variantRegions[variant], u.drop.color, 0.8f);
+                    int variants = tile.overlay().variants;
+                    int variant = Mathf.randomSeed(tile.pos(), 0, Math.max(0, variants - 1));
 
-                        //show an item icon above the cursor/finger
-                        Tile hoverTile = world.tileWorld(Core.input.mouseWorld().x, Core.input.mouseWorld().y);
+                    Draw.draw(Layer.light, () -> Draw.rect(tile.overlay().variantRegions[variant], tile.x * 8, tile.y * 8));
 
-                        if (tile == hoverTile && tile.block() != null) {
-                            Draw.z(Layer.max);
-                            Draw.alpha(1f);
-                            Draw.rect(u.drop.uiIcon, tile.x * 8, tile.y * 8 + 8);
-                        }
+                    // show an item icon above the cursor/finger
+                    // TODO use tap on mobile?
+                    if (tile == hoverTile && tile.block() != null) {
+                        Draw.z(Layer.max);
+                        Draw.alpha(1f);
+                        Draw.rect(u.drop.uiIcon, tile.x * 8, tile.y * 8 + 8);
                     }
                 }
-            }
+            });
         }
 
         @Override

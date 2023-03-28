@@ -18,7 +18,6 @@ public class CliffExplosive extends Block {
         super(name);
         solid = true;
         update = true;
-        buildType = CliffExplosiveBuild::new;
     }
 
     @Override
@@ -27,6 +26,7 @@ public class CliffExplosive extends Block {
         Drawf.dashSquare(Vars.player.team().color, x*8, y*8, range * 2 + 8);
     }
 
+    @SuppressWarnings("unused")
     public class CliffExplosiveBuild extends Building {
         public float timer = 180f;
 

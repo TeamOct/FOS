@@ -21,7 +21,6 @@ public class WindTurbine extends PowerGenerator {
     public WindTurbine(String name) {
         super(name);
         noUpdateDisabled = true;
-        buildType = WindTurbineBuild::new;
     }
 
     @Override
@@ -64,6 +63,7 @@ public class WindTurbine extends PowerGenerator {
         stats.add(generationType, powerProduction * 60.0f / displayEfficiencyScale, StatUnit.powerSecond);
     }
 
+    @SuppressWarnings("unused")
     public class WindTurbineBuild extends GeneratorBuild {
         public float rotatorAngle = 0f;
 

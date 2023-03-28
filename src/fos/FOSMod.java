@@ -9,6 +9,7 @@ import arc.scene.ui.layout.WidgetGroup;
 import arc.struct.Seq;
 import arc.util.Reflect;
 import fos.content.*;
+import fos.graphics.FOSShaders;
 import fos.ui.DamageDisplay;
 import fos.ui.menus.FOSMenuRenderer;
 import fos.ui.menus.FOSMenus;
@@ -165,6 +166,8 @@ public class FOSMod extends Mod {
 
     @Override
     public void loadContent() {
+        FOSShaders.init();
+
         FOSTeam.load();
         FOSMusic.load();
         FOSAttributes.load();

@@ -21,9 +21,9 @@ public class BugSpawn extends UnitBlock {
         solid = false;
         canOverdrive = false;
         buildVisibility = BuildVisibility.debugOnly;
-        buildType = BugSpawnBuild::new;
     }
 
+    @SuppressWarnings("unused")
     public class BugSpawnBuild extends UnitBuild {
         @Override
         public void updateTile() {
@@ -41,6 +41,7 @@ public class BugSpawn extends UnitBlock {
             }
         }
 
+        @SuppressWarnings("ConstantConditions")
         private UnitType getBug() {
             UnitType[][] units = {
                 //I actually made ACTUAL bugs spawn, yay!

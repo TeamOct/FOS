@@ -14,7 +14,6 @@ public class HeatGenerator extends PowerGenerator {
 
     public HeatGenerator(String name) {
         super(name);
-        buildType = HeatGeneratorBuild::new;
     }
 
     @Override
@@ -29,6 +28,7 @@ public class HeatGenerator extends PowerGenerator {
         addBar("heat", (HeatGeneratorBuild build) -> new Bar(Core.bundle.format("bar.heat"), Pal.lightOrange, () -> build.productionEfficiency));
     }
 
+    @SuppressWarnings("unused")
     public class HeatGeneratorBuild extends GeneratorBuild implements HeatConsumer {
         public float heat;
 

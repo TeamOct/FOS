@@ -38,7 +38,6 @@ public class PolyForceProjector extends ForceProjector {
         rotate = true;
         rotateDraw = false;
         shieldBreakEffect = FOSFx.rectShieldBreak;
-        buildType = PolyForceBuild::new;
     }
 
     @Override
@@ -77,6 +76,7 @@ public class PolyForceProjector extends ForceProjector {
         Draw.color();
     }
 
+    @SuppressWarnings("unused")
     public class PolyForceBuild extends ForceBuild {
         public float[] curPolygon;
         public Vec2[] curPolyLines;

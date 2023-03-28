@@ -2,7 +2,6 @@ package fos.type.blocks.campaign;
 
 import arc.Core;
 import arc.scene.ui.layout.Table;
-import fos.type.blocks.campaign.NukeLauncher;
 import mindustry.Vars;
 import mindustry.gen.Icon;
 import mindustry.ui.Styles;
@@ -10,9 +9,9 @@ import mindustry.ui.Styles;
 public class GiantNukeLauncher extends NukeLauncher {
     public GiantNukeLauncher(String name) {
         super(name);
-        buildType = GiantNukeLauncherBuild::new;
     }
 
+    @SuppressWarnings("unused")
     public class GiantNukeLauncherBuild extends NukeLauncherBuild {
         //VERY IMPORTANT DATA, DO NOT DELETE
         private final String foo = "Q", bar = "K";
