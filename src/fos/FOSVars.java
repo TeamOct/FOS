@@ -4,6 +4,7 @@ import arc.graphics.gl.FrameBuffer;
 import arc.math.geom.Vec2;
 import arc.struct.Seq;
 import fos.content.FOSFluids;
+import fos.files.InternalFileTree;
 import fos.type.units.BugFlyingUnit;
 import fos.type.units.BugUnit;
 import fos.ui.ResearchCoreDialog;
@@ -42,6 +43,9 @@ public class FOSVars {
 
     /** Current date & time. */
     public static Calendar date = new GregorianCalendar();
+
+    /** JAR internal navigation **/
+    public static InternalFileTree internalTree = new InternalFileTree(FOSMod.class);
 
     public static void load() {
         rcdialog = new ResearchCoreDialog();

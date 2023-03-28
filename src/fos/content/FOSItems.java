@@ -1,7 +1,18 @@
 package fos.content;
 
+import arc.Core;
+import arc.Events;
+import arc.assets.loaders.TextureLoader;
 import arc.graphics.Color;
+import arc.graphics.Texture;
+import arc.graphics.g2d.TextureRegion;
 import arc.struct.Seq;
+import arc.util.Log;
+import arc.util.Time;
+import fos.FOSVars;
+import fos.graphics.FOSShaders;
+import fos.graphics.ShaderTextureRegion;
+import mindustry.game.EventType;
 import mindustry.type.Item;
 
 import static mindustry.content.Items.*;
@@ -58,8 +69,15 @@ public class FOSItems {
         luminium = new Item("luminium", Color.valueOf("72cbcf")){{
             cost = 5.9f;
             hardness = 7;
-            /* animated */ frames = 12;
-        }};
+        }
+            @Override
+            public void loadIcon(){
+                super.loadIcon();
+                fullIcon = new ShaderTextureRegion(FOSShaders.str,
+                        new Texture(FOSVars.internalTree.child("sprites/items/luminium/luminium.png")), (s) -> {});
+                uiIcon = fullIcon;
+            }
+        };
 
         uxerdItems.addAll(rawNethratium, rawElbium, rawElithite, aluminium, tin, silver, lithium, titanium, cuberium);
         lumoniItems.addAll(copper, tin, silver, diamond, sand, silicon, brass, vanadium, iridium, luminium);
