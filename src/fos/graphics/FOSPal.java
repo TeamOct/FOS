@@ -12,5 +12,7 @@ public class FOSPal {
     diamondBack = Color.valueOf("828ed9"),
     hacked = Color.valueOf("8ae3df"),
     hackedBack = Color.valueOf("51a0b0"),
-    tokicite = Color.valueOf("d16792");
+    tokicite = Color.valueOf("d16792"),
+    luminium1 = Color.valueOf("72cbcf"),
+    luminium2 = Color.valueOf("72cf8b");
 }

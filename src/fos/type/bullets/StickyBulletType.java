@@ -2,8 +2,6 @@ package fos.type.bullets;
 
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
-import arc.util.pooling.Pool.Poolable;
-import arc.util.pooling.Pools;
 import mindustry.entities.bullet.BasicBulletType;
 import mindustry.gen.*;
 import mindustry.graphics.Layer;
@@ -22,12 +20,6 @@ public class StickyBulletType extends BasicBulletType {
     }
 
     @Override
-    public void init(Bullet b) {
-        super.init(b);
-        b.data = null;
-    }
-
-    @Override
     public void hitEntity(Bullet b, Hitboxc entity, float health) {
         //do not target missiles.
         if (((Unit) entity).type instanceof MissileUnitType) return;
@@ -36,7 +28,7 @@ public class StickyBulletType extends BasicBulletType {
 
         b.hit(true);
 
-        StickyBulletData data = Pools.obtain(StickyBulletData.class, StickyBulletData::new);
+        StickyBulletData data = new StickyBulletData();
         data.target = (Teamc) entity;
         b.data = data;
 
@@ -55,18 +47,11 @@ public class StickyBulletType extends BasicBulletType {
     //FIXME
     @Override
     public void update(Bullet b) {
-        super.update(b);
-
         StickyBulletData data = (StickyBulletData) b.data;
 
-        if (data == null || !b.hit) return;
-
-        if (data.target instanceof Unit u) {
-            if (u.dead()) {
-                data.reset();
-                return;
-            }
-
+        if (data == null || !b.hit || b.type != this) {
+            super.update(b);
+        } else if (data.target instanceof Unit u && !u.dead()) {
             float bx = b.x(), by = b.y();
             float ox = data.target.x(), oy = data.target.y();
 
@@ -75,8 +60,8 @@ public class StickyBulletType extends BasicBulletType {
 
             float angle = data.initialAngle - data.targetRot + u.rotation;
 
-            b.x = u.x + Mathf.cos(angle * Mathf.degreesToRadians) * u.hitSize / 2;
-            b.y = u.y + Mathf.sin(angle * Mathf.degreesToRadians) * u.hitSize / 2;
+            b.x = u.x + Mathf.cos(angle * Mathf.degRad) * u.hitSize / 2;
+            b.y = u.y + Mathf.sin(angle * Mathf.degRad) * u.hitSize / 2;
 
             b.vel(Vec2.ZERO);
         }
@@ -86,25 +71,16 @@ public class StickyBulletType extends BasicBulletType {
     public void removed(Bullet b) {
         super.removed(b);
         createSplashDamage(b, b.x, b.y);
-        if (b.data != null) ((StickyBulletData) b.data).reset();
     }
 
     @Override
     public void despawned(Bullet b) {
         super.despawned(b);
         createSplashDamage(b, b.x, b.y);
-        if (b.data != null) ((StickyBulletData) b.data).reset();
     }
 
-    public class StickyBulletData implements Poolable {
+    public class StickyBulletData {
         public Teamc target;
         public Float initialAngle, targetRot;
-
-        @Override
-        public void reset() {
-            target = null;
-            initialAngle = null;
-            targetRot = null;
-        }
     }
 }

@@ -1,22 +1,30 @@
 package fos.type.blocks.production;
 
 import arc.Core;
-import arc.graphics.*;
-import arc.graphics.g2d.*;
-import arc.math.*;
-import arc.scene.style.*;
-import arc.scene.ui.layout.*;
-import arc.util.*;
-import arc.util.io.*;
+import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Lines;
+import arc.math.Mathf;
+import arc.scene.style.TextureRegionDrawable;
+import arc.scene.ui.layout.Table;
+import arc.util.Time;
+import arc.util.io.Reads;
+import arc.util.io.Writes;
 import fos.type.blocks.environment.UndergroundOreBlock;
-import mindustry.gen.*;
-import mindustry.graphics.*;
-import mindustry.logic.*;
-import mindustry.ui.*;
-import mindustry.world.*;
-import mindustry.world.meta.*;
+import mindustry.content.Blocks;
+import mindustry.gen.Building;
+import mindustry.gen.Icon;
+import mindustry.graphics.Drawf;
+import mindustry.graphics.Layer;
+import mindustry.logic.Ranged;
+import mindustry.ui.Styles;
+import mindustry.world.Block;
+import mindustry.world.Tile;
+import mindustry.world.meta.Stat;
+import mindustry.world.meta.StatUnit;
 
-import static mindustry.Vars.*;
+import static mindustry.Vars.tilesize;
+import static mindustry.Vars.world;
 
 public class OreDetector extends Block {
     public float range = 15f * 8f;
@@ -74,15 +82,15 @@ public class OreDetector extends Block {
         public void draw() {
             super.draw();
             if (canConsume() && showOres) {
-                Draw.z(Layer.bullet - 0.0001f);
+                Draw.z(Layer.light);
                 Draw.alpha(0.6f);
                 Lines.stroke(2.5f, Color.valueOf("4b95ff"));
                 Draw.alpha(0.2f);
                 float x2 = x + (Mathf.cos(Time.time / 18f) * range());
                 float y2 = y + (Mathf.sin(Time.time / 18f) * range());
                 Lines.line(x, y, x2, y2);
-                Drawf.circles(x, y, range(), Color.valueOf("4b95ff"));
-                Drawf.circles(x, y, range() * 0.95f, Color.valueOf("4b95ff"));
+                Lines.circle(x, y, range);
+                Lines.circle(x, y, range * 0.95f);
                 locateOres(range());
             }
         }
@@ -92,17 +100,22 @@ public class OreDetector extends Block {
             Drawf.dashCircle(x, y, range, Color.valueOf("4b95ff"));
         }
 
-        public void locateOres(float range) {
-            for (float i = -range; i <= range; i+=8) {
-                for (float j = -range; j <= range; j+=8) {
+        protected void locateOres(float range) {
+            Draw.reset();
+            for (float i = -range; i <= range; i += 8) {
+                for (float j = -range; j <= range; j += 8) {
                     Tile tile = world.tileWorld(x + i, y + j);
                     //oh god so many conditions here
-                    if (Mathf.within(x, y, x + i, y + j, range) && tile != null && tile.overlay() != null && tile.overlay() instanceof UndergroundOreBlock u) {
-                        Draw.z(1f);
-                        Draw.alpha(0.6f);
+                    if (Mathf.within(x, y, x + i, y + j, range) && tile != null && tile.overlay() != null && tile.overlay() instanceof UndergroundOreBlock u
+                        && tile.block() == Blocks.air) {
+                        Draw.z(Layer.blockProp);
 
-                        Drawf.light(tile.x * 8, tile.y * 8, 6f, u.drop.color, 0.8f);
-                        Draw.rect(tile.overlay().region, tile.x * 8, tile.y * 8);
+                        int variants = tile.overlay().variants;
+                        int variant = Mathf.randomSeed(tile.pos(), 0, Math.max(0, variants - 1));
+
+                        Draw.draw(Layer.darkness + 1f, () -> Draw.rect(tile.overlay().variantRegions[variant], tile.x * 8, tile.y * 8));
+                        //Draw.z(Layer.effect);
+                        //Drawf.light(tile.x * 8, tile.y * 8, tile.overlay().variantRegions[variant], u.drop.color, 0.8f);
 
                         //show an item icon above the cursor/finger
                         Tile hoverTile = world.tileWorld(Core.input.mouseWorld().x, Core.input.mouseWorld().y);

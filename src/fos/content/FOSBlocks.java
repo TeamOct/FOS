@@ -316,7 +316,7 @@ public class FOSBlocks {
                     backColor = FOSPal.tinBack;
                     trailWidth = 1.5f;
                     trailLength = 8;
-                    ammoMultiplier = 4f;
+                    ammoMultiplier = 2f;
                 }},
                 silver, new BasicBulletType(3f, 25){{
                     width = 3f; height = 6f;
@@ -325,7 +325,7 @@ public class FOSBlocks {
                     backColor = FOSPal.silverBack;
                     trailWidth = 1.5f;
                     trailLength = 8;
-                    ammoMultiplier = 4f;
+                    ammoMultiplier = 2f;
                 }},
                 diamond, new BasicBulletType(3f, 35){{
                     width = 3f; height = 6f;
@@ -334,9 +334,44 @@ public class FOSBlocks {
                     backColor = FOSPal.diamondBack;
                     trailWidth = 1.5f;
                     trailLength = 8;
-                    ammoMultiplier = 6f;
+                    ammoMultiplier = 3f;
                     pierce = true;
                     pierceCap = 2;
+                }},
+                vanadium, new BasicBulletType(4f, 40){{
+                    width = 3f; height = 6f;
+                    lifetime = 44f;
+                    rangeChange = 44f;
+                    trailColor = frontColor = Pal.gray;
+                    backColor = Pal.darkerGray;
+                    trailWidth = 1.5f;
+                    trailLength = 8;
+                    ammoMultiplier = 3f;
+                }},
+                iridium, new BasicBulletType(4f, 44){{
+                    width = 4f; height = 8f;
+                    lifetime = 44f;
+                    rangeChange = 44f;
+                    trailColor = frontColor = Color.valueOf("a3bda7");
+                    backColor = Color.valueOf("4e5b4c");
+                    trailWidth = 1.5f;
+                    trailLength = 8;
+                    ammoMultiplier = 4f;
+                }},
+                luminium, new BasicBulletType(4.5f, 52.5f){{
+                    width = 4f; height = 8f;
+                    lifetime = 44f;
+                    rangeChange = 66f;
+                    trailColor = frontColor = FOSPal.luminium1;
+                    backColor = FOSPal.luminium2;
+                    trailWidth = 1.5f;
+                    trailLength = 12;
+                    ammoMultiplier = 3f;
+                    lightColor = FOSPal.luminium1.cpy().a(0.6f);
+                    pierce = true;
+                    pierceCap = 2;
+                    hitEffect = Fx.hitEmpSpark;
+                    status = StatusEffects.blasted;
                 }}
             );
             consumeCoolant(0.25f).boost();
@@ -711,7 +746,7 @@ public class FOSBlocks {
         //endregion
         //region environment & ores
         cyanium = new Floor("cyanium"){{
-            variants = 4;
+            variants = 3;
         }};
         cyaniumWall = new StaticWall("cyanium-wall"){{
             variants = 4;
@@ -843,9 +878,13 @@ public class FOSBlocks {
         oreIridium = new UndergroundOreBlock("ore-iridium"){{
             drop = iridium;
         }};
-        //TODO we haven't decided yet, should it be underground or not
-        oreLuminium = new OreBlock("ore-luminium"){{
+        oreLuminium = new AnimatedOreBlock("ore-luminium"){{
             itemDrop = luminium;
+            variants = 3;
+            frames = 12;
+            emitLight = true;
+            lightColor = FOSPal.luminium1.cpy().a(0.6f);
+            lightRadius = 6f;
         }};
         bugSpawn = new BugSpawn("bug-spawn"){{
             size = 3;

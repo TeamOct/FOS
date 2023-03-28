@@ -1,21 +1,28 @@
 package fos.type.blocks.storage;
 
-import arc.*;
-import arc.graphics.*;
-import arc.graphics.g2d.*;
-import arc.math.*;
-import arc.scene.style.*;
-import arc.scene.ui.layout.*;
-import arc.util.*;
-import arc.util.io.*;
+import arc.Core;
+import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Lines;
+import arc.graphics.g2d.TextureRegion;
+import arc.math.Mathf;
+import arc.scene.style.TextureRegionDrawable;
+import arc.scene.ui.layout.Table;
+import arc.util.Time;
+import arc.util.io.Reads;
+import arc.util.io.Writes;
 import fos.type.blocks.environment.UndergroundOreBlock;
 import mindustry.Vars;
+import mindustry.content.Blocks;
 import mindustry.game.Team;
-import mindustry.gen.*;
-import mindustry.graphics.*;
-import mindustry.ui.*;
-import mindustry.world.*;
-import mindustry.world.blocks.storage.*;
+import mindustry.gen.Icon;
+import mindustry.gen.Player;
+import mindustry.graphics.Drawf;
+import mindustry.graphics.Layer;
+import mindustry.ui.Styles;
+import mindustry.world.Block;
+import mindustry.world.Tile;
+import mindustry.world.blocks.storage.CoreBlock;
 
 import static mindustry.Vars.world;
 
@@ -64,7 +71,7 @@ public class DetectorCoreBlock extends CoreBlock {
 
             //spawn cooldown
             if (!requested) {
-                timer = spawnCooldown;
+                timer = Vars.state.isEditor() || Vars.state.rules.infiniteResources ? 0f : spawnCooldown;
                 requested = true;
                 Time.run(spawnCooldown, () -> {
                     if (player.dead()) {
@@ -94,22 +101,22 @@ public class DetectorCoreBlock extends CoreBlock {
         public void draw() {
             super.draw();
             if (showOres && radarRange != 0) {
-                Draw.z(Layer.bullet - 0.0001f);
+                Draw.z(Layer.light);
                 Draw.alpha(0.6f);
                 Lines.stroke(2.5f, Color.valueOf("4b95ff"));
                 Draw.alpha(0.2f);
                 float x2 = x + (Mathf.cos(Time.time / 18f) * radarRange);
                 float y2 = y + (Mathf.sin(Time.time / 18f) * radarRange);
                 Lines.line(x, y, x2, y2);
-                Drawf.circles(x, y, radarRange, Color.valueOf("4b95ff"));
-                Drawf.circles(x, y, radarRange * 0.95f, Color.valueOf("4b95ff"));
+                Lines.circle(x, y, radarRange);
+                Lines.circle(x, y, radarRange * 0.95f);
                 locateOres(radarRange);
             }
 
             if (timer > 0) {
                 Vars.ui.showLabel(String.valueOf(Mathf.ceil(timer / 60f)), 1f / 60f, x, y + 16f);
 
-                Draw.z(Layer.blockOver);
+                Draw.z(Layer.overlayUI);
                 Draw.rect("empty", x, y, 45f);
 
                 float progress = 1 - timer / spawnCooldown;
@@ -119,17 +126,22 @@ public class DetectorCoreBlock extends CoreBlock {
             }
         }
 
-        public void locateOres(float range) {
-            for (float i = -range; i <= range; i+=8) {
-                for (float j = -range; j <= range; j+=8) {
+        protected void locateOres(float range) {
+            Draw.reset();
+            for (float i = -range; i <= range; i += 8) {
+                for (float j = -range; j <= range; j += 8) {
                     Tile tile = world.tileWorld(x + i, y + j);
                     //oh god so many conditions here
-                    if (Mathf.within(x, y, x + i, y + j, range) && tile != null && tile.overlay() != null && tile.overlay() instanceof UndergroundOreBlock u) {
-                        Draw.z(1f);
-                        Draw.alpha(0.6f);
+                    if (Mathf.within(x, y, x + i, y + j, range) && tile != null && tile.overlay() != null && tile.overlay() instanceof UndergroundOreBlock u
+                    && tile.block() == Blocks.air) {
+                        Draw.z(Layer.blockProp);
 
-                        Drawf.light(tile.x * 8, tile.y * 8, 6f, u.drop.color, 0.8f);
-                        Draw.rect(tile.overlay().region, tile.x * 8, tile.y * 8);
+                        int variants = tile.overlay().variants;
+                        int variant = Mathf.randomSeed(tile.pos(), 0, Math.max(0, variants - 1));
+
+                        Draw.draw(Layer.light, () -> Draw.rect(tile.overlay().variantRegions[variant], tile.x * 8, tile.y * 8));
+                        //Draw.z(Layer.effect);
+                        //Drawf.light(tile.x * 8, tile.y * 8, tile.overlay().variantRegions[variant], u.drop.color, 0.8f);
 
                         //show an item icon above the cursor/finger
                         Tile hoverTile = world.tileWorld(Core.input.mouseWorld().x, Core.input.mouseWorld().y);

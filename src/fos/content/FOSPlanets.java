@@ -16,6 +16,7 @@ import mindustry.game.EventType;
 import mindustry.game.Team;
 import mindustry.graphics.g3d.*;
 import mindustry.type.*;
+import mindustry.ui.dialogs.PlanetDialog;
 import mindustry.world.meta.*;
 
 import java.util.Calendar;
@@ -43,7 +44,7 @@ public class FOSPlanets {
             iconColor = Color.valueOf("f7c265");
             solarSystem = this;
 
-            boolean nya = FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
+            boolean nya = PlanetDialog.debugSelect || FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
             Log.info(nya);
             accessible = nya;
             alwaysUnlocked = nya;
