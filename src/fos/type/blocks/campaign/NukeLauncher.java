@@ -16,7 +16,6 @@ import mindustry.world.*;
 public class NukeLauncher extends Block {
     public NukeLauncher(String name){
         super(name);
-        buildType = NukeLauncherBuild::new;
     }
 
     @Override
@@ -24,6 +23,7 @@ public class NukeLauncher extends Block {
         return teamRegion.found() ? new TextureRegion[]{region, teamRegions[Team.sharded.id]} : new TextureRegion[]{region};
     }
 
+    @SuppressWarnings("unused")
     public class NukeLauncherBuild extends Building {
         Sector chosen;
         @Override

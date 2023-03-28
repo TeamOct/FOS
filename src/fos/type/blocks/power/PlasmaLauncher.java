@@ -63,6 +63,7 @@ public class PlasmaLauncher extends Battery {
         }
     }
 
+    @SuppressWarnings("unused")
     public class PlasmaLauncherBuild extends BatteryBuild {
         public int link = -1;
         public float rotation = 90f;

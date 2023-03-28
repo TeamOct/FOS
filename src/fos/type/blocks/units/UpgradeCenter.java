@@ -37,7 +37,6 @@ public class UpgradeCenter extends Block {
         hasPower = true;
         hasItems = true;
         clearOnDoubleTap = true;
-        buildType = UpgradeCenterBuild::new;
 
         selectionColumns = 5;
 
@@ -63,6 +62,7 @@ public class UpgradeCenter extends Block {
         super.init();
     }
 
+    @SuppressWarnings("unused")
     public class UpgradeCenterBuild extends Building {
         public int weaponIndex = -1;
 

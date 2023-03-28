@@ -5,7 +5,6 @@ import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.math.*;
 import fos.type.blocks.environment.UndergroundOreBlock;
-import fos.type.blocks.production.DrillBase;
 import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.gen.*;
@@ -21,7 +20,6 @@ public class UndergroundDrill extends Drill {
     public UndergroundDrill(String name){
         super(name);
         drillTime = 360f;
-        buildType = UndergroundDrillBuild::new;
     }
 
     //placeable on drill bases or surface ores, or replaceable by other underground drills
@@ -134,6 +132,7 @@ public class UndergroundDrill extends Drill {
         return b instanceof UndergroundOreBlock u ? u.drop : b.itemDrop;
     }
 
+    @SuppressWarnings("unused")
     public class UndergroundDrillBuild extends DrillBuild {
         @Override
         public void onProximityUpdate() {

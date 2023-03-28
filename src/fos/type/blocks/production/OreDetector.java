@@ -29,7 +29,6 @@ public class OreDetector extends Block {
         hasPower = true;
         canOverdrive = false;
         fogRadius = (int)range / 8;
-        buildType = OreDetectorBuild::new;
         clipSize = range * 2f;
     }
 
@@ -46,6 +45,7 @@ public class OreDetector extends Block {
         Drawf.dashCircle(x * tilesize + offset, y * tilesize + offset, range, Color.valueOf("4b95ff"));
     }
 
+    @SuppressWarnings("unused")
     public class OreDetectorBuild extends Building implements Ranged {
         public boolean showOres = true;
 

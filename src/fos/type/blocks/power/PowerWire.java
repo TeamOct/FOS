@@ -30,7 +30,6 @@ public class PowerWire extends PowerNode {
         hasShadow = false;
         swapDiagonalPlacement = false;
         group = BlockGroup.power;
-        buildType = PowerWireBuild::new;
     }
 
     @Override
@@ -91,6 +90,7 @@ public class PowerWire extends PowerNode {
         //it is a freaking wire, no lasers!
     }
 
+    @SuppressWarnings("unused")
     public class PowerWireBuild extends PowerNodeBuild {
         protected byte curTile = 0, checkedNearby = 0;
 

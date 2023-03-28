@@ -27,7 +27,6 @@ public class DetectorCoreBlock extends CoreBlock {
     public DetectorCoreBlock(String name) {
         super(name);
         configurable = true;
-        buildType = DetectorCoreBuild::new;
         clipSize = radarRange * 2f;
     }
 
@@ -51,6 +50,7 @@ public class DetectorCoreBlock extends CoreBlock {
         return super.canPlaceOn(tile, team, rotation) || name.equals("fos-core-colony");
     }
 
+    @SuppressWarnings("unused")
     public class DetectorCoreBuild extends CoreBuild {
         public float timer = 0f;
         public boolean showOres = true, requested = false;
