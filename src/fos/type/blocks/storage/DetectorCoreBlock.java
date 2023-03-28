@@ -17,6 +17,7 @@ import mindustry.ui.*;
 import mindustry.world.*;
 import mindustry.world.blocks.storage.*;
 
+import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
 
 public class DetectorCoreBlock extends CoreBlock {
@@ -27,6 +28,7 @@ public class DetectorCoreBlock extends CoreBlock {
         super(name);
         configurable = true;
         buildType = DetectorCoreBuild::new;
+        clipSize = radarRange * 2f;
     }
 
     @Override
@@ -119,29 +121,26 @@ public class DetectorCoreBlock extends CoreBlock {
             }
         }
 
-        public void locateOres(float range) {
-            for (float i = -range; i <= range; i+=8) {
-                for (float j = -range; j <= range; j+=8) {
-                    Tile tile = world.tileWorld(x + i, y + j);
-                    //oh god so many conditions here
-                    if (Mathf.within(x, y, x + i, y + j, range) && tile != null && tile.overlay() != null && tile.overlay() instanceof UndergroundOreBlock u) {
-                        Draw.z(1f);
-                        Draw.alpha(0.6f);
+        public void locateOres(float radius) {
+            Tile hoverTile = world.tileWorld(Core.input.mouseWorld().x, Core.input.mouseWorld().y);
 
-                        Drawf.light(tile.x * 8, tile.y * 8, 6f, u.drop.color, 0.8f);
-                        Draw.rect(tile.overlay().region, tile.x * 8, tile.y * 8);
+            tile.circle((int) (radius / tilesize), (tile) -> {
+                if (tile.overlay() instanceof UndergroundOreBlock u) {
+                    Draw.z(1f);
+                    Draw.alpha(0.6f);
 
-                        //show an item icon above the cursor/finger
-                        Tile hoverTile = world.tileWorld(Core.input.mouseWorld().x, Core.input.mouseWorld().y);
+                    Drawf.light(tile.worldx(), tile.worldy(), 6f, u.drop.color, 0.8f);
+                    Draw.rect(tile.overlay().region, tile.worldx(), tile.worldy());
 
-                        if (tile == hoverTile && tile.block() != null) {
-                            Draw.z(Layer.max);
-                            Draw.alpha(1f);
-                            Draw.rect(u.drop.uiIcon, tile.x * 8, tile.y * 8 + 8);
-                        }
+                    // show an item icon above the cursor/finger
+                    // TODO use tap on mobile?
+                    if (tile == hoverTile && tile.block() != null) {
+                        Draw.z(Layer.max);
+                        Draw.alpha(1f);
+                        Draw.rect(u.drop.uiIcon, tile.x * 8, tile.y * 8 + 8);
                     }
                 }
-            }
+            });
         }
 
         @Override
