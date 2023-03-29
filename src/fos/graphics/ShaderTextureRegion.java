@@ -2,6 +2,7 @@ package fos.graphics;
 
 import arc.Events;
 import arc.func.Cons;
+import arc.func.Cons2;
 import arc.graphics.Color;
 import arc.graphics.Texture;
 import arc.graphics.g2d.Draw;
@@ -17,22 +18,28 @@ public class ShaderTextureRegion extends TextureRegion {
     public Texture original;
 
     /**
-     * Texture updates every {@link ShaderTextureRegion#frequency} frame
+     * Texture updates every N frame
      **/
     public int frequency = 5;
     public Shader shader;
-    private Cons<Shader> shaderPrepare;
+    private final Cons2<Shader, Object[]> shaderPrepare;
 
     private int counter = 0;
-    private FrameBuffer frameBuffer = new FrameBuffer();
+    private final FrameBuffer frameBuffer = new FrameBuffer();
+
+    /** Use to transfer shader parameters to {@link ShaderTextureRegion#shaderPrepare} **/
+    public Object[] shaderPrepareParams;
 
     static {
         //TODO draw or update???
         Events.run(EventType.Trigger.update, () -> regions.each(ShaderTextureRegion::updateShader));
     }
 
-    public ShaderTextureRegion(Shader shader, Texture original, Cons<Shader> shaderPrepare) {
+    public ShaderTextureRegion(Shader shader, Texture original, Cons2<Shader, Object[]> shaderPrepare,
+                               int shaderPrepareParamsSize) {
         regions.add(this);
+
+        shaderPrepareParams = new Object[shaderPrepareParamsSize];
         this.shader = shader;
         this.shaderPrepare = shaderPrepare;
 
@@ -50,7 +57,7 @@ public class ShaderTextureRegion extends TextureRegion {
             Draw.flush();
             Draw.reset();
             frameBuffer.resize(width, height);
-            shaderPrepare.get(shader);
+            shaderPrepare.get(shader, shaderPrepareParams);
             frameBuffer.begin(Color.black.cpy().a(0f));
 
             Draw.blit(original, shader);
