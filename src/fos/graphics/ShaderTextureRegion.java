@@ -1,6 +1,5 @@
 package fos.graphics;
 
-import arc.Core;
 import arc.Events;
 import arc.func.Cons;
 import arc.graphics.Color;
@@ -10,11 +9,7 @@ import arc.graphics.g2d.TextureRegion;
 import arc.graphics.gl.FrameBuffer;
 import arc.graphics.gl.Shader;
 import arc.struct.Seq;
-import arc.util.Log;
-import mindustry.Vars;
 import mindustry.game.EventType;
-import mindustry.graphics.Layer;
-import mindustry.graphics.Pal;
 
 public class ShaderTextureRegion extends TextureRegion {
     public static final Seq<ShaderTextureRegion> regions = new Seq<>();
@@ -25,15 +20,16 @@ public class ShaderTextureRegion extends TextureRegion {
      * Texture updates every {@link ShaderTextureRegion#frequency} frame
      **/
     public int frequency = 5;
+    public Shader shader;
+    private Cons<Shader> shaderPrepare;
+
+    private int counter = 0;
+    private FrameBuffer frameBuffer = new FrameBuffer();
 
     static {
-        Events.run(EventType.Trigger.draw, () -> {
-            regions.each(ShaderTextureRegion::updateShader);
-        });
+        //TODO draw or update???
+        Events.run(EventType.Trigger.update, () -> regions.each(ShaderTextureRegion::updateShader));
     }
-
-    public Shader shader;
-    Cons<Shader> shaderPrepare;
 
     public ShaderTextureRegion(Shader shader, Texture original, Cons<Shader> shaderPrepare) {
         regions.add(this);
@@ -48,8 +44,6 @@ public class ShaderTextureRegion extends TextureRegion {
         regions.remove(this);
     }
 
-    int counter = 0;
-    FrameBuffer frameBuffer = new FrameBuffer();
     public void updateShader() {
         counter++;
         if ((counter %= frequency) == 0) {

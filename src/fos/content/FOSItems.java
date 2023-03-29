@@ -67,9 +67,8 @@ public class FOSItems {
             @Override
             public void loadIcon(){
                 super.loadIcon();
-                fullIcon = new ShaderTextureRegion(FOSShaders.str,
-                        new Texture(FOSVars.internalTree.child("sprites/items/luminium/luminium.png")), (s) -> {});
-                uiIcon = fullIcon;
+                fullIcon = uiIcon = new ShaderTextureRegion(FOSShaders.str,
+                    new Texture(FOSVars.internalTree.child("sprites/items/luminium/luminium.png")), s -> {});
             }
         };
 

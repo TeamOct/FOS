@@ -92,6 +92,7 @@ public class OreDetector extends Block {
                 Lines.line(x, y, x2, y2);
                 Lines.circle(x, y, range);
                 Lines.circle(x, y, range * 0.95f);
+                Draw.reset();
                 locateOres(range());
             }
         }
@@ -107,8 +108,6 @@ public class OreDetector extends Block {
             tile.circle((int) (radius / tilesize), (tile) -> {
                 if (tile != null && tile.overlay() != null && tile.overlay() instanceof UndergroundOreBlock u
                     && tile.block() == air) {
-                    Draw.z(Layer.blockProp);
-
                     int variants = tile.overlay().variants;
                     int variant = Mathf.randomSeed(tile.pos(), 0, Math.max(0, variants - 1));
                     Draw.draw(Layer.light, () -> Draw.rect(tile.overlay().variantRegions[variant], tile.x * 8, tile.y * 8));
