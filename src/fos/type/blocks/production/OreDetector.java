@@ -111,7 +111,6 @@ public class OreDetector extends Block {
 
                     int variants = tile.overlay().variants;
                     int variant = Mathf.randomSeed(tile.pos(), 0, Math.max(0, variants - 1));
-
                     Draw.draw(Layer.light, () -> Draw.rect(tile.overlay().variantRegions[variant], tile.x * 8, tile.y * 8));
 
                     // show an item icon above the cursor/finger
