@@ -1,7 +1,6 @@
 package fos.graphics;
 
 import arc.Events;
-import arc.func.Cons;
 import arc.func.Cons2;
 import arc.graphics.Color;
 import arc.graphics.Texture;

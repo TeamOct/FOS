@@ -2,10 +2,12 @@ package fos.content;
 
 import arc.Core;
 import arc.graphics.Color;
+import arc.graphics.g2d.TextureRegion;
 import arc.struct.Seq;
 import arc.util.Strings;
 import arc.util.Time;
 import fos.graphics.FOSPal;
+import fos.graphics.FOSShaders;
 import fos.type.blocks.campaign.*;
 import fos.type.blocks.defense.*;
 import fos.type.blocks.distribution.*;
@@ -25,6 +27,7 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.world.Block;
+import mindustry.world.Tile;
 import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
@@ -881,7 +884,7 @@ public class FOSBlocks {
         oreLuminium = new AnimatedOreBlock("ore-luminium"){{
             itemDrop = luminium;
             variants = 3;
-            frames = 12;
+            shader = FOSShaders.los;
             emitLight = true;
             lightColor = FOSPal.luminium1.cpy().a(0.6f);
             lightRadius = 6f;

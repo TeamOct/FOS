@@ -39,11 +39,15 @@ public class NukeLauncher extends Block {
 
             table.button(Icon.upOpen, Styles.clearTogglei, () -> {
                 if (Vars.state.isCampaign() && chosen != null && canConsume() && potentialEfficiency == 1){
-                    items.clear();
-                    chosen.info.waves = false;
-                    chosen.info.wasCaptured = true;
-                    Fx.launchPod.at(this);
-                    Events.fire(new EventType.SectorCaptureEvent(chosen, true));
+
+                    Vars.ui.showConfirm("@silo.launch-warning", () -> {
+                        items.clear();
+                        Fx.launchPod.at(this);
+                        Time.runTask(60f, () -> {
+                            Vars.state.getSector().save.save();
+                            chosen.save.load();
+                        });
+                    });
                 } else {
                     if (!Vars.state.isCampaign()){
                         Vars.ui.showInfo("@silo.campaignonly");

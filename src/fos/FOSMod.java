@@ -14,13 +14,16 @@ import fos.ui.DamageDisplay;
 import fos.ui.menus.FOSMenuRenderer;
 import fos.ui.menus.FOSMenus;
 import fos.ui.menus.MenuBackground;
+import mindustry.Vars;
 import mindustry.ai.Pathfinder;
 import mindustry.content.SectorPresets;
+import mindustry.core.UI;
 import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.mod.Mod;
 import mindustry.mod.Mods.LoadedMod;
 import mindustry.ui.Styles;
+import mindustry.ui.dialogs.PlanetDialog;
 import mindustry.ui.fragments.MenuFragment;
 
 import java.util.Calendar;
@@ -52,7 +55,11 @@ public class FOSMod extends Mod {
                 + (u.weapons.contains(w -> w.bullet.heals()) ? bundle.get("unittype.support") : ""))
             );
 
-            ui.showOkText("@fos.earlyaccesstitle", bundle.get("fos.earlyaccess"), () -> {});
+            if (FOSVars.earlyAccess && !FOSVars.debug)
+                ui.showOkText("@fos.earlyaccesstitle", bundle.get("fos.earlyaccess"), () -> {});
+
+            if (FOSVars.debug)
+                PlanetDialog.debugSelect = true;
 
             LoadedMod ost = mods.getMod("fosost");
             if (ost == null) {
