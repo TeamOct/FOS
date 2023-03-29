@@ -45,7 +45,7 @@ public class FOSPlanets {
             solarSystem = this;
 
             boolean nya = PlanetDialog.debugSelect || FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
-            Log.info(nya);
+            //Log.info(nya);
             accessible = nya;
             alwaysUnlocked = nya;
             if (nya) {
@@ -57,7 +57,9 @@ public class FOSPlanets {
                 };
                 defaultEnv = Env.space | Env.scorching;
             }
-        }};
+        }
+
+        };
         lumoni = new Planet("lumoni", caldemolt, 0.9f, 2){{
             defaultCore = coreFortress;
             hasAtmosphere = true;
@@ -74,6 +76,8 @@ public class FOSPlanets {
             camRadius += 0.4f;
             orbitSpacing = 6f;
             allowLaunchLoadout = true;
+            accessible = true;
+            alwaysUnlocked = true;
             //TODO you'll see why I did this :)
             launchCandidates.add(uxerd);
             solarSystem = caldemolt;
@@ -105,6 +109,8 @@ public class FOSPlanets {
             launchCandidates.add(lumoni);
             solarSystem = caldemolt;
             allowLaunchLoadout = false;
+            accessible = true;
+            alwaysUnlocked = true;
             generator = new UxerdAsteroidGenerator(){{
                 seed = 8;
                 defaultFloor = Blocks.ice;

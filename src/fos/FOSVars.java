@@ -41,6 +41,14 @@ public class FOSVars {
     /** A flowfield used in certain custom AIs. */
     public static Pathfinder.Flowfield fpos = new Pathfinder.PositionTarget(new Vec2());
 
+    // TODO disable in release version
+    /** Enabling debug mode debug **/
+    public static final boolean debug = true;
+
+    // TODO disable in release version
+    /** Early access **/
+    public static final boolean earlyAccess = true;
+
     /** Current date & time. */
     public static Calendar date = new GregorianCalendar();
 
