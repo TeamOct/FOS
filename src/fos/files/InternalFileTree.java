@@ -2,6 +2,7 @@ package fos.files;
 
 import arc.files.Fi;
 import arc.files.ZipFi;
+import arc.util.Log;
 
 /**
  * Use for JAR internal navigation
@@ -18,9 +19,14 @@ public class InternalFileTree {
     public InternalFileTree(Class<?> owner) {
         anchorClass = owner;
 
+        Log.info("Initialising internal file tree from " + owner.toString());
         String classPath = owner.getResource("").getFile();
+        Log.info(classPath);
         classPath = classPath.substring(classPath.indexOf(":")+2);
+        Log.info(classPath);
         String jarPath = classPath.substring(0, classPath.indexOf("!"));
+        Log.info(jarPath);
+        Log.info("Is jar exists: " + new Fi(jarPath).exists());
 
         root = new ZipFi(new Fi(jarPath));
     }
