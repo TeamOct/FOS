@@ -108,9 +108,10 @@ public class OreDetector extends Block {
             tile.circle((int) (radius / tilesize), (tile) -> {
                 if (tile != null && tile.overlay() != null && tile.overlay() instanceof UndergroundOreBlock u
                     && tile.block() == air) {
-                    int variants = tile.overlay().variants;
-                    int variant = Mathf.randomSeed(tile.pos(), 0, Math.max(0, variants - 1));
-                    Draw.draw(Layer.light, () -> Draw.rect(tile.overlay().variantRegions[variant], tile.x * 8, tile.y * 8));
+
+                    u.shouldDrawBase = true;
+                    u.drawBase(tile);
+                    u.shouldDrawBase = false;
 
                     // show an item icon above the cursor/finger
                     // TODO use tap on mobile?
