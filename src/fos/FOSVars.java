@@ -1,5 +1,6 @@
 package fos;
 
+import arc.Core;
 import arc.graphics.gl.FrameBuffer;
 import arc.math.geom.Vec2;
 import arc.struct.Seq;
@@ -43,7 +44,7 @@ public class FOSVars {
 
     // TODO disable in release version
     /** Enabling debug mode debug **/
-    public static final boolean debug = true;
+    public static final boolean debug = Core.settings.getBool("fos-debugmode");
 
     // TODO disable in release version
     /** Early access **/

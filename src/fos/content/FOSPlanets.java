@@ -1,30 +1,34 @@
 package fos.content;
 
 import arc.Events;
-import arc.graphics.*;
-import arc.math.*;
-import arc.math.geom.*;
-import arc.struct.*;
-import arc.util.*;
+import arc.graphics.Color;
+import arc.math.Rand;
+import arc.math.geom.Mat3D;
+import arc.math.geom.Vec3;
+import arc.struct.Seq;
+import arc.util.Tmp;
 import fos.FOSVars;
 import fos.maps.generators.CaldemoltStarGenerator;
 import fos.maps.generators.LumoniPlanetGenerator;
 import fos.maps.generators.UxerdAsteroidGenerator;
 import mindustry.Vars;
-import mindustry.content.*;
+import mindustry.content.Blocks;
+import mindustry.content.Items;
 import mindustry.game.EventType;
 import mindustry.game.Team;
 import mindustry.graphics.g3d.*;
-import mindustry.type.*;
-import mindustry.ui.dialogs.PlanetDialog;
-import mindustry.world.meta.*;
+import mindustry.type.ItemStack;
+import mindustry.type.Planet;
+import mindustry.type.Sector;
+import mindustry.world.meta.Env;
 
 import java.util.Calendar;
 
 import static fos.content.FOSBlocks.*;
-import static fos.content.FOSItems.*;
+import static fos.content.FOSItems.lumoniItems;
+import static fos.content.FOSItems.uxerdItems;
 import static mindustry.content.Planets.*;
-import static mindustry.type.Weather.*;
+import static mindustry.type.Weather.WeatherEntry;
 
 public class FOSPlanets {
     public static Planet
@@ -44,7 +48,7 @@ public class FOSPlanets {
             iconColor = Color.valueOf("f7c265");
             solarSystem = this;
 
-            boolean nya = PlanetDialog.debugSelect || FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
+            boolean nya = FOSVars.debug || FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
             //Log.info(nya);
             accessible = nya;
             alwaysUnlocked = nya;

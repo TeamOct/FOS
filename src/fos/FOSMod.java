@@ -207,6 +207,12 @@ public class FOSMod extends Mod {
             t.checkPref("fos-damagedisplay", true);
             t.checkPref("fos-ostdontshowagain", false);
             t.checkPref("fos-realisticmode", false);
+            t.checkPref("fos-debugmode", false, b -> {
+                if (b) {
+                    settings.put("fos-debugmode", false);
+                    ui.showConfirm("@warning", "@fos-dangerzone", () -> settings.put("fos-debugmode", true));
+                }
+            });
         });
     }
 
