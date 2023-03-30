@@ -3,28 +3,38 @@ package fos.content;
 import mindustry.type.ItemStack;
 
 import static fos.content.FOSBlocks.*;
-import static fos.content.FOSFluids.*;
+import static fos.content.FOSFluids.tokicite;
 import static fos.content.FOSItems.*;
-import static fos.content.FOSUnits.*;
-import static fos.content.FOSWeaponModules.*;
-import static mindustry.content.Items.*;
-import static mindustry.content.Liquids.*;
+import static fos.content.FOSUnits.vulture;
+import static fos.content.FOSWeaponModules.standard1;
+import static fos.content.FOSWeaponModules.standard2;
+import static mindustry.content.Items.copper;
+import static mindustry.content.Items.silicon;
+import static mindustry.content.Liquids.water;
 import static mindustry.content.TechTree.*;
 
 public class LumoniTechTree {
     public static void load() {
         FOSPlanets.lumoni.techTree = nodeRoot("@planet.fos-lumoni.name", FOSBlocks.coreFortress, true, () -> {
+            node(coreCity, () ->
+                node(coreMetropolis)
+            );
             node(tinBelt, () -> {});
-            node(windTurbine, () -> {
-                node(tinWire);
-                node(copperWire);
-                node(brassWire);
-            });
+            node(windTurbine, () ->
+                node(tinWire, () ->
+                    node(copperWire, () ->
+                        node(brassWire)
+                    )
+                )
+            );
             node(tinWall, () -> {
                 node(tinWallLarge);
-                node(diamondWall, () ->
-                    node(diamondWallLarge)
-                );
+                node(diamondWall, () -> {
+                    node(diamondWallLarge);
+                    node(vanadiumWall, () ->
+                        node(vanadiumWallLarge)
+                    );
+                });
             });
             node(hovercraftFactory, () ->
                 node(vulture));

@@ -4,7 +4,6 @@ import arc.Events;
 import arc.graphics.Color;
 import arc.math.Rand;
 import arc.math.geom.Mat3D;
-import arc.math.geom.Vec3;
 import arc.struct.Seq;
 import arc.util.Tmp;
 import fos.FOSVars;
@@ -12,7 +11,6 @@ import fos.maps.generators.CaldemoltStarGenerator;
 import fos.maps.generators.LumoniPlanetGenerator;
 import fos.maps.generators.UxerdAsteroidGenerator;
 import mindustry.Vars;
-import mindustry.content.Blocks;
 import mindustry.content.Items;
 import mindustry.game.EventType;
 import mindustry.game.Team;
@@ -27,6 +25,7 @@ import java.util.Calendar;
 import static fos.content.FOSBlocks.*;
 import static fos.content.FOSItems.lumoniItems;
 import static fos.content.FOSItems.uxerdItems;
+import static mindustry.content.Blocks.*;
 import static mindustry.content.Planets.*;
 import static mindustry.type.Weather.WeatherEntry;
 
@@ -49,7 +48,6 @@ public class FOSPlanets {
             solarSystem = this;
 
             boolean nya = FOSVars.debug || FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
-            //Log.info(nya);
             accessible = nya;
             alwaysUnlocked = nya;
             if (nya) {
@@ -97,6 +95,8 @@ public class FOSPlanets {
                 WeatherEntry weather = new WeatherEntry(FOSWeathers.wind);
                 weather.always = true; //always windy
                 r.weather.add(weather);
+                r.bannedBlocks.addAll(conveyor, junction, router, duo, mechanicalDrill, copperWall, copperWallLarge);
+                r.hideBannedBlocks = true;
             };
         }};
         uxerd = new Planet("uxerd", lumoni, 0.12f){{
@@ -117,7 +117,7 @@ public class FOSPlanets {
             alwaysUnlocked = true;
             generator = new UxerdAsteroidGenerator(){{
                 seed = 8;
-                defaultFloor = Blocks.ice;
+                defaultFloor = ice;
                 elithiteChance = 0.33f;
                 elbiumChance = 0.5f;
                 nethratiumChance = 0.4f;
@@ -127,12 +127,14 @@ public class FOSPlanets {
                 r.planetBackground = new PlanetParams(){{
                     planet = parent;
                     zoom = 0.8f;
-                    camPos = new Vec3(0f, 0f, 0.5f);
+                    camPos = uxerd.position.cpy().sub(lumoni.position);
                 }};
                 r.dragMultiplier = 0.2f;
                 r.borderDarkness = false;
                 r.waves = false;
                 r.waveTeam = FOSTeam.corru;
+                r.bannedBlocks.addAll(container, hovercraftFactory);
+                r.hideBannedBlocks = true;
             };
             meshLoader = () -> {
                 Rand rand = new Rand(8);
@@ -141,13 +143,13 @@ public class FOSPlanets {
                     rand.chance(0.33f) ? elithite :
                         rand.chance(0.5f) ? elbium :
                             rand.chance(0.4f) ? nethratium :
-                                Blocks.ice
+                                ice
                 ).mapColor;
                 Color tinted = (
-                    color == elithite.mapColor ? Blocks.ferricStone :
-                        color == elbium.mapColor ? Blocks.rhyolite :
-                            color == nethratium.mapColor ? Blocks.yellowStone :
-                                Blocks.ice
+                    color == elithite.mapColor ? ferricStone :
+                        color == elbium.mapColor ? rhyolite :
+                            color == nethratium.mapColor ? yellowStone :
+                                ice
                 ).mapColor;
 
                 meshes.add(new NoiseMesh(
@@ -160,13 +162,13 @@ public class FOSPlanets {
                         rand.chance(0.33f) ? elithite :
                             rand.chance(0.5f) ? elbium :
                                 rand.chance(0.4f) ? nethratium :
-                                    Blocks.ice
+                                    ice
                     ).mapColor;
                     tinted = (
-                        color == elithite.mapColor ? Blocks.ferricStone :
-                            color == elbium.mapColor ? Blocks.rhyolite :
-                                color == nethratium.mapColor ? Blocks.yellowStone :
-                                    Blocks.ice
+                        color == elithite.mapColor ? ferricStone :
+                            color == elbium.mapColor ? rhyolite :
+                                color == nethratium.mapColor ? yellowStone :
+                                    ice
                     ).mapColor;
 
                     meshes.add(new MatMesh(
@@ -184,6 +186,7 @@ public class FOSPlanets {
         serpulo.hiddenItems.addAll(uxerdItems).addAll(lumoniItems).removeAll(Items.serpuloItems);
         erekir.hiddenItems.addAll(uxerdItems).addAll(lumoniItems).removeAll(Items.erekirItems);
 
+        //Anuke, *please* make an item whitelist instead
         Events.on(EventType.ContentInitEvent.class, e -> {
             uxerd.hiddenItems.addAll(Vars.content.items()).removeAll(uxerdItems);
             lumoni.hiddenItems.addAll(Vars.content.items()).removeAll(lumoniItems);

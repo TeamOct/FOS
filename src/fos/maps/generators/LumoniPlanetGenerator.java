@@ -1,26 +1,31 @@
 package fos.maps.generators;
 
-import arc.graphics.*;
-import arc.math.*;
+import arc.graphics.Color;
+import arc.math.Angles;
+import arc.math.Mathf;
+import arc.math.Rand;
 import arc.math.geom.*;
 import arc.struct.*;
-import arc.util.*;
-import arc.util.noise.*;
+import arc.util.Tmp;
+import arc.util.noise.Ridged;
+import arc.util.noise.Simplex;
 import fos.content.FOSTeam;
-import mindustry.ai.*;
-import mindustry.content.*;
-import mindustry.game.*;
-import mindustry.maps.generators.*;
-import mindustry.type.*;
+import mindustry.ai.Astar;
+import mindustry.content.Blocks;
+import mindustry.game.Schematics;
+import mindustry.game.Team;
+import mindustry.maps.generators.PlanetGenerator;
+import mindustry.type.Sector;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.Floor;
 import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.meta.Env;
 
 import static fos.content.FOSBlocks.*;
-import static mindustry.Vars.*;
+import static mindustry.Vars.state;
+import static mindustry.Vars.world;
 import static mindustry.content.Blocks.*;
-import static mindustry.graphics.g3d.PlanetGrid.*;
+import static mindustry.graphics.g3d.PlanetGrid.Ptile;
 
 public class LumoniPlanetGenerator extends PlanetGenerator {
     /** Enemy base generator. */
@@ -257,11 +262,22 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         inverseFloodFill(tiles.getn(spawn.x, spawn.y));
 
         Seq<Block> ores = Seq.with(oreTin, oreTinSurface, oreSilver);
-        if (this.sector.id != 91) {
+        if (sector.id != 91) {
             ores.add(oreDiamond);
+            ores.add(oreCopper);
         }
 
         float poles = Math.abs(sector.tile.v.y);
+
+        if (poles < 0.63f) {
+            ores.add(oreVanadium);
+        }
+        if (poles < 0.49f) {
+            ores.add(oreIridium);
+        }
+        if (poles < 0.34f) {
+            ores.add(oreLuminium);
+        }
 
         FloatSeq frequencies = new FloatSeq();
         for(int i = 0; i < ores.size; i++){

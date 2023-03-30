@@ -22,8 +22,7 @@ import mindustry.world.Tile;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
 
-import static mindustry.Vars.tilesize;
-import static mindustry.Vars.world;
+import static mindustry.Vars.*;
 import static mindustry.content.Blocks.air;
 
 public class OreDetector extends Block {
@@ -82,7 +81,7 @@ public class OreDetector extends Block {
         @Override
         public void draw() {
             super.draw();
-            if (canConsume() && showOres) {
+            if (canConsume() && showOres && team == player.team()) {
                 Draw.z(Layer.light);
                 Draw.alpha(0.6f);
                 Lines.stroke(2.5f, Color.valueOf("4b95ff"));

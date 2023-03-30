@@ -35,7 +35,6 @@ import mindustry.gen.Tex;
 import mindustry.graphics.CacheLayer;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
-import mindustry.graphics.Shaders;
 import mindustry.type.Category;
 import mindustry.type.LiquidStack;
 import mindustry.world.Block;
@@ -87,7 +86,7 @@ public class FOSBlocks {
     tokiciteFloor,
     cyaniumWater, crimsonStoneWater, anniteWater, blubluWater, purpurWater,
     alienMoss,
-    oreCopper, oreTin, oreTinSurface, oreSilver, oreLithium, oreDiamond, oreVanadium, oreIridium, oreLuminium,
+    oreTin, oreTinSurface, oreSilver, oreLithium, oreDiamond, oreVanadium, oreIridium, oreLuminium,
     bugSpawn,
     //units
     upgradeCenter, hovercraftFactory, droidConstructor,
@@ -729,7 +728,7 @@ public class FOSBlocks {
             health = 5;
             consumesPower = true;
             consumePower(0.5f / 60f);
-            requirements(Category.power, with(copper, 1));
+            requirements(Category.power, with(copper, 2));
         }};
         brassWire = new PowerWire("brass-wire"){{
             health = 8;
@@ -819,6 +818,7 @@ public class FOSBlocks {
             status = StatusEffects.wet;
             liquidDrop = water;
             cacheLayer = CacheLayer.water;
+            //blendGroup = cyanium;
             wall = cyaniumWall;
             speedMultiplier = 0.8f;
             statusDuration = 50f;
@@ -830,6 +830,7 @@ public class FOSBlocks {
             status = StatusEffects.wet;
             liquidDrop = water;
             cacheLayer = CacheLayer.water;
+            //blendGroup = crimsonStone;
             wall = crimsonStoneWall;
             speedMultiplier = 0.8f;
             statusDuration = 50f;
@@ -842,6 +843,7 @@ public class FOSBlocks {
             status = StatusEffects.wet;
             liquidDrop = water;
             cacheLayer = CacheLayer.water;
+            //blendGroup = annite;
             wall = anniteWall;
             speedMultiplier = 0.8f;
             statusDuration = 50f;
@@ -854,6 +856,7 @@ public class FOSBlocks {
             status = StatusEffects.wet;
             liquidDrop = water;
             cacheLayer = CacheLayer.water;
+            //blendGroup = blublu;
             wall = blubluWall;
             speedMultiplier = 0.8f;
             statusDuration = 50f;
@@ -866,6 +869,7 @@ public class FOSBlocks {
             status = StatusEffects.wet;
             liquidDrop = water;
             cacheLayer = CacheLayer.water;
+            //blendGroup = purpur;
             wall = purpurWall;
             speedMultiplier = 0.8f;
             statusDuration = 50f;
@@ -873,9 +877,6 @@ public class FOSBlocks {
             supportsOverlay = true;
         }};
         alienMoss = new OverlayFloor("alien-moss"){};
-        oreCopper = new OreBlock("ore-copper-surface"){{
-            itemDrop = copper;
-        }};
         oreTin = new UndergroundOreBlock("ore-tin"){{
             drop = tin;
             variants = 3;

@@ -1,27 +1,44 @@
 package fos.maps.generators;
 
-import arc.func.*;
-import arc.math.*;
-import arc.math.geom.*;
-import arc.struct.*;
-import arc.util.*;
+import arc.func.Cons;
+import arc.func.Intc2;
+import arc.math.Angles;
+import arc.math.Mathf;
+import arc.math.geom.Geometry;
+import arc.math.geom.Point2;
+import arc.math.geom.Vec2;
+import arc.struct.ObjectMap;
+import arc.struct.Seq;
+import arc.util.Nullable;
+import arc.util.Structs;
+import arc.util.Tmp;
 import fos.type.blocks.environment.UndergroundOreBlock;
-import mindustry.ai.*;
-import mindustry.content.*;
-import mindustry.ctype.*;
-import mindustry.game.*;
-import mindustry.gen.*;
-import mindustry.type.*;
-import mindustry.world.*;
-import mindustry.world.blocks.defense.*;
-import mindustry.world.blocks.payloads.*;
-import mindustry.world.blocks.production.*;
-import mindustry.world.blocks.sandbox.*;
-import mindustry.world.blocks.storage.*;
-import mindustry.world.meta.*;
+import mindustry.ai.Astar;
+import mindustry.content.Blocks;
+import mindustry.ctype.Content;
+import mindustry.game.Schematic;
+import mindustry.game.Schematics;
+import mindustry.game.Team;
+import mindustry.gen.Building;
+import mindustry.type.Item;
+import mindustry.type.Liquid;
+import mindustry.type.Sector;
+import mindustry.world.Block;
+import mindustry.world.Tile;
+import mindustry.world.Tiles;
+import mindustry.world.blocks.defense.Door;
+import mindustry.world.blocks.defense.Wall;
+import mindustry.world.blocks.payloads.PayloadBlock;
+import mindustry.world.blocks.payloads.PayloadConveyor;
+import mindustry.world.blocks.production.Drill;
+import mindustry.world.blocks.production.Pump;
+import mindustry.world.blocks.sandbox.ItemSource;
+import mindustry.world.blocks.sandbox.LiquidSource;
+import mindustry.world.blocks.storage.CoreBlock;
+import mindustry.world.meta.BuildVisibility;
 
 import static mindustry.Vars.*;
-import static mindustry.ai.BaseRegistry.*;
+import static mindustry.ai.BaseRegistry.BasePart;
 
 public class LumoniBaseGenerator {
     public String[] schematics;
@@ -113,7 +130,7 @@ public class LumoniBaseGenerator {
             && !b.insulated && b.buildVisibility == BuildVisibility.shown
             && !(b instanceof Door)
             && !(Structs.contains(b.requirements, i -> state.rules.hiddenBuildItems.contains(i.item)))
-            && b.minfo.mod.name.equals("fos"));
+            && b.minfo.mod != null && b.minfo.mod.name.equals("fos"));
         wallsSmall.sort(b -> b.buildCost);
         return wallsSmall.getFrac(difficulty * 0.91f);
     }
