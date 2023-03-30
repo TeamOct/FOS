@@ -10,7 +10,7 @@ import fos.graphics.FOSShaders;
 import fos.type.blocks.campaign.*;
 import fos.type.blocks.defense.PolyForceProjector;
 import fos.type.blocks.distribution.SpaceDuct;
-import fos.type.blocks.environment.AnimatedOreBlock;
+import fos.type.blocks.environment.ShaderOreBlock;
 import fos.type.blocks.environment.UndergroundOreBlock;
 import fos.type.blocks.power.*;
 import fos.type.blocks.production.*;
@@ -900,10 +900,9 @@ public class FOSBlocks {
         oreIridium = new UndergroundOreBlock("ore-iridium"){{
             drop = iridium;
         }};
-        oreLuminium = new AnimatedOreBlock("ore-luminium"){{
+        oreLuminium = new ShaderOreBlock("ore-luminium", FOSShaders.los){{
             itemDrop = luminium;
             variants = 3;
-            shader = FOSShaders.los;
             emitLight = true;
             lightColor = FOSPal.luminium1.cpy().a(0.6f);
             lightRadius = 6f;

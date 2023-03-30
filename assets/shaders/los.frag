@@ -2,8 +2,6 @@ varying vec2 v_texCoords;
 uniform sampler2D u_texture;
 
 uniform float u_time;
-uniform float u_x;
-uniform float u_y;
 
 float rand(vec2 co){
     return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
@@ -26,11 +24,17 @@ vec3 hsv2rgb(vec3 c){
 }
 
 void main(){
+    float delta = 0.8;
+    float noiseScale = 100.0;
+    float noisePosScale = 1;
+
     vec4 c = texture2D(u_texture, v_texCoords);
 
-    vec3 hsv = rgb2hsv(c.rgb);
-    hsv.r += sin(u_time + rand(vec2(u_x, u_y)) * 100.0) * 0.08 - 0.04;
-    c = vec4(hsv2rgb(hsv), c.a);
+    if (c.a > 0.05){
+        vec3 hsv = rgb2hsv(c.rgb);
+        hsv.r += sin(u_time + rand(gl_FragCoord) * noiseScale) * delta - delta / 2.0;
+        c = vec4(hsv2rgb(hsv), c.a);
+    }
 
     gl_FragColor = c;
 }
