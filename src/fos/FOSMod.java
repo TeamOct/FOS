@@ -10,6 +10,7 @@ import arc.struct.Seq;
 import arc.util.Reflect;
 import fos.content.*;
 import fos.graphics.FOSShaders;
+import fos.graphics.StaticBlockAnimator;
 import fos.ui.DamageDisplay;
 import fos.ui.menus.FOSMenuRenderer;
 import fos.ui.menus.FOSMenus;
@@ -122,6 +123,8 @@ public class FOSMod extends Mod {
                 audio.soundBus.setVolume(settings.getInt("sfxvol") / 100f);
             }
         });
+
+        Events.run(Trigger.drawOver, StaticBlockAnimator::renderAnimators);
     }
 
     @Override
