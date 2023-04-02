@@ -8,6 +8,7 @@ import arc.util.Time;
 import fos.graphics.FOSPal;
 import fos.graphics.FOSShaders;
 import fos.type.blocks.campaign.*;
+import fos.type.blocks.defense.DeathrayTurret;
 import fos.type.blocks.defense.PolyForceProjector;
 import fos.type.blocks.distribution.SpaceDuct;
 import fos.type.blocks.environment.AnimatedOreBlock;
@@ -19,6 +20,7 @@ import fos.type.blocks.storage.DetectorCoreBlock;
 import fos.type.blocks.units.BugSpawn;
 import fos.type.blocks.units.OverdriveDroneCenter;
 import fos.type.blocks.units.UpgradeCenter;
+import fos.type.bullets.OhioBeamBulletType;
 import fos.type.bullets.StickyBulletType;
 import fos.type.draw.DrawDiagonalPistons;
 import mindustry.content.Fx;
@@ -79,7 +81,8 @@ public class FOSBlocks {
     tinWire, copperWire, brassWire, windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     //defense
     tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge,
-    helix, sticker, particulator, pulse, thunder, cluster, matrixShieldProj,
+    helix, sticker, particulator, pulse, thunder, cluster, judge,
+    matrixShieldProj,
     //environment & ores
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
@@ -652,6 +655,24 @@ public class FOSBlocks {
             consumeCoolant(5f).boost();
             coolantMultiplier = 0.25f;
             requirements(Category.turret, with(silicon, 500, vanadium, 300, iridium, 250, luminium, 200));
+        }};
+        judge = new DeathrayTurret("judge"){{
+            scaledHealth = 480;
+            size = 8;
+            minRange = 200f;
+            range = 600f;
+            reload = 900f;
+            targetAir = targetGround = true;
+            loopSound = Sounds.techloop;
+            loopSoundVolume = 4f;
+            consumePower(150f);
+            coolant = consumeCoolant(5f);
+            liquidCapacity = 450f;
+            shootDuration = 600f;
+            coolantMultiplier = 0.1f;
+            shake = 10f;
+            shootType = new OhioBeamBulletType(7200);
+            requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, iridium, 1500, luminium, 1500));
         }};
 
         matrixShieldProj = new PolyForceProjector("matrix-shield-projector"){{

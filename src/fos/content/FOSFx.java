@@ -1,7 +1,10 @@
 package fos.content;
 
-import arc.graphics.g2d.*;
-import arc.math.geom.*;
+import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Fill;
+import arc.graphics.g2d.Lines;
+import arc.math.geom.Polygon;
+import arc.math.geom.Vec2;
 import mindustry.entities.Effect;
 import mindustry.gen.Groups;
 import mindustry.gen.WeatherState;
