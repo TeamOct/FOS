@@ -6,9 +6,11 @@ import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import arc.math.Mathf;
+import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
 import mindustry.entities.bullet.ContinuousBulletType;
 import mindustry.gen.Bullet;
+import mindustry.gen.Sounds;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
 import mindustry.world.blocks.defense.turrets.Turret;
@@ -19,23 +21,28 @@ import mindustry.world.blocks.defense.turrets.Turret;
  */
 public class OhioBeamBulletType extends ContinuousBulletType {
     /** The beam's color. */
-    public Color color = Pal.turretHeat;
+    public Color color = Pal.slagOrange;
+    /** The beam radius. */
+    public float width;
 
-    public OhioBeamBulletType(float dps) {
+    public OhioBeamBulletType(float dps, float width) {
         super();
         /* does nothing, purely for display lmao */ damage = 1f;
         collides = true;
         splashDamage = dps / (60f / damageInterval);
-        splashDamageRadius = 64f;
+        this.width = width;
+        splashDamageRadius = this.width;
         speed = 1f;
         lifetime = 600f;
         status = StatusEffects.melting;
         incendAmount = 20;
-        incendSpread = 32f;
+        incendSpread = this.width;
         shake = 10f;
         buildingDamageMultiplier = 0.5f;
         pierceBuilding = true;
         pierceArmor = true;
+        despawnEffect = Fx.fireRemove;
+        despawnSound = Sounds.none;
     }
 
     @Override
@@ -80,25 +87,25 @@ public class OhioBeamBulletType extends ContinuousBulletType {
     @Override
     public void draw(Bullet b) {
         Lines.stroke(80f, color);
-        drawBeam(color, b.x, b.y);
+        drawBeam(color, b.x, b.y, width);
         if (b.owner instanceof Turret.TurretBuild t) {
-            drawBeam(color, t.x, t.y);
+            drawBeam(color, t.x, t.y, width);
         }
     }
 
     /** Draws a beam that goes upwards. */
-    public void drawBeam(Color color, float x, float y) {
-        float radius = 32f;
-
+    public void drawBeam(Color color, float x, float y, float rad) {
         Draw.color(Pal.redLight, 0.6f);
-        Fill.poly(x, y, 48, radius * 1.2f);
+        Fill.poly(x, y, 48, rad * 1.2f);
 
-        Draw.color(color, color.a);
-        Fill.poly(x, y, 48, radius);
+        Draw.color(color, 1f);
+        Fill.poly(x, y, 48, rad);
 
-        Fill.quad(x - radius, y, x + radius, y, x + radius, y + 800f, x - radius, y + 800f);
+        Fill.quad(x - rad, y, x + rad, y, x + rad, y + 4000f, x - rad, y + 4000f);
 
-        Drawf.light(x, y + radius, x, y + radius + 400f, radius * 2, color, 0.8f);
+        Fill.poly(x, y + 4000f, 48, rad);
+
+        Drawf.light(x, y + rad, x, y + rad + 1600f, rad * 2, color, 0.8f);
         Draw.reset();
     }
 

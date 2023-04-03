@@ -41,7 +41,6 @@ public class DeathrayTurret extends LaserTurret {
                 wasShooting = true;
 
                 if(coolant != null){
-                    //TODO does not handle multi liquid req?
                     Liquid liquid = liquids.current();
                     float maxUsed = coolant.amount;
                     float used = (cheating() ? maxUsed : Math.min(liquids.get(liquid), maxUsed)) * delta();

@@ -72,9 +72,10 @@ public class DetectorCoreBlock extends CoreBlock {
 
             //spawn cooldown
             if (!requested) {
-                timer = Vars.state.isEditor() || Vars.state.rules.infiniteResources ? 0f : spawnCooldown;
+                boolean immediate = Vars.state.isEditor() || Vars.state.rules.infiniteResources;
+                timer = immediate ? 0f : spawnCooldown;
                 requested = true;
-                Time.run(spawnCooldown, () -> {
+                Time.run(immediate ? 0f : spawnCooldown, () -> {
                     if (player.dead()) {
                         super.requestSpawn(player);
                     }
@@ -139,7 +140,6 @@ public class DetectorCoreBlock extends CoreBlock {
                     Draw.draw(Layer.light, () -> Draw.rect(tile.overlay().variantRegions[variant], tile.x * 8, tile.y * 8));
 
                     // show an item icon above the cursor/finger
-                    // TODO use tap on mobile?
                     if (tile == hoverTile && tile.block() != null) {
                         Draw.z(Layer.max);
                         Draw.alpha(1f);

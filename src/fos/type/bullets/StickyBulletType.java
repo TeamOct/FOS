@@ -40,18 +40,16 @@ public class StickyBulletType extends BasicBulletType {
         super.hitTile(b, build, x, y, initialHealth, direct);
 
         //the bullet just stops.
-        b.vel(Vec2.ZERO);
+        b.vel.set(Vec2.ZERO);
         b.lifetime = explosionDelay;
     }
 
-    //FIXME
     @Override
     public void update(Bullet b) {
-        StickyBulletData data = (StickyBulletData) b.data;
+        super.update(b);
 
-        if (data == null || !b.hit || b.type != this) {
-            super.update(b);
-        } else if (data.target instanceof Unit u && !u.dead()) {
+        StickyBulletData data = (StickyBulletData) b.data;
+        if (data != null && data.target instanceof Unit u && !u.dead()) {
             float bx = b.x(), by = b.y();
             float ox = data.target.x(), oy = data.target.y();
 
@@ -60,10 +58,14 @@ public class StickyBulletType extends BasicBulletType {
 
             float angle = data.initialAngle - data.targetRot + u.rotation;
 
-            b.x = u.x + Mathf.cos(angle * Mathf.degRad) * u.hitSize / 2;
-            b.y = u.y + Mathf.sin(angle * Mathf.degRad) * u.hitSize / 2;
+            var vx = (u.x + Mathf.cos(angle * Mathf.degRad) * u.hitSize / 2) - b.x;
+            var vy = (u.y + Mathf.sin(angle * Mathf.degRad) * u.hitSize / 2) - b.y;
 
-            b.vel(Vec2.ZERO);
+            if (vx == 0 && vy == 0) {
+                b.vel.set(Vec2.ZERO);
+            } else {
+                b.vel.set(vx, vy);
+            }
         }
     }
 
@@ -79,7 +81,7 @@ public class StickyBulletType extends BasicBulletType {
         createSplashDamage(b, b.x, b.y);
     }
 
-    public class StickyBulletData {
+    public static class StickyBulletData {
         public Teamc target;
         public Float initialAngle, targetRot;
     }

@@ -113,7 +113,6 @@ public class OreDetector extends Block {
                     u.shouldDrawBase = false;
 
                     // show an item icon above the cursor/finger
-                    // TODO use tap on mobile?
                     if (tile == hoverTile && tile.block() != null) {
                         Draw.z(Layer.max);
                         Draw.alpha(1f);
