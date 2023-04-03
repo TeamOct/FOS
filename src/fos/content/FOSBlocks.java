@@ -780,6 +780,10 @@ public class FOSBlocks {
             size = 3;
             envRequired = envEnabled = Env.space;
             requirements(Category.power, with(aluminium, 125, lithium, 90, titanium, 75, cuberium, 50));
+            drawer = new DrawMulti(
+                new DrawRegion("-base"),
+                new DrawDefault()
+            );
         }};
         solarPanelMedium = new SolarGenerator("solar-panel-medium"){{
             size = 2;

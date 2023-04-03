@@ -1,27 +1,31 @@
 package fos.type.blocks.power;
 
-import arc.*;
-import arc.graphics.g2d.*;
-import arc.math.*;
-import arc.math.geom.*;
-import arc.struct.*;
-import arc.util.*;
+import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Lines;
+import arc.math.Angles;
+import arc.math.Mathf;
+import arc.math.geom.Point2;
+import arc.struct.OrderedSet;
+import arc.util.Time;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
-import arc.util.pooling.*;
-import fos.type.bullets.*;
-import mindustry.entities.bullet.*;
-import mindustry.gen.*;
-import mindustry.graphics.*;
-import mindustry.world.blocks.power.*;
-import mindustry.world.meta.*;
+import arc.util.pooling.Pool;
+import arc.util.pooling.Pools;
+import fos.type.bullets.PlasmaBall;
+import mindustry.entities.bullet.BulletType;
+import mindustry.gen.Building;
+import mindustry.gen.Bullet;
+import mindustry.graphics.Drawf;
+import mindustry.graphics.Pal;
+import mindustry.world.blocks.power.Battery;
+import mindustry.world.meta.Stat;
+import mindustry.world.meta.StatUnit;
 
 import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
 
 /** ALL OF THIS WAS HORRIBLY REWRITTEN FROM MassDriver */
 public class PlasmaLauncher extends Battery {
-    public TextureRegion baseRegion = Core.atlas.find(name + "-base");
     public BulletType bullet = new PlasmaBall();
     public float rotateSpeed = 2f;
     public float translation = 7f;
@@ -47,11 +51,6 @@ public class PlasmaLauncher extends Battery {
         super.setStats();
         stats.add(Stat.shootRange, range / 8f, StatUnit.blocks);
         stats.add(Stat.reload, 60f / reload, StatUnit.perSecond);
-    }
-
-    @Override
-    protected TextureRegion[] icons() {
-        return new TextureRegion[]{baseRegion, region};
     }
 
     public static class LauncherBulletData implements Pool.Poolable {
