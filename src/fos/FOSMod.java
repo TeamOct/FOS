@@ -148,7 +148,7 @@ public class FOSMod extends Mod {
 
         LoadedMod mod = mods.locateMod("fos");
 
-        SplashTexts.load(13);
+        SplashTexts.load();
         int n = Mathf.floor((float) Math.random() * SplashTexts.splashes.size);
 
         var date = FOSVars.date;
