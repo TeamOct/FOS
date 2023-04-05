@@ -20,7 +20,6 @@ import mindustry.world.blocks.environment.OreBlock;
 
 public class AnimatedOreBlock extends OreBlock {
     public int frames = 1;
-    public float frameTime = 5f;
     protected TextureRegion[] regions;
 
     // TODO make base shader for animated ore block
@@ -52,15 +51,17 @@ public class AnimatedOreBlock extends OreBlock {
     @Override
     public void drawBase(Tile tile) {
         Events.run(EventType.Trigger.draw, () -> {
+            if (Vars.world.tile(tile.x, tile.y).overlay() != this) return;
+
             int variant = Mathf.randomSeed(tile.pos(), 0, Math.max(0, variantRegions.length - 1));
             if (shader instanceof FOSShaders.AnimatedFloorShader afs) {
                 afs.setX(tile.x);
                 afs.setY(tile.y);
             }
-            Draw.draw(Layer.blockProp, () -> Draw.rect(regions[variant], tile.worldx(), tile.worldy()));
+            Draw.draw(Layer.blockUnder, () -> Draw.rect(regions[variant], tile.worldx(), tile.worldy()));
         });
         Events.run(EventType.Trigger.update, () -> {
-            if (Vars.renderer.lights.enabled() && tile.block() == Blocks.air) {
+            if (Vars.renderer.lights.enabled() && Vars.world.tile(tile.x, tile.y).overlay() == this && tile.block() == Blocks.air) {
                 drawEnvironmentLight(tile);
             }
         });

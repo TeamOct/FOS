@@ -32,6 +32,7 @@ import mindustry.entities.part.RegionPart;
 import mindustry.entities.part.ShapePart;
 import mindustry.entities.pattern.ShootBarrel;
 import mindustry.entities.pattern.ShootHelix;
+import mindustry.entities.pattern.ShootSpread;
 import mindustry.gen.Sounds;
 import mindustry.gen.Tex;
 import mindustry.graphics.CacheLayer;
@@ -407,9 +408,10 @@ public class FOSBlocks {
             targetAir = true;
             targetGround = false;
             recoil = 2f;
-            reload = 30f;
+            reload = 90f;
             inaccuracy = 4f;
             outlineColor = Color.valueOf("302326");
+            shoot = new ShootSpread(2, 8f);
             shootSound = Sounds.mud;
             consumeLiquid(tokicite, 0.1f);
             ammo(
@@ -671,7 +673,7 @@ public class FOSBlocks {
             shootDuration = 600f;
             coolantMultiplier = 0.1f;
             shake = 10f;
-            shootType = new OhioBeamBulletType(7200);
+            shootType = new OhioBeamBulletType(7200f, 32f);
             requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, iridium, 1500, luminium, 1500));
         }};
 
@@ -778,6 +780,10 @@ public class FOSBlocks {
             size = 3;
             envRequired = envEnabled = Env.space;
             requirements(Category.power, with(aluminium, 125, lithium, 90, titanium, 75, cuberium, 50));
+            drawer = new DrawMulti(
+                new DrawRegion("-base"),
+                new DrawDefault()
+            );
         }};
         solarPanelMedium = new SolarGenerator("solar-panel-medium"){{
             size = 2;
@@ -957,7 +963,7 @@ public class FOSBlocks {
             droneConstructTime = 1 * Time.toMinutes;
             droneRange = 80f;
             droneType = testOverdrive;
-            requirements(Category.units, with(brass, 275, silicon, 400, iridium, 150));
+            requirements(Category.units, BuildVisibility.debugOnly, with(brass, 275, silicon, 400, iridium, 150));
         }};
         //endregion
         //region storage

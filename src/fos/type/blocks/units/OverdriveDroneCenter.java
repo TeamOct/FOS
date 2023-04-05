@@ -12,10 +12,7 @@ import mindustry.Vars;
 import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
 import mindustry.entities.units.AIController;
-import mindustry.gen.Building;
-import mindustry.gen.BuildingTetherc;
-import mindustry.gen.Groups;
-import mindustry.gen.Unit;
+import mindustry.gen.*;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
@@ -96,8 +93,8 @@ public class OverdriveDroneCenter extends Block {
 
             if(droneWarmup > 0){
                 Draw.draw(Layer.blockOver + 0.2f, () ->
-                        Drawf.construct(this, droneType.fullIcon,
-                                Pal.accent, 0f, droneProgress, droneWarmup, totalDroneProgress, 14f));
+                    Drawf.construct(this, droneType.fullIcon,
+                        Pal.accent, 0f, droneProgress, droneWarmup, totalDroneProgress, 14f));
             }
         }
 

@@ -61,13 +61,14 @@ public class FOSVars {
 
         mechTree = TechTree.nodeRoot("", mechResearchCore, true, () -> {
             node(helix, with(scrap, 250), () -> {
+                node(sticker, with(scrap, 400), Seq.with(new Objectives.Research(FOSFluids.tokicite)), () -> {});
                 node(particulator, with(scrap, 1500), () -> {
                     //TODO more mid-tier turrets
                     node(cluster, with(scrap, 5250), () -> {
                     });
+                    node(judge, with(scrap, 20000), () -> {});
                 });
             });
-            node(sticker, with(scrap, 400), Seq.with(new Objectives.Research(FOSFluids.tokicite)), () -> {});
         });
 
         TechTree.roots.remove(mechTree);
