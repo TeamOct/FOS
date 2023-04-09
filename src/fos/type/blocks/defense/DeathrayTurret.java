@@ -2,10 +2,10 @@ package fos.type.blocks.defense;
 
 import arc.math.Mathf;
 import arc.util.Nullable;
-import mindustry.gen.Bullet;
-import mindustry.gen.Posc;
-import mindustry.graphics.Drawf;
-import mindustry.graphics.Pal;
+import fos.type.bullets.OhioBeamBulletType;
+import mindustry.entities.Units;
+import mindustry.gen.*;
+import mindustry.graphics.*;
 import mindustry.type.Liquid;
 import mindustry.world.blocks.defense.turrets.LaserTurret;
 
@@ -16,6 +16,7 @@ public class DeathrayTurret extends LaserTurret {
     public DeathrayTurret(String name) {
         super(name);
         rotate = false;
+        /* the entire circle */ shootCone = 360f;
     }
 
     @Override
@@ -27,6 +28,11 @@ public class DeathrayTurret extends LaserTurret {
 
     @SuppressWarnings("unused")
     public class DeathrayTurretBuild extends LaserTurretBuild {
+        @Override
+        public void drawLight() {
+            Drawf.light(x, y, lightRadius * potentialEfficiency, lightColor, 0.7f * potentialEfficiency);
+        }
+
         @Override
         public void updateTile() {
             super.updateTile();
@@ -57,10 +63,28 @@ public class DeathrayTurret extends LaserTurret {
         }
 
         @Override
+        protected void findTarget() {
+            float range = range();
+            Bullet b = Groups.bullet.find(e -> e.type instanceof OhioBeamBulletType);
+            float cx = b != null ? b.x : this.x;
+            float cy = b != null ? b.y : this.y;
+
+            target = Units.closestTarget(team, cx, cy, range - Mathf.dst(this.x, this.y, cx, cy),
+                e -> (!Mathf.within(this.x, this.y, e.x, e.y, minRange)) && !e.dead() && unitFilter.get(e) && (e.isGrounded() || targetAir) && (!e.isGrounded() || targetGround),
+                build -> !Mathf.within(this.x, this.y, build.x, build.y, minRange) && targetGround && buildingFilter.get(build));
+        }
+
+        @Override
         public void drawSelect() {
             super.drawSelect();
 
             Drawf.dashCircle(x, y, minRange, team.color);
+        }
+
+        @Override
+        protected void turnToTarget(float targetRot) {
+            //do not turn
+            rotation = 90f;
         }
 
         @Override

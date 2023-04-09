@@ -2,17 +2,12 @@ package fos.type.bullets;
 
 import arc.Core;
 import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.Fill;
-import arc.graphics.g2d.Lines;
+import arc.graphics.g2d.*;
 import arc.math.Mathf;
-import mindustry.content.Fx;
-import mindustry.content.StatusEffects;
+import mindustry.content.*;
 import mindustry.entities.bullet.ContinuousBulletType;
-import mindustry.gen.Bullet;
-import mindustry.gen.Sounds;
-import mindustry.graphics.Drawf;
-import mindustry.graphics.Pal;
+import mindustry.gen.*;
+import mindustry.graphics.*;
 import mindustry.world.blocks.defense.turrets.Turret;
 
 /**
@@ -66,19 +61,22 @@ public class OhioBeamBulletType extends ContinuousBulletType {
         super.update(b);
 
         if (b.owner instanceof Turret.TurretBuild t) {
-            if (t.isControlled()) {
-                b.vel.setAngle(b.angleTo(Core.input.mouseWorld()));
-            } else {
-                b.vel.setAngle(b.angleTo(t.targetPos));
-            }
-
             //check for turret range
             if (!Mathf.within(b.x, b.y, t.x, t.y, t.range())) {
                 b.vel.setAngle(b.angleTo(t));
                 b.vel.setLength(b.dst(t) - t.range() + 1f);
+                return;
             } else if (Mathf.within(b.x, b.y, t.x, t.y, ((Turret)t.block).minRange)) {
                 b.vel.setAngle(b.angleTo(t) + 180);
                 b.vel.setLength(((Turret)t.block).minRange - b.dst(t) + 1f);
+                return;
+            }
+
+            b.vel.setLength(b.type.speed);
+            if (t.isControlled()) {
+                b.vel.setAngle(b.angleTo(Core.input.mouseWorld()));
+            } else {
+                b.vel.setAngle(b.angleTo(t.targetPos));
             }
         }
 
