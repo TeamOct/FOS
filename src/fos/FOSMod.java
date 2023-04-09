@@ -4,16 +4,13 @@ import arc.Events;
 import arc.func.Prov;
 import arc.math.Mathf;
 import arc.scene.ui.ImageButton;
-import arc.scene.ui.layout.Table;
-import arc.scene.ui.layout.WidgetGroup;
+import arc.scene.ui.layout.*;
 import arc.struct.Seq;
 import arc.util.Reflect;
 import fos.content.*;
 import fos.graphics.FOSShaders;
 import fos.ui.DamageDisplay;
-import fos.ui.menus.FOSMenuRenderer;
-import fos.ui.menus.FOSMenus;
-import fos.ui.menus.MenuBackground;
+import fos.ui.menus.*;
 import mindustry.ai.Pathfinder;
 import mindustry.content.SectorPresets;
 import mindustry.game.Team;
@@ -174,7 +171,6 @@ public class FOSMod extends Mod {
         FOSShaders.init();
 
         FOSTeam.load();
-        FOSMusic.load();
         FOSAttributes.load();
         FOSWeathers.load();
         FOSItems.load();
