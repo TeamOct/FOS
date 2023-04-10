@@ -1,5 +1,6 @@
 package fos;
 
+import arc.Core;
 import arc.Events;
 import arc.func.Prov;
 import arc.math.Mathf;
@@ -11,8 +12,11 @@ import fos.content.*;
 import fos.graphics.FOSShaders;
 import fos.ui.DamageDisplay;
 import fos.ui.menus.*;
+import mindustry.Vars;
 import mindustry.ai.Pathfinder;
 import mindustry.content.SectorPresets;
+import mindustry.ctype.Content;
+import mindustry.ctype.UnlockableContent;
 import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.mod.Mod;
@@ -205,9 +209,11 @@ public class FOSMod extends Mod {
             t.checkPref("fos-realisticmode", false);
             t.checkPref("fos-debugmode", false, b -> {
                 if (b) {
+                    ui.showConfirm("@warning", "@fos-dangerzone", () -> {
+                        settings.put("fos-debugmode", true);
+                    });
+                } else
                     settings.put("fos-debugmode", false);
-                    ui.showConfirm("@warning", "@fos-dangerzone", () -> settings.put("fos-debugmode", true));
-                }
             });
         });
     }

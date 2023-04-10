@@ -6,6 +6,7 @@ import fos.type.abilities.*;
 import fos.ai.*;
 import fos.type.bullets.*;
 import fos.type.units.*;
+import fos.type.units.destroyers.DestroyersUnits;
 import fos.type.units.weapons.*;
 import mindustry.content.*;
 import mindustry.entities.abilities.*;
@@ -36,6 +37,8 @@ public class FOSUnits {
     smallFlying, mediumFlying, largeFlying, hugeFlying, titanFlying;
 
     public static void load(){
+        DestroyersUnits.load();
+
         legion = new UnitType("legion"){{
             health = 25000;
             armor = 25;
