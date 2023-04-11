@@ -7,24 +7,18 @@ import arc.math.geom.Mat3D;
 import arc.struct.Seq;
 import arc.util.Tmp;
 import fos.FOSVars;
-import fos.maps.generators.CaldemoltStarGenerator;
-import fos.maps.generators.LumoniPlanetGenerator;
-import fos.maps.generators.UxerdAsteroidGenerator;
+import fos.maps.generators.*;
 import mindustry.Vars;
 import mindustry.content.Items;
-import mindustry.game.EventType;
-import mindustry.game.Team;
+import mindustry.game.*;
 import mindustry.graphics.g3d.*;
-import mindustry.type.ItemStack;
-import mindustry.type.Planet;
-import mindustry.type.Sector;
+import mindustry.type.*;
 import mindustry.world.meta.Env;
 
 import java.util.Calendar;
 
 import static fos.content.FOSBlocks.*;
-import static fos.content.FOSItems.lumoniItems;
-import static fos.content.FOSItems.uxerdItems;
+import static fos.content.FOSItems.*;
 import static mindustry.content.Blocks.*;
 import static mindustry.content.Planets.*;
 import static mindustry.type.Weather.WeatherEntry;
@@ -113,6 +107,7 @@ public class FOSPlanets {
             launchCandidates.add(lumoni);
             solarSystem = caldemolt;
             allowLaunchLoadout = false;
+            clearSectorOnLose = true;
             accessible = true;
             alwaysUnlocked = true;
             generator = new UxerdAsteroidGenerator(){{
@@ -132,7 +127,8 @@ public class FOSPlanets {
                 r.dragMultiplier = 0.2f;
                 r.borderDarkness = false;
                 r.waves = false;
-                r.waveTeam = FOSTeam.corru;
+                r.defaultTeam = FOSTeam.corru;
+                r.waveTeam = Team.sharded;
                 r.bannedBlocks.addAll(container, hovercraftFactory);
                 r.hideBannedBlocks = true;
             };

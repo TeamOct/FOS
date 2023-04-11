@@ -57,7 +57,7 @@ public class FOSBlocks {
     //power
     tinWire, copperWire, brassWire, windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     //defense
-    tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge,
+    tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
     helix, sticker, particulator, pulse, thunder, cluster, judge,
     matrixShieldProj,
     //environment & ores
@@ -293,6 +293,18 @@ public class FOSBlocks {
             scaledHealth = 800;
             size = 2;
             requirements(Category.defense, with(vanadium, 24));
+        }};
+        cuberiumWall = new Wall("cuberium-wall"){{
+            scaledHealth = 600;
+            size = 1;
+            absorbLasers = true;
+            requirements(Category.defense, with(cuberium, 6));
+        }};
+        cuberiumWallLarge = new Wall("cuberium-wall-large"){{
+            scaledHealth = 600;
+            size = 2;
+            absorbLasers = true;
+            requirements(Category.defense, with(cuberium, 24));
         }};
 
         helix = new ItemTurret("helix"){{

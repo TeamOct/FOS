@@ -1,6 +1,5 @@
 package fos.type.bullets;
 
-import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
@@ -27,6 +26,7 @@ public class OhioBeamBulletType extends ContinuousBulletType {
         splashDamage = dps / (60f / damageInterval);
         this.width = width;
         splashDamageRadius = this.width;
+        scaledSplashDamage = false;
         speed = 1f;
         lifetime = 600f;
         status = StatusEffects.melting;
@@ -34,6 +34,7 @@ public class OhioBeamBulletType extends ContinuousBulletType {
         incendSpread = this.width;
         shake = 10f;
         buildingDamageMultiplier = 0.5f;
+        /* Anuke, why is this drawSize and not clipSize like everything else */ drawSize = 720f;
         pierceBuilding = true;
         pierceArmor = true;
         despawnEffect = Fx.fireRemove;
@@ -73,13 +74,8 @@ public class OhioBeamBulletType extends ContinuousBulletType {
             }
 
             b.vel.setLength(b.type.speed);
-            if (t.isControlled()) {
-                b.vel.setAngle(b.angleTo(Core.input.mouseWorld()));
-            } else {
-                b.vel.setAngle(b.angleTo(t.targetPos));
-            }
+            b.vel.setAngle(b.angleTo(t.targetPos));
         }
-
     }
 
     @Override

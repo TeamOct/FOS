@@ -3,16 +3,12 @@ package fos.type.units;
 import arc.math.Mathf;
 import arc.math.geom.Position;
 import arc.struct.Seq;
-import arc.util.ArcRuntimeException;
 import arc.util.Time;
-import arc.util.io.Reads;
-import arc.util.io.Writes;
+import arc.util.io.*;
 import mindustry.Vars;
-import mindustry.ctype.ContentType;
-import mindustry.ctype.UnlockableContent;
+import mindustry.ctype.*;
 import mindustry.gen.*;
-import mindustry.world.Block;
-import mindustry.world.Tile;
+import mindustry.world.*;
 import mindustry.world.blocks.environment.Floor;
 
 // save it
@@ -40,11 +36,13 @@ public class FOSUnitType extends UnlockableContent {
 
         public boolean dead;
 
+        @SuppressWarnings("unchecked")
         @Override
         public <T extends Entityc> T self() {
             return (T) this;
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public <T> T as() {
             return (T) this;
