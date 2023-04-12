@@ -2,8 +2,8 @@ package fos.type.blocks.defense;
 
 import arc.math.Mathf;
 import arc.util.Nullable;
-import fos.type.bullets.OhioBeamBulletType;
 import mindustry.entities.Units;
+import mindustry.entities.bullet.BulletType;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.Liquid;
@@ -17,6 +17,7 @@ public class DeathrayTurret extends LaserTurret {
         super(name);
         rotate = false;
         /* the entire circle */ shootCone = 360f;
+        targetInterval = 2f;
     }
 
     @Override
@@ -28,36 +29,34 @@ public class DeathrayTurret extends LaserTurret {
 
     @SuppressWarnings("unused")
     public class DeathrayTurretBuild extends LaserTurretBuild {
+        public @Nullable Bullet bullet;
+
         @Override
         public void drawLight() {
             Drawf.light(x, y, lightRadius * potentialEfficiency, lightColor, 0.7f * potentialEfficiency);
         }
 
         @Override
+        public boolean canConsume() {
+            return super.canConsume() && liquids.currentAmount() > 0;
+        }
+
+        @Override
         public void updateTile() {
             super.updateTile();
 
-            bullets.removeAll(b -> !b.bullet.isAdded() || b.bullet.type == null || b.life <= 0f || b.bullet.owner != this);
+            //if targeting, shoot indefinitely, otherwise stop shooting
+            if (bullet != null) {
+                if (isShooting() && canConsume()) {
+                    bullet.lifetime += edelta();
 
-            if(bullets.any()){
-                wasShooting = true;
-                heat = 1f;
-                curRecoil = 1f;
-            }else if(reloadCounter > 0){
-                wasShooting = true;
-
-                if(coolant != null){
                     Liquid liquid = liquids.current();
                     float maxUsed = coolant.amount;
                     float used = (cheating() ? maxUsed : Math.min(liquids.get(liquid), maxUsed)) * delta();
                     reloadCounter -= used * liquid.heatCapacity * coolantMultiplier;
                     liquids.remove(liquid, used);
-
-                    if(Mathf.chance(0.06 * used)){
-                        coolEffect.at(x + Mathf.range(size * tilesize / 2f), y + Mathf.range(size * tilesize / 2f));
-                    }
-                }else{
-                    reloadCounter -= edelta();
+                } else if (bullet.lifetime <= 0) {
+                    bullet = null;
                 }
             }
         }
@@ -65,7 +64,7 @@ public class DeathrayTurret extends LaserTurret {
         @Override
         protected void findTarget() {
             float range = range();
-            Bullet b = Groups.bullet.find(e -> e.type instanceof OhioBeamBulletType);
+            Bullet b = this.bullet;
             float cx = b != null ? b.x : this.x;
             float cy = b != null ? b.y : this.y;
 
@@ -94,8 +93,24 @@ public class DeathrayTurret extends LaserTurret {
         }
 
         @Override
-        protected void handleBullet(@Nullable Bullet bullet, float offsetX, float offsetY, float angleOffset) {
+        public boolean isShooting() {
+            return super.isShooting();
+        }
 
+        @Override
+        protected void updateShooting() {
+            if (bullet != null) return;
+
+            if(reloadCounter <= 0 && efficiency > 0 && !charging() && shootWarmup >= minWarmup){
+                BulletType type = peekAmmo();
+                shoot(type);
+                reloadCounter = reload;
+            }
+        }
+
+        @Override
+        protected void handleBullet(Bullet bullet, float offsetX, float offsetY, float angleOffset) {
+            this.bullet = bullet;
         }
     }
 }

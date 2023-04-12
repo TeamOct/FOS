@@ -28,7 +28,7 @@ public class OhioBeamBulletType extends ContinuousBulletType {
         splashDamageRadius = this.width;
         scaledSplashDamage = false;
         speed = 1f;
-        lifetime = 600f;
+        lifetime = 30f;
         status = StatusEffects.melting;
         incendAmount = 20;
         incendSpread = this.width;
