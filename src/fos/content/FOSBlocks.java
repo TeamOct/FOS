@@ -58,7 +58,7 @@ public class FOSBlocks {
     tinWire, copperWire, brassWire, windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     //defense
     tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
-    helix, sticker, particulator, pulse, thunder, cluster, judge,
+    helix, sticker, particulator, pulse, thunder, cluster, judge, newJudge,
     matrixShieldProj,
     //environment & ores
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
@@ -646,7 +646,42 @@ public class FOSBlocks {
             coolantMultiplier = 0.25f;
             requirements(Category.turret, with(silicon, 500, vanadium, 300, iridium, 250, luminium, 200));
         }};
-        judge = new DeathrayTurret("judge"){{
+        judge = new NewDeathRayTurret("judge"){{
+            scaledHealth = 480;
+            size = 8;
+            minRange = 200f;
+            range = 600f;
+            reload = 900f;
+            hasLiquids = true;
+            targetAir = targetGround = true;
+            loopSound = Sounds.techloop;
+            loopSoundVolume = 4f;
+            consumePower(150f);
+            consumeLiquid(cryofluid, 5f);
+            consumeCoolant(5f);
+            liquidCapacity = 450f;
+            coolantMultiplier = 0.1f;
+            shake = 10f;
+            outlineIcon = false;
+            squareSprite = false;
+            lightRadius = 96f;
+            shootDuration = 60f;
+            shootType = new DeathRayBulletType(){{
+                damage = 1000f / 60f;
+                raySize = 80f;
+            }};
+            drawer = new DrawMulti(
+                    new DrawRegion("-bottom"),
+                    new DrawPower("-glow"){{
+                        emptyLightColor = Color.valueOf("30608200");
+                        fullLightColor = Color.valueOf("306082");
+                    }},
+                    new DrawLiquidRegion(),
+                    new DrawDefault()
+            );
+            requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, iridium, 1500, luminium, 1500));
+        }};
+        /*judge = new DeathrayTurret("judge"){{
             scaledHealth = 480;
             size = 8;
             minRange = 200f;
@@ -676,7 +711,7 @@ public class FOSBlocks {
                 new DrawDefault()
             );
             requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, iridium, 1500, luminium, 1500));
-        }};
+        }};*/
 
         matrixShieldProj = new PolyForceProjector("matrix-shield-projector"){{
             health = 480;
