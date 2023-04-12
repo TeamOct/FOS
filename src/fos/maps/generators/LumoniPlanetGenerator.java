@@ -1,29 +1,23 @@
 package fos.maps.generators;
 
 import arc.graphics.Color;
-import arc.math.Angles;
-import arc.math.Mathf;
-import arc.math.Rand;
+import arc.math.*;
 import arc.math.geom.*;
 import arc.struct.*;
 import arc.util.Tmp;
-import arc.util.noise.Ridged;
-import arc.util.noise.Simplex;
+import arc.util.noise.*;
 import fos.content.FOSTeam;
+import fos.maps.generators.bases.LumoniBaseGenerator;
 import mindustry.ai.Astar;
 import mindustry.content.Blocks;
-import mindustry.game.Schematics;
-import mindustry.game.Team;
+import mindustry.game.*;
 import mindustry.maps.generators.PlanetGenerator;
 import mindustry.type.Sector;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.Floor;
-import mindustry.world.blocks.storage.CoreBlock;
-import mindustry.world.meta.Env;
 
 import static fos.content.FOSBlocks.*;
-import static mindustry.Vars.state;
-import static mindustry.Vars.world;
+import static mindustry.Vars.*;
 import static mindustry.content.Blocks.*;
 import static mindustry.graphics.g3d.PlanetGrid.Ptile;
 
@@ -438,7 +432,6 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
     @Override
     public void postGenerate(Tiles tiles) {
-        CoreBlock.CoreBuild core = state.rules.defaultTeam.core();
-        if (tiles.get(core.tile.x, core.tile.y).block() == deepwater) state.rules.env |= Env.underwater;
+        //TODO
     }
 }

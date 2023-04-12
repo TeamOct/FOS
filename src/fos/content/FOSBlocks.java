@@ -646,7 +646,7 @@ public class FOSBlocks {
             coolantMultiplier = 0.25f;
             requirements(Category.turret, with(silicon, 500, vanadium, 300, iridium, 250, luminium, 200));
         }};
-        judge = new NewDeathRayTurret("judge"){{
+        newJudge = new NewDeathRayTurret("new-judge"){{
             scaledHealth = 480;
             size = 8;
             minRange = 200f;
@@ -681,7 +681,7 @@ public class FOSBlocks {
             );
             requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, iridium, 1500, luminium, 1500));
         }};
-        /*judge = new DeathrayTurret("judge"){{
+        judge = new DeathrayTurret("judge"){{
             scaledHealth = 480;
             size = 8;
             minRange = 200f;
@@ -711,7 +711,7 @@ public class FOSBlocks {
                 new DrawDefault()
             );
             requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, iridium, 1500, luminium, 1500));
-        }};*/
+        }};
 
         matrixShieldProj = new PolyForceProjector("matrix-shield-projector"){{
             health = 480;

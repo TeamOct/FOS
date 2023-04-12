@@ -2,20 +2,28 @@ package fos.maps.generators;
 
 import arc.math.*;
 import arc.math.geom.*;
+import arc.struct.Seq;
 import arc.util.noise.*;
 import fos.content.FOSSchematics;
-import mindustry.content.*;
-import mindustry.game.*;
-import mindustry.maps.generators.*;
-import mindustry.type.*;
+import fos.maps.generators.bases.UxerdBaseGenerator;
+import mindustry.Vars;
+import mindustry.content.Blocks;
+import mindustry.game.Schematics;
+import mindustry.maps.generators.BlankPlanetGenerator;
+import mindustry.type.Sector;
 import mindustry.world.*;
-import mindustry.world.blocks.environment.*;
+import mindustry.world.blocks.environment.Floor;
 
 import static fos.content.FOSBlocks.*;
 
 public class UxerdAsteroidGenerator extends BlankPlanetGenerator {
+    /** A fallback floor if RNG fails to roll a floor. Should not happen under normal circumstances. */
     public Block defaultFloor = Blocks.stone;
+    /** All (except player spawn one) asteroid tiles. For use in {@code basegen}. */
+    public Seq<Tile> asteroids = new Seq<>();
 
+    /** Enemy base generator. */
+    public final UxerdBaseGenerator basegen = new UxerdBaseGenerator();
     public int amount = 28, octaves = 2;
     public float radMin = 32f, radMax = 59f, persistence = 0.4f, scale = 30f, mag = 0.46f, thresh = 0.8f;
     public float elithiteChance = 0f, elbiumChance = 0f, nethratiumChance = 0f;
@@ -29,18 +37,12 @@ public class UxerdAsteroidGenerator extends BlankPlanetGenerator {
             defaultFloor
         ).asFloor();
 
-        for(int x = ax - rad; x <= ax + rad; x++){
-            for (int y = ay - rad; y <= ay + rad; y++){
-                if (tiles.in(x, y) && Mathf.dst(x, y, ax, ay) / rad + Simplex.noise2d(seed, octaves, persistence, 1f / scale, x, y) * mag < thresh) {
-                    tiles.getn(x, y).setFloor(floor);
-                }
-            }
-        }
+        asteroid(ax, ay, rad, floor);
     }
 
     void asteroid(int ax, int ay, int rad, Floor floor) {
-        for(int x = ax - rad; x <= ax + rad; x++){
-            for (int y = ay - rad; y <= ay + rad; y++){
+        for (int x = ax - rad; x <= ax + rad; x++) {
+            for (int y = ay - rad; y <= ay + rad; y++) {
                 if (tiles.in(x, y) && Mathf.dst(x, y, ax, ay) / rad + Simplex.noise2d(seed, octaves, persistence, 1f / scale, x, y) * mag < thresh) {
                     tiles.getn(x, y).setFloor(floor);
                 }
@@ -63,6 +65,7 @@ public class UxerdAsteroidGenerator extends BlankPlanetGenerator {
         for(int i = 0; i < amount; i++){
             float rad = rand.random(radMin, radMax), ax = rand.random(rad, width - rad), ay = rand.random(rad, height - rad);
             asteroid((int)ax, (int)ay, (int)rad);
+            asteroids.add(tiles.get((int)ax, (int)ay));
         }
 
         //cliffs around asteroids
@@ -117,7 +120,7 @@ public class UxerdAsteroidGenerator extends BlankPlanetGenerator {
 
         //add a bit more environment
         pass((x, y) -> {
-            if (Ridged.noise2d(8, x, y, 5, 0.6f, 1f / 60f) > 0.3f) {
+            if (Ridged.noise2d(8, x, y, 5, 0.6f, 1f / 60f) > 0.5f) {
                 Block replace = (
                     floor == nethratium ? Blocks.yellowStone :
                     floor == elbium ? Blocks.rhyolite :
@@ -138,7 +141,11 @@ public class UxerdAsteroidGenerator extends BlankPlanetGenerator {
         //generate silver and titanium on elithite
         ore(oreSilver, elithite, 4f, 0.7f * silverScl);
 
-        Schematics.placeLoadout(FOSSchematics.uxerdLoadout, sx, sy, Team.sharded);
+        Schematics.placeLoadout(FOSSchematics.uxerdLoadout, sx, sy, Vars.state.rules.defaultTeam);
+
+        //generate enemy structures
+        var enemyCore = tiles.get(623, 426);
+        basegen.generate(tiles, new Seq<Tile>().add(enemyCore), enemyCore, Vars.state.rules.waveTeam, sector, 7);
     }
 
     @Override
