@@ -1,40 +1,48 @@
 package fos.type.blocks.defense;
 
 import arc.Core;
+import arc.flabel.effects.ShakeEffect;
 import arc.func.Floatp;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
+import arc.graphics.g2d.Lines;
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
 import arc.util.Log;
 import arc.util.Time;
+import arc.util.Tmp;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import mindustry.Vars;
-import mindustry.entities.Damage;
-import mindustry.entities.Effect;
+import mindustry.entities.*;
 import mindustry.entities.bullet.BulletType;
+import mindustry.game.Team;
+import mindustry.gen.Building;
+import mindustry.gen.Fire;
+import mindustry.gen.Icon;
 import mindustry.gen.Posc;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
+import mindustry.input.Binding;
 import mindustry.logic.LAccess;
 import mindustry.ui.Bar;
+import mindustry.world.Tile;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
-import mindustry.world.blocks.defense.turrets.ReloadTurret;
 import mindustry.world.meta.Stat;
-import mindustry.world.meta.StatUnit;
 
 // TODO add boosters
+// TODO consumption on charging
 public class NewDeathRayTurret extends PowerTurret {
     /** time of shooting on full charge **/
-    public float shootDuration = 60f;
+    public float shootDuration = 180f;
     /** time for full charge **/
     public float chargeTime = 60f;
     public Floatp raySize = () -> size * Vars.tilesize / 2f;
     /** time of drawing the ray after stopping shooting **/
     public float rayEffectTime = 60f;
+    public float aimingSpeed = 192f / 60f;
 
     public Effect ray = new Effect(60f, e -> {
         RayEffectData data = e.data();
@@ -54,8 +62,6 @@ public class NewDeathRayTurret extends PowerTurret {
 
     public NewDeathRayTurret(String name) {
         super(name);
-        shootType = new DeathRayBulletType();
-        ray.clip = Math.max(Vars.world.width(), Vars.world.height()) * 2f;
     }
 
     /** Draws a beam that goes upwards. (Yes, I'm just spizdil)*/
@@ -102,13 +108,36 @@ public class NewDeathRayTurret extends PowerTurret {
         public float charge = 0f;
         /** for ray drawing **/
         public Vec2 recentShoot = new Vec2();
+        public Vec2 aimPos = new Vec2();
         /** using for ray draw **/
         public boolean shooting = false;
         /** is turret uncharged **/
         public boolean overHeat = false;
 
         public boolean effectSpawned = true;
-        public float lastShootTime;
+
+        public DeathRayBulletType shoot() {
+            return (DeathRayBulletType) shootType;
+        }
+
+        @Override
+        public Building init(Tile tile, Team team, boolean shouldAdd, int rotation) {
+            aimPos.set(tile.worldx(), tile.worldy());
+            return super.init(tile, team, shouldAdd, rotation);
+        }
+
+        public boolean updateAim() {
+            if (targetPos.isZero()) return false;
+            aimPos.add(targetPos.cpy().sub(aimPos).nor().scl(aimingSpeed * edelta()));
+            return aimPos.cpy().sub(targetPos).len() <= shoot().raySize;
+        }
+
+        @Override
+        protected void findTarget() {
+            target = Units.closestEnemy(team, x, y, range(), (u) -> !u.dead() &&
+                    (targetAir && u.isFlying()) ||
+                    (targetGround && u.isGrounded()));
+        }
 
         @Override
         public void updateTile() {
@@ -117,7 +146,6 @@ public class NewDeathRayTurret extends PowerTurret {
             clipSize = range;
 
             wasShooting = false;
-            shooting = false;
 
             unit.tile(this);
             unit.rotation(rotation);
@@ -134,34 +162,36 @@ public class NewDeathRayTurret extends PowerTurret {
             updateReload();
 
             if(hasAmmo()){
-                if(Float.isNaN(reloadCounter)) reloadCounter = 0;
+                if (Float.isNaN(reloadCounter)) reloadCounter = 0;
 
-                if(timer(timerTarget, targetInterval)){
+                if (timer(timerTarget, targetInterval)) {
+                    // TODO re-write this method
                     findTarget();
                 }
 
+                shooting = false;
                 if(validateTarget()){
                     boolean canShoot = true;
 
-                    if(isControlled()){ //player behavior
+                    if (isControlled()) {
                         targetPos.set(unit.aimX(), unit.aimY());
                         canShoot = unit.isShooting();
-                    }else if(logicControlled()){ //logic behavior
+                    } else if (logicControlled()){
                         canShoot = logicShooting;
-                    }else{ //default AI behavior
+                    } else {
                         targetPosition(target);
 
-                        if(Float.isNaN(rotation)) rotation = 0;
+                        if (Float.isNaN(rotation)) rotation = 0;
                     }
 
-                    if(!isControlled()){
+                    if (!isControlled()) {
                         unit.aimX(targetPos.x);
                         unit.aimY(targetPos.y);
                     }
 
                     float targetRot = angleTo(targetPos);
 
-                    if(canShoot){
+                    if (canShoot) {
                         wasShooting = true;
                         updateShooting();
                     }
@@ -169,6 +199,7 @@ public class NewDeathRayTurret extends PowerTurret {
             }
 
             if(coolant != null){
+                // TODO re-write cooling
                 updateCooling();
             }
         }
@@ -177,7 +208,17 @@ public class NewDeathRayTurret extends PowerTurret {
         public void draw() {
             super.draw();
 
-            float time = Time.time - lastShootTime;
+            Tmp.c4.set(Draw.getColor());
+            Draw.color(Pal.lightOrange);
+            float z = Draw.z();
+            Draw.z(Layer.effect);
+
+            Lines.stroke(8, Pal.lighterOrange.cpy().mul(0.8f));
+            Lines.circle(aimPos.x, aimPos.y, shoot().raySize);
+
+            Draw.color(Tmp.c4);
+            Draw.z(z);
+
             if (charge > 0f && shooting) {
                 effectSpawned = false;
                 drawBeam(Pal.slagOrange, x, y, raySize.get());
@@ -185,6 +226,7 @@ public class NewDeathRayTurret extends PowerTurret {
                         shootType instanceof DeathRayBulletType d ? d.raySize : 0);
             } else if (!effectSpawned) {
                 ray.lifetime = rayEffectTime;
+                ray.clip = Math.max(Vars.world.width(), Vars.world.height()) * 2f;
                 ray.at(x, y, 0, new RayEffectData(recentShoot.x, recentShoot.y));
                 effectSpawned = true;
             }
@@ -200,7 +242,8 @@ public class NewDeathRayTurret extends PowerTurret {
 
         @Override
         protected void updateShooting() {
-            if (targetPos.isZero() || !targetPos.within(x, y, range())) return;
+            if (!updateAim()) return;
+            if (!aimPos.within(x, y, range())) return;
 
             if (!overHeat) {
                 charge -= 1 / shootDuration * Time.delta;
@@ -209,11 +252,15 @@ public class NewDeathRayTurret extends PowerTurret {
                 if (charge == 0)
                     overHeat = true;
 
-                recentShoot.set(targetPos.x, targetPos.y);
+                recentShoot.set(aimPos.x, aimPos.y);
                 shooting = true;
-                lastShootTime = Time.time;
 
-                Damage.damage(targetPos.x, targetPos.y,
+                Effect.shake(5, 10, this);
+                Effect.shake(5, 10, aimPos);
+                Vars.world.tileWorld(aimPos.x, aimPos.y)
+                        .circle(Mathf.ceil(shoot().raySize / Vars.tilesize), Fires::create);
+
+                Damage.damage(aimPos.x, aimPos.y,
                         shootType instanceof DeathRayBulletType d ? d.raySize : 0, shootType.damage);
             }
         }
@@ -226,7 +273,7 @@ public class NewDeathRayTurret extends PowerTurret {
         @Override
         protected void updateReload() {
             if (!shooting && charge < 1f) {
-                charge += 1 / chargeTime * edelta();
+                charge += 1f / chargeTime * edelta();
                 clampCharge();
             }
             if (charge == 1f) {
@@ -249,12 +296,12 @@ public class NewDeathRayTurret extends PowerTurret {
 
         @Override
         public float activeSoundVolume(){
-            return charge * 0.5f;
+            return 0.1f;
         }
 
         @Override
         public boolean shouldActiveSound(){
-            return charge > 0f;
+            return shooting;
         }
 
         @Override
@@ -263,6 +310,7 @@ public class NewDeathRayTurret extends PowerTurret {
             charge = read.f();
             overHeat = read.bool();
             shooting = read.bool();
+            aimPos.set(read.f(), read.f());
         }
 
         @Override
@@ -271,6 +319,8 @@ public class NewDeathRayTurret extends PowerTurret {
             write.f(charge);
             write.bool(overHeat);
             write.bool(shooting);
+            write.f(aimPos.x);
+            write.f(aimPos.y);
         }
 
         @Override

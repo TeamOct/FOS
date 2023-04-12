@@ -668,7 +668,7 @@ public class FOSBlocks {
             shootDuration = 60f;
             shootType = new DeathRayBulletType(){{
                 damage = 1000f / 60f;
-                raySize = 80f;
+                raySize = 40f;
             }};
             drawer = new DrawMulti(
                     new DrawRegion("-bottom"),
