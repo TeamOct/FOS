@@ -1,6 +1,5 @@
 package fos;
 
-import arc.Core;
 import arc.Events;
 import arc.func.Prov;
 import arc.math.Mathf;
@@ -12,11 +11,8 @@ import fos.content.*;
 import fos.graphics.FOSShaders;
 import fos.ui.DamageDisplay;
 import fos.ui.menus.*;
-import mindustry.Vars;
 import mindustry.ai.Pathfinder;
 import mindustry.content.SectorPresets;
-import mindustry.ctype.Content;
-import mindustry.ctype.UnlockableContent;
 import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.mod.Mod;
@@ -33,6 +29,8 @@ import static mindustry.Vars.*;
 import static mindustry.game.EventType.*;
 
 public class FOSMod extends Mod {
+    public DamageDisplay dd;
+
     public FOSMod() {
         Events.on(ClientLoadEvent.class, e -> {
             loadSettings();
@@ -167,7 +165,7 @@ public class FOSMod extends Mod {
 
         ui.editor.shown(this::addEditorTeams);
 
-        new DamageDisplay();
+        dd = new DamageDisplay();
     }
 
     @Override
@@ -195,16 +193,18 @@ public class FOSMod extends Mod {
 
     private void loadSettings() {
         ui.settings.addCategory("@setting.fos-title", "fos-settings-icon", t -> {
-            t.sliderPref("fos-menutheme", 2, 1, 7, i ->
-                i == 2 ? "@setting.fos-menutheme.uxerdspace" :
-                i == 3 ? "@setting.fos-menutheme.lumonispace" :
-                i == 4 ? "@setting.fos-menutheme.randomplanet" :
-                i == 5 ? "@setting.fos-menutheme.solarsystem" :
-                i == 6 ? "@setting.fos-menutheme.caldemoltsystem" :
-                i == 7 ? "@setting.fos-menutheme.lumoniterrain" :
+            t.sliderPref("fos-menutheme", 2, 1, 7, s ->
+                s == 2 ? "@setting.fos-menutheme.uxerdspace" :
+                s == 3 ? "@setting.fos-menutheme.lumonispace" :
+                s == 4 ? "@setting.fos-menutheme.randomplanet" :
+                s == 5 ? "@setting.fos-menutheme.solarsystem" :
+                s == 6 ? "@setting.fos-menutheme.caldemoltsystem" :
+                s == 7 ? "@setting.fos-menutheme.lumoniterrain" :
                 "@setting.fos-menutheme.default");
             t.checkPref("fos-rotatemenucamera", true);
             t.checkPref("fos-damagedisplay", true);
+            t.sliderPref("fos-damagedisplayfrequency", 30, 3, 120, 3, s ->
+                bundle.format("setting.seconds", s / 60f));
             t.checkPref("fos-ostdontshowagain", false);
             t.checkPref("fos-realisticmode", false);
             t.checkPref("fos-debugmode", false, b -> {

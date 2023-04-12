@@ -1,25 +1,19 @@
 package fos.ui;
 
-import arc.Core;
-import arc.Events;
+import arc.*;
 import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.GlyphLayout;
-import arc.graphics.g2d.TextureRegion;
+import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.scene.style.TextureRegionDrawable;
-import arc.struct.ObjectFloatMap;
-import arc.struct.Seq;
+import arc.struct.*;
 import arc.util.*;
 import mindustry.entities.Effect;
 import mindustry.gen.*;
-import mindustry.graphics.Layer;
-import mindustry.graphics.Pal;
+import mindustry.graphics.*;
 import mindustry.ui.Fonts;
 
-import static mindustry.Vars.state;
-import static mindustry.Vars.world;
-import static mindustry.game.EventType.*;
+import static mindustry.Vars.*;
+import static mindustry.game.EventType.Trigger;
 
 public class DamageDisplay {
     /** Entities health check frequency in ticks (1 second = 60 ticks) **/
@@ -90,6 +84,9 @@ public class DamageDisplay {
     }
 
     void update() {
+        // change frequency according to the slider
+        updateFrequency = Core.settings.getInt("fos-damagedisplayfrequency", 30);
+
         // add all in-world entities
         Groups.all.each(e -> {
             if (e instanceof Healthc he)
