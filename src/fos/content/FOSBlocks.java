@@ -654,21 +654,20 @@ public class FOSBlocks {
             reload = 900f;
             hasLiquids = true;
             targetAir = targetGround = true;
-            loopSound = Sounds.techloop;
+            loopSound = Sounds.laserbig;
             loopSoundVolume = 4f;
-            consumePower(150f);
+            consumePower(200f);
             consumeLiquid(cryofluid, 5f);
-            consumeCoolant(5f);
             liquidCapacity = 450f;
-            coolantMultiplier = 0.1f;
             shake = 10f;
             outlineIcon = false;
             squareSprite = false;
             lightRadius = 96f;
-            shootDuration = 60f;
+            shootDuration = 600f;
+            chargeTime = 180f;
             shootType = new DeathRayBulletType(){{
-                damage = 1000f / 60f;
-                raySize = 40f;
+                damage = 2000f / 60f;
+                raySize = 20f;
             }};
             drawer = new DrawMulti(
                     new DrawRegion("-bottom"),

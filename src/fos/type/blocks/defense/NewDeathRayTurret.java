@@ -18,10 +18,7 @@ import mindustry.Vars;
 import mindustry.entities.*;
 import mindustry.entities.bullet.BulletType;
 import mindustry.game.Team;
-import mindustry.gen.Building;
-import mindustry.gen.Fire;
-import mindustry.gen.Icon;
-import mindustry.gen.Posc;
+import mindustry.gen.*;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
@@ -36,15 +33,15 @@ import mindustry.world.meta.Stat;
 // TODO consumption on charging
 public class NewDeathRayTurret extends PowerTurret {
     /** time of shooting on full charge **/
-    public float shootDuration = 180f;
+    public float shootDuration = 60f;
     /** time for full charge **/
     public float chargeTime = 60f;
     public Floatp raySize = () -> size * Vars.tilesize / 2f;
     /** time of drawing the ray after stopping shooting **/
-    public float rayEffectTime = 60f;
-    public float aimingSpeed = 192f / 60f;
+    public float rayEffectTime = 30f;
+    public float aimingSpeed = 128f / 60f;
 
-    public Effect ray = new Effect(60f, e -> {
+    public Effect ray = new Effect(1f, e -> {
         RayEffectData data = e.data();
         NewDeathRayTurret.drawBeam(Pal.slagOrange, e.x, e.y, raySize.get() * e.fout());
         NewDeathRayTurret.drawBeam(Pal.slagOrange, data.rsx, data.rsy,
@@ -127,23 +124,36 @@ public class NewDeathRayTurret extends PowerTurret {
         }
 
         public boolean updateAim() {
-            if (targetPos.isZero()) return false;
+            if (Tmp.v5.set(aimPos).sub(targetPos).len() <= shoot().raySize * 0.3f) return true;
             aimPos.add(targetPos.cpy().sub(aimPos).nor().scl(aimingSpeed * edelta()));
-            return aimPos.cpy().sub(targetPos).len() <= shoot().raySize;
+
+            // clamp aimPos in turret range
+            Vec2 d = Tmp.v5.set(aimPos.x - x, aimPos.y - y);
+            if (d.len() > range())
+                aimPos.set(x, y).add(d.nor().scl(range()));
+
+            return Tmp.v5.set(aimPos).sub(targetPos).len() <= shoot().raySize;
         }
 
         @Override
         protected void findTarget() {
-            target = Units.closestEnemy(team, x, y, range(), (u) -> !u.dead() &&
-                    (targetAir && u.isFlying()) ||
-                    (targetGround && u.isGrounded()));
+            target = Units.closestEnemy(team, aimPos.x, aimPos.y, range(), u ->
+                    ((targetAir && u.isFlying()) ||
+                    (targetGround && u.isGrounded())) &&
+                    Tmp.v5.set(u.x, u.y).sub(x, y).len() <= range());
+            if (target == null || target instanceof Buildingc)
+                target = Units.findEnemyTile(team, aimPos.x, aimPos.y, range(), b ->
+                        Tmp.v5.set(b.x, b.y).sub(x, y).len() <= range());
+        }
+
+        @Override
+        protected boolean validateTarget() {
+            return target != null || logicControlled() || isControlled();
         }
 
         @Override
         public void updateTile() {
-            if(!validateTarget()) target = null;
-
-            clipSize = range;
+            clipSize = Math.max(Vars.world.height(), Vars.world.width()) * Vars.tilesize + 1600f;
 
             wasShooting = false;
 
@@ -165,7 +175,6 @@ public class NewDeathRayTurret extends PowerTurret {
                 if (Float.isNaN(reloadCounter)) reloadCounter = 0;
 
                 if (timer(timerTarget, targetInterval)) {
-                    // TODO re-write this method
                     findTarget();
                 }
 
@@ -198,10 +207,7 @@ public class NewDeathRayTurret extends PowerTurret {
                 }
             }
 
-            if(coolant != null){
-                // TODO re-write cooling
-                updateCooling();
-            }
+            // has no colling
         }
 
         @Override
@@ -219,7 +225,7 @@ public class NewDeathRayTurret extends PowerTurret {
             Draw.color(Tmp.c4);
             Draw.z(z);
 
-            if (charge > 0f && shooting) {
+            if (shooting) {
                 effectSpawned = false;
                 drawBeam(Pal.slagOrange, x, y, raySize.get());
                 drawBeam(Pal.slagOrange, recentShoot.x, recentShoot.y,
@@ -234,16 +240,12 @@ public class NewDeathRayTurret extends PowerTurret {
 
         @Override
         public void targetPosition(Posc pos) {
-            if (pos != null)
-                targetPos.set(pos);
-            else
-                targetPos.set(Vec2.ZERO);
+            targetPos.set(pos);
         }
 
         @Override
         protected void updateShooting() {
             if (!updateAim()) return;
-            if (!aimPos.within(x, y, range())) return;
 
             if (!overHeat) {
                 charge -= 1 / shootDuration * Time.delta;
@@ -255,13 +257,14 @@ public class NewDeathRayTurret extends PowerTurret {
                 recentShoot.set(aimPos.x, aimPos.y);
                 shooting = true;
 
-                Effect.shake(5, 10, this);
-                Effect.shake(5, 10, aimPos);
+                if (shake > 0) {
+                    Effect.shake(shake, shake, this);
+                    Effect.shake(shake, shake, aimPos);
+                }
                 Vars.world.tileWorld(aimPos.x, aimPos.y)
                         .circle(Mathf.ceil(shoot().raySize / Vars.tilesize), Fires::create);
 
-                Damage.damage(aimPos.x, aimPos.y,
-                        shootType instanceof DeathRayBulletType d ? d.raySize : 0, shootType.damage);
+                Damage.damage(aimPos.x, aimPos.y, shoot().raySize, shootType.damage * Time.delta);
             }
         }
 
@@ -281,6 +284,10 @@ public class NewDeathRayTurret extends PowerTurret {
             }
         }
 
+        /**
+         Clamps charge from 0 to 1.<br>
+         Call after charge update.
+         **/
         void clampCharge(){
             charge = Mathf.clamp(charge, 0, 1f);
         }
