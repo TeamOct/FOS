@@ -686,6 +686,7 @@ public class FOSBlocks {
             minRange = 200f;
             range = 600f;
             reload = 900f;
+            minWarmup = 0.99f;
             hasLiquids = true;
             targetAir = targetGround = true;
             loopSound = Sounds.techloop;
@@ -698,13 +699,19 @@ public class FOSBlocks {
             shake = 10f;
             outlineIcon = false;
             squareSprite = false;
-            shootType = new OhioBeamBulletType(7200f, 24f);
+            shootType = new OhioBeamBulletType(7200f, 18f);
             lightRadius = 96f;
             drawer = new DrawMulti(
                 new DrawRegion("-bottom"),
                 new DrawPower("-glow"){{
                     emptyLightColor = Color.valueOf("30608200");
                     fullLightColor = Color.valueOf("306082");
+                }},
+                new DrawShape(){{
+                    color = Pal.slagOrange;
+                    sides = 48;
+                    radius = 18f;
+                    useWarmupRadius = true;
                 }},
                 new DrawLiquidRegion(),
                 new DrawDefault()

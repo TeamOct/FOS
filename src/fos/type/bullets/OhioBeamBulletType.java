@@ -3,7 +3,9 @@ package fos.type.bullets;
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
-import mindustry.content.*;
+import fos.content.FOSFx;
+import mindustry.content.StatusEffects;
+import mindustry.entities.Effect;
 import mindustry.entities.bullet.ContinuousBulletType;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -37,7 +39,7 @@ public class OhioBeamBulletType extends ContinuousBulletType {
         /* Anuke, why is this drawSize and not clipSize like everything else */ drawSize = 720f;
         pierceBuilding = true;
         pierceArmor = true;
-        despawnEffect = Fx.fireRemove;
+        despawnEffect = FOSFx.deathrayDespawn;
         despawnSound = Sounds.none;
     }
 
@@ -79,6 +81,20 @@ public class OhioBeamBulletType extends ContinuousBulletType {
     }
 
     @Override
+    public void despawned(Bullet b) {
+        if (despawnHit) {
+            hit(b);
+        }
+
+        if (b.owner instanceof Turret.TurretBuild t) {
+            despawnEffect.at(b.x, b.y, b.rotation(), hitColor, t.pos());
+        }
+        despawnSound.at(b);
+
+        Effect.shake(despawnShake, despawnShake, b);
+    }
+
+    @Override
     public void draw(Bullet b) {
         Lines.stroke(80f, color);
         drawBeam(color, b.x, b.y, width);
@@ -88,7 +104,7 @@ public class OhioBeamBulletType extends ContinuousBulletType {
     }
 
     /** Draws a beam that goes upwards. */
-    public void drawBeam(Color color, float x, float y, float rad) {
+    public static void drawBeam(Color color, float x, float y, float rad) {
         Draw.color(Pal.redLight, 0.6f);
         Fill.poly(x, y, 48, rad * 1.2f);
 
