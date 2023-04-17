@@ -646,41 +646,7 @@ public class FOSBlocks {
             coolantMultiplier = 0.25f;
             requirements(Category.turret, with(silicon, 500, vanadium, 300, iridium, 250, luminium, 200));
         }};
-        newJudge = new NewDeathRayTurret("new-judge"){{
-            scaledHealth = 480;
-            size = 8;
-            minRange = 200f;
-            range = 600f;
-            reload = 900f;
-            hasLiquids = true;
-            targetAir = targetGround = true;
-            loopSound = Sounds.laserbig;
-            loopSoundVolume = 4f;
-            consumePower(200f);
-            consumeLiquid(cryofluid, 5f);
-            liquidCapacity = 450f;
-            shake = 10f;
-            outlineIcon = false;
-            squareSprite = false;
-            lightRadius = 96f;
-            shootDuration = 600f;
-            chargeTime = 180f;
-            shootType = new DeathRayBulletType(){{
-                damage = 2000f / 60f;
-                raySize = 20f;
-            }};
-            drawer = new DrawMulti(
-                    new DrawRegion("-bottom"),
-                    new DrawPower("-glow"){{
-                        emptyLightColor = Color.valueOf("30608200");
-                        fullLightColor = Color.valueOf("306082");
-                    }},
-                    new DrawLiquidRegion(),
-                    new DrawDefault()
-            );
-            requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, iridium, 1500, luminium, 1500));
-        }};
-        judge = new DeathrayTurret("judge"){{
+        judge = new DeathrayTurret("judge1"){{
             scaledHealth = 480;
             size = 8;
             minRange = 200f;
@@ -715,6 +681,40 @@ public class FOSBlocks {
                 }},
                 new DrawLiquidRegion(),
                 new DrawDefault()
+            );
+            requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, iridium, 1500, luminium, 1500));
+        }};
+        newJudge = new NewDeathRayTurret("judge2"){{
+            scaledHealth = 480;
+            size = 8;
+            minRange = 200f;
+            range = 600f;
+            reload = 900f;
+            hasLiquids = true;
+            targetAir = targetGround = true;
+            loopSound = Sounds.laserbig;
+            loopSoundVolume = 4f;
+            consumePower(200f);
+            consumeLiquid(cryofluid, 5f);
+            liquidCapacity = 450f;
+            shake = 10f;
+            outlineIcon = false;
+            squareSprite = false;
+            lightRadius = 96f;
+            shootDuration = 600f;
+            chargeTime = 180f;
+            shootType = new DeathRayBulletType(){{
+                damage = 2000f / 60f;
+                raySize = 20f;
+            }};
+            drawer = new DrawMulti(
+                    new DrawRegion("-bottom"),
+                    new DrawPower("-glow"){{
+                        emptyLightColor = Color.valueOf("30608200");
+                        fullLightColor = Color.valueOf("306082");
+                    }},
+                    new DrawLiquidRegion(),
+                    new DrawDefault()
             );
             requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, iridium, 1500, luminium, 1500));
         }};

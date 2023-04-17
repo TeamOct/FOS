@@ -3,6 +3,7 @@ package fos.type.bullets;
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
+import arc.math.geom.Point2;
 import fos.content.FOSFx;
 import mindustry.content.StatusEffects;
 import mindustry.entities.Effect;
@@ -29,6 +30,7 @@ public class OhioBeamBulletType extends ContinuousBulletType {
         this.width = width;
         splashDamageRadius = this.width;
         scaledSplashDamage = false;
+        /* aaaaaaaaaa */ displayAmmoMultiplier = false;
         speed = 1f;
         lifetime = 30f;
         status = StatusEffects.melting;
@@ -87,7 +89,7 @@ public class OhioBeamBulletType extends ContinuousBulletType {
         }
 
         if (b.owner instanceof Turret.TurretBuild t) {
-            despawnEffect.at(b.x, b.y, b.rotation(), hitColor, t.pos());
+            despawnEffect.at(b.x, b.y, b.rotation(), hitColor, Point2.pack((int)t.x, (int)t.y));
         }
         despawnSound.at(b);
 

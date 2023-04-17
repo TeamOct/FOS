@@ -52,7 +52,7 @@ public class NewDeathRayTurret extends PowerTurret {
         super(name);
     }
 
-    /** Draws a beam that goes upwards. (Yes, I'm just spizdil)*/
+    /** Draws a beam that goes upwards. (Yes, I'm just spizdil) */
     public static void drawBeam(Color color, float x, float y, float rad) {
         float z = Draw.z();
         Draw.z(Layer.effect);
