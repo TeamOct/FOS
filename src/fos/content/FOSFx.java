@@ -110,6 +110,6 @@ public class FOSFx {
         var data = Point2.unpack(e.data());
 
         OhioBeamBulletType.drawBeam(Pal.slagOrange, e.x, e.y, 18f * e.fout());
-        OhioBeamBulletType.drawBeam(Pal.slagOrange, data.x*8f, data.y*8f, 18f * e.fout());
+        OhioBeamBulletType.drawBeam(Pal.slagOrange, data.x, data.y, 18f * e.fout());
     });
 }
