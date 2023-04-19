@@ -60,6 +60,7 @@ public class FOSBlocks {
     tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
     helix, sticker, particulator, pulse, thunder, cluster, judge, newJudge,
     matrixShieldProj,
+        landMine,
     //environment & ores
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
@@ -734,6 +735,15 @@ public class FOSBlocks {
             };
             consumePower(4f);
             requirements(Category.effect, with(diamond, 150, silicon, 200, vanadium, 125));
+        }};
+
+        landMine = new CamoMine("land-mine"){{
+            tileDamage = health; //this is a one-time use mine.
+            teamAlpha = 0.1f;
+            tendrils = 0;
+            shots = 1;
+            bullet = new ExplosionBulletType(480f, 20f);
+            requirements(Category.effect, with(copper, 30, vanadium, 40));
         }};
         //endregion
         //region distribution
