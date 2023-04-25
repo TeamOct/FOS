@@ -171,6 +171,7 @@ public class FOSMod extends Mod {
     @Override
     public void loadContent() {
         FOSShaders.init();
+        FOSCommands.init();
 
         FOSTeam.load();
         FOSAttributes.load();
