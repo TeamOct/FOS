@@ -1027,7 +1027,7 @@ public class FOSBlocks {
             health = 1920;
             size = 2;
             breakable = true;
-            itemCapacity = 250;
+            itemCapacity = 0;
             unitCapModifier = 0;
             squareSprite = false;
             requirements(Category.effect, with(tin, 1500));
