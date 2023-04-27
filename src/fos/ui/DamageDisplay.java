@@ -8,13 +8,15 @@ import arc.scene.style.TextureRegionDrawable;
 import arc.struct.*;
 import arc.util.*;
 import mindustry.entities.Effect;
+import mindustry.game.Team;
 import mindustry.gen.*;
-import mindustry.graphics.*;
+import mindustry.graphics.Layer;
 import mindustry.ui.Fonts;
 
 import static mindustry.Vars.*;
 import static mindustry.game.EventType.Trigger;
 
+/** A class for displaying damage values entities receive. */
 public class DamageDisplay {
     /** Entities health check frequency in ticks (1 second = 60 ticks) **/
     public float updateFrequency = 30f;
@@ -22,43 +24,37 @@ public class DamageDisplay {
     public final ObjectFloatMap<Healthc> entitiesHealth = new ObjectFloatMap<>();
     /** Stores previous entity health values. */
     public final ObjectFloatMap<Building> nonUpdateBuildingsHealth = new ObjectFloatMap<>();
-    /** Stores entities **/
+    /** Stores entities. **/
     public final Seq<Healthc> entities = new Seq<>();
+    /** Stores non-updated buildings. */
     public final Seq<Building> nonUpdateBuildings = new Seq<>();
 
+    /** An effect used for damage display. */
     public static Effect damageShowEffect = new Effect(60f, 80f, (e) -> {
         HealthInfo data = e.data();
 
-        float scale = Mathf.sin(e.fin() * 3.14f / 2f);
+        float dmgScale = Mathf.clamp(1f + data.amount / 2500, 1f, 5f);
+        float scale = Mathf.sin(e.fin() * 3.14f / 2f) * dmgScale;
 
         if (scale == 0) return;
 
-        Color color = null;
-        TextureRegionDrawable forDraw = null;
+        Color color = data.team.color;
+        TextureRegionDrawable forDraw;
         switch (data.type) {
-            case 0 -> {
-                forDraw = Icon.defense;
-                color = Pal.gray;
-            }
-            case 1 -> {
-                forDraw = Icon.modeAttack;
-                color = Pal.health;
-            }
-            case 2 -> {
-                forDraw = Icon.wrench;
-                color = Pal.regen;
-            }
+            case 1 -> forDraw = Icon.modeAttack;
+            case 2 -> forDraw = Icon.wrench;
+            default -> forDraw = Icon.defense;
         }
 
         Draw.z(Layer.effect + 20);
-        Draw.color(color.cpy().a(0.6f));
+        Draw.color(color.cpy().a(0.8f));
 
         float realScale = scale * 0.5f;
 
         TextureRegion r = forDraw.getRegion();
         Draw.rect(forDraw.getRegion(), e.x, e.y, r.width * realScale / 2f, r.height * realScale / 2f);
 
-        GlyphLayout g = Fonts.def.draw(Strings.fixed(data.amount, 0), e.x + r.width * realScale / 4f,
+        Fonts.def.draw(Strings.fixed(data.amount, 0), e.x + r.width * realScale / 4f,
                 e.y + r.height * realScale / 4f, Draw.getColor(), realScale, false, Align.left);
 
         Draw.z(Layer.effect);
@@ -106,8 +102,9 @@ public class DamageDisplay {
             if (entitiesHealth.containsKey(he)) {
                 float delta = entitiesHealth.get(he, 0) - he.health();
                 if (delta != 0)
-                    damageShowEffect.at(he.x(), he.y(), 0, new HealthInfo(
-                            delta > 0 ? 1 : 2, Math.abs(delta)));
+                    damageShowEffect.at(he.x() + Mathf.random(-8f, 8f), he.y() + Mathf.random(4f, 8f), 0, new HealthInfo(
+                            delta > 0 ? 1 : 2, Math.abs(delta),
+                            he instanceof Unit u ? u.team : he instanceof Building b ? b.team : Team.derelict));
             }
 
             if (!he.isAdded()) {
@@ -126,8 +123,8 @@ public class DamageDisplay {
                 if (nonUpdateBuildingsHealth.containsKey(b)) {
                     float delta = nonUpdateBuildingsHealth.get(b, 0) - b.health();
                     if (delta != 0)
-                        damageShowEffect.at(b.x(), b.y(), 0, new HealthInfo(
-                                delta > 0 ? 1 : 2, Math.abs(delta)));
+                        damageShowEffect.at(b.x() + Mathf.random(-8f, 8f), b.y() + Mathf.random(4f, 8f), 0, new HealthInfo(
+                                delta > 0 ? 1 : 2, Math.abs(delta), b.team));
                 }
 
                 nonUpdateBuildingsHealth.put(b, b.health);
@@ -145,10 +142,12 @@ public class DamageDisplay {
     static class HealthInfo {
         int type;
         float amount;
+        Team team;
 
-        public HealthInfo(int t, float a) {
+        public HealthInfo(int t, float a, Team team) {
             type = t;
             amount = a;
+            this.team = team;
         }
     }
 }
