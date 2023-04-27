@@ -6,7 +6,7 @@ import arc.math.Mathf;
 import arc.scene.ui.ImageButton;
 import arc.scene.ui.layout.*;
 import arc.struct.Seq;
-import arc.util.Reflect;
+import arc.util.*;
 import fos.content.*;
 import fos.graphics.FOSShaders;
 import fos.ui.DamageDisplay;
@@ -208,6 +208,13 @@ public class FOSMod extends Mod {
                 bundle.format("setting.seconds", s / 60f));
             t.checkPref("fos-ostdontshowagain", false);
             t.checkPref("fos-realisticmode", false);
+            t.checkPref("fos-refreshsplash", false, b -> {
+                Time.run(60f, () ->
+                    settings.put("fos-refreshsplash", false)
+                );
+                int n = Mathf.floor((float) Math.random() * SplashTexts.splashes.size);
+                mods.locateMod("fos").meta.subtitle = SplashTexts.splashes.get(n);
+            });
             t.checkPref("fos-debugmode", false, b -> {
                 if (b) {
                     ui.showConfirm("@warning", "@fos-dangerzone", () -> {
