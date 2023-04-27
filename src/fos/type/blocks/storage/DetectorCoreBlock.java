@@ -32,7 +32,7 @@ public class DetectorCoreBlock extends CoreBlock {
     /** Player respawn cooldown. */
     public float spawnCooldown = 5f * 60f;
     /** Applies to Core: Colony only. Minimum distance between adjacent Colonies. */
-    public float colonyNoBuildRadius = 80f;
+    public float colonyNoBuildRadius = 400f;
 
     public DetectorCoreBlock(String name) {
         super(name);
