@@ -29,7 +29,6 @@ import mindustry.world.Tile;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
 import mindustry.world.meta.Stat;
 
-// TODO add boosters
 // TODO consumption on charging
 public class NewDeathRayTurret extends PowerTurret {
     /** time of shooting on full charge **/
@@ -278,6 +277,7 @@ public class NewDeathRayTurret extends PowerTurret {
             if (!shooting && charge < 1f) {
                 charge += 1f / chargeTime * edelta();
                 clampCharge();
+                updateConsumption();
             }
             if (charge == 1f) {
                 overHeat = false;
