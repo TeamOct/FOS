@@ -1,7 +1,6 @@
-package fos.type.units;
+package fos.type.units.constructors;
 
-import arc.util.io.Reads;
-import arc.util.io.Writes;
+import arc.util.io.*;
 import mindustry.gen.LegsUnit;
 import mindustry.io.TypeIO;
 

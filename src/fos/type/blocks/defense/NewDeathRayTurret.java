@@ -1,28 +1,19 @@
 package fos.type.blocks.defense;
 
 import arc.Core;
-import arc.flabel.effects.ShakeEffect;
 import arc.func.Floatp;
 import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.Fill;
-import arc.graphics.g2d.Lines;
+import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
-import arc.util.Log;
-import arc.util.Time;
-import arc.util.Tmp;
-import arc.util.io.Reads;
-import arc.util.io.Writes;
+import arc.util.*;
+import arc.util.io.*;
 import mindustry.Vars;
 import mindustry.entities.*;
 import mindustry.entities.bullet.BulletType;
 import mindustry.game.Team;
 import mindustry.gen.*;
-import mindustry.graphics.Drawf;
-import mindustry.graphics.Layer;
-import mindustry.graphics.Pal;
-import mindustry.input.Binding;
+import mindustry.graphics.*;
 import mindustry.logic.LAccess;
 import mindustry.ui.Bar;
 import mindustry.world.Tile;
@@ -60,7 +51,7 @@ public class NewDeathRayTurret extends PowerTurret {
         super(name);
     }
 
-    /** Draws a beam that goes upwards. (Yes, I'm just spizdil)*/
+    /** Draws a beam that goes upwards. (Yes, I'm just spizdil) */
     public static void drawBeam(Color color, float x, float y, float rad) {
         float z = Draw.z();
         Draw.z(Layer.effect);

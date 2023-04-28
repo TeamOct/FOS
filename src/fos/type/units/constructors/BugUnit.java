@@ -1,12 +1,10 @@
-package fos.type.units;
+package fos.type.units.constructors;
 
-import arc.util.io.Reads;
-import arc.util.io.Writes;
+import arc.util.io.*;
 import fos.FOSVars;
-import mindustry.gen.Unit;
-import mindustry.gen.UnitEntity;
+import mindustry.gen.*;
 
-public class BugFlyingUnit extends UnitEntity {
+public class BugUnit extends CrawlUnit {
     /** A unit that this bug follows. */
     public Unit following;
     /** Whether this bug is followed by others. */
@@ -14,20 +12,20 @@ public class BugFlyingUnit extends UnitEntity {
     /** Whether the swarm is currently invading enemy factories. */
     public boolean invading;
 
-    public BugFlyingUnit() {
+    public BugUnit() {
         super();
         following = null;
         isFollowed = false;
         invading = false;
     }
 
-    public static BugFlyingUnit create() {
-        return new BugFlyingUnit();
+    public static BugUnit create() {
+        return new BugUnit();
     }
 
     @Override
     public int classId() {
-        return FOSVars.bugFlyingEntity;
+        return FOSVars.bugEntity;
     }
 
     @Override

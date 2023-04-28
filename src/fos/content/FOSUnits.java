@@ -1,22 +1,21 @@
 package fos.content;
 
-import arc.math.*;
-import fos.graphics.FOSPal;
-import fos.type.abilities.*;
+import arc.math.Mathf;
 import fos.ai.*;
+import fos.graphics.FOSPal;
+import fos.type.abilities.HackFieldAbility;
 import fos.type.bullets.*;
 import fos.type.units.*;
+import fos.type.units.constructors.LumoniPlayerUnit;
 import fos.type.units.destroyers.DestroyersUnits;
-import fos.type.units.weapons.*;
+import fos.type.units.weapons.InjectorWeapon;
 import mindustry.content.*;
 import mindustry.entities.abilities.*;
-import mindustry.entities.bullet.BasicBulletType;
-import mindustry.entities.bullet.LiquidBulletType;
+import mindustry.entities.bullet.*;
 import mindustry.entities.part.RegionPart;
 import mindustry.entities.pattern.ShootSpread;
 import mindustry.gen.*;
-import mindustry.graphics.Layer;
-import mindustry.graphics.Pal;
+import mindustry.graphics.*;
 import mindustry.type.*;
 
 import static fos.content.FOSStatuses.hacked;
@@ -29,12 +28,15 @@ public class FOSUnits {
     lord, testBoss,
     //flying
     sergeant, lieutenant, captain, general, marshal,
+    smoke, cloud, storm,
     testRepair, testOverdrive,
     //payload
     vulture,
     //get stick-BUG-ged lol
     smallBug, mediumBug, largeBug, hugeBug, titanBug,
-    smallFlying, mediumFlying, largeFlying, hugeFlying, titanFlying;
+    smallFlying, mediumFlying, largeFlying, hugeFlying, titanFlying,
+    //TODO submarines
+    subSmall;
 
     public static void load(){
         DestroyersUnits.load();
@@ -124,17 +126,6 @@ public class FOSUnits {
             weapons.add(FOSWeaponModules.standard1.weapon);
             constructor = LumoniPlayerUnit::create;
         }};
-        testBoss = new BossUnitType("test-boss", FOSWeaponModules.standard2){{
-            health = 2800;
-            armor = 8;
-            /* custom range to prevent cheesing */ range = 200f;
-            hitSize = 14;
-            speed = 0.6f;
-            flying = false;
-            weapons.add(FOSWeaponModules.standard2.weapon);
-            constructor = LegsUnit::create;
-            aiController = GroundBossAI::new;
-        }};
 
         sergeant = new UnitType("sergeant"){{
             health = 150;
@@ -144,6 +135,8 @@ public class FOSUnits {
             omniMovement = true;
             immunities.add(hacked);
             circleTarget = true;
+            trailColor = FOSPal.hackedBack;
+            trailLength = 12;
             aiController = InjectorAI::new;
             weapons.add(
                 new InjectorWeapon("fos-injector"){{
@@ -250,6 +243,35 @@ public class FOSUnits {
             constructor = UnitEntity::create;
         }};
 
+        smoke = new UnitType("smoke"){{
+            health = 200;
+            armor = 3f;
+            hitSize = 9f;
+            rotateSpeed = 3f;
+            omniMovement = false;
+            circleTarget = true;
+            speed = 4f;
+            flying = true;
+            trailLength = 64;
+            trailColor = FOSPal.destroyerTrail;
+            abilities.add(
+                new LiquidExplodeAbility(){{
+                    liquid = Liquids.slag;
+                }}
+            );
+            weapons.add(
+                new Weapon(){{
+                    shootCone = 360f;
+                    bullet = new ExplosionBulletType(120f, 16f){{
+                        targetAir = true;
+                        targetGround = false;
+                        buildingDamageMultiplier = 0.2f;
+                    }};
+                }}
+            );
+            constructor = UnitEntity::create;
+        }};
+
         testOverdrive = new UnitType("test-overdrive"){{
             health = 360;
             hitSize = 12;
@@ -343,5 +365,13 @@ public class FOSUnits {
                 }}
             );
         }};
+
+        //TODO
+/*
+        subSmall = new SubmarineUnitType("dummy-submarine"){{
+            health = 250;
+            speed = 0.7f;
+        }};
+*/
     }
 }

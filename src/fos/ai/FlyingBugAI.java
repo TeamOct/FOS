@@ -1,14 +1,11 @@
 package fos.ai;
 
 import arc.math.Mathf;
-import fos.type.units.BugFlyingUnit;
-import fos.type.units.BugUnit;
+import fos.type.units.constructors.*;
 import mindustry.Vars;
 import mindustry.entities.Units;
 import mindustry.entities.units.AIController;
-import mindustry.gen.Teamc;
-import mindustry.gen.Unit;
-import mindustry.gen.Unitc;
+import mindustry.gen.*;
 import mindustry.world.meta.BlockFlag;
 
 public class FlyingBugAI extends AIController {

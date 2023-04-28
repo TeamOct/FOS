@@ -2,33 +2,37 @@ package fos.type.blocks.storage;
 
 import arc.Core;
 import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.Lines;
-import arc.graphics.g2d.TextureRegion;
+import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.scene.style.TextureRegionDrawable;
 import arc.scene.ui.layout.Table;
 import arc.util.Time;
-import arc.util.io.Reads;
-import arc.util.io.Writes;
+import arc.util.io.*;
 import fos.type.blocks.environment.UndergroundOreBlock;
 import mindustry.Vars;
 import mindustry.game.Team;
-import mindustry.gen.Icon;
-import mindustry.gen.Player;
-import mindustry.graphics.Drawf;
-import mindustry.graphics.Layer;
+import mindustry.gen.*;
+import mindustry.graphics.*;
 import mindustry.ui.Styles;
-import mindustry.world.Block;
-import mindustry.world.Tile;
+import mindustry.world.*;
 import mindustry.world.blocks.storage.CoreBlock;
 
 import static mindustry.Vars.*;
 import static mindustry.content.Blocks.air;
 
+/**
+ * A class for cores that have a functionality of scanning underground ores.
+ * (We don't talk about Core: Colony here).
+ * @author Slotterleet
+ * @author nekit508
+ */
 public class DetectorCoreBlock extends CoreBlock {
+    /** Ore detector radius, in world units. */
     public float radarRange = 25f * 8f;
+    /** Player respawn cooldown. */
     public float spawnCooldown = 5f * 60f;
+    /** Applies to Core: Colony only. Minimum distance between adjacent Colonies. */
+    public float colonyNoBuildRadius = 400f;
 
     public DetectorCoreBlock(String name) {
         super(name);
@@ -53,7 +57,9 @@ public class DetectorCoreBlock extends CoreBlock {
 
     @Override
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {
-        return super.canPlaceOn(tile, team, rotation) || name.equals("fos-core-colony");
+        boolean colonyTooClose = indexer.eachBlock(team, tile.worldx(), tile.worldy(), colonyNoBuildRadius, b -> b.block.name.equals("fos-core-colony"), b -> {});
+        return super.canPlaceOn(tile, team, rotation) ||
+            (name.equals("fos-core-colony") && !colonyTooClose);
     }
 
     @SuppressWarnings("unused")
@@ -75,7 +81,7 @@ public class DetectorCoreBlock extends CoreBlock {
                 boolean immediate = Vars.state.isEditor() || Vars.state.rules.infiniteResources;
                 timer = immediate ? 0f : spawnCooldown;
                 requested = true;
-                Time.run(immediate ? 0f : spawnCooldown, () -> {
+                Time.run(timer, () -> {
                     if (player.dead()) {
                         super.requestSpawn(player);
                     }

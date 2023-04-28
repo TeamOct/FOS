@@ -1,7 +1,7 @@
 package fos.type.units;
 
-import fos.ai.BugAI;
-import fos.ai.FlyingBugAI;
+import fos.ai.*;
+import fos.type.units.constructors.*;
 import mindustry.type.UnitType;
 import mindustry.world.meta.BlockFlag;
 

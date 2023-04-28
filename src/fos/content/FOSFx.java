@@ -1,14 +1,11 @@
 package fos.content;
 
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.Fill;
-import arc.graphics.g2d.Lines;
-import arc.math.geom.Polygon;
-import arc.math.geom.Vec2;
+import arc.graphics.g2d.*;
+import arc.math.geom.*;
+import fos.type.bullets.OhioBeamBulletType;
 import mindustry.entities.Effect;
-import mindustry.gen.Groups;
-import mindustry.gen.WeatherState;
-import mindustry.graphics.Layer;
+import mindustry.gen.*;
+import mindustry.graphics.*;
 import mindustry.type.weather.ParticleWeather;
 
 import static arc.graphics.g2d.Draw.color;
@@ -107,5 +104,12 @@ public class FOSFx {
         tokiciteBoil.at(e.x + 8f, e.y - 8f);
         tokiciteBoil.at(e.x - 8f, e.y + 8f);
         tokiciteBoil.at(e.x + 8f, e.y + 8f);
+    }),
+
+    deathrayDespawn = new Effect(60f, 720f, e -> {
+        var data = Point2.unpack(e.data());
+
+        OhioBeamBulletType.drawBeam(Pal.slagOrange, e.x, e.y, 18f * e.fout());
+        OhioBeamBulletType.drawBeam(Pal.slagOrange, data.x, data.y, 18f * e.fout());
     });
 }

@@ -6,8 +6,7 @@ import arc.math.geom.Vec2;
 import arc.struct.Seq;
 import fos.content.FOSFluids;
 import fos.files.InternalFileTree;
-import fos.type.units.BugFlyingUnit;
-import fos.type.units.BugUnit;
+import fos.type.units.constructors.*;
 import fos.ui.ResearchCoreDialog;
 import mindustry.ai.Pathfinder;
 import mindustry.content.TechTree;
@@ -15,8 +14,7 @@ import mindustry.game.Objectives;
 import mindustry.gen.EntityMapping;
 import mindustry.graphics.g3d.PlanetParams;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 import static fos.content.FOSBlocks.*;
 import static mindustry.content.Items.scrap;
@@ -38,6 +36,8 @@ public class FOSVars {
     public static int bugEntity;
     /** ID of the {@link BugFlyingUnit} class. */
     public static int bugFlyingEntity;
+    /** ID of the {@link SubmarineUnit} class. */
+    public static int subEntity;
 
     /** A flowfield used in certain custom AIs. */
     public static Pathfinder.Flowfield fpos = new Pathfinder.PositionTarget(new Vec2());
@@ -75,5 +75,6 @@ public class FOSVars {
 
         bugEntity = EntityMapping.register("FOSBugUnit", BugUnit::new);
         bugFlyingEntity = EntityMapping.register("FOSBugFlyingUnit", BugFlyingUnit::new);
+        subEntity = EntityMapping.register("FOSSubmarineUnit", SubmarineUnit::new);
     }
 }

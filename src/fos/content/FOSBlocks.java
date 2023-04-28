@@ -60,6 +60,7 @@ public class FOSBlocks {
     tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
     helix, sticker, particulator, pulse, thunder, cluster, judge, newJudge,
     matrixShieldProj,
+        landMine,
     //environment & ores
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
@@ -646,7 +647,45 @@ public class FOSBlocks {
             coolantMultiplier = 0.25f;
             requirements(Category.turret, with(silicon, 500, vanadium, 300, iridium, 250, luminium, 200));
         }};
-        newJudge = new NewDeathRayTurret("new-judge"){{
+        judge = new DeathrayTurret("judge1"){{
+            scaledHealth = 480;
+            size = 8;
+            minRange = 200f;
+            range = 600f;
+            reload = 900f;
+            minWarmup = 0.99f;
+            hasLiquids = true;
+            targetAir = targetGround = true;
+            loopSound = Sounds.techloop;
+            loopSoundVolume = 4f;
+            consumePower(150f);
+            consumeCoolant(5f);
+            liquidCapacity = 450f;
+            shootDuration = 600f;
+            coolantMultiplier = 0.1f;
+            shake = 10f;
+            outlineIcon = false;
+            squareSprite = false;
+            shootType = new OhioBeamBulletType(7200f, 18f);
+            lightRadius = 96f;
+            drawer = new DrawMulti(
+                new DrawRegion("-bottom"),
+                new DrawPower("-glow"){{
+                    emptyLightColor = Color.valueOf("30608200");
+                    fullLightColor = Color.valueOf("306082");
+                }},
+                new DrawShape(){{
+                    color = Pal.slagOrange;
+                    sides = 48;
+                    radius = 18f;
+                    useWarmupRadius = true;
+                }},
+                new DrawLiquidRegion(),
+                new DrawDefault()
+            );
+            requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, iridium, 1500, luminium, 1500));
+        }};
+        newJudge = new NewDeathRayTurret("judge2"){{
             scaledHealth = 480;
             size = 8;
             minRange = 200f;
@@ -680,37 +719,6 @@ public class FOSBlocks {
             );
             requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, iridium, 1500, luminium, 1500));
         }};
-        judge = new DeathrayTurret("judge"){{
-            scaledHealth = 480;
-            size = 8;
-            minRange = 200f;
-            range = 600f;
-            reload = 900f;
-            hasLiquids = true;
-            targetAir = targetGround = true;
-            loopSound = Sounds.techloop;
-            loopSoundVolume = 4f;
-            consumePower(150f);
-            consumeCoolant(5f);
-            liquidCapacity = 450f;
-            shootDuration = 600f;
-            coolantMultiplier = 0.1f;
-            shake = 10f;
-            outlineIcon = false;
-            squareSprite = false;
-            shootType = new OhioBeamBulletType(7200f, 24f);
-            lightRadius = 96f;
-            drawer = new DrawMulti(
-                new DrawRegion("-bottom"),
-                new DrawPower("-glow"){{
-                    emptyLightColor = Color.valueOf("30608200");
-                    fullLightColor = Color.valueOf("306082");
-                }},
-                new DrawLiquidRegion(),
-                new DrawDefault()
-            );
-            requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, iridium, 1500, luminium, 1500));
-        }};
 
         matrixShieldProj = new PolyForceProjector("matrix-shield-projector"){{
             health = 480;
@@ -727,6 +735,15 @@ public class FOSBlocks {
             };
             consumePower(4f);
             requirements(Category.effect, with(diamond, 150, silicon, 200, vanadium, 125));
+        }};
+
+        landMine = new CamoMine("land-mine"){{
+            tileDamage = health; //this is a one-time use mine.
+            teamAlpha = 0.1f;
+            tendrils = 0;
+            shots = 1;
+            bullet = new ExplosionBulletType(480f, 20f);
+            requirements(Category.effect, with(copper, 30, vanadium, 40));
         }};
         //endregion
         //region distribution
@@ -1010,7 +1027,7 @@ public class FOSBlocks {
             health = 1920;
             size = 2;
             breakable = true;
-            itemCapacity = 250;
+            itemCapacity = 0;
             unitCapModifier = 0;
             squareSprite = false;
             requirements(Category.effect, with(tin, 1500));

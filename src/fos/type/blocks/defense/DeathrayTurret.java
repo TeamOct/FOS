@@ -1,5 +1,6 @@
 package fos.type.blocks.defense;
 
+import arc.func.Boolf;
 import arc.math.Mathf;
 import arc.util.Nullable;
 import mindustry.entities.Units;
@@ -31,6 +32,11 @@ public class DeathrayTurret extends LaserTurret {
     public class DeathrayTurretBuild extends LaserTurretBuild {
         public @Nullable Bullet bullet;
 
+        private final Boolf<Unit> unitCons = e ->
+            (!Mathf.within(this.x, this.y, e.x, e.y, minRange)) && !e.dead() && unitFilter.get(e) && (e.isGrounded() || targetAir) && (!e.isGrounded() || targetGround);
+        private final Boolf<Building> buildCons = build ->
+            !Mathf.within(this.x, this.y, build.x, build.y, minRange) && targetGround && buildingFilter.get(build);
+
         @Override
         public void drawLight() {
             Drawf.light(x, y, lightRadius * potentialEfficiency, lightColor, 0.7f * potentialEfficiency);
@@ -47,7 +53,7 @@ public class DeathrayTurret extends LaserTurret {
 
             //if targeting, shoot indefinitely, otherwise stop shooting
             if (bullet != null) {
-                if (isShooting() && canConsume()) {
+                if (isShooting()) {
                     bullet.lifetime += edelta();
 
                     Liquid liquid = liquids.current();
@@ -55,7 +61,9 @@ public class DeathrayTurret extends LaserTurret {
                     float used = (cheating() ? maxUsed : Math.min(liquids.get(liquid), maxUsed)) * delta();
                     reloadCounter -= used * liquid.heatCapacity * coolantMultiplier;
                     liquids.remove(liquid, used);
-                } else if (bullet.lifetime <= 0) {
+                }
+
+                if (bullet.lifetime <= 0) {
                     bullet = null;
                 }
             }
@@ -68,9 +76,7 @@ public class DeathrayTurret extends LaserTurret {
             float cx = b != null ? b.x : this.x;
             float cy = b != null ? b.y : this.y;
 
-            target = Units.closestTarget(team, cx, cy, range - Mathf.dst(this.x, this.y, cx, cy),
-                e -> (!Mathf.within(this.x, this.y, e.x, e.y, minRange)) && !e.dead() && unitFilter.get(e) && (e.isGrounded() || targetAir) && (!e.isGrounded() || targetGround),
-                build -> !Mathf.within(this.x, this.y, build.x, build.y, minRange) && targetGround && buildingFilter.get(build));
+            target = Units.closestTarget(team, cx, cy, range - Mathf.dst(this.x, this.y, cx, cy), unitCons, buildCons);
         }
 
         @Override
@@ -87,14 +93,14 @@ public class DeathrayTurret extends LaserTurret {
         }
 
         @Override
-        public void targetPosition(Posc pos) {
-            //no velocity prediction, just shoot straight at the target
-            targetPos.set(pos);
+        public boolean isShooting() {
+            return (isControlled() ? unit.isShooting() : logicControlled() ? logicShooting : canConsume() && (target != null || bullet != null && hasTargets()));
         }
 
         @Override
-        public boolean isShooting() {
-            return super.isShooting();
+        public void targetPosition(Posc pos) {
+            //no velocity prediction, just shoot straight at the target
+            targetPos.set(pos);
         }
 
         @Override
@@ -111,6 +117,10 @@ public class DeathrayTurret extends LaserTurret {
         @Override
         protected void handleBullet(Bullet bullet, float offsetX, float offsetY, float angleOffset) {
             this.bullet = bullet;
+        }
+
+        private boolean hasTargets() {
+            return Units.closestTarget(team, x, y, range, unitCons, buildCons) != null;
         }
     }
 }
