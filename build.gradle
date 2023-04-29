@@ -162,11 +162,10 @@ allprojects {
 
             //collect dependencies needed for desugaring
             def dependencies = (
-                    configurations.compileClasspath.asList() +
+                    //configurations.compileClasspath.asList() +
                             configurations.runtimeClasspath.asList() +
                             [new File("$sdkRoot/platforms/android-$sdkVersion/android.jar")]
-            )
-                    .collect{ "--classpath $it.path" }.join(" ")
+            ).collect{ "--classpath $it.path" }.join(" ")
 
             //dex and desugar files - this requires d8 in your PATH
             "d8 $dependencies --min-api 14 --output ${getJarFileName(project.name)} ${getJarFileName("core")}"
