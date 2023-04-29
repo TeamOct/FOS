@@ -251,7 +251,7 @@ allprojects {
     task deploy(type: Jar){
         dependsOn jarAndroid
         dependsOn jar
-        archiveFileName = "${project.archivesBaseName}.jar"
+        archiveFileName = getJarFileName(project.name)
 
         /*from{ [zipTree("$buildDir/libs/${project.archivesBaseName}-desktop.jar"), zipTree("$buildDir/libs/${project.archivesBaseName}-android.jar")] }
 
