@@ -147,8 +147,9 @@ allprojects {
         archiveFileName = getJarFileName(project.name)
 
         from{
-            configurations.runtimeClasspath.collect{
-                it.isDirectory() ? it : zipTree(it)
+            configurations.compileClasspath.collect{
+                if (it.exists())
+                    it.isDirectory() ? it : zipTree(it)
             }
         }
 
@@ -243,14 +244,16 @@ allprojects {
 // only root project task
 // using by github actions
 task deploy {
-    new File("$rootDir/artifacts").mkdirs()
-    subprojects.each { p ->
-        delete{
-            delete "artifacts/${getJarFileName(p.name)}"
-        }
-        copy{
-            from "${p.buildDir}/libs/${getJarFileName(p.name)}"
-            into "artifacts/"
+    doLast {
+        new File("$rootDir/artifacts").mkdirs()
+        subprojects.each { p ->
+            delete {
+                delete "artifacts/${getJarFileName(p.name)}"
+            }
+            copy {
+                from "${p.buildDir}/libs/${getJarFileName(p.name)}"
+                into "artifacts/"
+            }
         }
     }
 }
