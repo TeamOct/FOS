@@ -22,5 +22,5 @@ jobs:
     - name: Upload built jar file
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ github.event.repository.name }} Pull Request
-        path: build/libs/${{ github.event.repository.name }}.jar
+        name: ${{ github.event.repository.name }}
+        path: artifacts/*.jar
