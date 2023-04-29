@@ -203,7 +203,7 @@ allprojects {
         files.eachFileRecurse(
                 groovy.io.FileType.FILES
         ){ file ->
-            if(file.name.endsWith(".java") && file.text.contains("@Annotations.ProcessorClass"))
+            if(file.name.endsWith(".java") && file.text.contains("// processor"))
                 text.append(file.path.substring(files.path.length() + 1)).append("\n")
         }
         processorFile.text = text.toString().replace(".java", "").replace("/", ".").replace("\\", ".")
@@ -253,11 +253,11 @@ allprojects {
         dependsOn jar
         archiveFileName = "${project.archivesBaseName}.jar"
 
-        from{ [zipTree("$buildDir/libs/${project.archivesBaseName}-desktop.jar"), zipTree("$buildDir/libs/${project.archivesBaseName}-android.jar")] }
+        /*from{ [zipTree("$buildDir/libs/${project.archivesBaseName}-desktop.jar"), zipTree("$buildDir/libs/${project.archivesBaseName}-android.jar")] }
 
         doLast{
             delete{ delete "$buildDir/libs/${project.archivesBaseName}-desktop.jar" }
             delete{ delete "$buildDir/libs/${project.archivesBaseName}-android.jar" }
-        }
+        }*/
     }
 }
