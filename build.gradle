@@ -12,6 +12,93 @@ plugins {
     id "org.jetbrains.kotlin.kapt" version "1.6.0"
 }
 
+ext {
+    modName = "fictional-octo-system"
+
+    module = { String module, String name ->
+        if(name.contains(':')) name = name.split(':').last()
+        if (modules.get(module) == null) {
+            println("${module} not founded")
+            return
+        }
+        return "${name == "" ? modules.get(module)[0] : modules.get(module)[0].replaceAll(":", ".")}" +
+                (name != "" ? ":${name}" : "") + ":${modules.get(module)[1]}"
+    }
+    getJarFileName = { String name ->
+        return "${modName}-${name}.jar"
+    }
+    doExec = { cmd ->
+        def proc = cmd.execute(null, new File("$buildDir/libs"))
+        proc.waitForProcessOutput(System.out, System.err)
+    }
+
+    sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
+
+    sdkVersion = '30'
+
+    modules = [:]
+    modules.arc = ["com.github.Anuken:Arc", "v143"]
+    modules.javapoet = ["com.squareup:javapoet", "1.13.0"]
+    modules.mindustry = ["com.github.Anuken:Mindustry", "v143"]
+    modules.multiCrafter = ["com.github.liplum:MultiCrafterLib", "v1.7"]
+    modules.jabel = ["com.github.Anuken:jabel", "34e4c172e65b3928cd9eabe1993654ea79c409cd"]
+    modules.ktlStd = ["org.jetbrains.kotlin:kotlin-stdlib-jdk8", "1.6.0"]
+
+    projectVersion  = "v1.0"
+
+    // no main classes
+    mains = [:]
+
+    deps = [:]
+    deps.impl = [:]
+    deps.comp = [:]
+    deps.proc = [:]
+    // core dependencies
+    deps.impl.core = [
+            module("multiCrafter", ""),
+            module("ktlStd", ""),
+    ]
+    deps.comp.core = [
+            project(":annotations"),
+            module("mindustry", "core"),
+            module("arc", "arc-core"),
+            module("arc", "extensions:flabel"),
+            module("arc", "extensions:freetype"),
+            module("arc", "extensions:g3d"),
+            module("arc", "extensions:fx"),
+            module("arc", "discord"),
+            module("arc", "extensions:arcnet"),
+    ]
+    deps.proc.core = [
+            module("jabel", ""),
+            project(":annotations"),
+    ]
+    // annotations dependencies
+    deps.impl.annotations = [
+            module("javapoet", ""),
+            module("arc", "arc-core"),
+    ]
+    deps.proc.annotations = [
+            module("jabel", ""),
+    ]
+    // desktop dependencies
+    deps.impl.desktop = [
+            project(":core")
+    ] + deps.impl.core
+    deps.comp.desktop = [
+    ] + deps.comp.core
+    deps.proc.desktop = [
+    ] + deps.proc.core
+    // android dependencies
+    deps.impl.android = [
+            project(":core")
+    ] + deps.impl.core
+    deps.comp.android = [
+    ] + deps.comp.core
+    deps.proc.android = [
+    ] + deps.proc.core
+}
+
 allprojects {
     repositories{
         mavenLocal()
@@ -28,80 +115,6 @@ allprojects {
     apply plugin: "kotlin"
 
     compileJava.options.fork = true
-
-    ext {
-        modName = "fictional-octo-system"
-
-        module = { String module, String name ->
-            if(name.contains(':')) name = name.split(':').last()
-            if (modules.get(module) == null) {
-                println("${module} not founded")
-                return
-            }
-            return "${name == "" ? modules.get(module)[0] : modules.get(module)[0].replaceAll(":", ".")}" +
-                    (name != "" ? ":${name}" : "") + ":${modules.get(module)[1]}"
-        }
-        getJarFileName = { String name ->
-            return "${modName}-${name}.jar"
-        }
-        doExec = { cmd ->
-            def proc = cmd.execute(null, new File("$buildDir/libs"))
-            proc.waitForProcessOutput(System.out, System.err)
-        }
-
-        sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
-
-        sdkVersion = '30'
-
-        modules = [:]
-        modules.arc = ["com.github.Anuken:Arc", "v143"]
-        modules.javapoet = ["com.squareup:javapoet", "1.13.0"]
-        modules.mindustry = ["com.github.Anuken:Mindustry", "v143"]
-        modules.multiCrafter = ["com.github.liplum:MultiCrafterLib", "v1.7"]
-        modules.jabel = ["com.github.Anuken:jabel", "34e4c172e65b3928cd9eabe1993654ea79c409cd"]
-        modules.ktlStd = ["org.jetbrains.kotlin:kotlin-stdlib-jdk8", "1.6.0"]
-
-        projectVersion  = "v1.0"
-
-        // no main classes
-        mains = [:]
-
-        deps = [:]
-        deps.impl = [:]
-        deps.comp = [:]
-        deps.proc = [:]
-        // core dependencies
-        deps.impl.core = [
-                module("multiCrafter", ""),
-                module("ktlStd", ""),
-        ]
-        deps.comp.core = [
-                project(":annotations"),
-                module("mindustry", "core"),
-                module("arc", "arc-core"),
-                module("arc", "extensions:flabel"),
-                module("arc", "extensions:freetype"),
-                module("arc", "extensions:g3d"),
-                module("arc", "extensions:fx"),
-                module("arc", "discord"),
-                module("arc", "extensions:arcnet"),
-        ]
-        deps.proc.core = [
-                module("jabel", ""),
-                project(":annotations"),
-        ]
-        // annotations dependencies
-        deps.impl.annotations = [
-                module("javapoet", ""),
-                module("arc", "arc-core"),
-        ]
-        deps.comp.annotatins = [
-
-        ]
-        deps.proc.annotations = [
-                module("jabel", ""),
-        ]
-    }
 
     compileKotlin{
         sourceCompatibility = JavaVersion.VERSION_16
@@ -150,29 +163,6 @@ allprojects {
         }
     }
 
-    task jarAndroid{
-        dependsOn "jar"
-
-        doLast{
-            if(!sdkRoot || !new File(sdkRoot).exists()) throw new GradleException("No valid Android SDK found. Ensure that ANDROID_HOME is set to your Android SDK directory.")
-
-            def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find{ f -> new File(f, "android.jar").exists() }
-
-            if(!platformRoot) throw new GradleException("No android.jar found. Ensure that you have an Android platform installed.")
-
-            //collect dependencies needed for desugaring
-            def dependencies = (
-                    //configurations.compileClasspath.asList() +
-                            configurations.runtimeClasspath.asList() +
-                            [new File("$sdkRoot/platforms/android-$sdkVersion/android.jar")]
-            ).collect{ "--classpath $it.path" }.join(" ")
-
-            //dex and desugar files - this requires d8 in your PATH
-            "d8 $dependencies --min-api 14 --output ${getJarFileName(project.name)} ${getJarFileName("core")}"
-                    .execute(null, new File("$buildDir/libs")).waitForProcessOutput(System.out, System.err)
-        }
-    }
-
     dependencies {
         ArrayList<String> listImpl = (ArrayList<String>) deps.impl.get(project.name)
         if (listImpl != null) {
@@ -210,6 +200,7 @@ allprojects {
     }
     compileJava.dependsOn(writeProcessors)
 
+    // use for test builds
     task mjar(){
         dependsOn "jar"
         ext{
@@ -247,17 +238,19 @@ allprojects {
             println "Build ended at: ${time}"
         }
     }
+}
 
-    task deploy(type: Jar){
-        dependsOn jarAndroid
-        dependsOn jar
-        archiveFileName = getJarFileName(project.name)
-
-        /*from{ [zipTree("$buildDir/libs/${project.archivesBaseName}-desktop.jar"), zipTree("$buildDir/libs/${project.archivesBaseName}-android.jar")] }
-
-        doLast{
-            delete{ delete "$buildDir/libs/${project.archivesBaseName}-desktop.jar" }
-            delete{ delete "$buildDir/libs/${project.archivesBaseName}-android.jar" }
-        }*/
+// only root project task
+// using by github actions
+task deploy {
+    new File("$rootDir/artifacts").mkdirs()
+    subprojects.each { p ->
+        delete{
+            delete "artifacts/${getJarFileName(p.name)}"
+        }
+        copy{
+            from "${p.buildDir}/libs/${getJarFileName(p.name)}"
+            into "artifacts/"
+        }
     }
 }
