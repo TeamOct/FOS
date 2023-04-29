@@ -1,0 +1,39 @@
+sourceSets.main.java.srcDirs = ["src/", "$buildDir/generated/sources/annotationProcessor/java/main"]
+sourceSets.main.kotlin.srcDirs = ["src/", "$buildDir/generated/sources/annotationProcessor/java/main"]
+sourceSets.main.resources.srcDirs = ["assets"]
+
+task buildProj {
+    dependsOn jar
+
+    doLast{
+        var sdkroot = null
+        var useandroid = true;
+        if(new File(rootDir, "local.properties").exists()){
+            def prop = new Properties()
+            prop.load(new File(rootDir, 'local.properties').newDataInputStream())
+            if(prop.containsKey("useandroid")) useandroid = prop.get("useandroid")
+            if(prop.containsKey("sdkroot")) sdkroot = prop.get("sdkroot")
+        }
+        var root = (sdkRoot != null && new File(sdkRoot as String).exists()) ? sdkRoot :
+                (sdkroot != null && new File(sdkroot).exists()) ? sdkroot : null
+
+        if(root != null && useandroid == true) {
+
+            def platformRoot = new File("$root/platforms").listFiles().sort().reverse().find { f -> new File(f, "android.jar").exists() }
+
+            if (platformRoot) {
+                //collect dependencies needed for desugaring
+                def dependencies = (
+                        //configurations.compileClasspath.asList() +
+                        configurations.runtimeClasspath.asList() +
+                                [new File("$root/platforms/android-$sdkVersion/android.jar")]
+                ).collect { "--classpath $it.path" }.join(" ")
+
+                //dex and desugar files - this requires d8 in your PATH
+                "d8 $dependencies --min-api 14 --output ${getJarFileName(project.name)} ${getJarFileName("core")}"
+                        .execute(null, new File("$buildDir/libs")).waitForProcessOutput(System.out, System.err)
+            }
+        }
+    }
+}
+rootProject.tasks.getByName("deploy").dependsOn(buildProj)

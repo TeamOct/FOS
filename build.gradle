@@ -1,193 +1,105 @@
-// Provided by Zelaux
+// Provided by Zelaux & nekit508
+//file:noinspection GroovyAssignabilityCheck
 
 import java.time.format.DateTimeFormatter
 
-buildscript{
-    ext{
-        sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
 
-        //version of SDK you will be using
-        sdkVersion = '30'
+buildscript {
 
-        mindustryPath = "com.github.Anuken.Mindustry"
-        //the build number that this mod is made for
-        mindustryVersion = "v143"
-        arcVersion = mindustryVersion
+}
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.6.0"
+    id "org.jetbrains.kotlin.kapt" version "1.6.0"
+}
 
-        kotlinVersion = "1.6.0"
-        jabelVersion = "34e4c172e65b3928cd9eabe1993654ea79c409cd"
-        arcModule = { String name ->
-            //skip to last submodule
-            if(name.contains(':')) name = name.split(':').last()
-            return "com.github.Anuken.Arc:$name:$arcVersion"
+ext {
+    modName = "fictional-octo-system"
+
+    module = { String module, String name ->
+        if(name.contains(':')) name = name.split(':').last()
+        if (modules.get(module) == null) {
+            println("${module} not founded")
+            return
         }
-        doExec = { cmd ->
-            def proc = cmd.execute(null, new File("$buildDir/libs"))
-            proc.waitForProcessOutput(System.out, System.err)
-        }
+        return "${name == "" ? modules.get(module)[0] : modules.get(module)[0].replaceAll(":", ".")}" +
+                (name != "" ? ":${name}" : "") + ":${modules.get(module)[1]}"
     }
-    repositories {
-        mavenCentral()
-        maven{ url 'https://jitpack.io' }
+    getJarFileName = { String name ->
+        return "${modName}-${name}.jar"
     }
-    dependencies {
-        classpath arcModule("arc-core")
-
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-    }
-}
-plugins{
-    id 'org.jetbrains.kotlin.jvm' version "$kotlinVersion"
-    id "org.jetbrains.kotlin.kapt" version "$kotlinVersion"
-}
-
-
-repositories{
-    mavenLocal()
-    mavenCentral()
-//        google()
-    maven{ url "https://oss.sonatype.org/content/repositories/snapshots/" }
-    maven{ url 'https://jitpack.io' }
-}
-
-
-
-allprojects(){
-    tasks.withType(JavaCompile){
-        options.compilerArgs.addAll(['--release', '8'])
-    }
-}
-
-apply plugin: "java"
-apply plugin: "java-library"
-apply plugin: "kotlin"
-
-sourceSets.main.java.srcDirs = ["src/", "$buildDir/generated/sources/annotationProcessor/java/main"]
-sourceSets.main.kotlin.srcDirs = ["src/", "$buildDir/generated/sources/annotationProcessor/java/main"]
-sourceSets.main.resources.srcDirs = ["assets"]
-version '1.0'
-
-compileJava.options.fork = true
-
-dependencies{
-    compileOnly arcModule("arc-core")
-    compileOnly arcModule("extensions:flabel")
-    compileOnly arcModule("extensions:freetype")
-    compileOnly arcModule("extensions:g3d")
-    compileOnly arcModule("extensions:fx")
-    compileOnly arcModule("extensions:arcnet")
-    compileOnly "com.github.Anuken.Arc:discord:v136"
-    compileOnly "$mindustryPath:core:$mindustryVersion"
-    implementation "com.github.liplum:MultiCrafterLib:v1.7"
-
-    //you may uncomment this dependency to properly use Java 17 features while still targeting Java 8.
-    //note that this fails on some systems for as-of-yet unknown reasons - if this happens to you, revert the changes
-    annotationProcessor "com.github.Anuken:jabel:$jabelVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-
-}
-
-task jarAndroid{
-    dependsOn "jar"
-
-    doLast{
-        if(!sdkRoot || !new File(sdkRoot).exists()) throw new GradleException("No valid Android SDK found. Ensure that ANDROID_HOME is set to your Android SDK directory.")
-
-        def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find{ f -> new File(f, "android.jar").exists() }
-
-        if(!platformRoot) throw new GradleException("No android.jar found. Ensure that you have an Android platform installed.")
-
-        //collect dependencies needed for desugaring
-        def dependencies = (
-                configurations.compileClasspath.asList() +
-                        configurations.runtimeClasspath.asList() +
-                        [new File("$sdkRoot/platforms/android-$sdkVersion/android.jar")]
-        )
-                .collect{ "--classpath $it.path" }.join(" ")
-
-        //dex and desugar files - this requires d8 in your PATH
-        "d8 $dependencies --min-api 14 --output ${project.archivesBaseName}-android.jar ${project.archivesBaseName}-desktop.jar"
-                .execute(null, new File("$buildDir/libs")).waitForProcessOutput(System.out, System.err)
-    }
-}
-jar{
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    archiveFileName = "${project.archivesBaseName}-desktop.jar"
-    from{
-        configurations.runtimeClasspath.collect{ it.isDirectory() ? it : zipTree(it) }
+    doExec = { cmd ->
+        def proc = cmd.execute(null, new File("$buildDir/libs"))
+        proc.waitForProcessOutput(System.out, System.err)
     }
 
-    from(rootDir){
-        include "mod.hjson"
-        include "mod.json"
-        include "icon.png"
-    }
+    sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
 
-    from("assets/"){
-        include "**"
-    }
-}
-task deploy(type: Jar){
-    dependsOn jarAndroid
-    dependsOn jar
-    archiveFileName = "${project.archivesBaseName}.jar"
+    sdkVersion = '30'
 
-    from{ [zipTree("$buildDir/libs/${project.archivesBaseName}-desktop.jar"), zipTree("$buildDir/libs/${project.archivesBaseName}-android.jar")] }
+    modules = [:]
+    modules.arc = ["com.github.Anuken:Arc", "v143"]
+    modules.javapoet = ["com.squareup:javapoet", "1.13.0"]
+    modules.mindustry = ["com.github.Anuken:Mindustry", "v143"]
+    modules.multiCrafter = ["com.github.liplum:MultiCrafterLib", "v1.7"]
+    modules.jabel = ["com.github.Anuken:jabel", "34e4c172e65b3928cd9eabe1993654ea79c409cd"]
+    modules.ktlStd = ["org.jetbrains.kotlin:kotlin-stdlib-jdk8", "1.6.0"]
 
-    doLast{
-        delete{ delete "$buildDir/libs/${project.archivesBaseName}-desktop.jar" }
-        delete{ delete "$buildDir/libs/${project.archivesBaseName}-android.jar" }
-    }
-}
-task mjar(){
-    dependsOn "jar"
-    ext{
-        move = { String intoPath ->
-            delete{
-                delete "${intoPath}/${project.archivesBaseName}-desktop.jar"
-            }
-            copy{
-                from "$buildDir/libs/${project.archivesBaseName}-desktop.jar"
-                into intoPath
-            }
-            println "Moved into " + intoPath
-        }
-    }
-    doLast{
-        def modsDirectories = []
-        def file = new File(rootDir, "modsDirectories.txt")
-//        println "abs->"+file.getAbsolutePath()
-        if(file.exists()){
-            BufferedReader reader = new BufferedReader(new FileReader(file))
-            reader.lines().forEach(line -> modsDirectories.add(line))
-        }else{
-            modsDirectories.add("classic")
-        }
-        for(String directory : modsDirectories){
-            if (directory.startsWith("#") || directory.startsWith("//")){
-                println "Directory \"$directory\" was skipped."
-                continue
-            }
-            if(directory == "classic"){
-                directory = "${arc.util.OS.getAppDataDirectoryString("Mindustry")}/mods/"
-            }
-            move(directory)
-        }
-        def time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))
-        println "Build ended at: ${time}"
-    }
+    projectVersion  = "v1.0"
+
+    // no main classes
+    mains = [:]
+
+    deps = [:]
+    deps.impl = [:]
+    deps.comp = [:]
+    deps.proc = [:]
+    // core dependencies
+    deps.impl.core = [
+            module("multiCrafter", ""),
+            module("ktlStd", ""),
+    ]
+    deps.comp.core = [
+            project(":annotations"),
+            module("mindustry", "core"),
+            module("arc", "arc-core"),
+            module("arc", "extensions:flabel"),
+            module("arc", "extensions:freetype"),
+            module("arc", "extensions:g3d"),
+            module("arc", "extensions:fx"),
+            module("arc", "discord"),
+            module("arc", "extensions:arcnet"),
+    ]
+    deps.proc.core = [
+            module("jabel", ""),
+            project(":annotations"),
+    ]
+    // annotations dependencies
+    deps.impl.annotations = [
+            module("javapoet", ""),
+            module("arc", "arc-core"),
+    ]
+    deps.proc.annotations = [
+            module("jabel", ""),
+    ]
+    // desktop dependencies
+    deps.impl.desktop = [
+            project(":core")
+    ] + deps.impl.core
+    deps.comp.desktop = [
+    ] + deps.comp.core
+    deps.proc.desktop = [
+    ] + deps.proc.core
+    // android dependencies
+    deps.impl.android = [
+            project(":core")
+    ] + deps.impl.core
+    deps.comp.android = [
+    ] + deps.comp.core
+    deps.proc.android = [
+    ] + deps.proc.core
 }
 
-compileKotlin{
-    sourceCompatibility = JavaVersion.VERSION_16
-    targetCompatibility = JavaVersion.VERSION_1_8
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-allprojects{
-    apply plugin: 'maven-publish'
-    apply plugin: "kotlin"
+allprojects {
     repositories{
         mavenLocal()
         google()
@@ -196,25 +108,152 @@ allprojects{
         maven{ url "https://oss.sonatype.org/content/repositories/releases/" }
         maven{ url 'https://jitpack.io' }
     }
+
+    apply plugin: 'java'
+    apply plugin: "java-library"
+    apply plugin: 'maven-publish'
+    apply plugin: "kotlin"
+
+    compileJava.options.fork = true
+
     compileKotlin{
         sourceCompatibility = JavaVersion.VERSION_16
         targetCompatibility = JavaVersion.VERSION_1_8
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
     }
+    compileTestKotlin {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+
     tasks.withType(JavaCompile){
         targetCompatibility = JavaVersion.VERSION_1_8
-        //switch to JavaVersion.VERSION_17 to use Java 17 features; this requires adding jabel (see dependencies block below)
         sourceCompatibility = JavaVersion.VERSION_16
         options.encoding = "UTF-8"
         options.compilerArgs += ["-Xlint:deprecation"]
+        options.compilerArgs.addAll(['--release', '8'])
 
         options.forkOptions.jvmArgs.addAll([
                 '--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED',
                 '--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED'
         ])
     }
+
+    jar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        archiveFileName = getJarFileName(project.name)
+
+        from{
+            configurations.compileClasspath.collect{
+                if (it.exists())
+                    it.isDirectory() ? it : zipTree(it)
+            }
+        }
+
+        from(rootDir){
+            include "mod.hjson"
+            include "mod.json"
+            include "icon.png"
+        }
+
+        from("assets/"){
+            include "**"
+        }
+    }
+
+    dependencies {
+        ArrayList<String> listImpl = (ArrayList<String>) deps.impl.get(project.name)
+        if (listImpl != null) {
+            listImpl.forEach(dep -> {
+                implementation dep
+            })
+        }
+        ArrayList<String> listComp = (ArrayList<String>) deps.comp.get(project.name)
+        if (listComp != null) {
+            listComp.forEach(dep -> {
+                compileOnly dep
+            })
+        }
+        ArrayList<String> listProc = (ArrayList<String>) deps.proc.get(project.name)
+        if (listProc != null) {
+            listProc.forEach(dep -> {
+                annotationProcessor dep
+            })
+        }
+    }
+
+    task writeProcessors {
+        outputs.upToDateWhen{ false }
+        new File(rootDir, "annotations/src/main/resources/META-INF/services/").mkdirs()
+        def processorFile = new File(rootDir, "annotations/src/main/resources/META-INF/services/javax.annotation.processing.Processor")
+        def text = new StringBuilder()
+        def files = new File(rootDir, "annotations/src")
+        files.eachFileRecurse(
+                groovy.io.FileType.FILES
+        ){ file ->
+            if(file.name.endsWith(".java") && file.text.contains("// processor"))
+                text.append(file.path.substring(files.path.length() + 1)).append("\n")
+        }
+        processorFile.text = text.toString().replace(".java", "").replace("/", ".").replace("\\", ".")
+    }
+    compileJava.dependsOn(writeProcessors)
+
+    // use for test builds
+    task mjar(){
+        dependsOn "jar"
+        ext{
+            move = { String intoPath ->
+                delete{
+                    delete "${intoPath}/${getJarFileName(project.name)}"
+                }
+                copy{
+                    from "$buildDir/libs/${getJarFileName(project.name)}"
+                    into intoPath
+                }
+                println "Moved into " + intoPath
+            }
+        }
+        doLast{
+            def modsDirectories = []
+            def file = new File(rootDir, "modsDirectories.txt")
+            if(file.exists()){
+                BufferedReader reader = new BufferedReader(new FileReader(file))
+                reader.lines().forEach(line -> modsDirectories.add(line))
+            }else{
+                modsDirectories.add("classic")
+            }
+            for(String directory : modsDirectories){
+                if (directory.startsWith("#") || directory.startsWith("//")){
+                    println "Directory \"$directory\" was skipped."
+                    continue
+                }
+                if(directory == "classic"){
+                    directory = "${System.getenv("APPDATA")}/Mindustry/mods/"
+                }
+                move(directory)
+            }
+            def time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))
+            println "Build ended at: ${time}"
+        }
+    }
 }
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
+
+// only root project task
+// using by github actions
+task deploy {
+    doLast {
+        new File("$rootDir/artifacts").mkdirs()
+        subprojects.each { p ->
+            delete {
+                delete "artifacts/${getJarFileName(p.name)}"
+            }
+            copy {
+                from "${p.buildDir}/libs/${getJarFileName(p.name)}"
+                into "artifacts/"
+            }
+        }
     }
 }

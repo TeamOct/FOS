@@ -143,7 +143,7 @@ nbactions.xml
 nb-configuration.xml
 
 ## Gradle
-
+/artifacts/
 /local.properties
 .gradle/
 gradle-app.setting
