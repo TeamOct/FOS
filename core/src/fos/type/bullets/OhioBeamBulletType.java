@@ -41,7 +41,7 @@ public class OhioBeamBulletType extends ContinuousBulletType {
         /* Anuke, why is this drawSize and not clipSize like everything else */ drawSize = 720f;
         pierceBuilding = true;
         pierceArmor = true;
-        //TODO splashDamagePierce = true on next update
+        splashDamagePierce = true;
         despawnEffect = FOSFx.deathrayDespawn;
         despawnSound = Sounds.none;
     }
