@@ -252,7 +252,7 @@ public class FOSUnits {
             circleTarget = true;
             speed = 4f;
             flying = true;
-            trailLength = 64;
+            trailLength = 32;
             trailColor = FOSPal.destroyerTrail;
             abilities.add(
                 new LiquidExplodeAbility(){{
@@ -268,6 +268,21 @@ public class FOSUnits {
                         buildingDamageMultiplier = 0.2f;
                     }};
                 }}
+            );
+            constructor = UnitEntity::create;
+        }};
+        cloud = new UnitType("cloud"){{
+            health = 400;
+            armor = 4;
+            hitSize = 12f;
+            rotateSpeed = 2f;
+            omniMovement = false;
+            trailColor = engineColor = FOSPal.destroyerTrail;
+            speed = 5f;
+            accel = 0.005f;
+            drag = 0.2f;
+            abilities.add(
+                new MoveLightningAbility(40f, 16, 0.2f, -6f, 3f, 5f, FOSPal.destroyerTrail.cpy().shiftSaturation(-0.3f))
             );
             constructor = UnitEntity::create;
         }};

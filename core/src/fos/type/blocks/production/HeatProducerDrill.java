@@ -1,14 +1,13 @@
 package fos.type.blocks.production;
 
-import arc.math.*;
+import arc.math.Mathf;
 import arc.util.io.*;
-import mindustry.graphics.*;
-import mindustry.ui.*;
+import mindustry.graphics.Pal;
+import mindustry.ui.Bar;
 import mindustry.world.blocks.heat.*;
-import mindustry.world.blocks.production.*;
 import mindustry.world.meta.*;
 
-public class HeatProducerDrill extends Drill {
+public class HeatProducerDrill extends BoostableDrill {
     public float heatOutput = 4f;
 
     public HeatProducerDrill(String name) {
@@ -28,7 +27,7 @@ public class HeatProducerDrill extends Drill {
     }
 
     @SuppressWarnings("unused")
-    public class HeatProducerDrillBuild extends DrillBuild implements HeatBlock {
+    public class HeatProducerDrillBuild extends BoostableDrillBuild implements HeatBlock {
         public float heat;
 
         @Override

@@ -3,20 +3,18 @@ package fos.type.blocks.production;
 import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
-import arc.math.*;
+import arc.math.Mathf;
 import fos.type.blocks.environment.UndergroundOreBlock;
-import mindustry.content.*;
-import mindustry.game.*;
-import mindustry.gen.*;
-import mindustry.type.*;
+import mindustry.content.Items;
+import mindustry.game.Team;
+import mindustry.gen.Building;
+import mindustry.type.Item;
 import mindustry.world.*;
-import mindustry.world.blocks.production.*;
-import mindustry.world.meta.Stat;
-import mindustry.world.meta.StatValues;
+import mindustry.world.meta.*;
 
 import static mindustry.Vars.*;
 
-public class UndergroundDrill extends Drill {
+public class UndergroundDrill extends BoostableDrill {
     public UndergroundDrill(String name){
         super(name);
         drillTime = 360f;
@@ -133,7 +131,7 @@ public class UndergroundDrill extends Drill {
     }
 
     @SuppressWarnings("unused")
-    public class UndergroundDrillBuild extends DrillBuild {
+    public class UndergroundDrillBuild extends BoostableDrillBuild {
         @Override
         public void onProximityUpdate() {
             super.onProximityUpdate();

@@ -147,7 +147,7 @@ allprojects {
         archiveFileName = getJarFileName(project.name)
 
         from{
-            configurations.compileClasspath.collect{
+            configurations.runtimeClasspath.collect{
                 if (it.exists())
                     it.isDirectory() ? it : zipTree(it)
             }

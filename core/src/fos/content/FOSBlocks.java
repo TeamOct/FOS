@@ -60,7 +60,7 @@ public class FOSBlocks {
     tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
     helix, sticker, particulator, pulse, thunder, cluster, judge, newJudge,
     matrixShieldProj,
-        landMine,
+    landMine,
     //environment & ores
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
@@ -78,7 +78,10 @@ public class FOSBlocks {
 
     public static void load() {
         //region crafting
+
+        //fine, I will document this block right here.
         resourceExtractor = new MultiCrafter("resource-extractor"){{
+            //since MultiCrafter extends Block, any field from Block class works here as well.
             itemCapacity = 15;
             size = 3;
             hasItems = acceptsItems = true;
@@ -86,6 +89,7 @@ public class FOSBlocks {
             envRequired = envEnabled = Env.space;
             drawer = new DrawMulti(
                 new DrawRegion("-bottom"),
+                //this is the custom drawer btw
                 new DrawDiagonalPistons(){{
                     sides = 8;
                     sinScl = 6f;
@@ -96,36 +100,44 @@ public class FOSBlocks {
             requirements(Category.crafting, with(rawNethratium, 50, rawElithite, 25));
             consumePower(2f);
 
+            //list of recipes used by this multicrafter, 3 in total here
             resolvedRecipes = Seq.with(
                 new Recipe(
+                    //IOEntry input: this recipe's input goes here
                     new IOEntry(
-                        Seq.with(with(rawNethratium, 2)),
+                        //input items go here (can be empty if you wish to use fluids only)
+                        Seq.with(ItemStack.with(rawNethratium, 2)),
+                        //input fluids go here (there are no fluids required so this is empty)
+                        Seq.with(/* example: LiquidStack.with(water, 10) */)
+                    ),
+                    //IOEntry output: this recipe's output goes here
+                    new IOEntry(
+                        //output items
+                        Seq.with(ItemStack.with(aluminium, 1)),
+                        //output fluids, again, it can be empty
                         Seq.with()
                     ),
-                    new IOEntry(
-                        Seq.with(with(aluminium, 1)),
-                        Seq.with()
-                    ),
+                    //float craftTime: self-explanatory. measured in ticks
                     60f
                 ),
                 new Recipe(
                     new IOEntry(
-                        Seq.with(with(rawElbium, 4)),
+                        Seq.with(ItemStack.with(rawElbium, 4)),
                         Seq.with()
                     ),
                     new IOEntry(
-                        Seq.with(with(tin, 1, lithium, 1)),
+                        Seq.with(ItemStack.with(tin, 1, lithium, 1)),
                         Seq.with()
                     ),
                     90f
                 ),
                 new Recipe(
                     new IOEntry(
-                        Seq.with(with(rawElithite, 6)),
+                        Seq.with(ItemStack.with(rawElithite, 6)),
                         Seq.with()
                     ),
                     new IOEntry(
-                        Seq.with(with(silver, 1, titanium, 1)),
+                        Seq.with(ItemStack.with(silver, 1, titanium, 1)),
                         Seq.with()
                     ),
                     120f
