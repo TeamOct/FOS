@@ -8,11 +8,11 @@ import arc.scene.ui.layout.*;
 import arc.struct.Seq;
 import arc.util.*;
 import fos.content.*;
+import fos.game.EndlessBoostHandler;
 import fos.graphics.FOSShaders;
 import fos.ui.DamageDisplay;
 import fos.ui.menus.*;
 import mindustry.ai.Pathfinder;
-import mindustry.content.SectorPresets;
 import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.mod.Mod;
@@ -28,13 +28,21 @@ import static fos.ui.menus.FOSMenus.*;
 import static mindustry.Vars.*;
 import static mindustry.game.EventType.*;
 
+/**
+ * This mod's main class.
+ * @author Slotterleet
+ * @author nekit508
+ */
 public class FOSMod extends Mod {
+    /** This mod's damage display system. */
     public DamageDisplay dd;
 
     public FOSMod() {
         Events.on(ClientLoadEvent.class, e -> {
+            //load this mod's settings
             loadSettings();
 
+            //add unit types to their descriptions
             content.units().each(u ->
                 u.description += ("\n" + bundle.get("unittype") + (
                     u.constructor.get() instanceof MechUnit ? bundle.get("unittype.infantry") :
@@ -52,12 +60,15 @@ public class FOSMod extends Mod {
                 + (u.weapons.contains(w -> w.bullet.heals()) ? bundle.get("unittype.support") : ""))
             );
 
+            //disclaimer for non-debug
             if (FOSVars.earlyAccess && !FOSVars.debug)
                 ui.showOkText("@fos.earlyaccesstitle", bundle.get("fos.earlyaccess"), () -> {});
 
+            //unlock every planet if debug
             if (FOSVars.debug)
                 PlanetDialog.debugSelect = true;
 
+            //check for "Fictional Octo System OST" mod. if it doesn't exist, prompt to download from GitHub
             LoadedMod ost = mods.getMod("fosost");
             if (ost == null) {
                 if (!settings.getBool("fos-ostdontshowagain")) {
@@ -74,6 +85,7 @@ public class FOSMod extends Mod {
                     }, () -> {});
             }
 
+            //change menu theme if it isn't set to default
             int tn = settings.getInt("fos-menutheme");
             MenuBackground bg = (
                 tn == 2 ? uxerdSpace :
@@ -111,10 +123,7 @@ public class FOSMod extends Mod {
             }
             */
 
-            if (SectorPresets.planetaryTerminal.sector.info.wasCaptured && !FOSPlanets.uxerd.unlocked()) {
-                FOSPlanets.uxerd.unlock();
-            }
-
+            //realistic mode - no sound FX in places with no atmosphere, such as asteroids
             if (settings.getBool("fos-realisticmode") && state.rules.sector != null && !state.rules.sector.planet.hasAtmosphere) {
                 audio.soundBus.setVolume(0f);
             } else {
@@ -125,9 +134,10 @@ public class FOSMod extends Mod {
 
     @Override
     public void init() {
+        //initialize mod variables
         FOSVars.load();
 
-        //required for modded AIs
+        //this flowfield is required for modded AIs
         Pathfinder.Flowfield pt = FOSVars.fpos;
         Reflect.<Seq<Prov<Pathfinder.Flowfield>>>get(pathfinder, "fieldTypes").add(() -> pt);
         Events.on(WorldLoadEvent.class, e -> {
@@ -136,36 +146,50 @@ public class FOSMod extends Mod {
             }
         });
 
+        //anything after this should not be initialized on dedicated servers.
         if (headless) return;
 
+        //an anti-cheat system from long ago, is it really necessary now?
         LoadedMod xf = mods.list().find(m ->
-            /* some mods don't even have the author field apparently */ m.meta.author != null &&
+            /* some mods don't even have the author field, apparently. how stupid. */ m.meta.author != null &&
             (m.meta.author.equals("XenoTale") || m.meta.author.equals("goldie")));
         if (xf != null) {
             ui.showOkText("@fos.errortitle", bundle.format("fos.errortext", xf.meta.displayName), () -> app.exit());
         }
 
+        //locate this mod, for later use
         LoadedMod mod = mods.locateMod("fos");
 
+        //load splash texts
         SplashTexts.load();
         int n = Mathf.floor((float) Math.random() * SplashTexts.splashes.size);
 
+        //change something on certain days
         var date = FOSVars.date;
+
+        //get a random splash text
         boolean isNewYear = date.get(Calendar.MONTH) == Calendar.JANUARY && date.get(Calendar.DAY_OF_MONTH) == 1;
-        mod.meta.subtitle =
-            isNewYear ? bundle.get("splashnewyear")
-            : SplashTexts.splashes.get(n);
+        mod.meta.subtitle = isNewYear ? bundle.get("splashnewyear") : SplashTexts.splashes.get(n);
+
+        //mistake.mp3
         boolean isAprilFools = date.get(Calendar.MONTH) == Calendar.APRIL && date.get(Calendar.DAY_OF_MONTH) == 1;
         if (isAprilFools) Musics.menu = tree.loadMusic("mistake");
 
+        //display the mod version
         mod.meta.description += "\n\n" + bundle.get("mod.currentversion") + "\n" + mod.meta.version;
 
+        //load icons and menu themes
         FOSIcons.load();
         FOSMenus.load();
 
+        //add a couple of buttons to in-game editor
         ui.editor.shown(this::addEditorTeams);
 
+        //damage display
         dd = new DamageDisplay();
+
+        //endless boost handler
+        new EndlessBoostHandler();
     }
 
     @Override
@@ -228,13 +252,13 @@ public class FOSMod extends Mod {
 
     private void addEditorTeams() {
         //thanks java.
-        WidgetGroup teambuttons = (WidgetGroup) ui.editor.getChildren().get(0);
-        teambuttons = (WidgetGroup) teambuttons.getChildren().get(0);
-        teambuttons = (WidgetGroup) teambuttons.getChildren().get(0);
+        WidgetGroup teambuttons = (WidgetGroup)ui.editor.getChildren().get(0);
+        teambuttons = (WidgetGroup)teambuttons.getChildren().get(0);
+        teambuttons = (WidgetGroup)teambuttons.getChildren().get(0);
 
-        ((Table) teambuttons).row();
+        ((Table)teambuttons).row();
 
-        for(int i = 69; i <= 70; i++){
+        for (int i = 69; i <= 70; i++) {
             Team team = Team.get(i);
 
             ImageButton button = new ImageButton(Tex.whiteui, Styles.clearNoneTogglei);
@@ -244,7 +268,7 @@ public class FOSMod extends Mod {
             button.clicked(() -> editor.drawTeam = team);
             button.update(() -> button.setChecked(editor.drawTeam == team));
 
-            ((Table) teambuttons).add(button);
+            ((Table)teambuttons).add(button);
         }
     }
 }
