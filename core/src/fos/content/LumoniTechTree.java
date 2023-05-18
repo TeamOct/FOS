@@ -5,17 +5,17 @@ import mindustry.type.ItemStack;
 import static fos.content.FOSBlocks.*;
 import static fos.content.FOSFluids.tokicite;
 import static fos.content.FOSItems.*;
+import static fos.content.FOSStatuses.drillSpeedEndless;
 import static fos.content.FOSUnits.vulture;
-import static fos.content.FOSWeaponModules.standard1;
-import static fos.content.FOSWeaponModules.standard2;
-import static mindustry.content.Items.copper;
-import static mindustry.content.Items.silicon;
+import static fos.content.FOSWeaponModules.*;
+import static mindustry.content.Items.*;
 import static mindustry.content.Liquids.water;
 import static mindustry.content.TechTree.*;
 
 public class LumoniTechTree {
     public static void load() {
         FOSPlanets.lumoni.techTree = nodeRoot("@planet.fos-lumoni.name", FOSBlocks.coreFortress, true, () -> {
+            node(drillSpeedEndless);
             node(coreCity, () ->
                 node(coreMetropolis)
             );

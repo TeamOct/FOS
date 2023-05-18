@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter
 buildscript {
 
 }
+
 plugins {
     id "org.jetbrains.kotlin.jvm" version "1.6.0"
     id "org.jetbrains.kotlin.kapt" version "1.6.0"
@@ -36,10 +37,12 @@ ext {
 
     sdkVersion = '30'
 
+    mindustryVersion = "v144"
+
     modules = [:]
-    modules.arc = ["com.github.Anuken:Arc", "v143"]
+    modules.arc = ["com.github.Anuken:Arc", "${mindustryVersion}"]
     modules.javapoet = ["com.squareup:javapoet", "1.13.0"]
-    modules.mindustry = ["com.github.Anuken:Mindustry", "v144"]
+    modules.mindustry = ["com.github.Anuken:Mindustry", "${mindustryVersion}"]
     modules.multiCrafter = ["com.github.liplum:MultiCrafterLib", "v1.7"]
     modules.jabel = ["com.github.Anuken:jabel", "34e4c172e65b3928cd9eabe1993654ea79c409cd"]
     modules.ktlStd = ["org.jetbrains.kotlin:kotlin-stdlib-jdk8", "1.6.0"]

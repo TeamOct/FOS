@@ -101,6 +101,9 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         height = Mathf.clamp(height);
 
         Block b = arr[Mathf.clamp((int)(temp * arr.length), 0, arr[0].length - 1)][Mathf.clamp((int)(height * arr[0].length), 0, arr[0].length - 1)];
+        if (Simplex.noise3d(seed, 5, 0.6f, 1f / scl, position.x, position.y, position.z) > 0.4f) {
+            b = getAlt(b);
+        }
         if (isWater(position, 0.2f)) {
             b = getFlooded(b);
         }
@@ -115,6 +118,10 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                     b == cyanium ? cyaniumWater :
                         b == purpur ? purpurWater :
                             b;
+    }
+
+    Block getAlt(Block b) {
+        return content.block(b.name + "-alt") != null ? content.block(b.name + "-alt") : b;
     }
 
     Block getBlock(Vec3 position) {
@@ -326,6 +333,39 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
                 if (noise(x + 69, y - 69, 2, 0.6, 80) > 0.86f) {
                     floor = tokiciteFloor;
+                    ore = air;
+                }
+            }
+
+            //oil puddles
+            if (floor == cyanium && block == air) {
+                //don't mix multiple liquids
+                for (Point2 p : Geometry.d4) {
+                    Tile other = tiles.get(x + p.x, y + p.y);
+                    if (other.floor().isLiquid && other.floor() != tar) return;
+                }
+
+                //only generate 1x1 puddles with a certain distance between them
+                /* java sucks */ final boolean[] isFree = {true};
+                tiles.get(x, y).circle(6, t -> {
+                    if (t.floor() == tar) isFree[0] = false;
+                });
+
+                if (noise(x * 3f + 236, y * 3f + 213, 2, 0.6, 80) < 0.17f && isFree[0]) {
+                    //shale around oil puddles
+                    tiles.get(x, y).circle(2, t ->
+                        t.setFloor(shale.asFloor())
+                    );
+                    tiles.get(x, y).circle(4, t -> {
+                        if (rand.random(1f) < 0.4f) t.setFloor(shale.asFloor());
+                    });
+
+                    //more oil because 1x1 puddles all around do not look natural
+                    tiles.get(x, y).circle(1, t -> {
+                        if (rand.random(1f) < 0.25f) t.setFloor(tar.asFloor());
+                    });
+
+                    floor = tar;
                     ore = air;
                 }
             }

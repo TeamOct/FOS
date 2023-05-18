@@ -23,7 +23,7 @@ import mindustry.entities.pattern.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
-import mindustry.world.Block;
+import mindustry.world.*;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
@@ -53,17 +53,17 @@ public class FOSBlocks {
     //distribution
     spaceDuct, spaceRouter, spaceBridge, itemCatapult, tinBelt,
     //liquids
-    fluidPipe,
+    fluidPipe, pumpjack,
     //power
-    tinWire, copperWire, brassWire, windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
+    tinWire, tinWirePole, copperWire, copperWirePole, brassWire, brassWirePole, windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     //defense
     tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
     helix, sticker, particulator, pulse, thunder, cluster, judge, newJudge,
     matrixShieldProj,
     landMine,
     //environment & ores
-    cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
-    annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
+    cyanium, cyaniumAlt, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
+    annite, anniteWall, blublu, blubluAlt, blubluWall, purpur, purpurWall,
     tokiciteFloor,
     cyaniumWater, crimsonStoneWater, anniteWater, blubluWater, purpurWater,
     alienMoss,
@@ -803,6 +803,21 @@ public class FOSBlocks {
             liquidCapacity = 20f;
             requirements(Category.liquid, with(tin, 1, silver, 1));
         }};
+        pumpjack = new Pump("pumpjack"){
+            {
+                scaledHealth = 60;
+                size = 3;
+                pumpAmount = 0.25f;
+                liquidCapacity = 45f;
+                requirements(Category.liquid, with(tin, 150, silicon, 50, copper, 100, vanadium, 75));
+            }
+
+            //only placeable on oil
+            @Override
+            protected boolean canPump(Tile tile) {
+                return tile != null && tile.floor().liquidDrop == oil;
+            }
+        };
         //endregion
         //region power
         tinWire = new PowerWire("tin-wire"){{
@@ -811,16 +826,43 @@ public class FOSBlocks {
             consumePower(2f / 60f);
             requirements(Category.power, with(tin, 1));
         }};
+        tinWirePole = new PowerWire("tin-wire-pole"){{
+            health = 30;
+            consumesPower = true;
+            consumePower(10f / 60f);
+            maxNodes = 2;
+            laserRange = 5;
+            conveyorPlacement = false;
+            requirements(Category.power, with(tin, 25));
+        }};
         copperWire = new PowerWire("copper-wire"){{
             health = 5;
             consumesPower = true;
             consumePower(0.5f / 60f);
             requirements(Category.power, with(copper, 2));
         }};
+        copperWirePole = new PowerWire("copper-wire-pole"){{
+            health = 30;
+            consumesPower = true;
+            consumePower(5f / 60f);
+            maxNodes = 2;
+            laserRange = 10;
+            conveyorPlacement = false;
+            requirements(Category.power, with(copper, 30));
+        }};
         brassWire = new PowerWire("brass-wire"){{
             health = 8;
             //does not consume any power
             requirements(Category.power, with(brass, 1));
+        }};
+        brassWirePole = new PowerWire("brass-wire-pole"){{
+            health = 30;
+            consumesPower = true;
+            //still no power consumption
+            maxNodes = 2;
+            laserRange = 15;
+            conveyorPlacement = false;
+            requirements(Category.power, with(brass, 25));
         }};
         windTurbine = new WindTurbine("wind-turbine"){{
             health = 480;
@@ -856,11 +898,87 @@ public class FOSBlocks {
         }};
         //endregion
         //region environment & ores
-        cyanium = new Floor("cyanium"){{
-            variants = 3;
+        tokiciteFloor = new Floor("tokicite-floor"){{
+            drownTime = 360f;
+            status = StatusEffects.slow;
+            speedMultiplier = 0.15f;
+            variants = 0;
+            liquidDrop = tokicite;
+            isLiquid = true;
+            cacheLayer = CacheLayer.tar;
+            albedo = 1f;
         }};
+        cyaniumWater = new Floor("cyanium-water"){{
+            variants = 4;
+            isLiquid = true;
+            status = StatusEffects.wet;
+            liquidDrop = water;
+            cacheLayer = CacheLayer.water;
+            wall = cyaniumWall;
+            speedMultiplier = 0.8f;
+            statusDuration = 50f;
+            albedo = 0.9f;
+            shallow = true;
+            supportsOverlay = true;
+        }};
+        crimsonStoneWater = new Floor("crimson-stone-water"){{
+            isLiquid = true;
+            status = StatusEffects.wet;
+            liquidDrop = water;
+            cacheLayer = CacheLayer.water;
+            wall = crimsonStoneWall;
+            speedMultiplier = 0.8f;
+            statusDuration = 50f;
+            albedo = 0.9f;
+            shallow = true;
+            supportsOverlay = true;
+        }};
+        anniteWater = new Floor("annite-water"){{
+            variants = 4;
+            isLiquid = true;
+            status = StatusEffects.wet;
+            liquidDrop = water;
+            cacheLayer = CacheLayer.water;
+            wall = anniteWall;
+            speedMultiplier = 0.8f;
+            statusDuration = 50f;
+            albedo = 0.9f;
+            shallow = true;
+            supportsOverlay = true;
+        }};
+        blubluWater = new Floor("blublu-water"){{
+            variants = 4;
+            isLiquid = true;
+            status = StatusEffects.wet;
+            liquidDrop = water;
+            cacheLayer = CacheLayer.water;
+            wall = blubluWall;
+            speedMultiplier = 0.8f;
+            statusDuration = 50f;
+            albedo = 0.9f;
+            shallow = true;
+            supportsOverlay = true;
+        }};
+        purpurWater = new Floor("purpur-water"){{
+            variants = 4;
+            isLiquid = true;
+            status = StatusEffects.wet;
+            liquidDrop = water;
+            cacheLayer = CacheLayer.water;
+            wall = purpurWall;
+            speedMultiplier = 0.8f;
+            statusDuration = 50f;
+            albedo = 0.9f;
+            shallow = true;
+            supportsOverlay = true;
+        }};
+        cyanium = new Floor("cyanium"){};
         cyaniumWall = new StaticWall("cyanium-wall"){{
             variants = 4;
+        }};
+        cyaniumAlt = new Floor("cyanium-alt"){{
+            variants = 4;
+            wall = cyaniumWall;
         }};
         crimsonStone = new Floor("crimson-stone"){};
         crimsonStoneWall = new StaticWall("crimson-stone-wall"){{
@@ -889,84 +1007,14 @@ public class FOSBlocks {
             variants = 4;
         }};
         blubluWall = new StaticWall("blublu-wall"){};
+        blubluAlt = new Floor("blublu-alt"){{
+            variants = 4;
+            wall = blubluWall;
+        }};
         purpur = new Floor("purpur"){{
             variants = 4;
         }};
         purpurWall = new StaticWall("purpur-wall"){};
-        tokiciteFloor = new Floor("tokicite-floor"){{
-            drownTime = 360f;
-            status = StatusEffects.slow;
-            speedMultiplier = 0.15f;
-            variants = 0;
-            liquidDrop = tokicite;
-            isLiquid = true;
-            cacheLayer = CacheLayer.tar;
-            albedo = 1f;
-        }};
-        cyaniumWater = new Floor("cyanium-water"){{
-            variants = 4;
-            isLiquid = true;
-            status = StatusEffects.wet;
-            liquidDrop = water;
-            cacheLayer = CacheLayer.water;
-            //blendGroup = cyanium;
-            wall = cyaniumWall;
-            speedMultiplier = 0.8f;
-            statusDuration = 50f;
-            albedo = 0.9f;
-            supportsOverlay = true;
-        }};
-        crimsonStoneWater = new Floor("crimson-stone-water"){{
-            isLiquid = true;
-            status = StatusEffects.wet;
-            liquidDrop = water;
-            cacheLayer = CacheLayer.water;
-            //blendGroup = crimsonStone;
-            wall = crimsonStoneWall;
-            speedMultiplier = 0.8f;
-            statusDuration = 50f;
-            albedo = 0.9f;
-            supportsOverlay = true;
-        }};
-        anniteWater = new Floor("annite-water"){{
-            variants = 4;
-            isLiquid = true;
-            status = StatusEffects.wet;
-            liquidDrop = water;
-            cacheLayer = CacheLayer.water;
-            //blendGroup = annite;
-            wall = anniteWall;
-            speedMultiplier = 0.8f;
-            statusDuration = 50f;
-            albedo = 0.9f;
-            supportsOverlay = true;
-        }};
-        blubluWater = new Floor("blublu-water"){{
-            variants = 4;
-            isLiquid = true;
-            status = StatusEffects.wet;
-            liquidDrop = water;
-            cacheLayer = CacheLayer.water;
-            //blendGroup = blublu;
-            wall = blubluWall;
-            speedMultiplier = 0.8f;
-            statusDuration = 50f;
-            albedo = 0.9f;
-            supportsOverlay = true;
-        }};
-        purpurWater = new Floor("purpur-water"){{
-            variants = 4;
-            isLiquid = true;
-            status = StatusEffects.wet;
-            liquidDrop = water;
-            cacheLayer = CacheLayer.water;
-            //blendGroup = purpur;
-            wall = purpurWall;
-            speedMultiplier = 0.8f;
-            statusDuration = 50f;
-            albedo = 0.9f;
-            supportsOverlay = true;
-        }};
         alienMoss = new OverlayFloor("alien-moss"){};
         oreTin = new UndergroundOreBlock("ore-tin"){{
             drop = tin;

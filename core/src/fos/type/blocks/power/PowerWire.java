@@ -1,18 +1,16 @@
 package fos.type.blocks.power;
 
 import arc.Core;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.TextureRegion;
-import arc.math.geom.Geometry;
-import arc.math.geom.Point2;
+import arc.graphics.g2d.*;
+import arc.math.geom.*;
 import arc.util.Eachable;
 import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
-import mindustry.world.blocks.power.*;
+import mindustry.graphics.Layer;
+import mindustry.world.blocks.power.PowerNode;
 import mindustry.world.meta.*;
 
-import static mindustry.Vars.tilesize;
-import static mindustry.Vars.world;
+import static mindustry.Vars.*;
 
 public class PowerWire extends PowerNode {
     public TextureRegion[] regions = new TextureRegion[16];
@@ -56,6 +54,9 @@ public class PowerWire extends PowerNode {
         for (int i = 0; i < regions.length; i++) {
             regions[i] = Core.atlas.find(name + "-" + i);
         }
+
+        laser = Core.atlas.find(name + "-wire");
+        laserEnd = Core.atlas.find(name + "-edge");
     }
 
     @Override
@@ -82,12 +83,14 @@ public class PowerWire extends PowerNode {
             }
         });
 
-        Draw.rect(/* just in case this value somehow exceeds 15 */ b[0] >= 16 ? regions[0] : regions[b[0]], plan.drawx(), plan.drawy());
+        Draw.rect(b[0] >= 16 || maxNodes > 0 ? region : regions[b[0]], plan.drawx(), plan.drawy());
     }
 
     @Override
     public void drawLaser(float x1, float y1, float x2, float y2, int size1, int size2) {
-        //it is a freaking wire, no lasers!
+        if (maxNodes == 0) return;
+
+        super.drawLaser(x1, y1, x2, y2, size1, size2);
     }
 
     @SuppressWarnings("unused")
@@ -96,6 +99,15 @@ public class PowerWire extends PowerNode {
 
         @Override
         public void draw() {
+            //connect wires and non-squareSprite blocks properly
+            for (var p : Geometry.d4) {
+                var block = world.tile(tileX() + p.x, tileY() + p.y).block();
+                if (block != null && block.hasPower && !block.squareSprite) {
+                    Draw.z(Layer.blockUnder);
+                    Draw.rect(p.x == 0 ? regions[5] : regions[10], x + p.x*4, y + p.y*4);
+                }
+            }
+
             Draw.rect(/* just in case this value somehow exceeds 15 */ curTile >= 16 ? regions[0] : regions[curTile], x, y);
         }
 
