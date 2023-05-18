@@ -1,4 +1,4 @@
-name: Commit Testing
+name: Testing
 
 on: [push]
 
@@ -15,7 +15,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 16
-    - name: Build mod jar
+    - name: Build mod jars
       run: |
         chmod +x gradlew
         ./gradlew deploy

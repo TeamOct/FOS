@@ -1,2 +1,10 @@
-sourceSets.main.java.srcDirs = ["src/", "$buildDir/generated/sources/annotationProcessor/java/main"]
-sourceSets.main.kotlin.srcDirs = ["src/", "$buildDir/generated/sources/annotationProcessor/java/main"]
+dependencies {
+    implementation "com.github.Anuken.Arc:arc-core:$mindustryVersion"
+    implementation "com.github.Anuken.MindustryJitpack:core:$mindustryVersion"
+
+    implementation 'com.squareup:javapoet:1.13.0'
+}
+
+tasks.withType(Jar) {
+    writeProcessors()
+}

@@ -1,262 +1,152 @@
-// Provided by Zelaux & nekit508
-//file:noinspection GroovyAssignabilityCheck
+import java.util.function.Consumer
 
-import java.time.format.DateTimeFormatter
+// root gradle file by nekit508
 
+allprojects { Project project ->
+    project.plugins.apply("java")
+    project.plugins.apply("idea")
+    project.plugins.apply("maven-publish")
 
-buildscript {
-
+    version = "v1.0"
+    group = "github.teamoct.fictional-octo-system"
 }
 
-plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.6.0"
-    id "org.jetbrains.kotlin.kapt" version "1.6.0"
+wrapper {
+    gradleVersion = "8.1.1"
 }
+
+sourceSets.main.java.srcDirs = []
+sourceSets.main.resources.srcDirs = []
 
 ext {
-    modName = "fictional-octo-system"
-
-    module = { String module, String name ->
-        if(name.contains(':')) name = name.split(':').last()
-        if (modules.get(module) == null) {
-            println("${module} not founded")
-            return
+    cleanBuilds = {
+        subprojects.each { Project p ->
+            if (p.buildDir.exists()) {
+                delete {
+                    it.delete(p.buildDir.listFiles() - p.ext.child(p.buildDir, "generated"))
+                }
+            }
         }
-        return "${name == "" ? modules.get(module)[0] : modules.get(module)[0].replaceAll(":", ".")}" +
-                (name != "" ? ":${name}" : "") + ":${modules.get(module)[1]}"
-    }
-    getJarFileName = { String name ->
-        return "${modName}-${name}.jar"
-    }
-    doExec = { cmd ->
-        def proc = cmd.execute(null, new File("$buildDir/libs"))
-        proc.waitForProcessOutput(System.out, System.err)
     }
 
-    sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT")
+    localProperties = new Properties()
+    if (new File("$rootProject.projectDir/local.properties").exists())
+        localProperties.load(new FileInputStream(new File("$rootProject.projectDir/local.properties")))
 
-    sdkVersion = '30'
-
-    mindustryVersion = "v144"
-
-    modules = [:]
-    modules.arc = ["com.github.Anuken:Arc", "${mindustryVersion}"]
-    modules.javapoet = ["com.squareup:javapoet", "1.13.0"]
-    modules.mindustry = ["com.github.Anuken:Mindustry", "${mindustryVersion}"]
-    modules.multiCrafter = ["com.github.liplum:MultiCrafterLib", "v1.7"]
-    modules.jabel = ["com.github.Anuken:jabel", "34e4c172e65b3928cd9eabe1993654ea79c409cd"]
-    modules.ktlStd = ["org.jetbrains.kotlin:kotlin-stdlib-jdk8", "1.6.0"]
-
-    projectVersion  = "v1.0"
-
-    // no main classes
-    mains = [:]
-
-    deps = [:]
-    deps.impl = [:]
-    deps.comp = [:]
-    deps.proc = [:]
-    // core dependencies
-    deps.impl.core = [
-            module("multiCrafter", ""),
-            module("ktlStd", ""),
-    ]
-    deps.comp.core = [
-            project(":annotations"),
-            module("mindustry", "core"),
-            module("arc", "arc-core"),
-            module("arc", "extensions:flabel"),
-            module("arc", "extensions:freetype"),
-            module("arc", "extensions:g3d"),
-            module("arc", "extensions:fx"),
-            module("arc", "discord"),
-            module("arc", "extensions:arcnet"),
-    ]
-    deps.proc.core = [
-            module("jabel", ""),
-            project(":annotations"),
-    ]
-    // annotations dependencies
-    deps.impl.annotations = [
-            module("javapoet", ""),
-            module("arc", "arc-core"),
-    ]
-    deps.proc.annotations = [
-            module("jabel", ""),
-    ]
-    // desktop dependencies
-    deps.impl.desktop = [
-            project(":core")
-    ] + deps.impl.core
-    deps.comp.desktop = [
-    ] + deps.comp.core
-    deps.proc.desktop = [
-    ] + deps.proc.core
-    // android dependencies
-    deps.impl.android = [
-            project(":core")
-    ] + deps.impl.core
-    deps.comp.android = [
-    ] + deps.comp.core
-    deps.proc.android = [
-    ] + deps.proc.core
+    setIfHasProp = { String property, Consumer<Object> set ->
+        if (localProperties.containsKey(property))
+            set.accept(localProperties.get(property))
+    }
 }
 
-allprojects {
-    repositories{
-        mavenLocal()
-        google()
+subprojects { Project project ->
+    project.sourceSets.main.java.srcDirs = [
+            "src",
+            "$project.buildDir/generated/sources/annotationProcessor/java/main",
+    ]
+    project.sourceSets.main.resources.srcDirs = [
+            "res",
+    ]
+
+    project.ext {
+        APArgs = []
+
+        copyPaths = [
+                "$rootProject.projectDir/artifacts",
+        ]
+        mindustryVersion = "v144"
+
+        child = { File p, String c ->
+            return new File(p, c)
+        }
+
+        writeProcessors = {
+            var processorPath = child(project.sourceSets.main.resources.srcDirs.getAt(0), "META-INF/services/")
+            processorPath.mkdirs()
+            var processorFile = child(processorPath, ("javax.annotation.processing.Processor"))
+            var text = new StringBuilder()
+            var srcFiles = project.sourceSets.main.java.srcDirs.getAt(0)
+            srcFiles.eachFileRecurse(groovy.io.FileType.FILES){ file ->
+                if(file.name.endsWith(".java") && ((file.text.contains(" extends AbstractProcessor")
+                        && !file.text.contains("abstract class")))){
+                    text.append(file.path.substring(srcFiles.path.length() + 1)).append("\n")
+                }
+            }
+            processorFile.text = text.toString().replace(".java", "").replace("/", ".").replace("\\", ".")
+        }
+    }
+
+    project.repositories {
         mavenCentral()
-        maven{ url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        maven{ url "https://oss.sonatype.org/content/repositories/releases/" }
-        maven{ url 'https://jitpack.io' }
+        maven { url "https://www.jitpack.io" }
     }
 
-    apply plugin: 'java'
-    apply plugin: "java-library"
-    apply plugin: 'maven-publish'
-    apply plugin: "kotlin"
-
-    compileJava.options.fork = true
-
-    compileKotlin{
-        sourceCompatibility = JavaVersion.VERSION_16
-        targetCompatibility = JavaVersion.VERSION_1_8
-        kotlinOptions {
-            jvmTarget = "1.8"
-        }
-    }
-    compileTestKotlin {
-        kotlinOptions {
-            jvmTarget = "1.8"
-        }
-    }
-
-    tasks.withType(JavaCompile){
-        targetCompatibility = JavaVersion.VERSION_1_8
-        sourceCompatibility = JavaVersion.VERSION_16
+    project.tasks.withType(JavaCompile).configureEach {
+        rootProject.ext.setIfHasProp("org.gradle.java.home", v -> options.forkOptions.executable = v)
         options.encoding = "UTF-8"
-        options.compilerArgs += ["-Xlint:deprecation"]
-        options.compilerArgs.addAll(['--release', '8'])
-
-        options.forkOptions.jvmArgs.addAll([
-                '--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED',
-                '--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED'
-        ])
+        sourceCompatibility = JavaVersion.VERSION_16
+        targetCompatibility = JavaVersion.VERSION_16
+        var finalAPArgs = []
+        APArgs.each { String str ->
+            if (!str.contains("-A"))
+                finalAPArgs.add("-A" + str)
+        }
+        options.compilerArgs += finalAPArgs + "-AProjectName=$project.name"
     }
 
-    jar {
+    project.tasks.create("cjar") {
+        dependsOn project.tasks.jar
+        doLast {
+            rootProject.ext.cleanBuilds()
+        }
+    }
+
+    project.tasks.jar {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        archiveFileName = getJarFileName(project.name)
-
-        from{
-            configurations.runtimeClasspath.collect{
-                if (it.exists())
-                    it.isDirectory() ? it : zipTree(it)
+        from {
+            configurations.runtimeClasspath.collect { File file ->
+                file.isDirectory() ? file : zipTree(file)
             }
         }
-
-        from(rootDir){
-            include "mod.hjson"
-            include "mod.json"
-            include "icon.png"
-        }
-
-        from("assets/"){
-            include "**"
+        doLast {
+            copy {
+                from {
+                    archiveFile.get()
+                }
+                copyPaths.each { p ->
+                    into(p)
+                }
+            }
         }
     }
 
-    dependencies {
-        ArrayList<String> listImpl = (ArrayList<String>) deps.impl.get(project.name)
-        if (listImpl != null) {
-            listImpl.forEach(dep -> {
-                implementation dep
-            })
-        }
-        ArrayList<String> listComp = (ArrayList<String>) deps.comp.get(project.name)
-        if (listComp != null) {
-            listComp.forEach(dep -> {
-                compileOnly dep
-            })
-        }
-        ArrayList<String> listProc = (ArrayList<String>) deps.proc.get(project.name)
-        if (listProc != null) {
-            listProc.forEach(dep -> {
-                annotationProcessor dep
-            })
-        }
+    java {
+        withSourcesJar()
+        withJavadocJar()
     }
 
-    task writeProcessors {
-        outputs.upToDateWhen{ false }
-        new File(rootDir, "annotations/src/main/resources/META-INF/services/").mkdirs()
-        def processorFile = new File(rootDir, "annotations/src/main/resources/META-INF/services/javax.annotation.processing.Processor")
-        def text = new StringBuilder()
-        def files = new File(rootDir, "annotations/src")
-        files.eachFileRecurse(
-                groovy.io.FileType.FILES
-        ){ file ->
-            if(file.name.endsWith(".java") && file.text.contains("// processor"))
-                text.append(file.path.substring(files.path.length() + 1)).append("\n")
-        }
-        processorFile.text = text.toString().replace(".java", "").replace("/", ".").replace("\\", ".")
-    }
-    compileJava.dependsOn(writeProcessors)
-
-    // use for test builds
-    task mjar(){
-        dependsOn "jar"
-        ext{
-            move = { String intoPath ->
-                delete{
-                    delete "${intoPath}/${getJarFileName(project.name)}"
-                }
-                copy{
-                    from "$buildDir/libs/${getJarFileName(project.name)}"
-                    into intoPath
-                }
-                println "Moved into " + intoPath
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                groupId project.group
+                artifactId project.name
+                version project.version
+                from components.java
             }
-        }
-        doLast{
-            def modsDirectories = []
-            def file = new File(rootDir, "modsDirectories.txt")
-            if(file.exists()){
-                BufferedReader reader = new BufferedReader(new FileReader(file))
-                reader.lines().forEach(line -> modsDirectories.add(line))
-            }else{
-                modsDirectories.add("classic")
-            }
-            for(String directory : modsDirectories){
-                if (directory.startsWith("#") || directory.startsWith("//")){
-                    println "Directory \"$directory\" was skipped."
-                    continue
-                }
-                if(directory == "classic"){
-                    directory = "${System.getenv("APPDATA")}/Mindustry/mods/"
-                }
-                move(directory)
-            }
-            def time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))
-            println "Build ended at: ${time}"
         }
     }
 }
 
-// only root project task
-// using by github actions
-task deploy {
+task publishProj {
     doLast {
-        new File("$rootDir/artifacts").mkdirs()
-        subprojects.each { p ->
-            delete {
-                delete "artifacts/${getJarFileName(p.name)}"
-            }
-            copy {
-                from "${p.buildDir}/libs/${getJarFileName(p.name)}"
-                into "artifacts/"
-            }
-        }
+        publishToMavenLocal
     }
+}
+
+task deploy {
+    dependsOn subprojects.stream().<Task>map(p -> p.tasks.jar).toArray()
+    doLast {
+        rootProject.ext.cleanBuilds()
+    }
+    finalizedBy rootProject.tasks.publishProj
 }

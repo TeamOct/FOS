@@ -1,6 +1,12 @@
-sourceSets.main.java.srcDirs = ["src/", "$buildDir/generated/sources/annotationProcessor/java/main"]
-sourceSets.main.kotlin.srcDirs = ["src/", "$buildDir/generated/sources/annotationProcessor/java/main"]
-sourceSets.main.resources.srcDirs = ["assets"]
+dependencies {
+    compileOnly "com.github.Anuken.Arc:arc-core:$mindustryVersion"
+    compileOnly "com.github.Anuken.MindustryJitpack:core:$mindustryVersion"
+
+    implementation project(":core")
+
+    compileOnly project(":annotations")
+    annotationProcessor project(":annotations")
+}
 
 task buildProj {
     dependsOn jar
@@ -36,4 +42,3 @@ task buildProj {
         }
     }
 }
-rootProject.tasks.getByName("deploy").dependsOn(buildProj)
