@@ -5,6 +5,6 @@ dependencies {
     implementation 'com.squareup:javapoet:1.13.0'
 }
 
-tasks.withType(Jar) {
-    writeProcessors()
+tasks.withType(JavaCompile) {
+    dependsOn project.tasks.writeProcessors
 }

@@ -59,27 +59,29 @@ subprojects { Project project ->
         child = { File p, String c ->
             return new File(p, c)
         }
+    }
 
-        writeProcessors = {
+    project.repositories {
+        mavenCentral()
+        maven { url "https://www.jitpack.io" }
+    }
+
+    project.tasks.create("writeProcessors") {
+        doLast {
             var processorPath = child(project.sourceSets.main.resources.srcDirs.getAt(0), "META-INF/services/")
             processorPath.mkdirs()
             var processorFile = child(processorPath, ("javax.annotation.processing.Processor"))
             var text = new StringBuilder()
             var srcFiles = project.sourceSets.main.java.srcDirs.getAt(0)
             println srcFiles
-            srcFiles.eachFileRecurse(groovy.io.FileType.FILES){ file ->
-                if(file.name.endsWith(".java") && ((file.text.contains(" extends AbstractProcessor")
-                        && !file.text.contains("abstract class")))){
+            srcFiles.eachFileRecurse(groovy.io.FileType.FILES) { file ->
+                if (file.name.endsWith(".java") && ((file.text.contains(" extends AbstractProcessor")
+                        && !file.text.contains("abstract class")))) {
                     text.append(file.path.substring(srcFiles.path.length() + 1)).append("\n")
                 }
             }
             processorFile.text = text.toString().replace(".java", "").replace("/", ".").replace("\\", ".")
         }
-    }
-
-    project.repositories {
-        mavenCentral()
-        maven { url "https://www.jitpack.io" }
     }
 
     project.tasks.withType(JavaCompile).configureEach {
