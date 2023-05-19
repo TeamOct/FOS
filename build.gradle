@@ -73,13 +73,13 @@ subprojects { Project project ->
             var processorFile = child(processorPath, ("javax.annotation.processing.Processor"))
             var text = new StringBuilder()
             var srcFiles = project.sourceSets.main.java.srcDirs.getAt(0)
-            println srcFiles
-            srcFiles.eachFileRecurse(groovy.io.FileType.FILES) { file ->
-                if (file.name.endsWith(".java") && ((file.text.contains(" extends AbstractProcessor")
-                        && !file.text.contains("abstract class")))) {
-                    text.append(file.path.substring(srcFiles.path.length() + 1)).append("\n")
+            if (srcFiles.exists())
+                srcFiles.eachFileRecurse(groovy.io.FileType.FILES) { file ->
+                    if (file.name.endsWith(".java") && ((file.text.contains(" extends AbstractProcessor")
+                            && !file.text.contains("abstract class")))) {
+                        text.append(file.path.substring(srcFiles.path.length() + 1)).append("\n")
+                    }
                 }
-            }
             processorFile.text = text.toString().replace(".java", "").replace("/", ".").replace("\\", ".")
         }
     }
