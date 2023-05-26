@@ -54,7 +54,7 @@ subprojects { Project project ->
         copyPaths = [
                 "$rootProject.projectDir/artifacts",
         ]
-        mindustryVersion = "v144"
+        mindustryVersion = "v144.3"
 
         child = { File p, String c ->
             return new File(p, c)

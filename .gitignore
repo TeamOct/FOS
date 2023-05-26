@@ -5,5 +5,12 @@ cache/
 /.gradle/
 /artifacts/
 
-### idea
+### IntelliJ IDEA
 /.idea/
+
+### Aseprite
+*.aseprite
+*.ase
+
+### gradlew mjar related file
+modsDirectories.txt
