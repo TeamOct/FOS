@@ -151,6 +151,8 @@ subprojects.each { Project project ->
     }
 
     project.tasks.jar {
+        archiveFileName = "${rootProject.name}-${project.name}-${project.version}.jar"
+
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         from {
             project.configurations.runtimeClasspath.collect { File file ->

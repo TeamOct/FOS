@@ -12,6 +12,3 @@ cache/
 ### Aseprite
 *.aseprite
 *.ase
-
-### gradlew mjar related file
-modsDirectories.txt

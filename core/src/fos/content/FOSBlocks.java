@@ -58,7 +58,7 @@ public class FOSBlocks {
     tinWire, tinWirePole, copperWire, copperWirePole, brassWire, brassWirePole, windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     //defense
     tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
-    helix, sticker, particulator, pulse, thunder, cluster, judge, newJudge,
+    helix, sticker, particulator, pulse, breakdown, thunder, cluster, judge, newJudge,
     matrixShieldProj,
     landMine,
     //environment & ores
@@ -535,6 +535,28 @@ public class FOSBlocks {
             squareSprite = false;
             consumePower(4);
             requirements(Category.turret, with(silver, 300, diamond, 250, silicon, 250, vanadium, 175));
+        }};
+        breakdown = new ItemTurret("breakdown"){{
+            health = 2400;
+            size = 3;
+            range = 320f;
+            targetAir = targetGround = true;
+            ammo(
+                iridium, new ShieldPierceBulletType(0.1f){{
+                    damage = 800f;
+                    shootEffect = Fx.shootBig;
+                    hitEffect = Fx.hitBulletColor;
+                    smokeEffect = Fx.smokeCloud;
+                    trailEffect = Fx.missileTrailSmoke;
+                    despawnEffect = Fx.shootSmallSmoke;
+                    trailSpacing = 20f;
+                    buildingDamageMultiplier = 0.2f;
+                    speed = 320f;
+                    hitShake = 4f;
+                    ammoMultiplier = 0.5f;
+                }}
+            );
+            requirements(Category.turret, with(silver, 150, silicon, 100, diamond, 75, iridium, 100));
         }};
         thunder = new PowerTurret("thunder"){
             {
