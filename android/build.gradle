@@ -8,37 +8,26 @@ dependencies {
     annotationProcessor project(":annotations")
 }
 
-task buildProj {
-    dependsOn jar
+ext {
+    sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT") ?: rootProject.ext.localProperties.get("sdkroot")
+}
 
+tasks.named("jar").configure {
     doLast{
-        var sdkroot = null
-        var useandroid = true;
-        if(new File(rootDir, "local.properties").exists()){
-            def prop = new Properties()
-            prop.load(new File(rootDir, 'local.properties').newDataInputStream())
-            if(prop.containsKey("useandroid")) useandroid = prop.get("useandroid")
-            if(prop.containsKey("sdkroot")) sdkroot = prop.get("sdkroot")
-        }
-        var root = (sdkRoot != null && new File(sdkRoot as String).exists()) ? sdkRoot :
-                (sdkroot != null && new File(sdkroot).exists()) ? sdkroot : null
+        var useandroid = rootProject.ext.localProperties.get("useandroid")
+        if (useandroid == null || useandroid == false) {
+            if (!sdkRoot || !new File(sdkRoot).exists()) throw new GradleException("No valid Android SDK found. Ensure that ANDROID_HOME is set to your Android SDK directory.");
 
-        if(root != null && useandroid == true) {
+            def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find { f -> new File(f, "android.jar").exists() }
 
-            def platformRoot = new File("$root/platforms").listFiles().sort().reverse().find { f -> new File(f, "android.jar").exists() }
+            if (!platformRoot) throw new GradleException("No android.jar found. Ensure that you have an Android platform installed.")
 
-            if (platformRoot) {
-                //collect dependencies needed for desugaring
-                def dependencies = (
-                        //configurations.compileClasspath.asList() +
-                        configurations.runtimeClasspath.asList() +
-                                [new File("$root/platforms/android-$sdkVersion/android.jar")]
-                ).collect { "--classpath $it.path" }.join(" ")
+            //collect dependencies needed for desugaring
+            def dependencies = (configurations.compileClasspath.asList() + configurations.runtimeClasspath.asList() + [new File(platformRoot, "android.jar")]).collect { "--classpath $it.path" }.join(" ")
 
-                //dex and desugar files - this requires d8 in your PATH
-                "d8 $dependencies --min-api 14 --output ${getJarFileName(project.name)} ${getJarFileName("core")}"
-                        .execute(null, new File("$buildDir/libs")).waitForProcessOutput(System.out, System.err)
-            }
+            //dex and desugar files - this requires d8 in your PATH
+            "d8 $dependencies --min-api 14 --output ${project.archivesBaseName}Android.jar ${project.archivesBaseName}Desktop.jar"
+                    .execute(null, new File("$buildDir/libs")).waitForProcessOutput(System.out, System.err)
         }
     }
 }
