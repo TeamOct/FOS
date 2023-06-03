@@ -1,4 +1,17 @@
+import arc.files.Fi
+
 import java.util.function.Consumer
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url "https://www.jitpack.io" }
+    }
+
+    dependencies {
+        classpath "com.github.Anuken.Arc:arc-core:v144.3"
+    }
+}
 
 allprojects.each { Project project ->
     project.plugins.apply("java")
@@ -92,7 +105,15 @@ subprojects.each { Project project ->
     ]
 
     project.ext {
-        APArgs = ["ProjectName=$project.name", "OutputPackage=f5of.ei.files"]
+        APArgs = ["ProjectName=${project.name}"]
+        var APAProps = new Fi(project.file("APA.properties"))
+        var GAPAProps = new Fi(rootProject.file("APA.properties"))
+        if (GAPAProps.exists()) {
+            APArgs += Arrays.stream(GAPAProps.readString().split(";")).toList()
+        }
+        if (APAProps.exists()) {
+            APArgs += Arrays.stream(APAProps.readString().split(";")).toList()
+        }
 
         copyPaths = [
                 "$rootProject.projectDir/artifacts",

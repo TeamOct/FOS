@@ -1,5 +1,5 @@
 ### Gradle
-local.properties
+/local.properties
 build/
 cache/
 /.gradle/

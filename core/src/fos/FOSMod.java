@@ -124,6 +124,7 @@ public class FOSMod extends Mod {
             */
 
             //realistic mode - no sound FX in places with no atmosphere, such as asteroids
+            // FIXME запхнуть в таймер и менять звук только при изменении настроек
             if (settings.getBool("fos-realisticmode") && state.rules.sector != null && !state.rules.sector.planet.hasAtmosphere) {
                 audio.soundBus.setVolume(0f);
             } else {

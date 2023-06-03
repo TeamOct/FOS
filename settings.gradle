@@ -1,3 +1,7 @@
+Properties gradleProperties = new Properties()
+gradleProperties.load(new FileInputStream(new File(rootProject.projectDir, "gradle.properties")))
+rootProject.name = gradleProperties.get("rootProjectName")
+
 include "core"
 include "annotations"
 include "desktop"
