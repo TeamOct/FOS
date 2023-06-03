@@ -28,7 +28,7 @@ tasks.named("jar").configure {
 
             //dex and desugar files - this requires d8 in your PATH
             "d8 $dependencies --min-api 14 --output ${rootProject.ext.getOutputJar(project)} ${rootProject.ext.getOutputJar(rootProject.project(":core"))}"
-                    .execute(null, new File("$buildDir/libs")).waitForProcessOutput(System.out, System.err)
+                    .execute(null, rootProject.file("artifacts")).waitForProcessOutput(System.out, System.err)
         }
     }
 }
