@@ -4,6 +4,7 @@ build/
 cache/
 /.gradle/
 /artifacts/
+/copy.properties
 
 ### IntelliJ IDEA
 /.idea/
