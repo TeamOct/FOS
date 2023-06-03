@@ -94,6 +94,10 @@ ext {
         var proc = cmd.execute(null, rootProject.projectDir)
         proc.waitForProcessOutput(new PrintStream(new C()), System.err)
     }
+
+    getOutputJar = {Project p ->
+        return "${rootProject.name}-${p.name}-${p.version}.jar"
+    }
 }
 
 subprojects.each { Project project ->
@@ -172,7 +176,7 @@ subprojects.each { Project project ->
     }
 
     project.tasks.jar {
-        archiveFileName = "${rootProject.name}-${project.name}-${project.version}.jar"
+        archiveFileName = rootProject.ext.getOutputJar(project)
 
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         from {
