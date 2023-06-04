@@ -10,12 +10,22 @@ dependencies {
 
 ext {
     sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT") ?: rootProject.ext.localProperties.get("sdkroot")
-    jarFile = tasks.jar.archiveFile.get().asFile
-    dexFile = new File(jarFile.parent, "raw-${rootProject.ext.getOutputJar(project)}")
+    rawFile = "raw-${rootProject.ext.getOutputJar(project)}"
+    dexFile = new File(project.buildDir, "dex-${rootProject.ext.getOutputJar(project)}")
     useandroid = rootProject.ext.localProperties.get("useandroid")
 }
 
-project.tasks.create("dex") {
+task createAndroidJar(type: Jar) {
+    from {
+        rawFile
+    }
+
+    from {
+        dexFile
+    }
+}
+
+task dex {
     doLast{
         println "Use android ${useandroid == null || useandroid == true}."
         if (useandroid == null || useandroid == true) {
@@ -36,7 +46,7 @@ project.tasks.create("dex") {
                 dependencies += path.path + " "
             }
 
-            "d8 $dependencies --min-api 14 --output ${dexFile}"
+            "d8 $dependencies --min-api 14 --output $dexFile $rawFile"
                     .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
 
             copy {
@@ -49,16 +59,11 @@ project.tasks.create("dex") {
             }
         }
     }
-}
 
-project.tasks.named("compileJava").configure {
-    finalizedBy tasks.dex
+    finalizedBy project.tasks.createAndroidJar
 }
 
 project.tasks.named("jar").configure {
-    if (useandroid) {
-        from {
-            zipTree(dexFile)
-        }
-    }
+    archiveFileName = rawFile
+    finalizedBy project.tasks.dex
 }
