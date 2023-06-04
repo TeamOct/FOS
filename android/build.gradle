@@ -43,6 +43,7 @@ tasks.named("jar").configure {
                     .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
 
             from {
+                println zipTree(dex)
                 zipTree(dex)
             }
         }
