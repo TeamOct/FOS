@@ -35,6 +35,8 @@ tasks.named("jar").configure {
                     dependencies += path.path + " "
                 }
 
+                println "d8 $dependencies --min-api 14 --output ${dex} ${jar}"
+
                 println dex.absolutePath
                 println jar.absolutePath
                 "d8 $dependencies --min-api 14 --output ${dex} ${jar}"

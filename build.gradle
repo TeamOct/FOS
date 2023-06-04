@@ -154,7 +154,13 @@ subprojects.each { Project project ->
         maven { url "https://www.jitpack.io" }
     }
 
+    project.dependencies {
+        annotationProcessor "com.github.Anuken:jabel:93fde537c7"
+    }
+
     project.tasks.withType(JavaCompile).configureEach {
+        targetCompatibility = 8
+        sourceCompatibility = JavaVersion.VERSION_16
         options.generatedSourceOutputDirectory.set(project.file("gen"))
         rootProject.ext.setIfHasProp("org.gradle.java.home", v -> options.forkOptions.executable = v)
         options.encoding = "UTF-8"
@@ -164,6 +170,9 @@ subprojects.each { Project project ->
                 finalAPArgs.add("-A" + str)
         }
         options.compilerArgs += finalAPArgs
+        if (JavaVersion.current() != JavaVersion.VERSION_1_8) {
+            options.compilerArgs.addAll(['--release', '8'])
+        }
 
         doFirst {
             delete options.generatedSourceOutputDirectory.get().asFile.listFiles()
