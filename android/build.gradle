@@ -14,7 +14,7 @@ ext {
     dexFile = new File(jarFile.parent, "raw-${rootProject.ext.getOutputJar(project)}")
 }
 
-tasks.create("dex") {
+project.tasks.create("dex") {
     doLast{
         var useandroid = rootProject.ext.localProperties.get("useandroid")
         println "Use android ${useandroid == null || useandroid == true}."
@@ -37,18 +37,17 @@ tasks.create("dex") {
             }
 
             println dexFile.absolutePath
-            println jarFile.absolutePath
             "d8 $dependencies --min-api 14 --output ${dexFile}"
                     .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
         }
     }
 }
 
-tasks.named("compileJava").configure {
+project.tasks.named("compileJava").configure {
     dependsOn tasks.dex
 }
 
-tasks.named("jar").configure {
+project.tasks.named("jar").configure {
     from {
         zipTree(dexFile)
     }
