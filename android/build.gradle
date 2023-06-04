@@ -18,12 +18,16 @@ ext {
 task createAndroidJar(type: Jar) {
     archiveFileName = rootProject.ext.getOutputJar(project)
 
-    println "|||$project.buildDir/libs/$rawFile"
     from {
         [zipTree("$project.buildDir/libs/$rawFile"), zipTree(dexFile)]
     }
 
     doLast {
+        project.ext.copyPaths.each { p ->
+            delete {
+                "$p/$rawFile"
+            }
+        }
         copy {
             from {
                 archiveFile.get().asFile
@@ -58,14 +62,6 @@ task dex {
 
             "d8 $dependencies --min-api 14 --output $dexFile.absolutePath $project.buildDir/libs/$rawFile"
                     .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
-            copy {
-                from {
-                    dexFile
-                }
-                project.ext.copyPaths.each { p ->
-                    into(p)
-                }
-            }
         }
     }
 
@@ -75,5 +71,4 @@ task dex {
 project.tasks.named("jar").configure {
     archiveFileName = rawFile
     finalizedBy project.tasks.dex
-    println archiveFile.get()
 }
