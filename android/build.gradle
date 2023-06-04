@@ -41,6 +41,15 @@ project.tasks.create("dex") {
             println dexFile.absolutePath
             "d8 $dependencies --min-api 14 --output ${dexFile}"
                     .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
+
+            copy {
+                from {
+                    dexFile
+                }
+                project.ext.copyPaths.each { p ->
+                    into(p)
+                }
+            }
         }
     }
 }
