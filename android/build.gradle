@@ -10,7 +10,6 @@ dependencies {
 
 ext {
     sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT") ?: rootProject.ext.localProperties.get("sdkroot")
-
     jarFile = tasks.jar.archiveFile.get().asFile
     dexFile = new File(jarFile.parent, "raw-${rootProject.ext.getOutputJar(project)}")
 }
@@ -45,9 +44,11 @@ tasks.create("dex") {
     }
 }
 
-tasks.named("jar").configure {
+tasks.named("compileJava").configure {
     dependsOn tasks.dex
+}
 
+tasks.named("jar").configure {
     from {
         zipTree(dexFile)
     }
