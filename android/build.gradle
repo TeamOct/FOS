@@ -43,11 +43,12 @@ project.tasks.create("dex") {
     }
 }
 
-project.tasks.named("compileJava").configure {
+/*project.tasks.named("compileJava").configure {
     dependsOn tasks.dex
-}
+}*/
 
 project.tasks.named("jar").configure {
+    dependsOn tasks.dex
     from {
         zipTree(dexFile)
     }
