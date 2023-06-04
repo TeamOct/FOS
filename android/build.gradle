@@ -42,6 +42,15 @@ tasks.named("jar").configure {
             println jar.absolutePath
             "d8 $dependencies --min-api 14 --output ${dex} ${jar}"
                     .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
+
+            copy {
+                from {
+                    dex
+                }
+                project.ext.copyPaths.each { p ->
+                    into(p)
+                }
+            }
         }
     }
 }
