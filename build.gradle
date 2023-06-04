@@ -147,6 +147,10 @@ subprojects.each { Project project ->
             }
             processorFile.text = text.toString().replace(".java", "").replace("/", ".").replace("\\", ".")
         }
+
+        copyJar = {
+
+        }
     }
 
     project.repositories {
@@ -183,7 +187,7 @@ subprojects.each { Project project ->
         doLast {
             copy {
                 from {
-                    tasks.jar.archiveFile.get()
+                    project.tasks.jar.archiveFile.get()
                 }
                 project.ext.copyPaths.each { p ->
                     into(p)
