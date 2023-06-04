@@ -162,24 +162,6 @@ subprojects.each { Project project ->
         annotationProcessor "com.github.Anuken:jabel:93fde537c7"
     }
 
-    project.tasks.create("processModConfig") {
-        /*doLast {
-            project.sourceSets.main.resources.srcDirs.each { File file ->
-                new Fi(file).findAll(f -> {
-                    println f
-                })
-                Fi projectModConfig = new Fi(file).findAll(f -> f.name() == "mod.hjson").peek()
-
-                ObjectMap<String, String> projectConfigData = ObjectMap.of(new Seq<String>(
-                        projectModConfig.readString()).flatMap(s -> s.split(":")).toArray(String.class))
-
-                println projectConfigData
-
-                ObjectMap<String, String> rootConfigData = ObjectMap.of()
-            }
-        }*/
-    }
-
     project.tasks.withType(JavaCompile).configureEach {
         targetCompatibility = 8
         sourceCompatibility = JavaVersion.VERSION_16
@@ -220,8 +202,6 @@ subprojects.each { Project project ->
     }
 
     project.tasks.jar {
-        dependsOn project.tasks.processModConfig
-
         archiveFileName = rootProject.ext.getOutputJar(project)
 
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE

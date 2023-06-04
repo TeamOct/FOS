@@ -13,14 +13,13 @@ ext {
 }
 
 tasks.named("jar").configure {
-    archiveFileName = "raw-${rootProject.ext.getOutputJar(project)}"
+    var jar = tasks.jar.archiveFile.get().asFile
+    var dex = new File(jar.parent, "raw-${rootProject.ext.getOutputJar(project)}")
+
     doLast{
         var useandroid = rootProject.ext.localProperties.get("useandroid")
         println "Use android ${useandroid == null || useandroid == true}."
         if (useandroid == null || useandroid == true) {
-            var jar = tasks.jar.archiveFile.get().asFile
-            var dex = new File(jar.parent, rootProject.ext.getOutputJar(project))
-
             if (!sdkRoot || !new File(sdkRoot).exists())
                 throw new GradleException("No valid Android SDK found.")
             def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find {
@@ -42,19 +41,10 @@ tasks.named("jar").configure {
             println jar.absolutePath
             "d8 $dependencies --min-api 14 --output ${dex} ${jar}"
                     .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
-
-            copy {
-                from {
-                    dex
-                }
-                project.ext.copyPaths.each { p ->
-                    into(p)
-                }
-            }
         }
     }
 
     from {
-        project.sourceSets.main.resources.srcDirs
+        zipTree(dex)
     }
 }

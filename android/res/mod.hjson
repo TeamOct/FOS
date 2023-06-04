@@ -1,1 +1,12 @@
 main: "fos.core.FOSModAndroid"
+name: "fos"
+displayName: "Fictional Octo System"
+author: "Team Oct"
+repo: "TeamOct/fictional-octo-system"
+subtitle: "See you later!"
+description: "A mod focused on space exploration."
+version: "1.1 pre-alpha"
+minGameVersion: 143
+java: true
+hidden: false
+hideBrowser: true
