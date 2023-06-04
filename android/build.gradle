@@ -25,6 +25,8 @@ tasks.named("jar").configure {
                     + configurations.runtimeClasspath.asList()
                     + [new File("$sdkRoot/platforms/android-30.0.1/android.jar")])
 
+            var dependencies = ""
+
             exec{
                 workingDir dex.parent
 
