@@ -32,24 +32,16 @@ tasks.named("jar").configure {
             var classpath = (configurations.compileClasspath.asList()
                     + configurations.runtimeClasspath.asList()
                     + [new File(platformRoot, "android.jar")])
-
             var dependencies = ""
-
-            exec{
-                workingDir dex.parent
-
-                for(def path : classpath){
-                    dependencies += "--classpath "
-                    dependencies += path.path + " "
-                }
-
-                println "d8 $dependencies --min-api 14 --output ${dex} ${jar}"
-
-                println dex.absolutePath
-                println jar.absolutePath
-                "d8 $dependencies --min-api 14 --output ${dex} ${jar}"
-                        .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
+            for(def path : classpath){
+                dependencies += "--classpath "
+                dependencies += path.path + " "
             }
+
+            println dex.absolutePath
+            println jar.absolutePath
+            "d8 $dependencies --min-api 14 --output ${dex} ${jar}"
+                    .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
         }
     }
 }
