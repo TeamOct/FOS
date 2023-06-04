@@ -41,10 +41,10 @@ tasks.named("jar").configure {
             println jar.absolutePath
             "d8 $dependencies --min-api 14 --output ${dex} ${jar}"
                     .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
-        }
-    }
 
-    from {
-        zipTree(dex)
+            from {
+                zipTree(dex)
+            }
+        }
     }
 }
