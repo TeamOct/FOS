@@ -54,9 +54,11 @@ project.tasks.create("dex") {
     }
 }
 
-project.tasks.named("jar").configure {
+project.tasks.named("compileJava").configure {
     dependsOn tasks.dex
+}
 
+project.tasks.named("jar").configure {
     if (useandroid) {
         from {
             zipTree(dexFile)
