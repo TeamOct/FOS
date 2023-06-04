@@ -55,7 +55,7 @@ project.tasks.create("dex") {
 }
 
 project.tasks.named("compileJava").configure {
-    dependsOn tasks.dex
+    finalizedBy tasks.dex
 }
 
 project.tasks.named("jar").configure {
