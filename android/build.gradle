@@ -10,12 +10,12 @@ dependencies {
 
 ext {
     sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT") ?: rootProject.ext.localProperties.get("sdkroot")
+
+    dex = new File(jar.parent, "raw-${rootProject.ext.getOutputJar(project)}")
 }
 
-tasks.named("jar").configure {
+tasks.create("dex") {
     var jar = tasks.jar.archiveFile.get().asFile
-    var dex = new File(jar.parent, "raw-${rootProject.ext.getOutputJar(project)}")
-
     doLast{
         var useandroid = rootProject.ext.localProperties.get("useandroid")
         println "Use android ${useandroid == null || useandroid == true}."
@@ -41,11 +41,14 @@ tasks.named("jar").configure {
             println jar.absolutePath
             "d8 $dependencies --min-api 14 --output ${dex} ${jar}"
                     .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
-
-            from {
-                println zipTree(dex)
-                zipTree(dex)
-            }
         }
+    }
+}
+
+tasks.named("jar").configure {
+    dependsOn tasks.dex
+
+    from {
+        zipTree(dex)
     }
 }
