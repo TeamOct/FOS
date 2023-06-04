@@ -56,7 +56,7 @@ task dex {
                 dependencies += path.path + " "
             }
 
-           "d8 $dependencies --min-api 14 --output $dexFile.absolutePath ${project.tasks.named("jar").archiveFile.get().asFile}"
+           "d8 $dependencies --min-api 14 --output $dexFile.absolutePath $project.buildDir/libs/$rawFile"
                     .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
 
             copy {
