@@ -170,6 +170,19 @@ subprojects.each { Project project ->
         }
     }
 
+    project.tasks.create("copyJar") {
+        doLast {
+            copy {
+                from {
+                    tasks.jar.archiveFile.get()
+                }
+                project.ext.copyPaths.each { p ->
+                    into(p)
+                }
+            }
+        }
+    }
+
     project.tasks.create("cjar") {
         dependsOn project.tasks.jar
         finalizedBy rootProject.tasks.cleanBuilds
@@ -184,16 +197,8 @@ subprojects.each { Project project ->
                 file.isDirectory() ? file : zipTree(file)
             }
         }
-        doLast {
-            copy {
-                from {
-                    archiveFile.get()
-                }
-                project.ext.copyPaths.each { p ->
-                    into(p)
-                }
-            }
-        }
+
+        finalizedBy project.tasks.copyJar
     }
 
     project.java {

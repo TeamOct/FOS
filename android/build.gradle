@@ -13,22 +13,31 @@ ext {
 }
 
 tasks.named("jar").configure {
+    archiveFileName = "raw-${rootProject.ext.getOutputJar(project)}"
     doLast{
         var useandroid = rootProject.ext.localProperties.get("useandroid")
         println "Use android ${useandroid == null || useandroid == true}."
         if (useandroid == null || useandroid == true) {
-            if (!sdkRoot || !new File(sdkRoot).exists()) throw new GradleException("No valid Android SDK found. Ensure that ANDROID_HOME is set to your Android SDK directory.");
+            var jar = tasks.jar.archiveFile.get().asFile
+            var dex = new File(jar.parent, rootProject.ext.getOutputJar(project))
 
-            def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find { f -> new File(f, "android.jar").exists() }
+            var classpath = (configurations.compileClasspath.asList()
+                    + configurations.runtimeClasspath.asList()
+                    + [new File("$sdkRoot/platforms/android-30.0.1/android.jar")])
 
-            if (!platformRoot) throw new GradleException("No android.jar found. Ensure that you have an Android platform installed.")
+            exec{
+                workingDir dex.parent
 
-            //collect dependencies needed for desugaring
-            def dependencies = (configurations.compileClasspath.asList() + configurations.runtimeClasspath.asList() + [new File(platformRoot, "android.jar")]).collect { "--classpath $it.path" }.join(" ")
+                for(def path : classpath){
+                    dependencies += "--classpath "
+                    dependencies += path.path + " "
+                }
 
-            //dex and desugar files - this requires d8 in your PATH
-            "d8 $dependencies --min-api 16 --output ${rootProject.ext.getOutputJar(project)} ${rootProject.ext.getOutputJar(project(":core"))}"
-                    .execute(null, rootProject.file("artifacts")).waitForProcessOutput(System.out, System.err)
+                println dex.absolutePath
+                println jar.absolutePath
+                "d8 $dependencies --min-api 14 --output ${dex} ${jar}"
+                        .execute(null, file("")).waitForProcessOutput(System.out, System.err)
+            }
         }
     }
 }
