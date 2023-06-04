@@ -40,7 +40,7 @@ tasks.named("jar").configure {
                 println dex.absolutePath
                 println jar.absolutePath
                 "d8 $dependencies --min-api 14 --output ${dex} ${jar}"
-                        .execute(null, file("")).waitForProcessOutput(System.out, System.err)
+                        .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
             }
         }
     }
