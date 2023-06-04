@@ -2,7 +2,7 @@ package fos.content;
 
 import arc.graphics.*;
 import arc.struct.Seq;
-import fos.FOSVars;
+import fos.core.FOSVars;
 import fos.graphics.*;
 import mindustry.type.Item;
 

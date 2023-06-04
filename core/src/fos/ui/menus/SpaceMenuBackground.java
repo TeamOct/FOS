@@ -8,8 +8,8 @@ import arc.math.geom.Vec3;
 import mindustry.graphics.g3d.PlanetParams;
 
 import static arc.Core.graphics;
-import static fos.FOSVars.menuBuffer;
-import static fos.FOSVars.menuParams;
+import static fos.core.FOSVars.menuBuffer;
+import static fos.core.FOSVars.menuParams;
 import static mindustry.Vars.renderer;
 
 public class SpaceMenuBackground extends MenuBackground {

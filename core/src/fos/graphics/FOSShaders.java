@@ -2,7 +2,7 @@ package fos.graphics;
 
 import arc.graphics.gl.Shader;
 import arc.util.Time;
-import fos.FOSVars;
+import fos.core.FOSVars;
 
 public class FOSShaders {
     public static LuminiumItemShader lis;

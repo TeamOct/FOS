@@ -1,7 +1,7 @@
 package fos.type.units.constructors;
 
 import arc.util.io.*;
-import fos.FOSVars;
+import fos.core.FOSVars;
 import mindustry.gen.*;
 
 public class BugFlyingUnit extends UnitEntity {

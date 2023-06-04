@@ -1,4 +1,6 @@
 import arc.files.Fi
+import arc.struct.ObjectMap
+import arc.struct.Seq
 
 import java.util.function.Consumer
 
@@ -76,6 +78,8 @@ class C extends OutputStream {
 }
 
 ext {
+    modConfig = new Fi(rootProject.file("mod.hjson"))
+
     copyProperties = new Properties()
     if (rootProject.file("copy.properties").exists())
         copyProperties.load(new FileInputStream(rootProject.file("copy.properties")))
@@ -147,10 +151,6 @@ subprojects.each { Project project ->
             }
             processorFile.text = text.toString().replace(".java", "").replace("/", ".").replace("\\", ".")
         }
-
-        copyJar = {
-
-        }
     }
 
     project.repositories {
@@ -160,6 +160,24 @@ subprojects.each { Project project ->
 
     project.dependencies {
         annotationProcessor "com.github.Anuken:jabel:93fde537c7"
+    }
+
+    project.tasks.create("processModConfig") {
+        /*doLast {
+            project.sourceSets.main.resources.srcDirs.each { File file ->
+                new Fi(file).findAll(f -> {
+                    println f
+                })
+                Fi projectModConfig = new Fi(file).findAll(f -> f.name() == "mod.hjson").peek()
+
+                ObjectMap<String, String> projectConfigData = ObjectMap.of(new Seq<String>(
+                        projectModConfig.readString()).flatMap(s -> s.split(":")).toArray(String.class))
+
+                println projectConfigData
+
+                ObjectMap<String, String> rootConfigData = ObjectMap.of()
+            }
+        }*/
     }
 
     project.tasks.withType(JavaCompile).configureEach {
@@ -202,6 +220,8 @@ subprojects.each { Project project ->
     }
 
     project.tasks.jar {
+        dependsOn project.tasks.processModConfig
+
         archiveFileName = rootProject.ext.getOutputJar(project)
 
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -247,7 +267,7 @@ task workflowCommit {
     dependsOn deploy
 }
 
-// only for local machine
+// only for local machine (still in dev)
 task createRelease {
     dependsOn deploy
 

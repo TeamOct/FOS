@@ -1,4 +1,4 @@
-package fos;
+package fos.core;
 
 import arc.Events;
 import arc.func.Prov;
@@ -7,6 +7,7 @@ import arc.scene.ui.ImageButton;
 import arc.scene.ui.layout.*;
 import arc.struct.Seq;
 import arc.util.*;
+import fos.SplashTexts;
 import fos.content.*;
 import fos.game.EndlessBoostHandler;
 import fos.graphics.FOSShaders;
@@ -33,7 +34,7 @@ import static mindustry.game.EventType.*;
  * @author Slotterleet
  * @author nekit508
  */
-public class FOSMod extends Mod {
+public abstract class FOSMod extends Mod {
     /** This mod's damage display system. */
     public DamageDisplay dd;
 

@@ -3,7 +3,7 @@ package fos.type.units.constructors;
 import arc.math.Mathf;
 import arc.util.Time;
 import arc.util.io.*;
-import fos.FOSVars;
+import fos.core.FOSVars;
 import mindustry.entities.EntityCollisions;
 import mindustry.gen.UnitWaterMove;
 import mindustry.world.Tile;

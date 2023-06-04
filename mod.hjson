@@ -1,7 +1,6 @@
 name: "fos"
 displayName: "Fictional Octo System"
 author: "Team Oct"
-main: "fos.FOSMod"
 repo: "TeamOct/fictional-octo-system"
 subtitle: "See you later!"
 description: "A mod focused on space exploration."

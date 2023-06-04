@@ -6,7 +6,7 @@ import arc.math.Rand;
 import arc.math.geom.Mat3D;
 import arc.struct.Seq;
 import arc.util.Tmp;
-import fos.FOSVars;
+import fos.core.FOSVars;
 import fos.maps.generators.*;
 import mindustry.Vars;
 import mindustry.content.Items;

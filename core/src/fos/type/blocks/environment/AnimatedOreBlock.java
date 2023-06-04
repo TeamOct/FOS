@@ -7,7 +7,7 @@ import arc.graphics.g2d.TextureRegion;
 import arc.graphics.gl.Shader;
 import arc.math.Mathf;
 import arc.util.Strings;
-import fos.FOSVars;
+import fos.core.FOSVars;
 import fos.graphics.FOSShaders;
 import fos.graphics.ShaderTextureRegion;
 import mindustry.Vars;

@@ -53,4 +53,8 @@ tasks.named("jar").configure {
             }
         }
     }
+
+    from {
+        project.sourceSets.main.resources.srcDirs
+    }
 }
