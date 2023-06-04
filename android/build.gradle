@@ -11,12 +11,14 @@ dependencies {
 ext {
     sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT") ?: rootProject.ext.localProperties.get("sdkroot")
     jarFile = tasks.jar.archiveFile.get().asFile
+    println jarFile
     dexFile = new File(jarFile.parent, "raw-${rootProject.ext.getOutputJar(project)}")
+    println dexFile
+    useandroid = rootProject.ext.localProperties.get("useandroid")
 }
 
 project.tasks.create("dex") {
     doLast{
-        var useandroid = rootProject.ext.localProperties.get("useandroid")
         println "Use android ${useandroid == null || useandroid == true}."
         if (useandroid == null || useandroid == true) {
             if (!sdkRoot || !new File(sdkRoot).exists())
@@ -43,13 +45,12 @@ project.tasks.create("dex") {
     }
 }
 
-/*project.tasks.named("compileJava").configure {
-    dependsOn tasks.dex
-}*/
-
 project.tasks.named("jar").configure {
     dependsOn tasks.dex
-    from {
-        zipTree(dexFile)
+
+    if (useandroid) {
+        from {
+            zipTree(dexFile)
+        }
     }
 }
