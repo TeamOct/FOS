@@ -18,10 +18,9 @@ ext {
 task createAndroidJar(type: Jar) {
     archiveFileName = rootProject.ext.getOutputJar(project)
 
-    println "$project.buildDir/libs/$rawFile"
+    println "|||$project.buildDir/libs/$rawFile"
     from {
-        zipTree("$project.buildDir/libs/$rawFile")
-        zipTree(dexFile)
+        [zipTree("$project.buildDir/libs/$rawFile"), zipTree(dexFile)]
     }
 
     doLast {
