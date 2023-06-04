@@ -16,12 +16,25 @@ ext {
 }
 
 task createAndroidJar(type: Jar) {
+    archiveFileName = rootProject.ext.getOutputJar(project)
+
     from {
         rawFile
     }
 
     from {
         dexFile
+    }
+
+    doLast {
+        copy {
+            from {
+                archiveFile.get().asFile
+            }
+            project.ext.copyPaths.each { p ->
+                into(p)
+            }
+        }
     }
 }
 
