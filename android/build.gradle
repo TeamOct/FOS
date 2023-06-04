@@ -23,6 +23,9 @@ task createAndroidJar(type: Jar) {
     }
 
     doLast {
+        delete {
+            "$project.buildDir/libs/$rawFile"
+        }
         project.ext.copyPaths.each { p ->
             delete {
                 "$p/$rawFile"
