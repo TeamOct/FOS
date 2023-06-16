@@ -14,6 +14,7 @@ public class SubDiveAI extends AIController {
     public void init() {
         if (unit instanceof SubmarineUnit sub && !sub.subSolid(sub.tileX(), sub.tileY())) {
             sub.submerged = !sub.submerged;
+            sub.elevation = sub.submerged ? 0f : 0.005f;
         }
     }
 }

@@ -382,11 +382,10 @@ public class FOSUnits {
         }};
 
         //TODO
-/*
         subSmall = new SubmarineUnitType("dummy-submarine"){{
             health = 250;
             speed = 0.7f;
+            hitSize = 12f;
         }};
-*/
     }
 }

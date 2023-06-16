@@ -5,7 +5,6 @@ import arc.graphics.gl.FrameBuffer;
 import arc.math.geom.Vec2;
 import arc.struct.Seq;
 import fos.content.FOSFluids;
-import fos.core.FOSMod;
 import fos.files.InternalFileTree;
 import fos.type.units.constructors.*;
 import fos.ui.ResearchCoreDialog;

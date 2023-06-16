@@ -1,10 +1,9 @@
 package fos.type.units.constructors;
 
-import arc.math.Mathf;
-import arc.util.Time;
 import arc.util.io.*;
 import fos.core.FOSVars;
 import mindustry.entities.EntityCollisions;
+import mindustry.game.Team;
 import mindustry.gen.UnitWaterMove;
 import mindustry.world.Tile;
 
@@ -16,7 +15,8 @@ import static mindustry.Vars.world;
  * @author Slotterleet
  */
 public class SubmarineUnit extends UnitWaterMove {
-    /** Whether a sub can get up to surface to attack land targets. */
+    /** Whether a sub can get up to surface to attack land targets.
+     * TODO: move to SubmarineUnitType */
     public boolean canSurface = true;
     /** Submerged state of a sub. */
     public boolean submerged = false;
@@ -42,8 +42,16 @@ public class SubmarineUnit extends UnitWaterMove {
 
     @Override
     public boolean isGrounded() {
-        return super.isGrounded() && !submerged;
+        return elevation <= 0.01f && elevation != 0f && !submerged;
     }
+
+    //TODO: how am I supposed to check by a freaking team????
+    @Override
+    public boolean targetable(Team targeter) {
+        return super.targetable(targeter);
+    }
+
+/* FIXME: this code is cursed. should I even use this in the first place?
 
     @Override
     public void updateDrowning() {
@@ -56,6 +64,7 @@ public class SubmarineUnit extends UnitWaterMove {
 
         drownTime = Mathf.clamp(drownTime, 0f, 0.8f);
     }
+*/
 
     @Override
     public void write(Writes write) {
