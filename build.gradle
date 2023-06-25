@@ -129,7 +129,7 @@ subprojects.each { Project project ->
         if (rootProject.ext.copyProperties.containsKey(project.name))
             copyPaths += Arrays.stream(rootProject.ext.copyProperties.get(project.name).split(";")).toList()
 
-        mindustryVersion = "v144.3"
+        mindustryVersion = "v145"
 
         child = { File p, String c ->
             return new File(p, c)
