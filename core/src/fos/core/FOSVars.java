@@ -8,6 +8,7 @@ import fos.content.FOSFluids;
 import fos.files.InternalFileTree;
 import fos.type.units.constructors.*;
 import fos.ui.ResearchCoreDialog;
+import fos.ui.menus.FOSMenuRenderer;
 import mindustry.ai.Pathfinder;
 import mindustry.content.TechTree;
 import mindustry.game.Objectives;
@@ -26,11 +27,6 @@ public class FOSVars {
     public static ResearchCoreDialog rcdialog;
     /** Special tech trees accessed only by certain blocks. */
     public static TechTree.TechNode mechTree, bioTree;
-
-    /** Used in modded menu renderer. A buffer for rendering planets. */
-    public static FrameBuffer menuBuffer;
-    /** Used in modded menu renderer. Planet params used in menuBuffer. */
-    public static PlanetParams menuParams;
 
     /** ID of the {@link BugUnit} class. */
     public static int bugEntity;
@@ -55,6 +51,9 @@ public class FOSVars {
 
     /** JAR internal navigation **/
     public static InternalFileTree internalTree = new InternalFileTree(FOSMod.class);
+
+    /** Main menu renderer **/
+    public static FOSMenuRenderer menuRenderer = new FOSMenuRenderer();
 
     public static void load() {
         rcdialog = new ResearchCoreDialog();

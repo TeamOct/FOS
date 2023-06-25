@@ -3,6 +3,8 @@ package fos.core;
 import arc.Events;
 import arc.func.Prov;
 import arc.math.Mathf;
+import arc.scene.Element;
+import arc.scene.Group;
 import arc.scene.ui.ImageButton;
 import arc.scene.ui.layout.*;
 import arc.struct.Seq;
@@ -13,6 +15,7 @@ import fos.game.EndlessBoostHandler;
 import fos.graphics.FOSShaders;
 import fos.ui.DamageDisplay;
 import fos.ui.menus.*;
+import mindustry.Vars;
 import mindustry.ai.Pathfinder;
 import mindustry.game.Team;
 import mindustry.gen.*;
@@ -86,6 +89,15 @@ public abstract class FOSMod extends Mod {
                     }, () -> {});
             }
 
+            Element menu = ((Element) Reflect.get(ui.menufrag, "container")).parent.parent;
+            Group menuCont = menu.parent;
+            menuCont.addChildBefore(menu, new Element(){
+                @Override
+                public void draw() {
+                    FOSVars.menuRenderer.render();
+                }
+            });
+
             //change menu theme if it isn't set to default
             int tn = settings.getInt("fos-menutheme");
             MenuBackground bg = (
@@ -96,8 +108,9 @@ public abstract class FOSMod extends Mod {
                 tn == 6 ? caldemoltSystem :
                 tn == 7 ? lumoniTerrain :
                 null);
-            if (tn != 1) {
-                Reflect.set(MenuFragment.class, ui.menufrag, "renderer", new FOSMenuRenderer(bg));
+            if (bg != null) {
+                FOSVars.menuRenderer.changeBackground(bg);
+                //Reflect.set(MenuFragment.class, ui.menufrag, "renderer", new FOSMenuRenderer(bg));
             }
         });
 
@@ -125,7 +138,7 @@ public abstract class FOSMod extends Mod {
             */
 
             //realistic mode - no sound FX in places with no atmosphere, such as asteroids
-            // FIXME запхнуть в таймер и менять звук только при изменении настроек
+            // FIXME запхнуть в таймер и менять звук только при изменении настроек и загрузке
             if (settings.getBool("fos-realisticmode") && state.rules.sector != null && !state.rules.sector.planet.hasAtmosphere) {
                 audio.soundBus.setVolume(0f);
             } else {

@@ -7,7 +7,7 @@ import mindustry.world.Tiles;
 // it does not look like the original code, but it works pretty much the same way
 public abstract class MenuBackground {
     /** Used in terrain menus. Generates a world displayed in the menu. */
-    void generateWorld(int width, int height) {}
+    void generateWorld() {}
     /** Used in generateWorld() to generate the tiles. */
     void generate(Tiles tiles) {}
 

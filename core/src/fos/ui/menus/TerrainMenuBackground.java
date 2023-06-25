@@ -12,7 +12,10 @@ import mindustry.world.*;
 import static mindustry.Vars.*;
 
 public class TerrainMenuBackground extends MenuBackground {
-    protected int width, height, seed;
+    protected final int width = !mobile ? 100 : 60;
+    protected final int height = !mobile ? 50 : 40;
+
+    protected int seed;
     private FrameBuffer shadows;
     private CacheBatch batch;
     private int cacheFloor, cacheWall;
@@ -20,9 +23,7 @@ public class TerrainMenuBackground extends MenuBackground {
     private final Mat mat = new Mat();
 
     @Override
-    public void generateWorld(int width, int height) {
-        this.width = width;
-        this.height = height;
+    public void generateWorld() {
         seed = Mathf.rand.nextInt();
 
         world.beginMapLoad();
