@@ -26,11 +26,6 @@ task createAndroidJar(type: Jar) {
         delete {
             "$project.buildDir/libs/$rawFile"
         }
-        project.ext.copyPaths.each { p ->
-            delete {
-                "$p/$rawFile"
-            }
-        }
         copy {
             from {
                 archiveFile.get().asFile
@@ -68,7 +63,8 @@ task dex {
         }
     }
 
-    finalizedBy project.tasks.createAndroidJar
+    if (useandroid == null || useandroid == true)
+        finalizedBy project.tasks.createAndroidJar
 }
 
 project.tasks.named("jar").configure {
