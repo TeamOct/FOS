@@ -98,7 +98,6 @@ public abstract class FOSMod extends Mod {
                 }
             });
 
-            //change menu theme if it isn't set to default
             int tn = settings.getInt("fos-menutheme");
             MenuBackground bg = (
                 tn == 2 ? uxerdSpace :
@@ -110,7 +109,6 @@ public abstract class FOSMod extends Mod {
                 null);
             if (bg != null) {
                 FOSVars.menuRenderer.changeBackground(bg);
-                //Reflect.set(MenuFragment.class, ui.menufrag, "renderer", new FOSMenuRenderer(bg));
             }
         });
 
