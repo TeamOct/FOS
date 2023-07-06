@@ -553,7 +553,7 @@ public class FOSBlocks {
                     buildingDamageMultiplier = 0.2f;
                     speed = 320f;
                     hitShake = 4f;
-                    ammoMultiplier = 0.5f;
+                    ammoMultiplier = 1f;
                 }}
             );
             requirements(Category.turret, with(silver, 150, silicon, 100, diamond, 75, iridium, 100));

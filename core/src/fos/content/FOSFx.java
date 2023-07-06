@@ -2,6 +2,7 @@ package fos.content;
 
 import arc.graphics.g2d.*;
 import arc.math.geom.*;
+import fos.graphics.DrawUtils;
 import fos.type.bullets.OhioBeamBulletType;
 import mindustry.entities.Effect;
 import mindustry.gen.*;
@@ -86,20 +87,29 @@ public class FOSFx {
     }).followParent(true).layer(Layer.shields),
 
     tokiciteBoil = new Effect(240f, e -> {
+        Vec2 parallax;
+
         if (Groups.weather.contains(we -> we.weather instanceof ParticleWeather p && p.useWindVector)) {
             WeatherState w = Groups.weather.find(ws -> ws.weather instanceof ParticleWeather p && p.useWindVector);
-            e.x += w.windVector.x * 24f * w.intensity * e.fin();
-            e.y += w.windVector.y * 24f * w.intensity * e.fin();
+
+            parallax = DrawUtils.parallax(
+                w.windVector.x * 24f * w.intensity * e.fin(), w.windVector.y * 24f * w.intensity * e.fin(),
+                e.fin() * 0.25f, true);
         } else {
             Vec2 v = new Vec2(1, 1);
-            e.x += v.x * 12f * e.fin();
-            e.y += v.y * 12f * e.fin();
+            parallax = DrawUtils.parallax(
+                v.x * 12f * e.fin(), v.y * 12f * e.fin(),
+                e.fin() * 0.25f, false);
         }
+
+        e.x += parallax.x;
+        e.y += parallax.y;
         Draw.color(FOSFluids.tokicite.color, 0.4f * e.fout());
         Fill.circle(e.x, e.y, 4f * (1 + e.fin()));
     }),
 
     brassSmelterCraft = new Effect(1f, e -> {
+        //copypasta time
         tokiciteBoil.at(e.x - 8f, e.y - 8f);
         tokiciteBoil.at(e.x + 8f, e.y - 8f);
         tokiciteBoil.at(e.x - 8f, e.y + 8f);
