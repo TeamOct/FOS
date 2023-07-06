@@ -12,3 +12,6 @@ cache/
 ### Aseprite
 *.aseprite
 *.ase
+
+### Secret dev-only stuff
+/core/tz/
