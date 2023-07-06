@@ -892,15 +892,7 @@ public class FOSBlocks {
             powerProduction = 0.8f;
             requirements(Category.power, with(tin, 40));
             researchCost = with(tin, 160);
-
-            drawer = new DrawMulti(
-            new DrawRegion("-base"),
-            new DrawRegion("-rotator"){{
-                rotateSpeed = 1.8f;
-                rotation = 45f;
-            }},
-            new DrawRegion("-top")
-            );
+            rotateSpeed = 1.8f;
         }};
         heatGenerator = new HeatGenerator("heat-generator"){{
             health = 480;
