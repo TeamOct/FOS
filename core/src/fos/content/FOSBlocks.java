@@ -899,7 +899,7 @@ public class FOSBlocks {
                 rotateSpeed = 1.8f;
                 rotation = 45f;
             }},
-            new DrawRegion("-top"),
+            new DrawRegion("-top")
             );
         }};
         heatGenerator = new HeatGenerator("heat-generator"){{
