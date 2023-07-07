@@ -578,6 +578,7 @@ public class FOSBlocks {
                 consumePower(10f);
                 consumeCoolant(2f).boost();
                 coolantMultiplier = 0.5f;
+                squareSprite = false;
                 drawer = new DrawTurret("reinforced-" /* TODO reinforced- is a placeholder */){{
                     parts.addAll(
                         new RegionPart("-mid"){{
@@ -893,6 +894,7 @@ public class FOSBlocks {
             requirements(Category.power, with(tin, 40));
             researchCost = with(tin, 160);
             rotateSpeed = 1.8f;
+            squareSprite = false;
             drawer = new DrawMulti(
                 new DrawDefault(),
                 new DrawRegion("-rotator", 15f, true)
