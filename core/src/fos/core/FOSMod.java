@@ -2,9 +2,9 @@ package fos.core;
 
 import arc.Events;
 import arc.func.Prov;
+import arc.graphics.g2d.*;
 import arc.math.Mathf;
-import arc.scene.Element;
-import arc.scene.Group;
+import arc.scene.*;
 import arc.scene.ui.ImageButton;
 import arc.scene.ui.layout.*;
 import arc.struct.Seq;
@@ -15,15 +15,13 @@ import fos.game.EndlessBoostHandler;
 import fos.graphics.FOSShaders;
 import fos.ui.DamageDisplay;
 import fos.ui.menus.*;
-import mindustry.Vars;
 import mindustry.ai.Pathfinder;
 import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.mod.Mod;
 import mindustry.mod.Mods.LoadedMod;
-import mindustry.ui.Styles;
+import mindustry.ui.*;
 import mindustry.ui.dialogs.PlanetDialog;
-import mindustry.ui.fragments.MenuFragment;
 
 import java.util.Calendar;
 
@@ -203,6 +201,16 @@ public abstract class FOSMod extends Mod {
 
         //endless boost handler
         new EndlessBoostHandler();
+
+        //add a new font page for... reasons
+        Seq<Font> fonts = Seq.with(Fonts.def, Fonts.outline);
+        fonts.each(f -> {
+            var regions = f.getRegions();
+            regions.add(new TextureRegion());
+        });
+
+        //init modded teams
+        FOSTeam.load();
     }
 
     @Override
@@ -210,7 +218,6 @@ public abstract class FOSMod extends Mod {
         FOSShaders.init();
         FOSCommands.init();
 
-        FOSTeam.load();
         FOSAttributes.load();
         FOSWeathers.load();
         FOSItems.load();

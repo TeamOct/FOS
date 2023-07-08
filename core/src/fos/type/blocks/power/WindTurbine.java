@@ -1,32 +1,26 @@
 package fos.type.blocks.power;
 
-import arc.*;
-import arc.graphics.*;
-import arc.graphics.g2d.*;
-import arc.math.*;
-import arc.math.geom.*;
-import fos.content.*;
-import mindustry.*;
-import mindustry.gen.*;
+import arc.Core;
+import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
+import arc.math.Mathf;
+import arc.math.geom.Point2;
+import arc.util.Time;
+import fos.content.FOSAttributes;
+import mindustry.Vars;
+import mindustry.gen.Building;
 import mindustry.graphics.*;
-import mindustry.world.blocks.power.*;
+import mindustry.world.blocks.power.PowerGenerator;
 import mindustry.world.meta.*;
 
 public class WindTurbine extends PowerGenerator {
     public float displayEfficiencyScale = 1f;
     public float rotateSpeed = 1f;
     public Attribute attr = FOSAttributes.windPower;
-    public TextureRegion rotatorRegion;
 
     public WindTurbine(String name) {
         super(name);
         noUpdateDisabled = true;
-    }
-
-    @Override
-    public void load() {
-        super.load();
-        rotatorRegion = Core.atlas.find(name + "-rotator");
     }
 
     @Override
@@ -49,13 +43,6 @@ public class WindTurbine extends PowerGenerator {
     }
 
     @Override
-    public TextureRegion[] icons() {
-        return new TextureRegion[]{
-            this.region, this.rotatorRegion
-        };
-    }
-
-    @Override
     public void setStats() {
         super.setStats();
 
@@ -65,11 +52,16 @@ public class WindTurbine extends PowerGenerator {
 
     @SuppressWarnings("unused")
     public class WindTurbineBuild extends GeneratorBuild {
-        public float rotatorAngle = 0f;
+        public float totalProgress;
+
+        @Override
+        public float totalProgress() {
+            return totalProgress;
+        }
 
         @Override
         public void updateTile() {
-            productionEfficiency = attr.env();
+            productionEfficiency = Mathf.lerpDelta(productionEfficiency, attr.env(), 0.01f);
 
             Point2[] edges = block.getEdges();
             for (Point2 edge : edges) {
@@ -80,13 +72,7 @@ public class WindTurbine extends PowerGenerator {
             }
             if (productionEfficiency < 0f) productionEfficiency = 0f;
 
-            rotatorAngle += productionEfficiency * rotateSpeed;
-        }
-
-        @Override
-        public void draw() {
-            super.draw();
-            Draw.rect(rotatorRegion, x, y, rotatorAngle);
+            totalProgress += Time.delta * productionEfficiency;
         }
     }
 }

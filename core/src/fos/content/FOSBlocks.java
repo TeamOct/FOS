@@ -553,7 +553,7 @@ public class FOSBlocks {
                     buildingDamageMultiplier = 0.2f;
                     speed = 320f;
                     hitShake = 4f;
-                    ammoMultiplier = 0.5f;
+                    ammoMultiplier = 1f;
                 }}
             );
             requirements(Category.turret, with(silver, 150, silicon, 100, diamond, 75, iridium, 100));
@@ -578,6 +578,7 @@ public class FOSBlocks {
                 consumePower(10f);
                 consumeCoolant(2f).boost();
                 coolantMultiplier = 0.5f;
+                squareSprite = false;
                 drawer = new DrawTurret("reinforced-" /* TODO reinforced- is a placeholder */){{
                     parts.addAll(
                         new RegionPart("-mid"){{
@@ -889,9 +890,14 @@ public class FOSBlocks {
             health = 480;
             size = 2;
             powerProduction = 0.8f;
-            rotateSpeed = 1.8f;
             requirements(Category.power, with(tin, 40));
             researchCost = with(tin, 160);
+            rotateSpeed = 1.8f;
+            squareSprite = false;
+            drawer = new DrawMulti(
+                new DrawDefault(),
+                new DrawRegion("-rotator", 15f, true)
+            );
         }};
         heatGenerator = new HeatGenerator("heat-generator"){{
             health = 480;
