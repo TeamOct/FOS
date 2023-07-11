@@ -5,6 +5,7 @@ import arc.func.Floatp;
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
+import arc.math.geom.Geometry;
 import arc.math.geom.Vec2;
 import arc.util.*;
 import arc.util.io.*;
@@ -49,6 +50,7 @@ public class NewDeathRayTurret extends PowerTurret {
 
     public NewDeathRayTurret(String name) {
         super(name);
+        maxAmmo = 1000;
     }
 
     /** Draws a beam that goes upwards. (Yes, I'm just spizdil) */
@@ -239,7 +241,7 @@ public class NewDeathRayTurret extends PowerTurret {
 
             if (!overHeat) {
                 charge -= 1 / shootDuration * Time.delta;
-                clampCharge();
+                updateCharge();
 
                 if (charge == 0)
                     overHeat = true;
@@ -251,8 +253,10 @@ public class NewDeathRayTurret extends PowerTurret {
                     Effect.shake(shake, shake, this);
                     Effect.shake(shake, shake, aimPos);
                 }
-                Vars.world.tileWorld(aimPos.x, aimPos.y)
-                        .circle(Mathf.ceil(shoot().raySize / Vars.tilesize), Fires::create);
+
+                Geometry.circle(Mathf.round(aimPos.x / Vars.tilesize), Mathf.round(aimPos.y / Vars.tilesize),
+                        Vars.world.width(), Vars.world.height(), (int) (shoot().raySize / Vars.tilesize),
+                        (x, y) -> Fires.create(Vars.world.tile(x, y)));
 
                 Damage.damage(aimPos.x, aimPos.y, shoot().raySize, shootType.damage * Time.delta);
             }
@@ -267,7 +271,7 @@ public class NewDeathRayTurret extends PowerTurret {
         protected void updateReload() {
             if (!shooting && charge < 1f) {
                 charge += 1f / chargeTime * edelta();
-                clampCharge();
+                updateCharge();
                 updateConsumption();
             }
             if (charge == 1f) {
@@ -277,10 +281,11 @@ public class NewDeathRayTurret extends PowerTurret {
 
         /**
          Clamps charge from 0 to 1.<br>
-         Call after charge update.
+         Call after {@link NewDeathRayTurretBuild#charge} update.
          **/
-        void clampCharge(){
+        void updateCharge(){
             charge = Mathf.clamp(charge, 0, 1f);
+            totalAmmo = (int) (charge * maxAmmo);
         }
 
         @Override
@@ -294,7 +299,7 @@ public class NewDeathRayTurret extends PowerTurret {
 
         @Override
         public float activeSoundVolume(){
-            return 0.1f;
+            return 0.4f;
         }
 
         @Override
@@ -323,7 +328,7 @@ public class NewDeathRayTurret extends PowerTurret {
 
         @Override
         public boolean hasAmmo() {
-            return power.status > 0;
+            return canConsume();
         }
     }
 

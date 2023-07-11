@@ -740,7 +740,6 @@ public class FOSBlocks {
             size = 8;
             minRange = 200f;
             range = 600f;
-            reload = 900f;
             hasLiquids = true;
             targetAir = targetGround = true;
             loopSound = Sounds.laserbig;
