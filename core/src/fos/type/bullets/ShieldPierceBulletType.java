@@ -26,7 +26,6 @@ public class ShieldPierceBulletType extends BulletType {
 
     public ShieldPierceBulletType(float pierceChance) {
         super();
-        trailEffect = Fx.missileTrailSmoke;
         this.pierceChance = pierceChance;
     }
 

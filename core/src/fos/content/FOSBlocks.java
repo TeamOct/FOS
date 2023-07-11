@@ -328,10 +328,22 @@ public class FOSBlocks {
             recoil = 1f;
             reload = 30f;
             inaccuracy = 0f;
+            shootY = 4f;
             shootSound = Sounds.pew;
             shoot = new ShootHelix(){{
                 shots = 2;
                 mag = 2.5f;
+            }};
+            drawer = new DrawTurret("reinforced-" /* TODO reinforced- is a placeholder */){{
+                parts.addAll(
+                    new RegionPart(){{
+                        mirror = false;
+                    }},
+                    new RegionPart("-side"){{
+                        mirror = true;
+                        moveX = 1f;
+                    }}
+                );
             }};
             ammo(
                 tin, new BasicBulletType(3f, 20){{
@@ -541,13 +553,16 @@ public class FOSBlocks {
             size = 3;
             range = 320f;
             targetAir = targetGround = true;
+            recoil = 3f;
+            shake = 2f;
+            reload = 90f;
             ammo(
                 iridium, new ShieldPierceBulletType(0.1f){{
                     damage = 800f;
                     shootEffect = Fx.shootBig;
                     hitEffect = Fx.hitBulletColor;
                     smokeEffect = Fx.smokeCloud;
-                    trailEffect = Fx.missileTrailSmoke;
+                    trailEffect = Fx.artilleryTrailSmoke;
                     despawnEffect = Fx.shootSmallSmoke;
                     trailSpacing = 20f;
                     buildingDamageMultiplier = 0.2f;
