@@ -40,16 +40,9 @@ public abstract class FOSMod extends Mod {
     public FOSMod() {
         Events.on(ClientLoadEvent.class, e -> {
             //load this mod's settings
-            loadSettings();
+            constructSettings();
 
             //add unit types to their descriptions
-            content.units().each(u -> {
-                try {
-                    //Log.info(u.constructor.getClass().getDeclaredMethod("get").getReturnType().getSimpleName());
-                } catch (Exception ex) {
-                    Log.err(ex);
-                }
-            });
             content.units().each(u ->
                 u.description += ("\n" + bundle.get("unittype") + (
                     u.constructor.get() instanceof MechUnit ? bundle.get("unittype.infantry") :
@@ -246,7 +239,7 @@ public abstract class FOSMod extends Mod {
         UxerdTechTree.load();
     }
 
-    private void loadSettings() {
+    private void constructSettings() {
         ui.settings.addCategory("@setting.fos-title", "fos-settings-icon", t -> {
             t.sliderPref("fos-menutheme", 2, 1, 7, s ->
                 s == 2 ? "@setting.fos-menutheme.uxerdspace" :
