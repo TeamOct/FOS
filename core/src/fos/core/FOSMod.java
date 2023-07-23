@@ -11,6 +11,7 @@ import arc.struct.Seq;
 import arc.util.*;
 import fos.SplashTexts;
 import fos.content.*;
+import fos.controllers.CapsulesController;
 import fos.game.EndlessBoostHandler;
 import fos.graphics.FOSShaders;
 import fos.ui.DamageDisplay;
@@ -36,15 +37,19 @@ import static mindustry.game.EventType.*;
  * @author nekit508
  */
 public abstract class FOSMod extends Mod {
-    /** This mod's damage display system. */
-    public DamageDisplay dd;
-
     public FOSMod() {
         Events.on(ClientLoadEvent.class, e -> {
             //load this mod's settings
             loadSettings();
 
             //add unit types to their descriptions
+            content.units().each(u -> {
+                try {
+                    //Log.info(u.constructor.getClass().getDeclaredMethod("get").getReturnType().getSimpleName());
+                } catch (Exception ex) {
+                    Log.err(ex);
+                }
+            });
             content.units().each(u ->
                 u.description += ("\n" + bundle.get("unittype") + (
                     u.constructor.get() instanceof MechUnit ? bundle.get("unittype.infantry") :
@@ -108,6 +113,10 @@ public abstract class FOSMod extends Mod {
             if (bg != null) {
                 FOSVars.menuRenderer.changeBackground(bg);
             }
+
+            // load capsules
+            FOSVars.capsulesController = new CapsulesController();
+            FOSVars.capsulesController.load();
         });
 
         Events.run(Trigger.update, () -> {
@@ -157,6 +166,7 @@ public abstract class FOSMod extends Mod {
             }
         });
 
+
         //anything after this should not be initialized on dedicated servers.
         if (headless) return;
 
@@ -197,7 +207,7 @@ public abstract class FOSMod extends Mod {
         ui.editor.shown(this::addEditorTeams);
 
         //damage display
-        dd = new DamageDisplay();
+        FOSVars.damageDisplay = new DamageDisplay();
 
         //endless boost handler
         new EndlessBoostHandler();

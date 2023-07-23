@@ -1,19 +1,19 @@
 package fos.core;
 
 import arc.Core;
-import arc.graphics.gl.FrameBuffer;
 import arc.math.geom.Vec2;
 import arc.struct.Seq;
 import fos.content.FOSFluids;
+import fos.controllers.CapsulesController;
 import fos.files.InternalFileTree;
 import fos.type.units.constructors.*;
+import fos.ui.DamageDisplay;
 import fos.ui.ResearchCoreDialog;
 import fos.ui.menus.FOSMenuRenderer;
 import mindustry.ai.Pathfinder;
 import mindustry.content.TechTree;
 import mindustry.game.Objectives;
 import mindustry.gen.EntityMapping;
-import mindustry.graphics.g3d.PlanetParams;
 
 import java.util.*;
 
@@ -24,9 +24,14 @@ import static mindustry.type.ItemStack.with;
 
 public class FOSVars {
     /** A research dialog that shows one of the two tech trees declared below. */
-    public static ResearchCoreDialog rcdialog;
+    public static ResearchCoreDialog researchCoreDialog;
     /** Special tech trees accessed only by certain blocks. */
     public static TechTree.TechNode mechTree, bioTree;
+    /** This mod's damage display system. */
+    public static DamageDisplay damageDisplay;
+
+    /** Capsules creator **/
+    public static CapsulesController capsulesController;
 
     /** ID of the {@link BugUnit} class. */
     public static int bugEntity;
@@ -56,7 +61,7 @@ public class FOSVars {
     public static FOSMenuRenderer menuRenderer = new FOSMenuRenderer();
 
     public static void load() {
-        rcdialog = new ResearchCoreDialog();
+        researchCoreDialog = new ResearchCoreDialog();
 
         mechTree = TechTree.nodeRoot("", mechResearchCore, true, () -> {
             node(helix, with(scrap, 250), () -> {

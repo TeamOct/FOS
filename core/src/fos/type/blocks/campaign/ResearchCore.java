@@ -45,8 +45,8 @@ public class ResearchCore extends PayloadBlock {
         public void buildConfiguration(Table table) {
             deselect();
 
-            FOSVars.rcdialog.rc = this;
-            FOSVars.rcdialog.show();
+            FOSVars.researchCoreDialog.rc = this;
+            FOSVars.researchCoreDialog.show();
         }
     }
 }
