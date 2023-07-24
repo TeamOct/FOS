@@ -7,7 +7,7 @@ import arc.util.*;
 import fos.graphics.*;
 import fos.type.blocks.campaign.*;
 import fos.type.blocks.defense.*;
-import fos.type.blocks.distribution.*;
+import fos.type.blocks.distribution.SpaceDuct;
 import fos.type.blocks.environment.*;
 import fos.type.blocks.power.*;
 import fos.type.blocks.production.*;
@@ -1225,6 +1225,7 @@ public class FOSBlocks {
             requirements(Category.effect, with(tin, 250, silver, 300, silicon, 150));
         }};
 
+/*
         liquidConveyor = new LiquidConveyor("l-c"){{
             requirements(Category.distribution, with(Items.copper, 1));
             health = 45;
@@ -1232,5 +1233,6 @@ public class FOSBlocks {
             displayedSpeed = 4.2f;
             researchCost = with(Items.copper, 5);
         }};
+*/
     }
 }

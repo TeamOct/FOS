@@ -11,7 +11,6 @@ import arc.struct.Seq;
 import arc.util.*;
 import fos.SplashTexts;
 import fos.content.*;
-import fos.controllers.CapsulesController;
 import fos.game.EndlessBoostHandler;
 import fos.graphics.FOSShaders;
 import fos.ui.DamageDisplay;
@@ -108,8 +107,11 @@ public abstract class FOSMod extends Mod {
             }
 
             // load capsules
+            // FIXME: broken in campaign
+/*
             FOSVars.capsulesController = new CapsulesController();
             FOSVars.capsulesController.load();
+*/
         });
 
         Events.run(Trigger.update, () -> {
@@ -158,7 +160,6 @@ public abstract class FOSMod extends Mod {
                 Reflect.invoke(pathfinder, "preloadPath", new Object[]{pt}, Pathfinder.Flowfield.class);
             }
         });
-
 
         //anything after this should not be initialized on dedicated servers.
         if (headless) return;
