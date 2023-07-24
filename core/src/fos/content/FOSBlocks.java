@@ -7,8 +7,7 @@ import arc.util.*;
 import fos.graphics.*;
 import fos.type.blocks.campaign.*;
 import fos.type.blocks.defense.*;
-import fos.type.blocks.distribution.LiquidConveyor;
-import fos.type.blocks.distribution.SpaceDuct;
+import fos.type.blocks.distribution.*;
 import fos.type.blocks.environment.*;
 import fos.type.blocks.power.*;
 import fos.type.blocks.production.*;
@@ -828,9 +827,12 @@ public class FOSBlocks {
             requirements(Category.distribution, with(aluminium, 120, lithium, 75, silver, 100, titanium, 125));
             envRequired = envEnabled = Env.space;
         }};
-        //TODO something???
-        tinBelt = new Duct("tin-belt"){{
+        //TODO was supposed to be a duct, but current sprites were made for a conveyor instead
+        tinBelt = new Conveyor("tin-belt"){{
             health = 10;
+            speed = 0.05f;
+            displayedSpeed = 6.9f;
+            researchCost = with(tin, 30);
             requirements(Category.distribution, with(tin, 1));
         }};
         //endregion
