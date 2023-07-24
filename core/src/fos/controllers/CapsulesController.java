@@ -20,7 +20,6 @@ public class CapsulesController {
 
     public Seq<LiquidCapsule> capsules = new Seq<>();
 
-    /** Call after the end of loading mods. **/
     public void load() {
         // remove already created capsules
         ObjectMap<String, MappableContent> itemsMap =
@@ -44,10 +43,6 @@ public class CapsulesController {
         capsules.each(LiquidCapsule::constructIcon);
         packer.flush(Core.settings.getBool("linear", true) ? Texture.TextureFilter.linear
                 : Texture.TextureFilter.nearest, Core.atlas);
-
-        capsules.each(LiquidCapsule::init);
-        capsules.each(LiquidCapsule::loadIcon);
-        capsules.each(LiquidCapsule::load);
     }
 
     @Nullable

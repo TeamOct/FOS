@@ -11,6 +11,7 @@ import arc.struct.Seq;
 import arc.util.*;
 import fos.SplashTexts;
 import fos.content.*;
+import fos.controllers.CapsulesController;
 import fos.game.EndlessBoostHandler;
 import fos.graphics.FOSShaders;
 import fos.ui.DamageDisplay;
@@ -105,13 +106,6 @@ public abstract class FOSMod extends Mod {
             if (bg != null) {
                 FOSVars.menuRenderer.changeBackground(bg);
             }
-
-            // load capsules
-            // FIXME: broken in campaign
-/*
-            FOSVars.capsulesController = new CapsulesController();
-            FOSVars.capsulesController.load();
-*/
         });
 
         Events.run(Trigger.update, () -> {
@@ -238,6 +232,9 @@ public abstract class FOSMod extends Mod {
         LumoniTechTree.load();
         SerpuloTechTree.load();
         UxerdTechTree.load();
+
+        FOSVars.capsulesController = new CapsulesController();
+        FOSVars.capsulesController.load();
     }
 
     private void constructSettings() {
