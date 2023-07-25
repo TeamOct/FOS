@@ -10,10 +10,12 @@ import fos.type.units.constructors.*;
 import fos.ui.DamageDisplay;
 import fos.ui.ResearchCoreDialog;
 import fos.ui.menus.FOSMenuRenderer;
+import mindustry.Vars;
 import mindustry.ai.Pathfinder;
 import mindustry.content.TechTree;
 import mindustry.game.Objectives;
 import mindustry.gen.EntityMapping;
+import mindustry.mod.Mods;
 
 import java.util.*;
 
@@ -46,7 +48,6 @@ public class FOSVars {
     // TODO disable in release version
     /** Enabling debug mode debug **/
     public static final boolean debug = Core.settings.getBool("fos-debugmode");
-
     // TODO disable in release version
     /** Early access **/
     public static final boolean earlyAccess = true;

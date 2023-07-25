@@ -16,6 +16,7 @@ import fos.game.EndlessBoostHandler;
 import fos.graphics.FOSShaders;
 import fos.ui.DamageDisplay;
 import fos.ui.menus.*;
+import mindustry.Vars;
 import mindustry.ai.Pathfinder;
 import mindustry.game.Team;
 import mindustry.gen.*;
