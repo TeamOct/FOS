@@ -7,9 +7,6 @@ import arc.util.Log;
 import arc.util.Reflect;
 import arc.util.Time;
 import arc.util.Tmp;
-import fos.core.FOSMod;
-import fos.core.FOSVars;
-import mindustry.Vars;
 import mindustry.gen.Icon;
 
 public class FOSIcons {
