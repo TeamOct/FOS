@@ -7,13 +7,14 @@ import fos.content.FOSFluids;
 import fos.controllers.CapsulesController;
 import fos.files.InternalFileTree;
 import fos.type.units.constructors.*;
-import fos.ui.DamageDisplay;
-import fos.ui.ResearchCoreDialog;
+import fos.ui.*;
 import fos.ui.menus.FOSMenuRenderer;
+import mindustry.Vars;
 import mindustry.ai.Pathfinder;
 import mindustry.content.TechTree;
 import mindustry.game.Objectives;
 import mindustry.gen.EntityMapping;
+import mindustry.mod.Mods.LoadedMod;
 
 import java.util.*;
 
@@ -23,6 +24,9 @@ import static mindustry.content.TechTree.node;
 import static mindustry.type.ItemStack.with;
 
 public class FOSVars {
+    /** This mod's instance for later use. */
+    public static LoadedMod thisMod = Vars.mods.locateMod("fos");
+
     /** A research dialog that shows one of the two tech trees declared below. */
     public static ResearchCoreDialog researchCoreDialog;
     /** Special tech trees accessed only by certain blocks. */

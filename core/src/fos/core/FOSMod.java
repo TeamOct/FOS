@@ -167,7 +167,7 @@ public abstract class FOSMod extends Mod {
         }
 
         //locate this mod, for later use
-        LoadedMod mod = mods.locateMod("fos");
+        LoadedMod mod = FOSVars.thisMod;
 
         //load splash texts
         SplashTexts.load();
