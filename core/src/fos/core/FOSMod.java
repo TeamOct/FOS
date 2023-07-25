@@ -16,6 +16,7 @@ import fos.game.EndlessBoostHandler;
 import fos.graphics.FOSShaders;
 import fos.ui.DamageDisplay;
 import fos.ui.menus.*;
+import mindustry.Vars;
 import mindustry.ai.Pathfinder;
 import mindustry.game.Team;
 import mindustry.gen.*;
@@ -106,6 +107,11 @@ public abstract class FOSMod extends Mod {
             if (bg != null) {
                 FOSVars.menuRenderer.changeBackground(bg);
             }
+
+            renderer.planets.cam.far = Mathf.pow(2, 20);
+            renderer.planets.projector.setScaling(1 / renderer.planets.cam.far);
+
+            Log.infoList(renderer.planets.cam.far, 1 / renderer.planets.cam.far);
         });
 
         Events.run(Trigger.update, () -> {

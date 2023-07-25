@@ -50,7 +50,6 @@ public class FOSVars {
     // TODO disable in release version
     /** Enabling debug mode debug **/
     public static final boolean debug = Core.settings.getBool("fos-debugmode");
-
     // TODO disable in release version
     /** Early access **/
     public static final boolean earlyAccess = true;
