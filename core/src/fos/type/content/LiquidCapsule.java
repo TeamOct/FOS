@@ -39,7 +39,7 @@ public class LiquidCapsule extends Item {
         });
 
         pixmap.draw(bottom);
-        pixmap.draw(top);
+        pixmap.draw(top, true);
 
         CapsulesController.packer.add(MultiPacker.PageType.main, name, pixmap);
     }
