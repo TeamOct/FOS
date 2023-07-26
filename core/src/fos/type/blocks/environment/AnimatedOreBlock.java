@@ -2,19 +2,16 @@ package fos.type.blocks.environment;
 
 import arc.Events;
 import arc.graphics.Texture;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.TextureRegion;
+import arc.graphics.g2d.*;
 import arc.graphics.gl.Shader;
 import arc.math.Mathf;
 import arc.util.Strings;
 import fos.core.FOSVars;
-import fos.graphics.FOSShaders;
-import fos.graphics.ShaderTextureRegion;
+import fos.graphics.*;
 import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.game.EventType;
-import mindustry.graphics.Drawf;
-import mindustry.graphics.Layer;
+import mindustry.graphics.*;
 import mindustry.world.Tile;
 import mindustry.world.blocks.environment.OreBlock;
 
@@ -51,7 +48,7 @@ public class AnimatedOreBlock extends OreBlock {
     @Override
     public void drawBase(Tile tile) {
         Events.run(EventType.Trigger.draw, () -> {
-            if (Vars.world.tile(tile.x, tile.y).overlay() != this) return;
+            if (Vars.world.tile(tile.x, tile.y) == null || Vars.world.tile(tile.x, tile.y).overlay() != this) return;
 
             int variant = Mathf.randomSeed(tile.pos(), 0, Math.max(0, variantRegions.length - 1));
             if (shader instanceof FOSShaders.AnimatedFloorShader afs) {

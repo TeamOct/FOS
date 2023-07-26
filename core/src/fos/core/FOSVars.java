@@ -59,7 +59,7 @@ public class FOSVars {
     /** Main menu renderer **/
     public static FOSMenuRenderer menuRenderer = new FOSMenuRenderer();
 
-    /** Mod notification **/
+    /** Mod reference **/
     public static Mods.LoadedMod mod;
 
     public static void load() {

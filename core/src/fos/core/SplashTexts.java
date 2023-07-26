@@ -22,8 +22,8 @@ public class SplashTexts {
     public static void init() {
         boolean isNewYear = FOSVars.date.get(Calendar.MONTH) == Calendar.JANUARY &&
                 FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
-        FOSVars.mod.meta.subtitle = isNewYear ? bundle.get("splashnewyear") : SplashTexts.splashes.get(
-                Mathf.floor((float) Math.random() * SplashTexts.splashes.size)
+        FOSVars.mod.meta.subtitle = isNewYear ? bundle.get("splashnewyear") : splashes.get(
+                Mathf.floor((float) Math.random() * splashes.size)
         );
     }
 }

@@ -15,7 +15,6 @@ import fos.game.EndlessBoostHandler;
 import fos.graphics.FOSShaders;
 import fos.ui.DamageDisplay;
 import fos.ui.menus.*;
-import mindustry.Vars;
 import mindustry.ai.Pathfinder;
 import mindustry.game.Team;
 import mindustry.gen.*;
@@ -142,8 +141,6 @@ public abstract class FOSMod extends Mod {
 
     @Override
     public void loadContent() {
-        FOSVars.mod = mods.getMod(getClass());
-
         SplashTexts.load();
 
         FOSShaders.init();
@@ -174,9 +171,11 @@ public abstract class FOSMod extends Mod {
     public void init() {
         //initialize mod variables
         FOSVars.load();
+        FOSVars.mod = mods.getMod(getClass());
 
-        renderer.planets.cam.far = Mathf.pow(2, 20);
-        renderer.planets.projector.setScaling(1 / renderer.planets.cam.far);
+        //TODO: is it necessary now?
+        //renderer.planets.cam.far = Mathf.pow(2, 20);
+        //renderer.planets.projector.setScaling(1 / renderer.planets.cam.far);
 
         //this flowfield is required for modded AIs
         Pathfinder.Flowfield pt = FOSVars.fpos;
