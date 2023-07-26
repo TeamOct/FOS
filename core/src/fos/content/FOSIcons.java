@@ -11,14 +11,13 @@ public class FOSIcons {
         Log.info("[FOS] Started loading icons.");
         Time.mark();
 
-        //should return the sprites/icons directory.
-        Fi iconDir = FOSVars.thisMod.root.child("sprites").child("icons");
+        Fi iconDir = FOSVars.mod.root.child("sprites/icons");
 
         for (var i : iconDir.list()) {
-            var name = "fos-" + i.nameWithoutExtension();
+            var name = FOSVars.mod.meta.name + i.nameWithoutExtension();
             Icon.icons.put(name, Core.atlas.getDrawable(name));
 
-            Log.info("[FOS] Loaded icon: " + name);
+            Log.debug("[FOS] Loaded icon: " + name);
         }
 
         Log.info("[FOS] Icons loaded in @s", Time.elapsed());
