@@ -1,6 +1,7 @@
 package fos.controllers;
 
 import arc.Core;
+import arc.Events;
 import arc.graphics.Texture;
 import arc.struct.ObjectMap;
 import arc.struct.Seq;
@@ -9,16 +10,32 @@ import arc.util.Nullable;
 import arc.util.Reflect;
 import fos.type.content.LiquidCapsule;
 import mindustry.Vars;
+import mindustry.async.AsyncProcess;
 import mindustry.ctype.ContentType;
 import mindustry.ctype.MappableContent;
+import mindustry.game.EventType;
 import mindustry.graphics.MultiPacker;
 import mindustry.type.Liquid;
 
-public class CapsulesController {
+public class CapsulesController implements AsyncProcess {
     public static final float liquidInCapsule = 20;
-    public static MultiPacker packer;
 
     public Seq<LiquidCapsule> capsules = new Seq<>();
+
+    public CapsulesController() {
+        Vars.asyncCore.processes.add(this);
+
+        Events.on(EventType.UnlockEvent.class, e -> {
+            if (!(e.content instanceof Liquid))
+                return;
+
+            for (int i = 0; i < capsules.size; i++) {
+                LiquidCapsule capsule = capsules.get(i);
+                if (capsule.liquid.equals(e.content))
+                    capsule.unlock();
+            }
+        });
+    }
 
     public void load() {
         // remove already created capsules
@@ -38,15 +55,23 @@ public class CapsulesController {
             }
             capsules.add(new LiquidCapsule("capsule-" + liquid.name, liquid));
         });
-
-        packer = new MultiPacker();
-        capsules.each(LiquidCapsule::constructIcon);
-        packer.flush(Core.settings.getBool("linear", true) ? Texture.TextureFilter.linear
-                : Texture.TextureFilter.nearest, Core.atlas);
     }
 
     @Nullable
     public LiquidCapsule toCapsule(Liquid liquid) {
         return capsules.find(capsule -> capsule.liquid == liquid);
+    }
+
+    @Override
+    public void init() {
+        capsules.each(capsule -> {
+            if (capsule.liquid.unlocked())
+                capsule.unlock();
+        });
+    }
+
+    @Override
+    public boolean shouldProcess() {
+        return false;
     }
 }

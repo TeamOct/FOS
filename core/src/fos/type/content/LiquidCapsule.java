@@ -2,9 +2,12 @@ package fos.type.content;
 
 import arc.graphics.Color;
 import arc.graphics.Pixmap;
+import arc.util.Log;
 import arc.util.Tmp;
 import fos.controllers.CapsulesController;
+import fos.core.FOSMod;
 import fos.core.FOSVars;
+import mindustry.Vars;
 import mindustry.graphics.MultiPacker;
 import mindustry.type.Item;
 import mindustry.type.Liquid;
@@ -27,9 +30,21 @@ public class LiquidCapsule extends Item {
         explosiveness = liquid.explosiveness * 0.8f;
         flammability = liquid.flammability * 0.7f;
         radioactivity = 0;
+
+        hidden = liquid.hidden;
+        alwaysUnlocked = liquid.alwaysUnlocked;
+        generateIcons = true;
     }
 
-    public void constructIcon() {
+    @Override
+    public void load() {
+        super.load();
+    }
+
+    @Override
+    public void createIcons(MultiPacker packer) {
+        super.createIcons(packer);
+
         Pixmap pixmap = new Pixmap(32, 32);
 
         bottom.each((x, y) -> {
@@ -41,6 +56,6 @@ public class LiquidCapsule extends Item {
         pixmap.draw(bottom);
         pixmap.draw(top, true);
 
-        CapsulesController.packer.add(MultiPacker.PageType.main, name, pixmap);
+        packer.add(MultiPacker.PageType.main, name, pixmap);
     }
 }

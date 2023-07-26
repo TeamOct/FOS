@@ -14,6 +14,7 @@ import mindustry.ai.Pathfinder;
 import mindustry.content.TechTree;
 import mindustry.game.Objectives;
 import mindustry.gen.EntityMapping;
+import mindustry.mod.Mods;
 import mindustry.mod.Mods.LoadedMod;
 
 import java.util.*;
@@ -62,6 +63,9 @@ public class FOSVars {
 
     /** Main menu renderer **/
     public static FOSMenuRenderer menuRenderer = new FOSMenuRenderer();
+
+    /** Mod notification **/
+    public static Mods.LoadedMod mod;
 
     public static void load() {
         researchCoreDialog = new ResearchCoreDialog();

@@ -9,7 +9,6 @@ import arc.scene.ui.ImageButton;
 import arc.scene.ui.layout.*;
 import arc.struct.Seq;
 import arc.util.*;
-import fos.SplashTexts;
 import fos.content.*;
 import fos.controllers.CapsulesController;
 import fos.game.EndlessBoostHandler;
@@ -35,7 +34,6 @@ import static mindustry.game.EventType.*;
 /**
  * This mod's main class.
  * @author Slotterleet
- * @author nekit508
  */
 public abstract class FOSMod extends Mod {
     public FOSMod() {
@@ -107,11 +105,6 @@ public abstract class FOSMod extends Mod {
             if (bg != null) {
                 FOSVars.menuRenderer.changeBackground(bg);
             }
-
-            renderer.planets.cam.far = Mathf.pow(2, 20);
-            renderer.planets.projector.setScaling(1 / renderer.planets.cam.far);
-
-            Log.infoList(renderer.planets.cam.far, 1 / renderer.planets.cam.far);
         });
 
         Events.run(Trigger.update, () -> {
@@ -148,9 +141,42 @@ public abstract class FOSMod extends Mod {
     }
 
     @Override
+    public void loadContent() {
+        FOSVars.mod = mods.getMod(getClass());
+
+        SplashTexts.load();
+
+        FOSShaders.init();
+        FOSCommands.init();
+
+        FOSAttributes.load();
+        FOSWeathers.load();
+        FOSItems.load();
+        FOSFluids.load();
+        FOSWeaponModules.load();
+        FOSBullets.load();
+        FOSStatuses.load();
+        FOSUnits.load();
+        FOSBlocks.load();
+        FOSSchematics.load();
+        FOSPlanets.load();
+        FOSSectors.load();
+
+        LumoniTechTree.load();
+        SerpuloTechTree.load();
+        UxerdTechTree.load();
+
+        FOSVars.capsulesController = new CapsulesController();
+        FOSVars.capsulesController.load();
+    }
+
+    @Override
     public void init() {
         //initialize mod variables
         FOSVars.load();
+
+        renderer.planets.cam.far = Mathf.pow(2, 20);
+        renderer.planets.projector.setScaling(1 / renderer.planets.cam.far);
 
         //this flowfield is required for modded AIs
         Pathfinder.Flowfield pt = FOSVars.fpos;
@@ -166,32 +192,20 @@ public abstract class FOSMod extends Mod {
 
         //an anti-cheat system from long ago, is it really necessary now?
         LoadedMod xf = mods.list().find(m ->
-            /* some mods don't even have the author field, apparently. how stupid. */ m.meta.author != null &&
-            (m.meta.author.equals("XenoTale") || m.meta.author.equals("goldie")));
+                /* some mods don't even have the author field, apparently. how stupid. */ m.meta.author != null &&
+                (m.meta.author.equals("XenoTale") || m.meta.author.equals("goldie")));
         if (xf != null) {
             ui.showOkText("@fos.errortitle", bundle.format("fos.errortext", xf.meta.displayName), () -> app.exit());
         }
 
-        //locate this mod, for later use
-        LoadedMod mod = FOSVars.thisMod;
-
-        //load splash texts
-        SplashTexts.load();
-        int n = Mathf.floor((float) Math.random() * SplashTexts.splashes.size);
-
-        //change something on certain days
-        var date = FOSVars.date;
-
-        //get a random splash text
-        boolean isNewYear = date.get(Calendar.MONTH) == Calendar.JANUARY && date.get(Calendar.DAY_OF_MONTH) == 1;
-        mod.meta.subtitle = isNewYear ? bundle.get("splashnewyear") : SplashTexts.splashes.get(n);
+        SplashTexts.init();
 
         //mistake.mp3
-        boolean isAprilFools = date.get(Calendar.MONTH) == Calendar.APRIL && date.get(Calendar.DAY_OF_MONTH) == 1;
+        boolean isAprilFools = FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
         if (isAprilFools) Musics.menu = tree.loadMusic("mistake");
 
         //display the mod version
-        mod.meta.description += "\n\n" + bundle.get("mod.currentversion") + "\n" + mod.meta.version;
+        FOSVars.mod.meta.description += "\n\n" + bundle.get("mod.currentversion") + "\n" + FOSVars.mod.meta.version;
 
         //load icons and menu themes
         FOSIcons.load();
@@ -215,32 +229,6 @@ public abstract class FOSMod extends Mod {
 
         //init modded teams
         FOSTeam.load();
-    }
-
-    @Override
-    public void loadContent() {
-        FOSShaders.init();
-        FOSCommands.init();
-
-        FOSAttributes.load();
-        FOSWeathers.load();
-        FOSItems.load();
-        FOSFluids.load();
-        FOSWeaponModules.load();
-        FOSBullets.load();
-        FOSStatuses.load();
-        FOSUnits.load();
-        FOSBlocks.load();
-        FOSSchematics.load();
-        FOSPlanets.load();
-        FOSSectors.load();
-
-        LumoniTechTree.load();
-        SerpuloTechTree.load();
-        UxerdTechTree.load();
-
-        FOSVars.capsulesController = new CapsulesController();
-        FOSVars.capsulesController.load();
     }
 
     private void constructSettings() {
