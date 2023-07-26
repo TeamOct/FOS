@@ -1,6 +1,5 @@
 package fos.content;
 
-import arc.Events;
 import arc.graphics.Color;
 import arc.math.Rand;
 import arc.math.geom.Mat3D;
@@ -8,9 +7,8 @@ import arc.struct.Seq;
 import arc.util.Tmp;
 import fos.core.FOSVars;
 import fos.maps.generators.*;
-import mindustry.Vars;
 import mindustry.content.Items;
-import mindustry.game.*;
+import mindustry.game.Team;
 import mindustry.graphics.g3d.*;
 import mindustry.type.*;
 import mindustry.world.meta.Env;
@@ -34,7 +32,7 @@ public class FOSPlanets {
             bloom = true;
             hasAtmosphere = false;
             tidalLock = true;
-            orbitRadius = 500f;
+            orbitRadius = 29305f; //haha random number goes brr
             drawOrbit = false;
             meshLoader = () -> new SunMesh(this, 5, 5, 0.3, 1.7, 1.2, 1, 1.1f,
                 Color.valueOf("f7c265"), Color.valueOf("ffb380"), Color.valueOf("e8d174"), Color.valueOf("ffa95e"));
@@ -53,47 +51,9 @@ public class FOSPlanets {
                 };
                 defaultEnv = Env.space | Env.scorching;
             }
-        }
-
-        };
-        lumoni = new Planet("lumoni", caldemolt, 0.9f, 2){{
-            defaultCore = coreFortress;
-            hasAtmosphere = true;
-            bloom = false;
-            atmosphereColor = Color.valueOf("288a5d27");
-            iconColor = annite.mapColor;
-            meshLoader = () -> new HexMesh(this, 5);
-            startSector = 9;
-            generator = new LumoniPlanetGenerator(){{
-                defaultLoadout = FOSSchematics.lumoniLoadout;
-            }};
-            defaultEnv = Env.terrestrial | Env.oxygen | Env.groundWater;
-            minZoom = 0.8f;
-            camRadius += 0.4f;
-            orbitSpacing = 6f;
-            allowLaunchLoadout = true;
-            accessible = true;
-            alwaysUnlocked = true;
-            //TODO you'll see why I did this :)
-            launchCandidates.add(uxerd);
-            solarSystem = caldemolt;
-            cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 5, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
-            ruleSetter = r -> {
-                r.loadout = ItemStack.list();
-                r.fog = true;
-                r.defaultTeam = FOSTeam.corru;
-                r.waveTeam = r.attackMode ? Team.sharded : FOSTeam.bessin;
-                r.waves = true;
-                r.enemyCoreBuildRadius = 300;
-                r.coreCapture = false;
-                WeatherEntry weather = new WeatherEntry(FOSWeathers.wind);
-                weather.always = true; //always windy
-                r.weather.add(weather);
-                r.bannedBlocks.addAll(conveyor, junction, router, duo, mechanicalDrill, copperWall, copperWallLarge);
-                r.hideBannedBlocks = true;
-            };
         }};
-        uxerd = new Planet("uxerd", lumoni, 0.12f){{
+
+        uxerd = new Planet("uxerd", caldemolt, 0.12f){{
             hasAtmosphere = false;
             updateLighting = false;
             icon = "fos-asteroids";
@@ -110,6 +70,7 @@ public class FOSPlanets {
             clearSectorOnLose = true;
             accessible = true;
             alwaysUnlocked = true;
+            itemWhitelist = uxerdItems;
             generator = new UxerdAsteroidGenerator(){{
                 seed = 8;
                 defaultFloor = ice;
@@ -178,14 +139,47 @@ public class FOSPlanets {
             };
         }};
 
+        lumoni = new Planet("lumoni", caldemolt, 0.9f, 2){{
+            defaultCore = coreFortress;
+            hasAtmosphere = true;
+            bloom = false;
+            atmosphereColor = Color.valueOf("288a5d27");
+            iconColor = annite.mapColor;
+            meshLoader = () -> new HexMesh(this, 5);
+            startSector = 9;
+            generator = new LumoniPlanetGenerator(){{
+                defaultLoadout = FOSSchematics.lumoniLoadout;
+            }};
+            defaultEnv = Env.terrestrial | Env.oxygen | Env.groundWater;
+            minZoom = 0.8f;
+            camRadius += 0.4f;
+            orbitSpacing = 6f;
+            allowLaunchLoadout = true;
+            accessible = true;
+            alwaysUnlocked = true;
+            //TODO you'll see why I did this :)
+            launchCandidates.add(uxerd);
+            solarSystem = caldemolt;
+            itemWhitelist = lumoniItems;
+            cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 5, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
+            ruleSetter = r -> {
+                r.loadout = ItemStack.list();
+                r.fog = true;
+                r.defaultTeam = FOSTeam.corru;
+                r.waveTeam = r.attackMode ? Team.sharded : FOSTeam.bessin;
+                r.waves = true;
+                r.enemyCoreBuildRadius = 300;
+                r.coreCapture = false;
+                WeatherEntry weather = new WeatherEntry(FOSWeathers.wind);
+                weather.always = true; //always windy
+                r.weather.add(weather);
+                r.bannedBlocks.addAll(conveyor, junction, router, duo, mechanicalDrill, copperWall, copperWallLarge);
+                r.hideBannedBlocks = true;
+            };
+        }};
+
         //hide modded items from vanilla planets
         serpulo.hiddenItems.addAll(uxerdItems).addAll(lumoniItems).removeAll(Items.serpuloItems);
         erekir.hiddenItems.addAll(uxerdItems).addAll(lumoniItems).removeAll(Items.erekirItems);
-
-        //Anuke, *please* make an item whitelist instead
-        Events.on(EventType.ContentInitEvent.class, e -> {
-            uxerd.hiddenItems.addAll(Vars.content.items()).removeAll(uxerdItems);
-            lumoni.hiddenItems.addAll(Vars.content.items()).removeAll(lumoniItems);
-        });
     }
 }
