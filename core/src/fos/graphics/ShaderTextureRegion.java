@@ -11,14 +11,15 @@ import arc.graphics.gl.Shader;
 import arc.struct.Seq;
 import mindustry.game.EventType;
 
+// TODO it should use atlas
+// TODO optimize updateShader()
+// TODO don't not used regions
 public class ShaderTextureRegion extends TextureRegion {
     public static final Seq<ShaderTextureRegion> regions = new Seq<>();
 
     public Texture original;
 
-    /**
-     * Texture updates every N frame
-     **/
+    /** Texture updates every {@link ShaderTextureRegion#frequency} frame **/
     public int frequency = 5;
     public Shader shader;
     private final Cons2<Shader, Object[]> shaderPrepare;
@@ -30,8 +31,7 @@ public class ShaderTextureRegion extends TextureRegion {
     public Object[] shaderPrepareParams;
 
     static {
-        //TODO draw or update???
-        Events.run(EventType.Trigger.update, () -> regions.each(ShaderTextureRegion::updateShader));
+        Events.run(EventType.Trigger.preDraw, () -> regions.each(ShaderTextureRegion::updateShader));
     }
 
     public ShaderTextureRegion(Shader shader, Texture original, Cons2<Shader, Object[]> shaderPrepare,

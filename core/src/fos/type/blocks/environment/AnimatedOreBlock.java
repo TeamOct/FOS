@@ -1,10 +1,12 @@
 package fos.type.blocks.environment;
 
 import arc.Events;
+import arc.graphics.Color;
 import arc.graphics.Texture;
 import arc.graphics.g2d.*;
 import arc.graphics.gl.Shader;
 import arc.math.Mathf;
+import arc.struct.Seq;
 import arc.util.Strings;
 import fos.core.FOSVars;
 import fos.graphics.*;
@@ -47,27 +49,52 @@ public class AnimatedOreBlock extends OreBlock {
 
     @Override
     public void drawBase(Tile tile) {
-        Events.run(EventType.Trigger.draw, () -> {
-            if (Vars.world.tile(tile.x, tile.y) == null || Vars.world.tile(tile.x, tile.y).overlay() != this) return;
 
-            int variant = Mathf.randomSeed(tile.pos(), 0, Math.max(0, variantRegions.length - 1));
-            if (shader instanceof FOSShaders.AnimatedFloorShader afs) {
-                afs.setX(tile.x);
-                afs.setY(tile.y);
-            }
-            Draw.draw(Layer.blockUnder, () -> Draw.rect(regions[variant], tile.worldx(), tile.worldy()));
-        });
-        Events.run(EventType.Trigger.update, () -> {
-            if (Vars.renderer.lights.enabled() && Vars.world.tile(tile.x, tile.y).overlay() == this && tile.block() == Blocks.air) {
-                drawEnvironmentLight(tile);
-            }
-        });
     }
 
     @Override
-    public void drawEnvironmentLight(Tile tile) {
-        int variant = Mathf.randomSeed(tile.pos(), 0, Math.max(0, variantRegions.length - 1));
+    public void renderUpdate(UpdateRenderState state) {
+        new DrawRequest(state){
+            @Override
+            public void draw() {
+                Tile tile = state.tile;
+                int variant = Mathf.randomSeed(tile.pos(), 0, Math.max(0, variantRegions.length - 1));
+                if (shader instanceof FOSShaders.AnimatedFloorShader afs) {
+                    afs.setX(tile.x);
+                    afs.setY(tile.y);
+                }
+                Draw.rect(regions[variant], tile.worldx(), tile.worldy());
 
-        Drawf.light(tile.worldx(), tile.worldy(), regions[variant], lightColor, lightColor.a);
+                if (Vars.renderer.lights.enabled()) {
+                    float scl = regions[variant].scale;
+                    regions[variant].scale = 1.5f;
+                    Drawf.light(tile.worldx(), tile.worldy(), regions[variant], Color.white, 1f);
+                    regions[variant].scale = scl;
+                }
+            }
+        };
+    }
+
+    // TODO optimize
+    @Override
+    public boolean updateRender(Tile tile) {
+        return tile.block() == Blocks.air;
+    }
+
+    public abstract static class DrawRequest {
+        public static Seq<DrawRequest> requests = new Seq<>();
+        static {
+            Events.run(EventType.Trigger.postDraw, () -> requests.clear());
+            Events.run(EventType.Trigger.draw, () -> requests.each(DrawRequest::draw));
+        }
+
+        public UpdateRenderState state;
+
+        public DrawRequest(UpdateRenderState state) {
+            this.state = state;
+            requests.add(this);
+        }
+
+        public abstract void draw() ;
     }
 }
