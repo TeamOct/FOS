@@ -9,6 +9,7 @@ import arc.scene.ui.ImageButton;
 import arc.scene.ui.layout.*;
 import arc.struct.Seq;
 import arc.util.*;
+import fos.annotations.CreateSoundHost;
 import fos.content.*;
 import fos.controllers.CapsulesController;
 import fos.game.EndlessBoostHandler;
@@ -34,6 +35,7 @@ import static mindustry.game.EventType.*;
  * This mod's main class.
  * @author Slotterleet
  */
+@CreateSoundHost(paths="sounds", extensions="mp3", className="FOSLoops")
 public abstract class FOSMod extends Mod {
     public FOSMod() {
         Events.on(ClientLoadEvent.class, e -> {

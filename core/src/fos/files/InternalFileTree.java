@@ -3,6 +3,8 @@ package fos.files;
 import arc.files.Fi;
 import arc.files.ZipFi;
 
+import java.util.Objects;
+
 /**
  * Use for JAR internal navigation
  * @author nekit508
@@ -28,7 +30,8 @@ public class InternalFileTree {
     public Fi child(String childPath) {
         Fi out = root;
         for (String s : childPath.split("/")) {
-            out = out.child(s);
+            if (!"".equals(s))
+                out = out.child(s);
         }
         return out;
     }

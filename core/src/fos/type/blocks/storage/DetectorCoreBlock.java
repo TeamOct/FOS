@@ -8,7 +8,7 @@ import arc.scene.style.TextureRegionDrawable;
 import arc.scene.ui.layout.Table;
 import arc.util.Time;
 import arc.util.io.*;
-import fos.audio.FOSSounds;
+import fos.audio.FOSLoopsCore;
 import fos.type.blocks.environment.UndergroundOreBlock;
 import mindustry.Vars;
 import mindustry.game.Team;
@@ -41,7 +41,7 @@ public class DetectorCoreBlock extends CoreBlock {
         super(name);
         configurable = true;
         clipSize = radarRange * 2f;
-        loopSound = FOSSounds.radar;
+        loopSound = FOSLoopsCore.radar;
     }
 
     @Override

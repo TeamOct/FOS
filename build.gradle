@@ -114,13 +114,22 @@ subprojects.each { Project project ->
 
     project.ext {
         APArgs = ["ProjectName=${project.name}"]
+        var src = "ProjectSrc=", res = "ProjectRes="
+        project.sourceSets.main.java.srcDirs.each { var str ->
+            src += str.toString() + ";"
+        }
+        project.sourceSets.main.resources.srcDirs.each { var str ->
+            res += str.toString() + ";"
+        }
+        APArgs.add(src.substring(0, src.length()-1))
+        APArgs.add(res.substring(0, res.length()-1))
         var APAProps = new Fi(project.file("APA.properties"))
         var GAPAProps = new Fi(rootProject.file("APA.properties"))
         if (GAPAProps.exists()) {
-            APArgs += Arrays.stream(GAPAProps.readString().split(";")).toList()
+            APArgs += Arrays.stream(GAPAProps.readString().replaceAll("\n", "").replaceAll("\r", "").split(";")).toList()
         }
         if (APAProps.exists()) {
-            APArgs += Arrays.stream(APAProps.readString().split(";")).toList()
+            APArgs += Arrays.stream(APAProps.readString().replaceAll("\n", "").replaceAll("\r", "").split(";")).toList()
         }
 
         copyPaths = [
