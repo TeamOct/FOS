@@ -3,11 +3,11 @@
 
 Update 1.1 brings you a brand-new star system where you can experience brand-new blocks and mechanics such as underground ores, gameplay unique from Serpulo/Erekir, etc.
 ## Credits
-- Team founder: [@Polar4ik](https://github.com/Polar4ik) (root$Polar4ik#6727)
-- Programmers: [@Slotterleet](https://github.com/Slotterleet) (Slotterleet#7897), [@nekit508](https://github.com/nekit508) (nekit508#7932)
+- Team founder: [@Polar4ik](https://github.com/Polar4ik) (polar4ik)
+- Programmers: [@Slotterleet](https://github.com/Slotterleet) (sl0tterleet), [@nekit508](https://github.com/nekit508) (nekit508)
 - Artists: [@NotTheGrawx](https://github.com/NotTheGrawx) (MyatiyMotilyok#8455), [@Kowkodivka](https://github.com/Kowkodivka) (rachie#0949)
-- Composer: [@SaigoN0Nozomi](https://github.com/SaigoN0Nozomi) (Saigo no-nozomi#1206)
-- Translator: [@Slotterleet](https://github.com/Slotterleet) (Slotterleet#7897)
+- Composer: [@SaigoN0Nozomi](https://github.com/SaigoN0Nozomi) (saigononozomi)
+- Translator: [@Slotterleet](https://github.com/Slotterleet) (sl0tterleet)
 
 ## Special Thanks
 - [@kapzduke](https://github.com/kapzduke) - Contributor & Pre-alpha Tester
