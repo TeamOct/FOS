@@ -226,7 +226,7 @@ public abstract class FOSMod extends Mod {
             graphics.setResizable(false);
 
             Music mistake = audio.newMusic(FOSVars.internalTree.child("music/mistake.mp3"));
-            mistake.setVolume(Core.settings.getInt("musicvol") / 100f);
+            mistake.setVolume(1f);
             mistake.setLooping(true);
             mistake.play();
 
@@ -253,11 +253,13 @@ public abstract class FOSMod extends Mod {
                 );
                 ScreenQuad quad = new ScreenQuad();
 
+                int counter = 0;
                 @Override
                 public void update() {
                     texture.bind();
                     shader.bind();
                     quad.render(shader);
+                    Log.info(counter++);
                     SDL.SDL_RestoreWindow(Reflect.get(SdlApplication.class, a, "window"));
                 }
             });
