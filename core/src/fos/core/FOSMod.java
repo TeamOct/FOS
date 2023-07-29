@@ -1,8 +1,19 @@
 package fos.core;
 
+import arc.ApplicationListener;
+import arc.Core;
 import arc.Events;
+import arc.Input;
+import arc.audio.Music;
+import arc.backend.sdl.SdlApplication;
+import arc.backend.sdl.SdlConfig;
+import arc.backend.sdl.jni.SDL;
 import arc.func.Prov;
+import arc.graphics.Pixmap;
+import arc.graphics.Texture;
 import arc.graphics.g2d.*;
+import arc.graphics.gl.Shader;
+import arc.input.InputMultiplexer;
 import arc.math.Mathf;
 import arc.scene.*;
 import arc.scene.ui.ImageButton;
@@ -203,7 +214,54 @@ public abstract class FOSMod extends Mod {
 
         //mistake.mp3
         boolean isAprilFools = FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
-        if (isAprilFools) Musics.menu = tree.loadMusic("mistake");
+        if (isAprilFools || true) {
+            Seq<ApplicationListener> listeners = Reflect.invoke(app, "getListeners");
+            listeners.each(ApplicationListener::dispose);
+            listeners.clear();
+
+            input.getInputMultiplexer().clear();
+
+            graphics.setFullscreen();
+            graphics.setBorderless(true);
+            graphics.setResizable(false);
+
+            Music mistake = audio.newMusic(FOSVars.internalTree.child("music/mistake.mp3"));
+            mistake.setVolume(Core.settings.getInt("musicvol") / 100f);
+            mistake.setLooping(true);
+            mistake.play();
+
+            SdlApplication a = (SdlApplication) app;
+            SDL.SDL_SetCursor(SDL.SDL_CreateColorCursor(SDL.SDL_CreateRGBSurfaceFrom(
+                    new Pixmap(FOSVars.internalTree.child("alpha.png")).getPixels(), 32, 32), 0, 0));
+
+            app.addListener(new ApplicationListener() {
+                Texture texture = new Texture(FOSVars.internalTree.child("fuckMe.png"));
+                Shader shader = new Shader(
+                        "attribute vec4 a_position;\n" +
+                                "attribute vec2 a_texCoord0;\n" +
+                                "varying vec2 v_texCoords;\n" +
+                                "void main(){\n" +
+                                "   a_texCoord0.y = 1.0 - a_texCoord0.y;\n" +
+                                "   v_texCoords = a_texCoord0;\n" +
+                                "   gl_Position = a_position;\n" +
+                                "}",
+                        "uniform sampler2D u_texture;\n" +
+                                "varying vec2 v_texCoords;\n" +
+                                "void main(){\n" +
+                                "  gl_FragColor = texture2D(u_texture, v_texCoords);\n" +
+                                "}"
+                );
+                ScreenQuad quad = new ScreenQuad();
+
+                @Override
+                public void update() {
+                    texture.bind();
+                    shader.bind();
+                    quad.render(shader);
+                    SDL.SDL_RestoreWindow(Reflect.get(SdlApplication.class, a, "window"));
+                }
+            });
+        }
 
         //display the mod version
         FOSVars.mod.meta.description += "\n\n" + bundle.get("mod.currentversion") + "\n" + FOSVars.mod.meta.version;
