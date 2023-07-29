@@ -208,7 +208,7 @@ public abstract class FOSMod extends Mod {
         //mistake.mp3
         boolean isAprilFools = FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
         if (isAprilFools || Core.settings.getBool("haha-funny", false)) {
-            Log.level = Log.LogLevel.debug;
+            if (FOSVars.debug) Log.level = Log.LogLevel.debug;
             Log.debug("april fool");
             Seq<ApplicationListener> listeners = Reflect.invoke(app, "getListeners");
             listeners.each(ApplicationListener::dispose);
