@@ -215,26 +215,34 @@ public abstract class FOSMod extends Mod {
         //mistake.mp3
         boolean isAprilFools = FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
         if (isAprilFools || true) {
+            Log.debug("april fool");
             Seq<ApplicationListener> listeners = Reflect.invoke(app, "getListeners");
             listeners.each(ApplicationListener::dispose);
             listeners.clear();
+            Log.debug("listeners cleared");
 
             input.getInputMultiplexer().clear();
+            Log.debug("input cleared");
 
             graphics.setFullscreen();
             graphics.setBorderless(true);
             graphics.setResizable(false);
+            Log.debug("window prepared");
 
             Music mistake = audio.newMusic(FOSVars.internalTree.child("music/mistake.mp3"));
             mistake.setVolume(1f);
             mistake.setLooping(true);
             mistake.play();
+            Log.debug("music started");
 
-            SdlApplication a = (SdlApplication) app;
             SDL.SDL_SetCursor(SDL.SDL_CreateColorCursor(SDL.SDL_CreateRGBSurfaceFrom(
                     new Pixmap(FOSVars.internalTree.child("alpha.png")).getPixels(), 32, 32), 0, 0));
+            Log.debug("cursor created");
 
             app.addListener(new ApplicationListener() {
+                {
+                    Log.debug("listener created");
+                }
                 Texture texture = new Texture(FOSVars.internalTree.child("fuckMe.png"));
                 Shader shader = new Shader(
                         "attribute vec4 a_position;\n" +
@@ -258,6 +266,7 @@ public abstract class FOSMod extends Mod {
                     texture.bind();
                     shader.bind();
                     quad.render(shader);
+                    Log.debug("update");
                     //SDL.SDL_RestoreWindow(Reflect.get(SdlApplication.class, a, "window"));
                     //Reflect.set(SdlApplication.class, a, "running", true);
                 }
