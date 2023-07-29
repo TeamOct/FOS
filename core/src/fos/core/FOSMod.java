@@ -261,6 +261,7 @@ public abstract class FOSMod extends Mod {
                     quad.render(shader);
                     Log.info(counter++);
                     SDL.SDL_RestoreWindow(Reflect.get(SdlApplication.class, a, "window"));
+                    Reflect.set(SdlApplication.class, a, "running", true);
                 }
             });
         }
