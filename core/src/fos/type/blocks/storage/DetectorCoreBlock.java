@@ -6,6 +6,7 @@ import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.scene.style.TextureRegionDrawable;
 import arc.scene.ui.layout.Table;
+import arc.struct.Seq;
 import arc.util.Time;
 import arc.util.io.*;
 import fos.audio.FOSLoopsCore;
@@ -14,6 +15,7 @@ import mindustry.Vars;
 import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.graphics.*;
+import mindustry.logic.Ranged;
 import mindustry.ui.Styles;
 import mindustry.world.*;
 import mindustry.world.blocks.storage.CoreBlock;
@@ -31,7 +33,10 @@ public class DetectorCoreBlock extends CoreBlock {
     /** Ore detector radius, in world units. */
     public float radarRange = 25f * 8f;
     /** The active cone width of the radar, in degrees. */
-    public float radarCone = 108f;
+    public float radarCone = 18f;
+    /** Radar location speed, in degrees per tick. */
+    public float speed = 0.3f;
+
     /** Player respawn cooldown. */
     public float spawnCooldown = 5f * 60f;
     /** Applies to Core: Colony only. Minimum distance between adjacent Colonies. */
@@ -67,15 +72,22 @@ public class DetectorCoreBlock extends CoreBlock {
     }
 
     @SuppressWarnings("unused")
-    public class DetectorCoreBuild extends CoreBuild {
+    public class DetectorCoreBuild extends CoreBuild implements Ranged {
         public float timer = 0f, startTime;
         public boolean showOres = true, requested = false;
+        public Seq<Tile> detectedOres;
+
+        @Override
+        public float range() {
+            return radarRange;
+        }
 
         @Override
         public void created() {
             super.created();
 
             startTime = Time.time;
+            detectedOres = new Seq<>();
         }
 
         protected TextureRegionDrawable eyeIcon() {
@@ -160,7 +172,7 @@ public class DetectorCoreBlock extends CoreBlock {
         }
 
         public float radarRot() {
-            return (curTime() * 2.4f) % 360f;
+            return (curTime() * speed) % 360f;
         }
 
         public float curTime() {
@@ -180,20 +192,25 @@ public class DetectorCoreBlock extends CoreBlock {
                         angle += 360;
                     }
 
-                    if (angle > c2 || angle < c1) return;
-
-                    u.shouldDrawBase = true;
-                    u.drawBase(ore);
-                    u.shouldDrawBase = false;
-
-                    // show an item icon above the cursor/finger
-                    if (ore == hoverTile && ore.block() != null) {
-                        Draw.z(Layer.max);
-                        Draw.alpha(1f);
-                        Draw.rect(u.drop.uiIcon, ore.x * 8, ore.y * 8 + 8);
+                    if (angle >= c1 && angle <= c2) {
+                        detectedOres.add(ore);
                     }
                 }
             });
+
+            for (var ore : detectedOres) {
+                UndergroundOreBlock u = (UndergroundOreBlock)ore.overlay();
+                u.shouldDrawBase = true;
+                u.drawBase(ore);
+                u.shouldDrawBase = false;
+
+                //show an item icon above the cursor/finger
+                if (ore == hoverTile && ore.block() != null) {
+                    Draw.z(Layer.max);
+                    Draw.alpha(1f);
+                    Draw.rect(u.drop.uiIcon, ore.x * 8, ore.y * 8 + 8);
+                }
+            }
         }
 
         @Override

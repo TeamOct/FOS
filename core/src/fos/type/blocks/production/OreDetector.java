@@ -6,6 +6,7 @@ import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.scene.style.TextureRegionDrawable;
 import arc.scene.ui.layout.Table;
+import arc.struct.Seq;
 import arc.util.Time;
 import arc.util.io.*;
 import fos.audio.FOSLoopsCore;
@@ -24,7 +25,13 @@ public class OreDetector extends Block {
     /** Ore detector radius, in world units. */
     public float range = 15f * 8f;
     /** The active cone width of the radar, in degrees. */
-    public float radarCone = 108f;
+    public float radarCone = 18f;
+    /** Radar location speed, in degrees per tick. */
+    public float speed = 0.8f;
+    /** Effect color. */
+    public Color effectColor = Color.valueOf("4b95ff");
+    /** Efficiency of drills powered by this detector. */
+    public float drillEfficiencyMultiplier = 1f;
 
     public OreDetector(String name) {
         super(name);
@@ -55,10 +62,12 @@ public class OreDetector extends Block {
     public class OreDetectorBuild extends Building implements Ranged {
         public boolean showOres = true;
         public float startTime;
+        public Seq<Tile> detectedOres;
 
         @Override
         public void created() {
             startTime = Time.time;
+            detectedOres = new Seq<>();
         }
 
         @Override
@@ -74,14 +83,17 @@ public class OreDetector extends Block {
         public void buildConfiguration(Table table) {
             table.button(eyeIcon(), Styles.clearTogglei, () -> {
                 showOres = !showOres;
+                startTime = Time.time; //reset the timer to fix sound loop
                 deselect();
             }).size(40);
         }
 
+/*
         @Override
         public boolean shouldConsume() {
             return showOres;
         }
+*/
 
         @Override
         public boolean shouldActiveSound() {
@@ -89,7 +101,7 @@ public class OreDetector extends Block {
         }
 
         public float radarRot() {
-            return (curTime() * 2.4f) % 360f;
+            return (curTime() * speed) % 360f;
         }
 
         public float curTime() {
@@ -97,39 +109,48 @@ public class OreDetector extends Block {
         }
 
         @Override
+        public void updateTile() {
+            if (canConsume()) {
+                indexer.eachBlock(this, range(), other -> other.block instanceof UndergroundDrill && other.block.canOverdrive,
+                    other -> other.applyBoost(efficiency * drillEfficiencyMultiplier, 10f));
+            }
+        }
+
+        @Override
         public void draw() {
             super.draw();
-            if (canConsume() && showOres && team == player.team()) {
+            if (canConsume() && team == player.team()) {
                 Draw.z(Layer.light);
                 Draw.alpha(0.6f);
-                Lines.stroke(2.5f, Color.valueOf("4b95ff"));
+                Lines.stroke(2.5f, effectColor);
 
-                Draw.alpha(1f - (curTime() % 120f) / 120f);
-                Lines.circle(x, y, (curTime() % 120f) / 120f * range());
+                if (showOres) {
+                    Draw.alpha(1f - (curTime() % 120f) / 120f);
+                    Lines.circle(x, y, (curTime() % 120f) / 120f * range());
 
-                Draw.alpha(0.3f);
-                Fill.arc(x, y, range(), radarCone / 360f, radarRot());
+                    Draw.alpha(0.3f);
+                    Fill.arc(x, y, range(), radarCone / 360f, radarRot());
+                }
 
                 Draw.alpha(0.2f);
                 Lines.circle(x, y, range);
                 Lines.circle(x, y, range * 0.95f);
 
                 Draw.reset();
-                locateOres(range());
+                if (showOres) locateOres(range());
             }
         }
 
         @Override
         public void drawSelect(){
-            Drawf.dashCircle(x, y, range, Color.valueOf("4b95ff"));
+            Drawf.dashCircle(x, y, range, effectColor);
         }
 
         public void locateOres(float radius) {
             Tile hoverTile = world.tileWorld(Core.input.mouseWorld().x, Core.input.mouseWorld().y);
 
             tile.circle((int) (radius / tilesize), (ore) -> {
-                if (ore != null && ore.overlay() != null && ore.overlay() instanceof UndergroundOreBlock u
-                    && ore.block() == air) {
+                if (ore != null && ore.overlay() != null && ore.overlay() instanceof UndergroundOreBlock u) {
                     var angle = Mathf.angle(ore.x - tile.x, ore.y - tile.y);
                     var c1 = radarRot();
                     var c2 = radarRot() + radarCone;
@@ -137,20 +158,27 @@ public class OreDetector extends Block {
                         angle += 360;
                     }
 
-                    if (angle > c2 || angle < c1) return;
-
-                    u.shouldDrawBase = true;
-                    u.drawBase(ore);
-                    u.shouldDrawBase = false;
-
-                    // show an item icon above the cursor/finger
-                    if (ore == hoverTile && ore.block() != null) {
-                        Draw.z(Layer.max);
-                        Draw.alpha(1f);
-                        Draw.rect(u.drop.uiIcon, ore.x * 8, ore.y * 8 + 8);
+                    if (angle >= c1 && angle <= c2) {
+                        detectedOres.add(ore);
                     }
                 }
             });
+
+            for (var ore : detectedOres) {
+                if (ore.block() != air) continue;
+
+                UndergroundOreBlock u = (UndergroundOreBlock)ore.overlay();
+                u.shouldDrawBase = true;
+                u.drawBase(ore);
+                u.shouldDrawBase = false;
+
+                //show an item icon above the cursor/finger
+                if (ore == hoverTile && ore.block() != null) {
+                    Draw.z(Layer.max);
+                    Draw.alpha(1f);
+                    Draw.rect(u.drop.uiIcon, ore.x * 8, ore.y * 8 + 8);
+                }
+            }
         }
 
         @Override

@@ -5,37 +5,36 @@ import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.math.Mathf;
 import fos.type.blocks.environment.UndergroundOreBlock;
+import fos.type.blocks.storage.DetectorCoreBlock;
 import mindustry.content.Items;
 import mindustry.game.Team;
 import mindustry.gen.Building;
+import mindustry.logic.Ranged;
 import mindustry.type.Item;
 import mindustry.world.*;
+import mindustry.world.blocks.production.Drill;
 import mindustry.world.meta.*;
 
 import static mindustry.Vars.*;
 
-public class UndergroundDrill extends BoostableDrill {
+public class UndergroundDrill extends Drill {
     public UndergroundDrill(String name){
         super(name);
         drillTime = 360f;
     }
 
-    //placeable on drill bases or surface ores, or replaceable by other underground drills
+    //placeable on drill bases or replaceable by other underground drills
     @Override
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {
         if (isMultiblock()) {
             for(Tile other : tile.getLinkedTilesAs(this, tempTiles)) {
-                //if mining surface ores (only works with FOS's ones), place immediately
-                if (other.overlay().minfo.mod != null && (!(other.overlay() instanceof UndergroundOreBlock) && other.overlay().minfo.mod.name.equals("fos"))) return true;
-
                 Building block = other.build;
                 if (block != null && (block.block() instanceof DrillBase || block.block() instanceof UndergroundDrill) && block.team == team) return true;
             }
             return false;
         } else {
             Building block = tile.build;
-            return (block != null && (block.block() instanceof DrillBase || block.block() instanceof UndergroundDrill) && block.team == team) ||
-                (tile.overlay().minfo.mod != null && (!(tile.overlay() instanceof UndergroundOreBlock) && tile.overlay().minfo.mod.name.equals("fos")));
+            return (block != null && (block.block() instanceof DrillBase || block.block() instanceof UndergroundDrill) && block.team == team);
         }
     }
 
@@ -74,7 +73,7 @@ public class UndergroundDrill extends BoostableDrill {
     public void setStats() {
         super.setStats();
         stats.remove(Stat.drillTier);
-        stats.add(Stat.drillTier, StatValues.blocks(b -> (b.name.equals("fos-ore-tin-surface") || b.itemDrop == Items.titanium || b instanceof UndergroundOreBlock) &&
+        stats.add(Stat.drillTier, StatValues.blocks(b -> (b instanceof UndergroundOreBlock) &&
             getUnderDrop(b) != null && getUnderDrop(b).hardness <= tier && getUnderDrop(b) != blockedItem && (indexer.isBlockPresent(b) || state.isMenu())));
     }
 
@@ -94,7 +93,7 @@ public class UndergroundDrill extends BoostableDrill {
         itemArray.clear();
 
         for(Tile other : tile.getLinkedTilesAs(this, tempTiles)){
-            if(canMine(other) && (other.overlay() instanceof UndergroundOreBlock || (other.overlay().minfo.mod != null && other.overlay().minfo.mod.name.equals("fos")) || getDrop(other) == Items.titanium)){
+            if(canMine(other) && (other.overlay() instanceof UndergroundOreBlock)) {
                 oreCount.increment(getUnderDrop(other.overlay()), 0, 1);
             }
         }
@@ -127,17 +126,23 @@ public class UndergroundDrill extends BoostableDrill {
     }
 
     protected Item getUnderDrop(Block b) {
-        return b instanceof UndergroundOreBlock u ? u.drop : b.itemDrop;
+        return b instanceof UndergroundOreBlock u ? u.drop : null;
     }
 
     @SuppressWarnings("unused")
-    public class UndergroundDrillBuild extends BoostableDrillBuild {
+    public class UndergroundDrillBuild extends DrillBuild {
         @Override
         public void onProximityUpdate() {
             super.onProximityUpdate();
 
             dominantItem = getOutput(tile);
             if (dominantItem == Items.sand) dominantItems = (int)Mathf.sqr(size);
+        }
+
+        @Override
+        public float efficiencyScale() {
+            Ranged other = (Ranged)indexer.findTile(team, x, y, 999f, b -> b.block instanceof OreDetector || b.block instanceof DetectorCoreBlock);
+            return other != null && other.range() >= Mathf.dst(x, y, other.x(), other.y()) ? 1f : 0f;
         }
     }
 }

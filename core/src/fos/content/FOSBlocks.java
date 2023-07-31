@@ -7,8 +7,7 @@ import arc.util.*;
 import fos.graphics.*;
 import fos.type.blocks.campaign.*;
 import fos.type.blocks.defense.*;
-import fos.type.blocks.distribution.LiquidConveyor;
-import fos.type.blocks.distribution.SpaceDuct;
+import fos.type.blocks.distribution.*;
 import fos.type.blocks.environment.*;
 import fos.type.blocks.power.*;
 import fos.type.blocks.production.*;
@@ -50,7 +49,8 @@ public class FOSBlocks {
     //crafting
     resourceExtractor, cuberiumSynthesizer, sublimator, siliconSynthesizer, brassSmelter,
     //production
-    rockCrusher, drillBase, drillBaseLarge, tinDrill, silverDrill, diamondDrill, vanadiumDrill, oreDetectorSmall, oreDetector,
+    rockCrusher, drillBase, drillBaseLarge, tinDrill, silverDrill, diamondDrill, vanadiumDrill,
+    oreDetectorSmall, oreDetector, oreDetectorReinforced, oreDetectorOverclocked,
     //distribution
     spaceDuct, spaceRouter, spaceBridge, itemCatapult, tinBelt, liquidConveyor,
     //liquids
@@ -275,6 +275,23 @@ public class FOSBlocks {
             requirements(Category.production, with(tin, 50));
             consumePower(0.5f);
             researchCost = with(tin, 150);
+        }};
+        oreDetectorReinforced = new OreDetector("ore-detector-reinforced"){{
+            health = 2880;
+            armor = 3;
+            size = 3;
+            speed = 0.4f;
+            requirements(Category.production, with(tin, 125, vanadium, 60));
+            consumePower(0.5f);
+        }};
+        oreDetectorOverclocked = new OreDetector("ore-detector-overclocked"){{
+            health = 480;
+            size = 3;
+            speed = 1.4f;
+            effectColor = Color.valueOf("e37f36");
+            drillEfficiencyMultiplier = 1.5f;
+            requirements(Category.production, with(tin, 125, silicon, 60, vanadium, 30));
+            consumePower(2f);
         }};
         //endregion
         //region defense

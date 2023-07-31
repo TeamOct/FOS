@@ -5,9 +5,10 @@ import arc.util.io.*;
 import mindustry.graphics.Pal;
 import mindustry.ui.Bar;
 import mindustry.world.blocks.heat.*;
+import mindustry.world.blocks.production.Drill;
 import mindustry.world.meta.*;
 
-public class HeatProducerDrill extends BoostableDrill {
+public class HeatProducerDrill extends Drill {
     public float heatOutput = 4f;
 
     public HeatProducerDrill(String name) {
@@ -27,7 +28,7 @@ public class HeatProducerDrill extends BoostableDrill {
     }
 
     @SuppressWarnings("unused")
-    public class HeatProducerDrillBuild extends BoostableDrillBuild implements HeatBlock {
+    public class HeatProducerDrillBuild extends DrillBuild implements HeatBlock {
         public float heat;
 
         @Override
