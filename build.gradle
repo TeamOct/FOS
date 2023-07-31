@@ -1,6 +1,4 @@
 import arc.files.Fi
-import arc.struct.ObjectMap
-import arc.struct.Seq
 
 import java.util.function.Consumer
 
@@ -11,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.github.Anuken.Arc:arc-core:v144.3"
+        classpath "com.github.Anuken.Arc:arc-core:v145"
     }
 }
 
