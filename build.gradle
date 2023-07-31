@@ -108,6 +108,15 @@ ext {
 }
 
 subprojects.each { Project project ->
+    // Anuke
+    project.configurations.all {
+        resolutionStrategy.eachDependency { details ->
+            if(details.requested.group == 'com.github.Anuken.Arc'){
+                details.useVersion "$mindustryVersion"
+            }
+        }
+    }
+
     project.sourceSets.main.java.srcDirs = [
             "src", "gen"
     ]
