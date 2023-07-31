@@ -101,10 +101,29 @@ ext {
         return "${rootProject.name}-${p.name}-${p.version}.jar"
     }
 
+    // TODO fix this
+    getLastestVersion = { String dep ->
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(new URL("https://jitpack.io/com/github/$dep/").openStream()))
+        String line, latestVersion
+        println reader.readLine()
+        while ((line = reader.readLine()) != null) {
+            println line
+            if (line.matches(".?[0-9.]+[/]?")) {
+                println line
+                latestVersion = line.substring(0, line.length()-1)
+            }
+        }
+        return latestVersion
+    }
+
     mindustryDependencyType = rootProject.properties.get("mindustryDependencyType")
     mindustryVersion = rootProject.properties.get("mindustryVersion")
+    arcVersion = rootProject.properties.get("arcVersion")
     if (mindustryVersion == "-")
-        getLastestMindustryVersion()
+        mindustryVersion = getLastestVersion("Anuken/$mindustryDependencyType")
+    if (arcVersion == "-")
+        arcVersion = getLastestVersion("Anuken/Arc")
 }
 
 subprojects.each { Project project ->
@@ -112,7 +131,7 @@ subprojects.each { Project project ->
     project.configurations.all {
         resolutionStrategy.eachDependency { details ->
             if(details.requested.group == 'com.github.Anuken.Arc'){
-                details.useVersion "$mindustryVersion"
+                details.useVersion "$arcVersion"
             }
         }
     }
