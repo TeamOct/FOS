@@ -2,12 +2,9 @@ package fos.graphics;
 
 import arc.Events;
 import arc.func.Cons2;
-import arc.graphics.Color;
-import arc.graphics.Texture;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.TextureRegion;
-import arc.graphics.gl.FrameBuffer;
-import arc.graphics.gl.Shader;
+import arc.graphics.*;
+import arc.graphics.g2d.*;
+import arc.graphics.gl.*;
 import arc.struct.Seq;
 import mindustry.game.EventType;
 
@@ -19,7 +16,7 @@ public class ShaderTextureRegion extends TextureRegion {
 
     public Texture original;
 
-    /** Texture updates every {@link ShaderTextureRegion#frequency} frame **/
+    /** Texture update frequency, in frames **/
     public int frequency = 5;
     public Shader shader;
     private final Cons2<Shader, Object[]> shaderPrepare;

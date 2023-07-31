@@ -1,20 +1,13 @@
 package fos.controllers;
 
-import arc.Core;
 import arc.Events;
-import arc.graphics.Texture;
-import arc.struct.ObjectMap;
-import arc.struct.Seq;
-import arc.util.Log;
-import arc.util.Nullable;
-import arc.util.Reflect;
+import arc.struct.*;
+import arc.util.*;
 import fos.type.content.LiquidCapsule;
 import mindustry.Vars;
 import mindustry.async.AsyncProcess;
-import mindustry.ctype.ContentType;
-import mindustry.ctype.MappableContent;
+import mindustry.ctype.*;
 import mindustry.game.EventType;
-import mindustry.graphics.MultiPacker;
 import mindustry.type.Liquid;
 
 public class CapsulesController implements AsyncProcess {

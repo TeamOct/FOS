@@ -1,19 +1,13 @@
 package fos.type.blocks.distribution;
 
 import arc.math.Mathf;
-import arc.scene.ui.Button;
-import arc.scene.ui.CheckBox;
 import arc.scene.ui.layout.Table;
-import arc.util.Log;
-import arc.util.Reflect;
-import arc.util.Tmp;
+import arc.util.*;
 import fos.controllers.CapsulesController;
 import fos.core.FOSVars;
 import fos.type.content.LiquidCapsule;
-import mindustry.gen.Building;
-import mindustry.gen.Icon;
-import mindustry.type.Liquid;
-import mindustry.ui.Styles;
+import mindustry.gen.*;
+import mindustry.type.*;
 import mindustry.world.blocks.distribution.Conveyor;
 
 public class LiquidConveyor extends Conveyor {
@@ -66,9 +60,9 @@ public class LiquidConveyor extends Conveyor {
         public void updateTile() {
             if (output) {
                 // anuke's issue №2
-                for (int i = 0; i < ids.length; i++) {
-                    if (ids[i] instanceof LiquidCapsule cap && liquidCapacity - liquids.get(cap.liquid) >=
-                            CapsulesController.liquidInCapsule) {
+                for (Item i : ids) {
+                    if (i instanceof LiquidCapsule cap && liquidCapacity - liquids.get(cap.liquid) >=
+                        CapsulesController.liquidInCapsule) {
                         removeStack(cap, 1);
                         liquids.add(cap.liquid, CapsulesController.liquidInCapsule);
                     }

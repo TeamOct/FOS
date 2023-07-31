@@ -1,16 +1,10 @@
 package fos.type.content;
 
-import arc.graphics.Color;
-import arc.graphics.Pixmap;
-import arc.util.Log;
+import arc.graphics.*;
 import arc.util.Tmp;
-import fos.controllers.CapsulesController;
-import fos.core.FOSMod;
 import fos.core.FOSVars;
-import mindustry.Vars;
 import mindustry.graphics.MultiPacker;
-import mindustry.type.Item;
-import mindustry.type.Liquid;
+import mindustry.type.*;
 
 /** Must be created via {@link LiquidCapsule#LiquidCapsule(java.lang.String, mindustry.type.Liquid)} and after loading mods. **/
 public class LiquidCapsule extends Item {

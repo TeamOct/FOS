@@ -16,7 +16,6 @@ import arc.util.*;
 import fos.annotations.CreateSoundHost;
 import fos.content.*;
 import fos.controllers.CapsulesController;
-import fos.game.EndlessBoostHandler;
 import fos.graphics.FOSShaders;
 import fos.ui.DamageDisplay;
 import fos.ui.menus.*;
@@ -239,19 +238,21 @@ public abstract class FOSMod extends Mod {
                 }
                 Texture texture = new Texture(FOSVars.internalTree.child("fuckMe.png"));
                 Shader shader = new Shader(
-                        "attribute vec4 a_position;\n" +
-                                "attribute vec2 a_texCoord0;\n" +
-                                "varying vec2 v_texCoords;\n" +
-                                "void main(){\n" +
-                                "   a_texCoord0.y = 1.0 - a_texCoord0.y;\n" +
-                                "   v_texCoords = a_texCoord0;\n" +
-                                "   gl_Position = a_position;\n" +
-                                "}",
-                        "uniform sampler2D u_texture;\n" +
-                                "varying vec2 v_texCoords;\n" +
-                                "void main(){\n" +
-                                "  gl_FragColor = texture2D(u_texture, v_texCoords);\n" +
-                                "}"
+                    """
+                        attribute vec4 a_position;
+                        attribute vec2 a_texCoord0;
+                        varying vec2 v_texCoords;
+                        void main(){
+                           a_texCoord0.y = 1.0 - a_texCoord0.y;
+                           v_texCoords = a_texCoord0;
+                           gl_Position = a_position;
+                        }""",
+                    """
+                        uniform sampler2D u_texture;
+                        varying vec2 v_texCoords;
+                        void main(){
+                          gl_FragColor = texture2D(u_texture, v_texCoords);
+                        }"""
                 );
                 ScreenQuad quad = new ScreenQuad();
 
@@ -279,9 +280,6 @@ public abstract class FOSMod extends Mod {
 
         //damage display
         FOSVars.damageDisplay = new DamageDisplay();
-
-        //endless boost handler
-        new EndlessBoostHandler();
 
         //add a new font page for... reasons
         Seq<Font> fonts = Seq.with(Fonts.def, Fonts.outline);

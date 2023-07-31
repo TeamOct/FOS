@@ -1,9 +1,6 @@
 package fos.files;
 
-import arc.files.Fi;
-import arc.files.ZipFi;
-
-import java.util.Objects;
+import arc.files.*;
 
 /**
  * Use for JAR internal navigation
