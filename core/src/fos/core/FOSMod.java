@@ -43,79 +43,13 @@ import static mindustry.game.EventType.*;
 
 /**
  * This mod's main class.
- * @author Slotterleet
+ * @author Дядь, какой автор?.. это ж ядро мода - здесь каждый наследил.
  */
-@CreateSoundHost(paths="sounds", extensions="mp3", className="FOSLoops")
+@CreateSoundHost(paths="sounds/loops", extensions="mp3", className="FOSLoops", depth=-1)
 public abstract class FOSMod extends Mod {
     public FOSMod() {
         Events.on(ClientLoadEvent.class, e -> {
-            //load this mod's settings
-            constructSettings();
-
-            //add unit types to their descriptions
-            content.units().each(u ->
-                u.description += ("\n" + bundle.get("unittype") + (
-                    u.constructor.get() instanceof MechUnit ? bundle.get("unittype.infantry") :
-                    u.constructor.get() instanceof UnitEntity ? bundle.get("unittype.flying") :
-                    u.constructor.get() instanceof LegsUnit ? bundle.get("unittype.spider") :
-                    u.constructor.get() instanceof UnitWaterMove ? bundle.get("unittype.ship") :
-                    u.constructor.get() instanceof PayloadUnit ? bundle.get("unittype.payload") :
-                    u.constructor.get() instanceof TimedKillUnit ? bundle.get("unittype.timedkill") :
-                    u.constructor.get() instanceof TankUnit ? bundle.get("unittype.tank") :
-                    u.constructor.get() instanceof ElevationMoveUnit ? bundle.get("unittype.hover") :
-                    u.constructor.get() instanceof BuildingTetherPayloadUnit ? bundle.get("unittype.tether") :
-                    u.constructor.get() instanceof CrawlUnit ? bundle.get("unittype.crawl") :
-                    ""
-                    )
-                + (u.weapons.contains(w -> w.bullet.heals()) ? bundle.get("unittype.support") : ""))
-            );
-
-            //disclaimer for non-debug
-            if (FOSVars.earlyAccess && !FOSVars.debug)
-                ui.showOkText("@fos.earlyaccesstitle", bundle.get("fos.earlyaccess"), () -> {});
-
-            //unlock every planet if debug
-            if (FOSVars.debug)
-                PlanetDialog.debugSelect = true;
-
-            //check for "Fictional Octo System OST" mod. if it doesn't exist, prompt to download from GitHub
-            LoadedMod ost = mods.getMod("fosost");
-            if (ost == null) {
-                if (!settings.getBool("fos-ostdontshowagain")) {
-                    ui.showCustomConfirm("@fos.noosttitle", bundle.get("fos.noost"),
-                        "@mods.browser.add", "@no",
-                        () -> ui.mods.githubImportMod("TeamOct/FOS-OST", true), () -> {});
-                }
-            } else if (!ost.enabled()) {
-                ui.showCustomConfirm("@fos.ostdisabledtitle", bundle.get("fos.ostdisabled"),
-                    "@yes", "@no",
-                    () -> {
-                        mods.setEnabled(ost, true);
-                        ui.showInfoOnHidden("@mods.reloadexit", () -> app.exit());
-                    }, () -> {});
-            }
-
-            Element menu = ((Element) Reflect.get(ui.menufrag, "container")).parent.parent;
-            Group menuCont = menu.parent;
-            menuCont.addChildBefore(menu, new Element(){
-                @Override
-                public void draw() {
-                    FOSVars.menuRenderer.render();
-                }
-            });
-
-            int tn = settings.getInt("fos-menutheme");
-            MenuBackground bg = (
-                tn == 2 ? uxerdSpace :
-                tn == 3 ? lumoniSpace :
-                tn == 4 ? random :
-                tn == 5 ? solarSystem :
-                tn == 6 ? caldemoltSystem :
-                tn == 7 ? lumoniTerrain :
-                null);
-            if (bg != null) {
-                FOSVars.menuRenderer.changeBackground(bg);
-            }
+            clientLoaded();
         });
 
         Events.run(Trigger.update, () -> {
@@ -211,9 +145,9 @@ public abstract class FOSMod extends Mod {
 
         SplashTexts.init();
 
-        //mistake.mp3
         boolean isAprilFools = FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
-        Musics.menu = audio.newMusic(FOSVars.internalTree.child("music/mistake.mp3"));;
+        Musics.menu = audio.newMusic(FOSVars.internalTree.child("music/mistake.mp3"));
+
         if (isAprilFools && app.isDesktop()) {
             Log.level = Log.LogLevel.debug;
             Log.debug("april fool");
@@ -300,6 +234,74 @@ public abstract class FOSMod extends Mod {
         FOSTeam.load();
     }
 
+    public void clientLoaded() {
+        //load this mod's settings
+        constructSettings();
+
+        //add unit types to their descriptions
+        content.units().each(u ->
+                u.description += ("\n" + bundle.get("unittype") + (
+                u.constructor.get() instanceof MechUnit ? bundle.get("unittype.infantry") :
+                u.constructor.get() instanceof UnitEntity ? bundle.get("unittype.flying") :
+                u.constructor.get() instanceof LegsUnit ? bundle.get("unittype.spider") :
+                u.constructor.get() instanceof UnitWaterMove ? bundle.get("unittype.ship") :
+                u.constructor.get() instanceof PayloadUnit ? bundle.get("unittype.payload") :
+                u.constructor.get() instanceof TimedKillUnit ? bundle.get("unittype.timedkill") :
+                u.constructor.get() instanceof TankUnit ? bundle.get("unittype.tank") :
+                u.constructor.get() instanceof ElevationMoveUnit ? bundle.get("unittype.hover") :
+                u.constructor.get() instanceof BuildingTetherPayloadUnit ? bundle.get("unittype.tether") :
+                u.constructor.get() instanceof CrawlUnit ? bundle.get("unittype.crawl") :
+                "")
+                + (u.weapons.contains(w -> w.bullet.heals()) ? bundle.get("unittype.support") : ""))
+        );
+
+        //disclaimer for non-debug
+        if (FOSVars.earlyAccess && !FOSVars.debug)
+            ui.showOkText("@fos.earlyaccesstitle", bundle.get("fos.earlyaccess"), () -> {});
+
+        //unlock every planet if debug
+        if (FOSVars.debug)
+            PlanetDialog.debugSelect = true;
+
+        //check for "Fictional Octo System OST" mod. if it doesn't exist, prompt to download from GitHub
+        LoadedMod ost = mods.getMod("fosost");
+        if (ost == null) {
+            if (!settings.getBool("fos-ostdontshowagain")) {
+                ui.showCustomConfirm("@fos.noosttitle", bundle.get("fos.noost"),
+                        "@mods.browser.add", "@no",
+                        () -> ui.mods.githubImportMod("TeamOct/FOS-OST", true), () -> {});
+            }
+        } else if (!ost.enabled()) {
+            ui.showCustomConfirm("@fos.ostdisabledtitle", bundle.get("fos.ostdisabled"),
+                    "@yes", "@no",
+                    () -> {
+                        mods.setEnabled(ost, true);
+                        ui.showInfoOnHidden("@mods.reloadexit", () -> app.exit());
+                    }, () -> {});
+        }
+
+        Element menu = ((Element) Reflect.get(ui.menufrag, "container")).parent.parent;
+        Group menuCont = menu.parent;
+        menuCont.addChildBefore(menu, new Element(){
+            @Override
+            public void draw() {
+                FOSVars.menuRenderer.render();
+            }
+        });
+
+        int tn = settings.getInt("fos-menutheme");
+        MenuBackground bg = (
+                tn == 2 ? uxerdSpace :
+                tn == 3 ? lumoniSpace :
+                tn == 4 ? random :
+                tn == 5 ? solarSystem :
+                tn == 6 ? caldemoltSystem :
+                tn == 7 ? lumoniTerrain : null);
+        if (bg != null) {
+            FOSVars.menuRenderer.changeBackground(bg);
+        }
+    }
+
     private void constructSettings() {
         ui.settings.addCategory("@setting.fos-title", "fos-settings-icon", t -> {
             t.sliderPref("fos-menutheme", 2, 1, 7, s ->
@@ -335,7 +337,6 @@ public abstract class FOSMod extends Mod {
     }
 
     private void addEditorTeams() {
-        //thanks java.
         WidgetGroup teambuttons = (WidgetGroup)ui.editor.getChildren().get(0);
         teambuttons = (WidgetGroup)teambuttons.getChildren().get(0);
         teambuttons = (WidgetGroup)teambuttons.getChildren().get(0);

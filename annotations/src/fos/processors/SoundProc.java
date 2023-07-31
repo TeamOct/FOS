@@ -27,6 +27,7 @@ public class SoundProc extends AbstractProcessor {
     private Types types;
     private Elements elements;
 
+    Seq<Fi> temp = new Seq<>();
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         types = processingEnv.getTypeUtils();
@@ -44,6 +45,7 @@ public class SoundProc extends AbstractProcessor {
             String[] extensions = annotation.extensions();
             String[] paths = annotation.paths();
             String typeName = annotation.className() + name;
+            int depth = annotation.depth();
 
             Seq<String> fields = new Seq<>();
             Seq<String> fieldsPaths = new Seq<>();
@@ -51,7 +53,8 @@ public class SoundProc extends AbstractProcessor {
             for (int i = 0; i < resources.length; i++) {
                 for (int j = 0; j < paths.length; j++) {
                     int finalI = i;
-                    new Fi(resources[i] + "/" + paths[j]).findAll(file ->
+                    temp.clear();
+                    scanFiles(depth, new Fi(resources[i] + "/" + paths[j]), temp).filter(file ->
                             Structs.contains(extensions, file.extension())).each(file -> {
                         String fieldName = file.nameWithoutExtension();
                         while (fields.contains(fieldName)) {
@@ -70,7 +73,6 @@ public class SoundProc extends AbstractProcessor {
                         .initializer(CodeBlock.builder().add("arc.Core.audio.newSound($1L.child(\"$2L\"))",
                                 fileTree, fieldsPaths.get(i)).build()).build());
             }
-
             try {
                 JavaFile.builder(packagee + ".audio", type.build()).indent("    ").build().writeTo(processingEnv.getFiler());
             } catch (IOException e) {
@@ -78,5 +80,18 @@ public class SoundProc extends AbstractProcessor {
             }
         });
         return false;
+    }
+
+    Seq<Fi> scanFiles(int depth, Fi file, Seq<Fi> out) {
+        return scanFiles(depth, file, out, 0);
+    }
+
+    Seq<Fi> scanFiles(int depth, Fi file, Seq<Fi> out, int counter) {
+        for (Fi fi : file.list()) {
+            out.add(fi);
+            if (counter >= 0 && counter < depth)
+                scanFiles(depth, fi, out, counter+1);
+        }
+        return out;
     }
 }

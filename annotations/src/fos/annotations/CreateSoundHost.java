@@ -6,4 +6,6 @@ public @interface CreateSoundHost {
     /** Supported files extensions without the dot. **/
     String[] extensions();
     String className();
+    /** Max search depth. -1 for disable. **/
+    int depth();
 }
