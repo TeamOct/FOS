@@ -133,8 +133,8 @@ public class OreDetector extends Block {
                 }
 
                 Draw.alpha(0.2f);
-                Lines.circle(x, y, range);
-                Lines.circle(x, y, range * 0.95f);
+                Lines.circle(x, y, range());
+                Lines.circle(x, y, range() * 0.95f);
 
                 Draw.reset();
                 if (showOres) locateOres(range());

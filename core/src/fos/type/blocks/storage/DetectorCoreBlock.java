@@ -36,6 +36,8 @@ public class DetectorCoreBlock extends CoreBlock {
     public float radarCone = 18f;
     /** Radar location speed, in degrees per tick. */
     public float speed = 0.3f;
+    /** Effect color. */
+    public Color effectColor = Color.valueOf("4b95ff");
 
     /** Player respawn cooldown. */
     public float spawnCooldown = 5f * 60f;
@@ -131,23 +133,25 @@ public class DetectorCoreBlock extends CoreBlock {
         @Override
         public void draw() {
             super.draw();
-            if (canConsume() && showOres && team == player.team()) {
+            if (canConsume() && team == player.team()) {
                 Draw.z(Layer.light);
                 Draw.alpha(0.6f);
-                Lines.stroke(2.5f, Color.valueOf("4b95ff"));
+                Lines.stroke(2.5f, effectColor);
 
-                Draw.alpha(1f - (curTime() % 120f) / 120f);
-                Lines.circle(x, y, (curTime() % 120f) / 120f * radarRange);
+                if (showOres) {
+                    Draw.alpha(1f - (curTime() % 120f) / 120f);
+                    Lines.circle(x, y, (curTime() % 120f) / 120f * range());
 
-                Draw.alpha(0.3f);
-                Fill.arc(x, y, radarRange, radarCone / 360f, radarRot());
+                    Draw.alpha(0.3f);
+                    Fill.arc(x, y, range(), radarCone / 360f, radarRot());
+                }
 
                 Draw.alpha(0.2f);
-                Lines.circle(x, y, radarRange);
-                Lines.circle(x, y, radarRange * 0.95f);
+                Lines.circle(x, y, range());
+                Lines.circle(x, y, range() * 0.95f);
 
                 Draw.reset();
-                locateOres(radarRange);
+                if (showOres) locateOres(range());
             }
 
             if (timer > 0) {
@@ -183,8 +187,7 @@ public class DetectorCoreBlock extends CoreBlock {
             Tile hoverTile = world.tileWorld(Core.input.mouseWorld().x, Core.input.mouseWorld().y);
 
             tile.circle((int) (radius / tilesize), (ore) -> {
-                if (ore != null && ore.overlay() != null && ore.overlay() instanceof UndergroundOreBlock u
-                    && ore.block() == air) {
+                if (ore != null && ore.overlay() != null && ore.overlay() instanceof UndergroundOreBlock u) {
                     var angle = Mathf.angle(ore.x - tile.x, ore.y - tile.y);
                     var c1 = radarRot();
                     var c2 = radarRot() + radarCone;
@@ -199,6 +202,8 @@ public class DetectorCoreBlock extends CoreBlock {
             });
 
             for (var ore : detectedOres) {
+                if (ore.block() != air) continue;
+
                 UndergroundOreBlock u = (UndergroundOreBlock)ore.overlay();
                 u.shouldDrawBase = true;
                 u.drawBase(ore);

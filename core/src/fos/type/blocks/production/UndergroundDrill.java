@@ -9,6 +9,7 @@ import fos.type.blocks.storage.DetectorCoreBlock;
 import mindustry.content.Items;
 import mindustry.game.Team;
 import mindustry.gen.Building;
+import mindustry.graphics.Drawf;
 import mindustry.logic.Ranged;
 import mindustry.type.Item;
 import mindustry.world.*;
@@ -40,14 +41,20 @@ public class UndergroundDrill extends Drill {
 
     @Override
     public void drawPlace(int x, int y, int rotation, boolean valid) {
-        super.drawPlace(x, y, rotation, valid);
+        //super.drawPlace(x, y, rotation, valid);
 
         Tile tile = world.tile(x, y);
-        if(tile == null) return;
+        var detector = nearestDetector(player.team(), x*8, y*8);
+        if (tile == null) return;
+
+        if (detector == null) {
+            drawPlaceText(Core.bundle.get("bar.detectorreq"), x, y, valid);
+            return;
+        }
 
         countOre(tile);
 
-        if(returnItem != null){
+        if (returnItem != null) {
             float width = drawPlaceText(Core.bundle.formatFloat("bar.drillspeed", 60f / getDrillTime(returnItem) * returnCount, 2), x, y, valid);
             float dx = x * tilesize + offset - width/2f - 4f, dy = y * tilesize + offset + size * tilesize / 2f + 5, s = iconSmall / 4f;
             Draw.mixcol(Color.darkGray, 1f);
@@ -55,15 +62,15 @@ public class UndergroundDrill extends Drill {
             Draw.reset();
             Draw.rect(returnItem.fullIcon, dx, dy, s, s);
 
-            if(drawMineItem){
+            if(drawMineItem) {
                 Draw.color(returnItem.color);
                 Draw.rect(itemRegion, tile.worldx() + offset, tile.worldy() + offset);
                 Draw.color();
             }
-        }else{
+        } else {
             Tile to = tile.getLinkedTilesAs(this, tempTiles).find(t -> getUnderDrop(t.overlay()) != null && (getUnderDrop(t.overlay()).hardness > tier || getUnderDrop(t.overlay()) == blockedItem));
             Item item = to == null ? null : to.drop();
-            if(item != null){
+            if(item != null) {
                 drawPlaceText(Core.bundle.get("bar.drilltierreq"), x, y, valid);
             }
         }
@@ -129,6 +136,11 @@ public class UndergroundDrill extends Drill {
         return b instanceof UndergroundOreBlock u ? u.drop : null;
     }
 
+    protected Ranged nearestDetector(Team team, float wx, float wy) {
+        return (Ranged)indexer.findTile(team, wx, wy, 999f, b -> (b.block instanceof OreDetector || b.block instanceof DetectorCoreBlock)
+            && Mathf.within(wx, wy, b.x, b.y, ((Ranged)b).range()));
+    }
+
     @SuppressWarnings("unused")
     public class UndergroundDrillBuild extends DrillBuild {
         @Override
@@ -141,8 +153,18 @@ public class UndergroundDrill extends Drill {
 
         @Override
         public float efficiencyScale() {
-            Ranged other = (Ranged)indexer.findTile(team, x, y, 999f, b -> b.block instanceof OreDetector || b.block instanceof DetectorCoreBlock);
+            Ranged other = nearestDetector(team, x, y);
             return other != null && other.range() >= Mathf.dst(x, y, other.x(), other.y()) ? 1f : 0f;
+        }
+
+        @Override
+        public void drawSelect() {
+            super.drawSelect();
+
+            var d = nearestDetector(team, x, y);
+            if (d != null) {
+                Drawf.dashLine(team.color, x, y, d.x(), d.y());
+            }
         }
     }
 }

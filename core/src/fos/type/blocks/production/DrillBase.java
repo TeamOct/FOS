@@ -1,12 +1,13 @@
 package fos.type.blocks.production;
 
+import arc.Core;
 import arc.math.Mathf;
 import fos.type.blocks.storage.DetectorCoreBlock;
-import mindustry.entities.*;
+import mindustry.entities.TargetPriority;
 import mindustry.game.Team;
-import mindustry.gen.Building;
+import mindustry.logic.Ranged;
 import mindustry.world.*;
-import mindustry.world.meta.*;
+import mindustry.world.meta.BlockGroup;
 
 import static mindustry.Vars.*;
 
@@ -22,12 +23,22 @@ public class DrillBase extends Block {
 
     @Override
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {
-        Building build = indexer.findTile(player.team(), tile.worldx(), tile.worldy(), 999f, b ->
-            b instanceof OreDetector.OreDetectorBuild || b instanceof DetectorCoreBlock.DetectorCoreBuild);
-        if (build instanceof OreDetector.OreDetectorBuild) {
-            return Mathf.within(tile.worldx(), tile.worldy(), build.x, build.y, ((OreDetector.OreDetectorBuild) build).range());
-        } else {
-            return build != null && Mathf.within(tile.worldx(), tile.worldy(), build.x, build.y, build.block().name.equals("fos-core-colony") ? 0 : 25f * 8f);
+        return nearestDetector(team, tile.worldx(), tile.worldy()) != null;
+    }
+
+    @Override
+    public void drawPlace(int x, int y, int rotation, boolean valid) {
+        Tile tile = world.tile(x, y);
+        var detector = nearestDetector(player.team(), x*8, y*8);
+        if (tile == null) return;
+
+        if (detector == null) {
+            drawPlaceText(Core.bundle.get("bar.detectorreq"), x, y, valid);
         }
+    }
+
+    protected Ranged nearestDetector(Team team, float wx, float wy) {
+        return (Ranged)indexer.findTile(team, wx, wy, 999f, b -> (b.block instanceof OreDetector || b.block instanceof DetectorCoreBlock)
+            && Mathf.within(wx, wy, b.x, b.y, ((Ranged)b).range()));
     }
 }
