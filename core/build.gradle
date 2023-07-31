@@ -1,9 +1,9 @@
 dependencies {
-    compileOnly "com.github.Anuken.Arc:arc-core:$mindustryVersion"
-    compileOnly "com.github.Anuken.MindustryJitpack:core:$mindustryVersion"
+    compileOnly "com.github.Anuken.Arc:arc-core:$rootProject.mindustryVersion"
+    compileOnly "com.github.Anuken.$rootProject.mindustryDependencyType:core:$rootProject.mindustryVersion"
 
-    compileOnly "com.github.Anuken.Arc:backend-sdl:$mindustryVersion"
-    compileOnly "com.github.Anuken.Arc:natives-desktop:$mindustryVersion"
+    compileOnly "com.github.Anuken.Arc:backend-sdl:$rootProject.mindustryVersion"
+    compileOnly "com.github.Anuken.Arc:natives-desktop:$rootProject.mindustryVersion"
 
     implementation "com.github.liplum:MultiCrafterLib:v1.7"
 
