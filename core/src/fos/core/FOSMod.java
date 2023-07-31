@@ -1,12 +1,19 @@
 package fos.core;
 
-import arc.*;
+import arc.ApplicationListener;
+import arc.Core;
+import arc.Events;
+import arc.Input;
 import arc.audio.Music;
+import arc.backend.sdl.SdlApplication;
+import arc.backend.sdl.SdlConfig;
 import arc.backend.sdl.jni.SDL;
 import arc.func.Prov;
-import arc.graphics.*;
+import arc.graphics.Pixmap;
+import arc.graphics.Texture;
 import arc.graphics.g2d.*;
 import arc.graphics.gl.Shader;
+import arc.input.InputMultiplexer;
 import arc.math.Mathf;
 import arc.scene.*;
 import arc.scene.ui.ImageButton;
@@ -206,11 +213,12 @@ public abstract class FOSMod extends Mod {
 
         //mistake.mp3
         boolean isAprilFools = FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
-        if (isAprilFools || Core.settings.getBool("haha-funny", false)) {
-            if (FOSVars.debug) Log.level = Log.LogLevel.debug;
+        Musics.menu = audio.newMusic(FOSVars.internalTree.child("music/mistake.mp3"));;
+        if (isAprilFools && app.isDesktop()) {
+            Log.level = Log.LogLevel.debug;
             Log.debug("april fool");
             Seq<ApplicationListener> listeners = Reflect.invoke(app, "getListeners");
-            listeners.each(ApplicationListener::dispose);
+            //listeners.each(ApplicationListener::dispose);
             listeners.clear();
             Log.debug("listeners cleared");
 
