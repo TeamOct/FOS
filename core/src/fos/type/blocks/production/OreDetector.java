@@ -43,6 +43,8 @@ public class OreDetector extends Block {
         fogRadius = (int)range / 8;
         clipSize = range * 2f;
         loopSound = FOSLoopsCore.radar;
+
+        config(Boolean.class, (r, b) -> ((OreDetectorBuild) r).showOres = b);
     }
 
     @Override
@@ -62,12 +64,11 @@ public class OreDetector extends Block {
     public class OreDetectorBuild extends Building implements Ranged {
         public boolean showOres = true;
         public float startTime;
-        public Seq<Tile> detectedOres;
+        public Seq<Tile> detectedOres = new Seq<>();
 
         @Override
         public void created() {
             startTime = Time.time;
-            detectedOres = new Seq<>();
         }
 
         @Override
@@ -84,16 +85,10 @@ public class OreDetector extends Block {
             table.button(eyeIcon(), Styles.clearTogglei, () -> {
                 showOres = !showOres;
                 startTime = Time.time; //reset the timer to fix sound loop
+                configure(!showOres);
                 deselect();
             }).size(40);
         }
-
-/*
-        @Override
-        public boolean shouldConsume() {
-            return showOres;
-        }
-*/
 
         @Override
         public boolean shouldActiveSound() {
