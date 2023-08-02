@@ -43,7 +43,6 @@ public class FOSVars {
     /** A flowfield used in certain custom AIs. */
     public static Pathfinder.Flowfield fpos = new Pathfinder.PositionTarget(new Vec2());
 
-    // TODO disable in release version
     /** Enabling debug mode debug **/
     public static final boolean debug = Core.settings.getBool("fos-debugmode");
     // TODO disable in release version
@@ -52,6 +51,8 @@ public class FOSVars {
 
     /** Current date & time. */
     public static Calendar date = new GregorianCalendar();
+
+    public static boolean isAprilFools = FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;;
 
     /** JAR internal navigation **/
     public static InternalFileTree internalTree = new InternalFileTree(FOSMod.class);

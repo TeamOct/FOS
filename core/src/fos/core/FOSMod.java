@@ -1,12 +1,8 @@
 package fos.core;
 
 import arc.*;
-import arc.audio.Music;
-import arc.backend.sdl.jni.SDL;
 import arc.func.Prov;
-import arc.graphics.*;
 import arc.graphics.g2d.*;
-import arc.graphics.gl.Shader;
 import arc.math.Mathf;
 import arc.scene.*;
 import arc.scene.ui.ImageButton;
@@ -19,20 +15,15 @@ import fos.controllers.CapsulesController;
 import fos.graphics.FOSShaders;
 import fos.ui.DamageDisplay;
 import fos.ui.menus.*;
+import mindustry.Vars;
 import mindustry.ai.Pathfinder;
+import mindustry.game.EventType;
 import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.mod.Mod;
 import mindustry.mod.Mods.LoadedMod;
 import mindustry.ui.*;
 import mindustry.ui.dialogs.PlanetDialog;
-
-import java.util.Calendar;
-
-import static arc.Core.*;
-import static fos.ui.menus.FOSMenus.*;
-import static mindustry.Vars.*;
-import static mindustry.game.EventType.*;
 
 /**
  * This mod's main class.
@@ -41,11 +32,14 @@ import static mindustry.game.EventType.*;
 @CreateSoundHost(paths="sounds/loops", extensions="mp3", className="FOSLoops", depth=-1)
 public abstract class FOSMod extends Mod {
     public FOSMod() {
-        Events.on(ClientLoadEvent.class, e -> {
+        if (FOSVars.debug)
+            Log.level = Log.LogLevel.debug;
+
+        Events.on(EventType.ClientLoadEvent.class, e -> {
             clientLoaded();
         });
 
-        Events.run(Trigger.update, () -> {
+        Events.run(EventType.Trigger.update, () -> {
             /* not sure if it will ever be useful now?
             if (!mobile) {
                 boolean useDiscord = !OS.hasProp("nodiscord");
@@ -70,10 +64,10 @@ public abstract class FOSMod extends Mod {
 
             //realistic mode - no sound FX in places with no atmosphere, such as asteroids
             // FIXME запхнуть в таймер и менять звук только при изменении настроек и загрузке
-            if (settings.getBool("fos-realisticmode") && state.rules.sector != null && !state.rules.sector.planet.hasAtmosphere) {
-                audio.soundBus.setVolume(0f);
+            if (Core.settings.getBool("fos-realisticmode") && Vars.state.rules.sector != null && !Vars.state.rules.sector.planet.hasAtmosphere) {
+                Core.audio.soundBus.setVolume(0f);
             } else {
-                audio.soundBus.setVolume(settings.getInt("sfxvol") / 100f);
+                Core.audio.soundBus.setVolume(Core.settings.getInt("sfxvol") / 100f);
             }
         });
     }
@@ -110,7 +104,7 @@ public abstract class FOSMod extends Mod {
     public void init() {
         //initialize mod variables
         FOSVars.load();
-        FOSVars.mod = mods.getMod(getClass());
+        FOSVars.mod = Vars.mods.getMod(getClass());
 
         //TODO: is it necessary now?
         //renderer.planets.cam.far = Mathf.pow(2, 20);
@@ -118,100 +112,38 @@ public abstract class FOSMod extends Mod {
 
         //this flowfield is required for modded AIs
         Pathfinder.Flowfield pt = FOSVars.fpos;
-        Reflect.<Seq<Prov<Pathfinder.Flowfield>>>get(pathfinder, "fieldTypes").add(() -> pt);
-        Events.on(WorldLoadEvent.class, e -> {
-            if (!net.client()) {
-                Reflect.invoke(pathfinder, "preloadPath", new Object[]{pt}, Pathfinder.Flowfield.class);
+        Reflect.<Seq<Prov<Pathfinder.Flowfield>>>get(Vars.pathfinder, "fieldTypes").add(() -> pt);
+        Events.on(EventType.WorldLoadEvent.class, e -> {
+            if (!Vars.net.client()) {
+                Reflect.invoke(Vars.pathfinder, "preloadPath", new Object[]{pt}, Pathfinder.Flowfield.class);
             }
         });
 
         //anything after this should not be initialized on dedicated servers.
-        if (headless) return;
+        if (Vars.headless) return;
 
         //an anti-cheat system from long ago, is it really necessary now?
-        LoadedMod xf = mods.list().find(m ->
+        LoadedMod xf = Vars.mods.list().find(m ->
                 /* some mods don't even have the author field, apparently. how stupid. */ m.meta.author != null &&
                 (m.meta.author.equals("XenoTale") || m.meta.author.equals("goldie")));
         if (xf != null) {
-            ui.showOkText("@fos.errortitle", bundle.format("fos.errortext", xf.meta.displayName), () -> app.exit());
+            Vars.ui.showOkText("@fos.errortitle", Core.bundle.format("fos.errortext", xf.meta.displayName), () -> Core.app.exit());
         }
 
         SplashTexts.init();
 
-        boolean isAprilFools = FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
-        //Musics.menu = audio.newMusic(FOSVars.internalTree.child("music/mistake.mp3"));
-
-        if ((isAprilFools || FOSVars.debug && settings.getBool("haha-funny", false)) && app.isDesktop() /*&& false*/ /* uncomment a snippet to the left to disable manually */) {
-            if (FOSVars.debug) Log.level = Log.LogLevel.debug;
-            Log.debug("april fool");
-            Seq<ApplicationListener> listeners = Reflect.invoke(app, "getListeners");
-            //listeners.each(ApplicationListener::dispose);
-            listeners.clear();
-            Log.debug("listeners cleared");
-
-            input.getInputMultiplexer().clear();
-            Log.debug("input cleared");
-
-            graphics.setFullscreen();
-            graphics.setBorderless(true);
-            graphics.setResizable(false);
-            Log.debug("window prepared");
-
-            Music mistake = audio.newMusic(FOSVars.internalTree.child("music/mistake.mp3"));
-            mistake.setVolume(1f);
-            mistake.setLooping(true);
-            mistake.play();
-            Log.debug("music started");
-
-            SDL.SDL_SetCursor(SDL.SDL_CreateColorCursor(SDL.SDL_CreateRGBSurfaceFrom(
-                    new Pixmap(FOSVars.internalTree.child("alpha.png")).getPixels(), 32, 32), 0, 0));
-            Log.debug("cursor created");
-
-            app.addListener(new ApplicationListener() {
-                {
-                    Log.debug("listener created");
-                }
-                Texture texture = new Texture(FOSVars.internalTree.child("pain.png"));
-                Shader shader = new Shader(
-                    """
-                        attribute vec4 a_position;
-                        attribute vec2 a_texCoord0;
-                        varying vec2 v_texCoords;
-                        void main(){
-                           a_texCoord0.y = 1.0 - a_texCoord0.y;
-                           v_texCoords = a_texCoord0;
-                           gl_Position = a_position;
-                        }""",
-                    """
-                        uniform sampler2D u_texture;
-                        varying vec2 v_texCoords;
-                        void main(){
-                          gl_FragColor = texture2D(u_texture, v_texCoords);
-                        }"""
-                );
-                ScreenQuad quad = new ScreenQuad();
-
-                @Override
-                public void update() {
-                    texture.bind();
-                    shader.bind();
-                    quad.render(shader);
-                    Log.debug("update");
-                    //SDL.SDL_RestoreWindow(Reflect.get(SdlApplication.class, a, "window"));
-                    //Reflect.set(SdlApplication.class, a, "running", true);
-                }
-            });
-        }
+        if (FOSVars.isAprilFools)
+            Musics.menu = Core.audio.newMusic(FOSVars.internalTree.child("music/mistake.mp3"));
 
         //display the mod version
-        FOSVars.mod.meta.description += "\n\n" + bundle.get("mod.currentversion") + "\n" + FOSVars.mod.meta.version;
+        FOSVars.mod.meta.description += "\n\n" + Core.bundle.get("mod.currentversion") + "\n" + FOSVars.mod.meta.version;
 
         //load icons and menu themes
         FOSIcons.load();
         FOSMenus.load();
 
         //add a couple of buttons to in-game editor
-        ui.editor.shown(this::addEditorTeams);
+        Vars.ui.editor.shown(this::addEditorTeams);
 
         //damage display
         FOSVars.damageDisplay = new DamageDisplay();
@@ -232,48 +164,48 @@ public abstract class FOSMod extends Mod {
         constructSettings();
 
         //add unit types to their descriptions
-        content.units().each(u ->
-                u.description += ("\n" + bundle.get("unittype") + (
-                u.constructor.get() instanceof MechUnit ? bundle.get("unittype.infantry") :
-                u.constructor.get() instanceof UnitEntity ? bundle.get("unittype.flying") :
-                u.constructor.get() instanceof LegsUnit ? bundle.get("unittype.spider") :
-                u.constructor.get() instanceof UnitWaterMove ? bundle.get("unittype.ship") :
-                u.constructor.get() instanceof PayloadUnit ? bundle.get("unittype.payload") :
-                u.constructor.get() instanceof TimedKillUnit ? bundle.get("unittype.timedkill") :
-                u.constructor.get() instanceof TankUnit ? bundle.get("unittype.tank") :
-                u.constructor.get() instanceof ElevationMoveUnit ? bundle.get("unittype.hover") :
-                u.constructor.get() instanceof BuildingTetherPayloadUnit ? bundle.get("unittype.tether") :
-                u.constructor.get() instanceof CrawlUnit ? bundle.get("unittype.crawl") :
+        Vars.content.units().each(u ->
+                u.description += ("\n" + Core.bundle.get("unittype") + (
+                u.constructor.get() instanceof MechUnit ? Core.bundle.get("unittype.infantry") :
+                u.constructor.get() instanceof UnitEntity ? Core.bundle.get("unittype.flying") :
+                u.constructor.get() instanceof LegsUnit ? Core.bundle.get("unittype.spider") :
+                u.constructor.get() instanceof UnitWaterMove ? Core.bundle.get("unittype.ship") :
+                u.constructor.get() instanceof PayloadUnit ? Core.bundle.get("unittype.payload") :
+                u.constructor.get() instanceof TimedKillUnit ? Core.bundle.get("unittype.timedkill") :
+                u.constructor.get() instanceof TankUnit ? Core.bundle.get("unittype.tank") :
+                u.constructor.get() instanceof ElevationMoveUnit ? Core.bundle.get("unittype.hover") :
+                u.constructor.get() instanceof BuildingTetherPayloadUnit ? Core.bundle.get("unittype.tether") :
+                u.constructor.get() instanceof CrawlUnit ? Core.bundle.get("unittype.crawl") :
                 "")
-                + (u.weapons.contains(w -> w.bullet.heals()) ? bundle.get("unittype.support") : ""))
+                + (u.weapons.contains(w -> w.bullet.heals()) ? Core.bundle.get("unittype.support") : ""))
         );
 
         //disclaimer for non-debug
         if (FOSVars.earlyAccess && !FOSVars.debug)
-            ui.showOkText("@fos.earlyaccesstitle", bundle.get("fos.earlyaccess"), () -> {});
+            Vars.ui.showOkText("@fos.earlyaccesstitle", Core.bundle.get("fos.earlyaccess"), () -> {});
 
         //unlock every planet if debug
         if (FOSVars.debug)
             PlanetDialog.debugSelect = true;
 
         //check for "Fictional Octo System OST" mod. if it doesn't exist, prompt to download from GitHub
-        LoadedMod ost = mods.getMod("fosost");
+        LoadedMod ost = Vars.mods.getMod("fosost");
         if (ost == null) {
-            if (!settings.getBool("fos-ostdontshowagain")) {
-                ui.showCustomConfirm("@fos.noosttitle", bundle.get("fos.noost"),
+            if (!Core.settings.getBool("fos-ostdontshowagain")) {
+                Vars.ui.showCustomConfirm("@fos.noosttitle", Core.bundle.get("fos.noost"),
                         "@mods.browser.add", "@no",
-                        () -> ui.mods.githubImportMod("TeamOct/FOS-OST", true), () -> {});
+                        () -> Vars.ui.mods.githubImportMod("TeamOct/FOS-OST", true), () -> {});
             }
         } else if (!ost.enabled()) {
-            ui.showCustomConfirm("@fos.ostdisabledtitle", bundle.get("fos.ostdisabled"),
+            Vars.ui.showCustomConfirm("@fos.ostdisabledtitle", Core.bundle.get("fos.ostdisabled"),
                     "@yes", "@no",
                     () -> {
-                        mods.setEnabled(ost, true);
-                        ui.showInfoOnHidden("@mods.reloadexit", () -> app.exit());
+                        Vars.mods.setEnabled(ost, true);
+                        Vars.ui.showInfoOnHidden("@mods.reloadexit", () -> Core.app.exit());
                     }, () -> {});
         }
 
-        Element menu = ((Element) Reflect.get(ui.menufrag, "container")).parent.parent;
+        Element menu = ((Element) Reflect.get(Vars.ui.menufrag, "container")).parent.parent;
         Group menuCont = menu.parent;
         menuCont.addChildBefore(menu, new Element(){
             @Override
@@ -282,21 +214,21 @@ public abstract class FOSMod extends Mod {
             }
         });
 
-        int tn = settings.getInt("fos-menutheme");
+        int tn = Core.settings.getInt("fos-menutheme");
         MenuBackground bg = (
-                tn == 2 ? uxerdSpace :
-                tn == 3 ? lumoniSpace :
-                tn == 4 ? random :
-                tn == 5 ? solarSystem :
-                tn == 6 ? caldemoltSystem :
-                tn == 7 ? lumoniTerrain : null);
+                tn == 2 ? FOSMenus.uxerdSpace :
+                tn == 3 ? FOSMenus.lumoniSpace :
+                tn == 4 ? FOSMenus.random :
+                tn == 5 ? FOSMenus.solarSystem :
+                tn == 6 ? FOSMenus.caldemoltSystem :
+                tn == 7 ? FOSMenus.lumoniTerrain : null);
         if (bg != null) {
             FOSVars.menuRenderer.changeBackground(bg);
         }
     }
 
-    private void constructSettings() {
-        ui.settings.addCategory("@setting.fos-title", "fos-settings-icon", t -> {
+    public void constructSettings() {
+        Vars.ui.settings.addCategory("@setting.fos-title", "fos-settings-icon", t -> {
             t.sliderPref("fos-menutheme", 2, 1, 7, s ->
                 s == 2 ? "@setting.fos-menutheme.uxerdspace" :
                 s == 3 ? "@setting.fos-menutheme.lumonispace" :
@@ -308,29 +240,37 @@ public abstract class FOSMod extends Mod {
             t.checkPref("fos-rotatemenucamera", true);
             t.checkPref("fos-damagedisplay", true);
             t.sliderPref("fos-damagedisplayfrequency", 30, 3, 120, 3, s ->
-                bundle.format("setting.seconds", s / 60f));
+                Core.bundle.format("setting.seconds", s / 60f));
             t.checkPref("fos-ostdontshowagain", false);
             t.checkPref("fos-realisticmode", false);
             t.checkPref("fos-refreshsplash", false, b -> {
                 Time.run(60f, () ->
-                    settings.put("fos-refreshsplash", false)
+                        Core.settings.put("fos-refreshsplash", false)
                 );
                 int n = Mathf.floor((float) Math.random() * SplashTexts.splashes.size);
-                mods.locateMod("fos").meta.subtitle = SplashTexts.splashes.get(n);
+                Vars.mods.locateMod("fos").meta.subtitle = SplashTexts.splashes.get(n);
             });
             t.checkPref("fos-debugmode", false, b -> {
                 if (b) {
-                    ui.showConfirm("@warning", "@fos-dangerzone", () -> {
-                        settings.put("fos-debugmode", true);
+                    Vars.ui.showConfirm("@warning", "@fos-dangerzone", () -> {
+                        Core.settings.put("fos-debugmode", true);
                     });
                 } else
-                    settings.put("fos-debugmode", false);
+                    Core.settings.put("fos-debugmode", false);
+            });
+            t.checkPref("fos-haha-funny", false, b -> {
+                if (b) {
+                    Vars.ui.showConfirm("@warning", "@fos-dangerzone", () -> {
+                        Core.settings.put("fos-haha-funny", true);
+                    });
+                } else
+                    Core.settings.put("fos-haha-funny", false);
             });
         });
     }
 
-    private void addEditorTeams() {
-        WidgetGroup teambuttons = (WidgetGroup)ui.editor.getChildren().get(0);
+    public void addEditorTeams() {
+        WidgetGroup teambuttons = (WidgetGroup)Vars.ui.editor.getChildren().get(0);
         teambuttons = (WidgetGroup)teambuttons.getChildren().get(0);
         teambuttons = (WidgetGroup)teambuttons.getChildren().get(0);
 
@@ -343,8 +283,8 @@ public abstract class FOSMod extends Mod {
             button.margin(4f);
             button.getImageCell().grow();
             button.getStyle().imageUpColor = team.color;
-            button.clicked(() -> editor.drawTeam = team);
-            button.update(() -> button.setChecked(editor.drawTeam == team));
+            button.clicked(() -> Vars.editor.drawTeam = team);
+            button.update(() -> button.setChecked(Vars.editor.drawTeam == team));
 
             ((Table)teambuttons).add(button);
         }
