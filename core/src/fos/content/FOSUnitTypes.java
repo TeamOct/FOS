@@ -180,50 +180,66 @@ public class FOSUnitTypes {
         }};
         captain = new UnitType("captain"){{
             health = 900;
-            hitSize = 22;
+            hitSize = 20;
             speed = 1.1f;
             flying = true;
+            trailColor = FOSPal.hackedBack;
+            trailLength = 8;
             aiController = InjectorAI::new;
             immunities.add(hacked);
             weapons.add(
                 new InjectorWeapon("fos-injector-missile"){{
                     x = 9; y = 0;
+                    top = true;
                     mirror = true;
                     alternate = false;
                     rotate = true;
                     reload = 300f;
-                    shoot.shots = 8;
+                    shoot.shots = 4;
                     shoot.shotDelay = 10f;
                     inaccuracy = 12f;
+                    shootSound = Sounds.missile;
                     bullet = new InjectorBasicBulletType(0f, 0.95f, 600, 5000, false){{
                         damage = 25f;
                         speed = 2.4f; lifetime = 90f;
-                        width = 6f; height = 12f;
+                        width = 8f; height = 16f;
+                        sprite = "missile";
                         backColor = FOSPal.hackedBack;
                         frontColor = FOSPal.hacked;
-                        homingPower = 1;
+                        shrinkY = 0f;
+                        homingPower = 0.06f;
                         weaveScale = 0.8f;
                         weaveMag = 1.8f;
+                        hitSound = Sounds.explosion;
+                        trailChance = 0.2f;
+                        trailColor = FOSPal.hacked;
                     }};
                 }},
                 new InjectorWeapon("fos-injector-missile"){{
                     x = 6; y = 12;
+                    top = true;
                     mirror = true;
                     alternate = false;
                     rotate = true;
                     reload = 300f;
-                    shoot.shots = 8;
+                    shoot.shots = 4;
                     shoot.shotDelay = 10f;
                     inaccuracy = 12f;
+                    shootSound = Sounds.missile;
                     bullet = new InjectorBasicBulletType(0f, 0.95f, 600, 5000, false){{
                         damage = 25f;
                         speed = 2.4f; lifetime = 90f;
-                        width = 6f; height = 12f;
+                        width = 8f; height = 16f;
+                        sprite = "missile";
                         backColor = FOSPal.hackedBack;
                         frontColor = FOSPal.hacked;
-                        homingPower = 1;
+                        shrinkY = 0f;
+                        homingPower = 0.06f;
                         weaveScale = 0.8f;
                         weaveMag = 1.8f;
+                        hitSound = Sounds.explosion;
+                        trailChance = 0.2f;
+                        trailColor = FOSPal.hacked;
                     }};
                 }}
             );
