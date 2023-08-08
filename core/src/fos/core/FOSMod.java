@@ -17,8 +17,7 @@ import fos.ui.DamageDisplay;
 import fos.ui.menus.*;
 import mindustry.Vars;
 import mindustry.ai.Pathfinder;
-import mindustry.game.EventType;
-import mindustry.game.Team;
+import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.mod.Mod;
 import mindustry.mod.Mods.LoadedMod;
@@ -86,7 +85,7 @@ public abstract class FOSMod extends Mod {
         FOSWeaponModules.load();
         FOSBullets.load();
         FOSStatuses.load();
-        FOSUnits.load();
+        FOSUnitTypes.load();
         FOSBlocks.load();
         FOSSchematics.load();
         FOSPlanets.load();
