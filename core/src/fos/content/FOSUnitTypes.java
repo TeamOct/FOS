@@ -179,15 +179,35 @@ public class FOSUnitTypes {
             constructor = UnitEntity::create;
         }};
         captain = new UnitType("captain"){{
-            health = 600;
-            hitSize = 18;
+            health = 900;
+            hitSize = 22;
             speed = 1.1f;
             flying = true;
             aiController = InjectorAI::new;
             immunities.add(hacked);
             weapons.add(
-                new InjectorWeapon("fos-missile-launcher"){{
-                    x = -2; y = -1;
+                new InjectorWeapon("fos-injector-missile"){{
+                    x = 9; y = 0;
+                    mirror = true;
+                    alternate = false;
+                    rotate = true;
+                    reload = 300f;
+                    shoot.shots = 8;
+                    shoot.shotDelay = 10f;
+                    inaccuracy = 12f;
+                    bullet = new InjectorBasicBulletType(0f, 0.95f, 600, 5000, false){{
+                        damage = 25f;
+                        speed = 2.4f; lifetime = 90f;
+                        width = 6f; height = 12f;
+                        backColor = FOSPal.hackedBack;
+                        frontColor = FOSPal.hacked;
+                        homingPower = 1;
+                        weaveScale = 0.8f;
+                        weaveMag = 1.8f;
+                    }};
+                }},
+                new InjectorWeapon("fos-injector-missile"){{
+                    x = 6; y = 12;
                     mirror = true;
                     alternate = false;
                     rotate = true;
