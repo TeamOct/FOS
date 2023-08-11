@@ -26,7 +26,7 @@ public class FOSEvents {
     }
 
     public static <T> boolean remove(T type, Cons<T> listener){
-        Log.info("Remover @", events.get(type, () -> new Seq<>(Cons.class)).indexOf(listener));
+        Log.debug("Remover @", events.get(type, () -> new Seq<>(Cons.class)).indexOf(listener));
         return events.get(type, () -> new Seq<>(Cons.class)).remove(listener);
     }
 }

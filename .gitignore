@@ -14,7 +14,7 @@ cache/
 *.ase
 
 ### Secret dev-only stuff
-/core/tz/
+*/tz/*
 
 ### Generated files
 gen/
