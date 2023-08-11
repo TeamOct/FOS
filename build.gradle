@@ -71,8 +71,9 @@ class C extends OutputStream {
         return t
     }
 
-    static void print() {
-        println out
+    @Override
+    String toString() {
+        return out
     }
 }
 
@@ -102,7 +103,7 @@ ext {
         return "${rootProject.name}-${p.name}-${p.version}.jar"
     }
 
-    // TODO fix this
+    // WIP
     getLastestVersion = { String dep ->
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(new URL("https://jitpack.io/com/github/$dep/").openStream()))
@@ -121,6 +122,7 @@ ext {
     mindustryDependencyType = rootProject.properties.get("mindustryDependencyType")
     mindustryVersion = rootProject.properties.get("mindustryVersion")
     arcVersion = rootProject.properties.get("arcVersion")
+
     if (mindustryVersion == "-")
         mindustryVersion = getLastestVersion("Anuken/$mindustryDependencyType")
     if (arcVersion == "-")
@@ -194,8 +196,8 @@ subprojects.each { Project project ->
 
     project.repositories {
         mavenCentral()
-        maven { url "https://www.jitpack.io" }
         maven { url "https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository" }
+        maven { url "https://www.jitpack.io" }
     }
 
     project.dependencies {
@@ -287,7 +289,7 @@ task workflowCommit {
     dependsOn deploy
 }
 
-// only for local machine (still in dev)
+// only for local machine (WIP)
 task createRelease {
     dependsOn deploy
 
