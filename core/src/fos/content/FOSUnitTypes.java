@@ -427,6 +427,20 @@ public class FOSUnitTypes {
             health = 250;
             speed = 0.7f;
             hitSize = 12f;
+            weapons.add(new Weapon("fos-subMissile-launcher"){{
+                reload = 22f;
+                x = 0f;
+                y = 1f;
+                top = true;
+                rotate = true;
+                mirror = false;
+                ejectEffect = Fx.casing1;
+                bullet = new MissileBulletType(3f, 5){{
+                    width = 8f;
+                    height = 11f;
+                    lifetime = 36f;
+                }};
+            }});
         }};
     }
 }

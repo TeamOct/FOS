@@ -32,7 +32,7 @@ public class FOSPlanets {
             bloom = true;
             hasAtmosphere = false;
             tidalLock = true;
-            orbitRadius = 29305f; //haha random number goes brr
+            orbitRadius = 1200f; //No one will notice that (Out of bounds fix)
             drawOrbit = false;
             meshLoader = () -> new SunMesh(this, 5, 5, 0.3, 1.7, 1.2, 1, 1.1f,
                 Color.valueOf("f7c265"), Color.valueOf("ffb380"), Color.valueOf("e8d174"), Color.valueOf("ffa95e"));
