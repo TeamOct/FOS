@@ -352,7 +352,7 @@ public class FOSBlocks {
                 shots = 2;
                 mag = 2.5f;
             }};
-            drawer = new DrawTurret("reinforced-" /* TODO reinforced- is a placeholder */){{
+            drawer = new DrawTurret("lumina-"){{
                 parts.addAll(
                     new RegionPart(){{
                         mirror = false;
@@ -469,6 +469,7 @@ public class FOSBlocks {
                     splashDamageRadius = 16f;
                 }}
             );
+            drawer = new DrawTurret("lumina-");
             requirements(Category.turret, with(tin, 75, silver, 100));
         }};
         particulator = new ItemTurret("particulator"){{
@@ -546,6 +547,7 @@ public class FOSBlocks {
                     }};
                 }}
             );
+            drawer = new DrawTurret("lumina-");
             consumeCoolant(0.5f).boost();
             coolantMultiplier = 2f;
             requirements(Category.turret, with(tin, 200, silver, 125, silicon, 275));
@@ -589,6 +591,7 @@ public class FOSBlocks {
                     ammoMultiplier = 1f;
                 }}
             );
+            drawer = new DrawTurret("lumina-");
             requirements(Category.turret, with(silver, 150, silicon, 100, diamond, 75, iridium, 100));
         }};
         thunder = new PowerTurret("thunder"){
