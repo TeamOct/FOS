@@ -39,7 +39,7 @@ import multicraft.*;
 
 import static fos.content.FOSFluids.*;
 import static fos.content.FOSItems.*;
-import static fos.content.FOSUnits.testOverdrive;
+import static fos.content.FOSUnitTypes.testOverdrive;
 import static mindustry.content.Items.*;
 import static mindustry.content.Liquids.*;
 import static mindustry.type.ItemStack.with;
@@ -1128,7 +1128,7 @@ public class FOSBlocks {
             consumePower(5f);
             requirements(Category.units, with(tin, 100, silver, 75));
             plans.add(
-                new UnitPlan(FOSUnits.vulture, 20f * 60, with(tin, 35))
+                new UnitPlan(FOSUnitTypes.vulture, 20f * 60, with(tin, 35))
             );
         }};
         droidConstructor = new OverdriveDroneCenter("droid-constructor"){{
@@ -1160,7 +1160,7 @@ public class FOSBlocks {
             size = 3;
             unitCapModifier = 5;
             itemCapacity = 2500;
-            unitType = FOSUnits.lord;
+            unitType = FOSUnitTypes.lord;
             squareSprite = false;
             requirements(Category.effect, with(tin, 2000, silver, 1250));
         }};
@@ -1169,7 +1169,7 @@ public class FOSBlocks {
             size = 4;
             unitCapModifier = 7;
             itemCapacity = 5000;
-            unitType = FOSUnits.lord;
+            unitType = FOSUnitTypes.lord;
             requirements(Category.effect, with(tin, 2500, silver, 2000, diamond, 1500));
         }};
         coreMetropolis = new DetectorCoreBlock("core-metropolis"){{
@@ -1177,7 +1177,7 @@ public class FOSBlocks {
             size = 5;
             unitCapModifier = 10;
             itemCapacity = 8000;
-            unitType = FOSUnits.lord;
+            unitType = FOSUnitTypes.lord;
             requirements(Category.effect, with(tin, 4500, silver, 3500, diamond, 3000));
         }};
         lightUnloader = new Unloader("light-unloader"){{

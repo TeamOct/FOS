@@ -1,16 +1,15 @@
 package fos.maps.generators;
 
 import arc.func.Intc;
-import arc.math.Mathf;
-import arc.math.Rand;
+import arc.math.*;
 import arc.struct.Seq;
 import arc.util.Structs;
 import mindustry.content.StatusEffects;
 import mindustry.game.SpawnGroup;
 import mindustry.type.UnitType;
 
+import static fos.content.FOSUnitTypes.*;
 import static mindustry.content.UnitTypes.*;
-import static fos.content.FOSUnits.*;
 
 public class LumoniWaves {
     public static Seq<SpawnGroup> generate(float difficulty, Rand rand, boolean attack) {

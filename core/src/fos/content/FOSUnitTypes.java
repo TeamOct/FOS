@@ -20,7 +20,7 @@ import mindustry.type.*;
 
 import static fos.content.FOSStatuses.hacked;
 
-public class FOSUnits {
+public class FOSUnitTypes {
     public static UnitType
     //mechs
     legion, citadel,
@@ -41,6 +41,7 @@ public class FOSUnits {
     public static void load(){
         DestroyersUnits.load();
 
+        //TODO: campaign boss
         legion = new UnitType("legion"){{
             health = 25000;
             armor = 25;
@@ -58,6 +59,7 @@ public class FOSUnits {
             }
             constructor = MechUnit::create;
         }};
+        //TODO: campaign boss
         citadel = new UnitType("citadel"){{
             health = 7500;
             armor = 40;
@@ -140,7 +142,7 @@ public class FOSUnits {
             aiController = InjectorAI::new;
             weapons.add(
                 new InjectorWeapon("fos-injector"){{
-                    bullet = new InjectorBulletType(0, 0.3f, 50, 300, false){{
+                    bullet = new InjectorBasicBulletType(0, 0.3f, 50, 300, false){{
                         homingPower = 1;
                         speed = 1.2f;
                     }};
@@ -152,53 +154,92 @@ public class FOSUnits {
             constructor = UnitEntity::create;
         }};
         lieutenant = new UnitType("lieutenant"){{
-            health = 260;
-            hitSize = 8;
-            speed = 1.4f;
+            health = 360;
+            hitSize = 16;
+            speed = 2.4f;
             flying = true;
+            circleTarget = true;
+            omniMovement = true;
             aiController = InjectorAI::new;
+            trailColor = FOSPal.hackedBack;
+            trailLength = 24;
             immunities.add(hacked);
             weapons.add(
                 new InjectorWeapon(){{
                     x = y = 0;
                     mirror = false;
                     rotate = true;
-                    bullet = new InjectorBulletType(0.03f, false){{
-                        splashDamage = 10;
-                        splashDamageRadius = 16;
-                        killShooter = true;
-                        instantDisappear = true;
+                    reload = 120f;
+                    bullet = new InjectorBlastBulletType(0.1f, false){{
+                        splashDamage = 20f;
+                        splashDamageRadius = 32f;
                     }};
                 }}
             );
             constructor = UnitEntity::create;
         }};
         captain = new UnitType("captain"){{
-            health = 600;
-            hitSize = 12;
+            health = 900;
+            hitSize = 20;
             speed = 1.1f;
             flying = true;
+            trailColor = FOSPal.hackedBack;
+            trailLength = 8;
             aiController = InjectorAI::new;
             immunities.add(hacked);
             weapons.add(
-                new InjectorWeapon("fos-missile-launcher"){{
-                    x = -2; y = -1;
+                new InjectorWeapon("fos-injector-missile"){{
+                    x = 9; y = 0;
+                    top = true;
                     mirror = true;
                     alternate = false;
                     rotate = true;
                     reload = 300f;
-                    shoot.shots = 8;
+                    shoot.shots = 4;
                     shoot.shotDelay = 10f;
                     inaccuracy = 12f;
-                    bullet = new InjectorBulletType(0f, 0.95f, 600, 5000, false){{
+                    shootSound = Sounds.missile;
+                    bullet = new InjectorBasicBulletType(0f, 0.95f, 600, 5000, false){{
                         damage = 25f;
                         speed = 2.4f; lifetime = 90f;
-                        width = 6f; height = 12f;
+                        width = 8f; height = 16f;
+                        sprite = "missile";
                         backColor = FOSPal.hackedBack;
                         frontColor = FOSPal.hacked;
-                        homingPower = 1;
+                        shrinkY = 0f;
+                        homingPower = 0.06f;
                         weaveScale = 0.8f;
                         weaveMag = 1.8f;
+                        hitSound = Sounds.explosion;
+                        trailChance = 0.2f;
+                        trailColor = FOSPal.hacked;
+                    }};
+                }},
+                new InjectorWeapon("fos-injector-missile"){{
+                    x = 6; y = 12;
+                    top = true;
+                    mirror = true;
+                    alternate = false;
+                    rotate = true;
+                    reload = 300f;
+                    shoot.shots = 4;
+                    shoot.shotDelay = 10f;
+                    inaccuracy = 12f;
+                    shootSound = Sounds.missile;
+                    bullet = new InjectorBasicBulletType(0f, 0.95f, 600, 5000, false){{
+                        damage = 25f;
+                        speed = 2.4f; lifetime = 90f;
+                        width = 8f; height = 16f;
+                        sprite = "missile";
+                        backColor = FOSPal.hackedBack;
+                        frontColor = FOSPal.hacked;
+                        shrinkY = 0f;
+                        homingPower = 0.06f;
+                        weaveScale = 0.8f;
+                        weaveMag = 1.8f;
+                        hitSound = Sounds.explosion;
+                        trailChance = 0.2f;
+                        trailColor = FOSPal.hacked;
                     }};
                 }}
             );
@@ -229,7 +270,7 @@ public class FOSUnits {
                     reload = 900f;
                     shoot.firstShotDelay = 300f;
                     inaccuracy = 0f;
-                    bullet = new InjectorBulletType(1, true){{
+                    bullet = new InjectorBasicBulletType(1, true){{
                         chargeEffect = Fx.lancerLaserCharge;
                         speed = 6f; lifetime = 64f;
                         width = height = 18f;

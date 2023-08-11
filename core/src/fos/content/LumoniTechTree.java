@@ -5,7 +5,7 @@ import mindustry.type.ItemStack;
 import static fos.content.FOSBlocks.*;
 import static fos.content.FOSFluids.tokicite;
 import static fos.content.FOSItems.*;
-import static fos.content.FOSUnits.vulture;
+import static fos.content.FOSUnitTypes.vulture;
 import static fos.content.FOSWeaponModules.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.Liquids.water;
@@ -55,7 +55,7 @@ public class LumoniTechTree {
                     )
                 );
             });
-            node(FOSUnits.lord, () ->
+            node(FOSUnitTypes.lord, () ->
                 node(standard1, () ->
                     node(standard2, ItemStack.with(tin, 750, silver, 600), () -> {})
                 )
