@@ -85,6 +85,10 @@ public class UpgradeCenter extends Block {
             }).left();
         }
 
+        public void upgrade(Player player) {
+
+        }
+
         @Override
         public void buildConfiguration(Table table) {
             if (weaponModules.any()) {
@@ -136,7 +140,8 @@ public class UpgradeCenter extends Block {
             Seq<ItemStack> seq = new Seq<>();
             seq.add(weaponModules.get(weaponIndex).reqs);
 
-            return seq.find(s -> s.item == item).amount;
+            var stack = seq.find(s -> s.item == item);
+            return stack != null ? stack.amount : 0;
         }
 
         @Override
