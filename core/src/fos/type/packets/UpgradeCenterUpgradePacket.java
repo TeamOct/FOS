@@ -7,6 +7,7 @@ import mindustry.Vars;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.Player;
 import mindustry.io.TypeIO;
+import mindustry.net.Net;
 import mindustry.net.NetConnection;
 import mindustry.net.Packet;
 
@@ -14,6 +15,14 @@ public class UpgradeCenterUpgradePacket extends Packet {
     public Player player;
     public UpgradeCenter.UpgradeCenterBuild build;
     public int weapon;
+
+    static {
+        Net.registerPacket(UpgradeCenterUpgradePacket::new);
+    }
+
+    public UpgradeCenterUpgradePacket() {
+
+    }
 
     public UpgradeCenterUpgradePacket(Player p, UpgradeCenter.UpgradeCenterBuild b, int w) {
         player = p;
@@ -36,11 +45,12 @@ public class UpgradeCenterUpgradePacket extends Packet {
 
     @Override
     public void handleServer(NetConnection con) {
-
+        build.upgrade(this);
+        Vars.net.send(this, true);
     }
 
     @Override
     public void handleClient() {
-
+        build.upgrade(this);
     }
 }

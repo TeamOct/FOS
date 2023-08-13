@@ -9,6 +9,7 @@ import arc.util.Structs;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import fos.type.content.WeaponModule;
+import fos.type.packets.UpgradeCenterUpgradePacket;
 import fos.type.units.LumoniPlayerUnitType;
 import mindustry.Vars;
 import mindustry.content.Fx;
@@ -23,11 +24,9 @@ import mindustry.world.blocks.ItemSelection;
 import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.consumers.ConsumeItemDynamic;
 
-import static mindustry.Vars.*;
-
 public class UpgradeCenter extends Block {
     public int[] capacities = {};
-    protected Seq<WeaponModule> weaponModules = Vars.content.statusEffects().copy().filter(s -> s instanceof WeaponModule).as();
+    public Seq<WeaponModule> weaponModules = Vars.content.statusEffects().copy().filter(s -> s instanceof WeaponModule).as();
 
     public UpgradeCenter(String name) {
         super(name);
@@ -66,6 +65,10 @@ public class UpgradeCenter extends Block {
     public class UpgradeCenterBuild extends Building {
         public int weaponIndex = -1;
 
+        public Seq<WeaponModule> getWeaponModules() {
+            return weaponModules;
+        }
+
         @Override
         public void display(Table table) {
             super.display(table);
@@ -85,14 +88,23 @@ public class UpgradeCenter extends Block {
             }).left();
         }
 
-        public void upgrade(Player player) {
+        /** Called from packet. **/
+        public void upgrade(UpgradeCenterUpgradePacket packet) {
+            Weapon weapon = getWeaponModules().get(weaponIndex).weapon;
+            if (weapon == null) return;
 
+            if (potentialEfficiency < 1 || !(Vars.player.unit().type instanceof LumoniPlayerUnitType) || tile == null) return;
+
+            consume();
+            packet.player.unit().mounts(new WeaponMount[]{weapon.mountType.get(weapon)});
         }
 
         @Override
         public void buildConfiguration(Table table) {
             if (weaponModules.any()) {
-                ItemSelection.buildTable(UpgradeCenter.this, table, weaponModules, () -> weaponIndex == -1 ? null : weaponModules.get(weaponIndex), wm -> configure(weaponModules.indexOf(i -> i == wm)), selectionRows, selectionColumns);
+                ItemSelection.buildTable(UpgradeCenter.this, table, weaponModules, () -> weaponIndex == -1 ? null :
+                        weaponModules.get(weaponIndex), wm -> configure(weaponModules.indexOf(i -> i == wm)),
+                        selectionRows, selectionColumns);
             } else {
                 table.table(Styles.black3, t -> t.add("@none").color(Color.lightGray));
             }
@@ -103,35 +115,11 @@ public class UpgradeCenter extends Block {
                 deselect();
 
                 if (weaponIndex == -1) return;
-
-                Weapon weapon = weaponModules.get(weaponIndex).weapon;
-
-                if (weapon == null) return;
-
-                if (potentialEfficiency < 1 || !(Vars.player.unit().type instanceof LumoniPlayerUnitType)) return;
-
-                Player player = Vars.player;
-                if(player == null || tile == null || !(tile.build instanceof UpgradeCenterBuild entity)) return;
-
-                consume();
-
-                CoreBlock c = (CoreBlock) player.bestCore().block;
-                if(entity.wasVisible){
-                    Fx.spawn.at(entity);
-                }
-
-                player.set(entity);
-
-                if(!net.client()){
-                    Unit unit = c.unitType.create(tile.team());
-                    unit.mounts(new WeaponMount[]{weapon.mountType.get(weapon)});
-                    unit.set(entity);
-                    unit.rotation(90f);
-                    unit.impulse(0f, 3f);
-                    unit.controller(player);
-                    unit.spawnedByCore(true);
-                    unit.add();
-                }
+                UpgradeCenterUpgradePacket packet = new UpgradeCenterUpgradePacket(Vars.player, this, weaponIndex);
+                if (!Vars.net.active())
+                    upgrade(packet);
+                else
+                    Vars.net.send(packet, true);
             });
         }
 
@@ -140,7 +128,7 @@ public class UpgradeCenter extends Block {
             Seq<ItemStack> seq = new Seq<>();
             seq.add(weaponModules.get(weaponIndex).reqs);
 
-            var stack = seq.find(s -> s.item == item);
+            ItemStack stack = seq.find(s -> s.item == item);
             return stack != null ? stack.amount : 0;
         }
 
