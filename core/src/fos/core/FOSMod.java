@@ -13,6 +13,7 @@ import fos.annotations.CreateSoundHost;
 import fos.content.*;
 import fos.controllers.CapsulesController;
 import fos.graphics.FOSShaders;
+import fos.net.FOSPackets;
 import fos.ui.DamageDisplay;
 import fos.ui.menus.*;
 import mindustry.Vars;
@@ -33,6 +34,8 @@ public abstract class FOSMod extends Mod {
     public FOSMod() {
         if (FOSVars.debug)
             Log.level = Log.LogLevel.debug;
+
+        FOSPackets.register();
 
         Events.on(EventType.ClientLoadEvent.class, e -> {
             clientLoaded();

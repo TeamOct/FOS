@@ -4,15 +4,15 @@ import arc.graphics.Color;
 import arc.scene.style.TextureRegionDrawable;
 import arc.scene.ui.layout.*;
 import arc.struct.Seq;
+import arc.util.Log;
 import arc.util.Scaling;
 import arc.util.Structs;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
+import fos.net.FOSPackets;
 import fos.type.content.WeaponModule;
-import fos.type.packets.UpgradeCenterUpgradePacket;
 import fos.type.units.LumoniPlayerUnitType;
 import mindustry.Vars;
-import mindustry.content.Fx;
 import mindustry.entities.units.*;
 import mindustry.gen.*;
 import mindustry.type.Item;
@@ -21,7 +21,6 @@ import mindustry.type.Weapon;
 import mindustry.ui.Styles;
 import mindustry.world.*;
 import mindustry.world.blocks.ItemSelection;
-import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.consumers.ConsumeItemDynamic;
 
 public class UpgradeCenter extends Block {
@@ -89,7 +88,7 @@ public class UpgradeCenter extends Block {
         }
 
         /** Called from packet. **/
-        public void upgrade(UpgradeCenterUpgradePacket packet) {
+        public void upgrade(FOSPackets.UpgradeCenterUpgradePacket packet) {
             Weapon weapon = getWeaponModules().get(weaponIndex).weapon;
             if (weapon == null) return;
 
@@ -112,14 +111,17 @@ public class UpgradeCenter extends Block {
             table.row();
 
             table.button(Icon.units, Styles.clearTogglei, () -> {
-                deselect();
-
                 if (weaponIndex == -1) return;
-                UpgradeCenterUpgradePacket packet = new UpgradeCenterUpgradePacket(Vars.player, this, weaponIndex);
+                FOSPackets.UpgradeCenterUpgradePacket packet = new FOSPackets.UpgradeCenterUpgradePacket(Vars.player, this, weaponIndex);
                 if (!Vars.net.active())
                     upgrade(packet);
-                else
+                else {
+                    if (Vars.net.server())
+                        upgrade(packet);
                     Vars.net.send(packet, true);
+                }
+
+                deselect();
             });
         }
 
