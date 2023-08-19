@@ -33,6 +33,8 @@ task dex {
             dependencies += path.path + " "
         }
 
+        println "d8 $dependencies ${project.tasks.jar.archiveFile.get()} --min-api 14 --output $dexFile.absolutePath"
+
         "d8 $dependencies ${project.tasks.jar.archiveFile.get()} --min-api 14 --output $dexFile.absolutePath"
                 .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
     }
