@@ -10,64 +10,43 @@ dependencies {
 
 ext {
     sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT") ?: rootProject.ext.localProperties.get("sdkroot")
-    rawFile = "raw-${rootProject.ext.getOutputJar(project)}"
     dexFile = new File(project.buildDir, "dex-${rootProject.ext.getOutputJar(project)}")
-    useandroid = rootProject.ext.localProperties.get("useandroid")
-}
-
-task createAndroidJar(type: Jar) {
-    archiveFileName = rootProject.ext.getOutputJar(project)
-
-    from {
-        [zipTree("$project.buildDir/libs/$rawFile"), zipTree(dexFile)]
-    }
-
-    doLast {
-        delete {
-            "$project.buildDir/libs/$rawFile"
-        }
-        copy {
-            from {
-                archiveFile.get().asFile
-            }
-            project.ext.copyPaths.each { p ->
-                into(p)
-            }
-        }
-    }
+    useandroid = Boolean.parseBoolean(rootProject.ext.localProperties.get("useandroid"))
 }
 
 task dex {
     doLast{
-        println "Use android ${useandroid == null || useandroid == true}."
-        if (useandroid == null || useandroid == true) {
-            if (!sdkRoot || !new File(sdkRoot).exists())
-                throw new GradleException("No valid Android SDK found.")
-            def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find {
-                f -> new File(f, "android.jar").exists()
-            }
-            if (!platformRoot)
-                throw new GradleException("No android.jar found. Ensure that you have an Android platform installed.")
-
-            var classpath = (configurations.compileClasspath.asList()
-                    + configurations.runtimeClasspath.asList()
-                    + [new File(platformRoot, "android.jar")])
-            var dependencies = ""
-            for(def path : classpath){
-                dependencies += "--classpath "
-                dependencies += path.path + " "
-            }
-
-            "d8 $dependencies --min-api 14 --output $dexFile.absolutePath $project.buildDir/libs/$rawFile"
-                    .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
+        println "Use android ${useandroid == null || useandroid}."
+        configurations.each {
+            println it
         }
-    }
+        if (!sdkRoot || !new File(sdkRoot).exists())
+            throw new GradleException("No valid Android SDK found.")
+        def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find {
+            f -> new File(f, "android.jar").exists()
+        }
+        if (!platformRoot)
+            throw new GradleException("No android.jar found. Ensure that you have an Android platform installed.")
 
-    if (useandroid == null || useandroid == true)
-        finalizedBy project.tasks.createAndroidJar
+        var classpath = (configurations.compileClasspath.asList()
+                + configurations.runtimeClasspath.asList()
+                + [new File(platformRoot, "android.jar")])
+        var dependencies = ""
+        for(def path : classpath){
+            dependencies += "--classpath "
+            dependencies += path.path + " "
+        }
+
+        "d8 $dependencies --min-api 14 --output $dexFile.absolutePath"
+                .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
+    }
 }
 
 project.tasks.named("jar").configure {
-    archiveFileName = rawFile
-    finalizedBy project.tasks.dex
+    if (useandroid == null || useandroid) {
+        dependsOn project.tasks.dex
+        from {
+            zipTree(dexFile)
+        }
+    }
 }
