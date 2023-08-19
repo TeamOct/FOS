@@ -11,15 +11,11 @@ dependencies {
 ext {
     sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT") ?: rootProject.ext.localProperties.get("sdkroot")
     dexFile = new File(project.buildDir, "dex-${rootProject.ext.getOutputJar(project)}")
-    useandroid = Boolean.parseBoolean(rootProject.ext.localProperties.get("useandroid"))
+    useandroid = rootProject.ext.localProperties.get("useandroid")
 }
 
 task dex {
     doLast{
-        println "Use android ${useandroid == null || useandroid}."
-        configurations.each {
-            println it
-        }
         if (!sdkRoot || !new File(sdkRoot).exists())
             throw new GradleException("No valid Android SDK found.")
         def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find {
@@ -43,7 +39,8 @@ task dex {
 }
 
 project.tasks.named("jar").configure {
-    if (useandroid == null || useandroid) {
+    println "Build android dex: ${useandroid == null || useandroid.equalsIgnoreCase("true")}."
+    if (useandroid == null || useandroid.equalsIgnoreCase("true")) {
         dependsOn project.tasks.dex
         from {
             zipTree(dexFile)
