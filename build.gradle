@@ -1,6 +1,9 @@
 import arc.files.Fi
+import jdk.security.jarsigner.JarSigner
 
 import java.util.function.Consumer
+import java.util.zip.ZipFile
+import java.util.zip.ZipOutputStream
 
 buildscript {
     repositories {

@@ -37,6 +37,29 @@ task dex {
 
         "d8 $dependencies ${project.tasks.jar.archiveFile.get()} --min-api 14 --output $dexFile.absolutePath"
                 .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
+
+        finalizedBy project.tasks.createFinalJar
+    }
+}
+
+project.tasks.create("createFinalJar", Jar) {
+    archiveFileName = "temp.jar"
+    from {
+        [
+                zipTree(project.tasks.jar.archiveFile.get()),
+                zipTree(dexFile)
+        ]
+    }
+    doLast {
+        delete(project.tasks.jar.archiveFile.get())
+        copy {
+            from(archiveFile.get())
+            String str = project.tasks.jar.archiveFile.get().absolutePath
+            println str
+            int ind = str.lastIndexOf("/")
+            println str
+            into(str.substring(0, ind))
+        }
     }
 }
 
