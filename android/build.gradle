@@ -33,7 +33,7 @@ task dex {
             dependencies += path.path + " "
         }
 
-        "d8 $dependencies --min-api 14 --output $dexFile.absolutePath"
+        "d8 $dependencies ${project.tasks.jar.archiveFile.get()} --min-api 14 --output $dexFile.absolutePath"
                 .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
     }
 }
@@ -41,9 +41,6 @@ task dex {
 project.tasks.named("jar").configure {
     println "Build android dex: ${useandroid == null || useandroid.equalsIgnoreCase("true")}."
     if (useandroid == null || useandroid.equalsIgnoreCase("true")) {
-        dependsOn project.tasks.dex
-        /*from {
-            zipTree(dexFile)
-        }*/
+        finalyzedBy project.tasks.dex
     }
 }
