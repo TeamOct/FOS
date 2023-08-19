@@ -147,6 +147,7 @@ subprojects.each { Project project ->
     ]
 
     project.ext {
+        // setup annotation processors properties
         APArgs = ["ProjectName=${project.name}"]
         var src = "ProjectSrc=", res = "ProjectRes="
         project.sourceSets.main.java.srcDirs.each { var str ->
@@ -184,8 +185,7 @@ subprojects.each { Project project ->
             var srcFiles = project.sourceSets.main.java.srcDirs.getAt(0)
             if (srcFiles.exists()) {
                 srcFiles.eachFileRecurse(groovy.io.FileType.FILES) { file ->
-                    if (file.name.endsWith(".java") && ((file.text.contains(" extends AbstractProcessor")
-                            && !file.text.contains("abstract class")))) {
+                    if (file.name.endsWith(".java") && file.text.contains("@AnnotationProcessor")) {
                         text.append(file.path.substring(srcFiles.path.length() + 1)).append("\n")
                     }
                 }

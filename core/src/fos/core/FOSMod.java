@@ -9,7 +9,7 @@ import arc.scene.ui.ImageButton;
 import arc.scene.ui.layout.*;
 import arc.struct.Seq;
 import arc.util.*;
-import fos.annotations.CreateSoundHost;
+import fos.annotations.FOSAnnotations;
 import fos.content.*;
 import fos.controllers.CapsulesController;
 import fos.graphics.FOSShaders;
@@ -25,11 +25,10 @@ import mindustry.mod.Mods.LoadedMod;
 import mindustry.ui.*;
 import mindustry.ui.dialogs.PlanetDialog;
 
-/**
- * This mod's main class.
- * @author Дядь, какой автор?.. это ж ядро мода - здесь каждый наследил.
- */
-@CreateSoundHost(paths="sounds/loops", extensions="mp3", className="FOSLoops", depth=-1)
+@FOSAnnotations.Settings(map = {
+        "ModPackage", "fos"
+})
+@FOSAnnotations.CreateSoundHost(paths="sounds/loops", extensions="mp3", className="FOSLoops", depth=-1)
 public abstract class FOSMod extends Mod {
     public FOSMod() {
         if (FOSVars.debug)
