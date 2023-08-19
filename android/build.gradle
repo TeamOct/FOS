@@ -26,13 +26,11 @@ project.tasks.create("createFinalJar", Jar) {
         delete(project.tasks.jar.archiveFile.get())
         copy {
             from(archiveFile.get())
-            String str = project.tasks.jar.archiveFile.get().absolutePath
-            println str
-            int ind = str.lastIndexOf("/")
-            println str
-            into(str.substring(0, ind))
+            into(rootProject.ext.getOutputJar(project))
         }
     }
+
+    finalizedBy project.tasks.copyJar
 }
 
 task dex {
