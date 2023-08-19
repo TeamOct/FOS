@@ -41,6 +41,6 @@ task dex {
 project.tasks.named("jar").configure {
     println "Build android dex: ${useandroid == null || useandroid.equalsIgnoreCase("true")}."
     if (useandroid == null || useandroid.equalsIgnoreCase("true")) {
-        finalyzedBy project.tasks.dex
+        finalizedBy project.tasks.dex
     }
 }
