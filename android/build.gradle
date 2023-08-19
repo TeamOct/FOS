@@ -37,9 +37,9 @@ task dex {
 
         "d8 $dependencies ${project.tasks.jar.archiveFile.get()} --min-api 14 --output $dexFile.absolutePath"
                 .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
-
-        finalizedBy project.tasks.createFinalJar
     }
+
+    finalizedBy project.tasks.createFinalJar
 }
 
 project.tasks.create("createFinalJar", Jar) {
