@@ -10,7 +10,7 @@ dependencies {
 
 ext {
     sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT") ?: rootProject.ext.localProperties.get("sdkroot")
-    dexFile = new File(rootProject.file("artifacts"), "dex-${rootProject.ext.getOutputJar(project)}")
+    dexFile = new File(project.buildDir, "dex-${rootProject.ext.getOutputJar(project)}")
     useandroid = rootProject.ext.localProperties.get("useandroid")
 }
 
@@ -33,7 +33,7 @@ task dex {
             dependencies += path.path + " "
         }
 
-        println "d8 $dependencies --min-api 14 --output $dexFile.absolutePath ${project.tasks.jar.archiveFile.get()}"
+        println "d8 $dependencies${project.tasks.jar.archiveFile.get()} --min-api 14 --output $dexFile.absolutePath"
 
         "d8 $dependencies ${project.tasks.jar.archiveFile.get()} --min-api 14 --output $dexFile.absolutePath"
                 .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
