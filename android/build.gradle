@@ -14,6 +14,27 @@ ext {
     useandroid = rootProject.ext.localProperties.get("useandroid")
 }
 
+project.tasks.create("createFinalJar", Jar) {
+    archiveFileName = "temp.jar"
+    from {
+        [
+                zipTree(project.tasks.jar.archiveFile.get()),
+                zipTree(dexFile)
+        ]
+    }
+    doLast {
+        delete(project.tasks.jar.archiveFile.get())
+        copy {
+            from(archiveFile.get())
+            String str = project.tasks.jar.archiveFile.get().absolutePath
+            println str
+            int ind = str.lastIndexOf("/")
+            println str
+            into(str.substring(0, ind))
+        }
+    }
+}
+
 task dex {
     doLast{
         if (!sdkRoot || !new File(sdkRoot).exists())
@@ -40,27 +61,6 @@ task dex {
     }
 
     finalizedBy project.tasks.createFinalJar
-}
-
-project.tasks.create("createFinalJar", Jar) {
-    archiveFileName = "temp.jar"
-    from {
-        [
-                zipTree(project.tasks.jar.archiveFile.get()),
-                zipTree(dexFile)
-        ]
-    }
-    doLast {
-        delete(project.tasks.jar.archiveFile.get())
-        copy {
-            from(archiveFile.get())
-            String str = project.tasks.jar.archiveFile.get().absolutePath
-            println str
-            int ind = str.lastIndexOf("/")
-            println str
-            into(str.substring(0, ind))
-        }
-    }
 }
 
 project.tasks.named("jar").configure {
