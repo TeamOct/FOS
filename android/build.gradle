@@ -31,8 +31,8 @@ project.tasks.create("createFinalJar", Jar) {
             into project.tasks.jar.destinationDirectory
             rename { name -> project.tasks.jar.archiveFileName }
         }
-        buildDir.list().each {
-            println project.tasks.jar.destinationDirectory
+        project.tasks.jar.destinationDirectory.list().each {
+            println it
         }
     }
 
