@@ -25,13 +25,11 @@ project.tasks.create("createFinalJar", Jar) {
         ]
     }
     doLast {
-        delete(project.tasks.jar.archiveFile.get())
+        delete project.tasks.jar.archiveFile.get()
         copy {
             from archiveFile.get()
             into project.tasks.jar.destinationDirectory
-            rename {name: String ->
-                    project.tasks.jar.archiveFileName
-            }
+            rename { name -> project.tasks.jar.archiveFileName }
         }
     }
 
