@@ -24,8 +24,10 @@ project.tasks.create("createFinalJar", Jar) {
     }
     doLast {
         copy {
-            from archiveFile.get()
-            into rootProject.file("artifacts")
+            from buildDir
+            include "temp.jar"
+            destinationDir buildDir
+            rename "temp.jar", rootProject.ext.getOutputJar(project)
         }
     }
 
