@@ -20,19 +20,20 @@ project.tasks.create("createFinalJar", Jar) {
     archiveFileName = "temp.jar"
     from {
         [
-                zipTree(project.tasks.jar.archiveFile.get()),
+                zipTree(project.tasks.jar),
                 zipTree(dexFile)
         ]
     }
     doLast {
-        delete project.tasks.jar.archiveFile.get()
+        delete project.tasks.jar
         copy {
             from archiveFile.get()
             into project.tasks.jar.destinationDirectory
-            rename { name -> project.tasks.jar.archiveFileName }
-        }
-        project.tasks.jar.destinationDirectory.list().each {
-            println it
+            rename { name ->
+                println project.tasks.jar.archiveFile.get()
+                println project.tasks.jar.
+                project.tasks.jar.archiveFileName
+            }
         }
     }
 
