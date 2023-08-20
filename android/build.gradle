@@ -1,3 +1,5 @@
+import java.util.regex.Pattern
+
 dependencies {
     compileOnly "com.github.Anuken.Arc:arc-core:$rootProject.arcVersion"
     compileOnly "com.github.Anuken.$rootProject.mindustryDependencyType:core:$rootProject.mindustryVersion"
@@ -27,7 +29,7 @@ project.tasks.create("createFinalJar", Jar) {
         copy {
             from archiveFile.get()
             into project.tasks.jar.destinationDirectory
-            rename(archiveFileName, project.tasks.jar.archiveFileName)
+            rename(archiveFileName as Pattern, project.tasks.jar.archiveFileName)
         }
     }
 
