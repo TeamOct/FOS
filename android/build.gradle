@@ -23,11 +23,11 @@ project.tasks.create("createFinalJar", Jar) {
         ]
     }
     doLast {
+        delete(project.tasks.jar.archiveFile.get())
         copy {
-            from buildDir
-            include "temp.jar"
-            destinationDir buildDir
-            rename "temp.jar", rootProject.ext.getOutputJar(project)
+            from archiveFile.get()
+            into project.tasks.jar.destinationDirectory
+            rename(archiveFileName, project.tasks.jar.archiveFileName)
         }
     }
 
