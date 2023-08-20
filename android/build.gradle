@@ -25,7 +25,7 @@ project.tasks.create("createFinalJar", Jar) {
     doLast {
         copy {
             from archiveFile.get()
-            into(rootProject.ext.getOutputJar(project))
+            into rootProject.file("artifacts")
         }
     }
 
