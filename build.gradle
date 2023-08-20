@@ -286,7 +286,6 @@ task buildRelease(type: Jar) {
     dependsOn deploy
 
     from {
-        zipTree("artifacts/" + rootProject.ext.getOutputJar(project(":core")))
         zipTree("artifacts/" + rootProject.ext.getOutputJar(project(":android")))
         zipTree("artifacts/" + rootProject.ext.getOutputJar(project(":desktop")))
     }

@@ -31,6 +31,9 @@ project.tasks.create("createFinalJar", Jar) {
             into project.tasks.jar.destinationDirectory
             rename { name -> project.tasks.jar.archiveFileName }
         }
+        buildDir.list().each {
+            println it
+        }
     }
 
     finalizedBy project.tasks.copyJar
@@ -55,15 +58,8 @@ task dex {
             dependencies += path.path + " "
         }
 
-        println "d8 $dependencies --claspath ${project.tasks.jar.archiveFile.get()} --min-api 14 --output $dexFile.absolutePath"
-
         "d8 $dependencies ${project.tasks.jar.archiveFile.get()} --min-api 14 --output $dexFile.absolutePath"
                 .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
-
-        copy {
-            from dexFile
-            into rootProject.file("artifacts")
-        }
     }
 
     finalizedBy project.tasks.createFinalJar
