@@ -285,6 +285,8 @@ task workflowCommit {
 task buildRelease(type: Jar) {
     dependsOn deploy
 
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
     from {
         zipTree("artifacts/" + rootProject.ext.getOutputJar(project(":android")))
         zipTree("artifacts/" + rootProject.ext.getOutputJar(project(":desktop")))
