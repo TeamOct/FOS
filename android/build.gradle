@@ -29,7 +29,9 @@ project.tasks.create("createFinalJar", Jar) {
         copy {
             from archiveFile.get()
             into project.tasks.jar.destinationDirectory
-            rename(archiveFileName as Pattern, project.tasks.jar.archiveFileName)
+            rename {name: String ->
+                    project.tasks.jar.archiveFileName
+            }
         }
     }
 
