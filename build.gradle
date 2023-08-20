@@ -229,10 +229,8 @@ subprojects.each { Project project ->
         doLast {
             project.ext.copyPaths.each { p ->
                 copy {
-                    from {
-                        project.tasks.jar.archiveFile.get()
-                    }
-                    into(p)
+                    from project.tasks.jar
+                    into p
                 }
             }
         }
