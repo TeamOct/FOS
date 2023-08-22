@@ -21,23 +21,6 @@ allprojects.each { Project project ->
 
     project.version = properties.get("version")
     project.group = properties.get("group")
-
-    tasks.withType(JavaCompile).configureEach {
-        options.fork = true
-        options.forkOptions.jvmArgs += "-Xms256m -Xmx1024m --illegal-access=permit" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED" +
-                "--add-opens=java.base/sun.reflect.annotation=ALL-UNNAMED"
-    }
 }
 
 wrapper {
@@ -51,7 +34,7 @@ task cleanBuilds(type: Delete) {
     doLast {
         subprojects.each { Project p ->
             if (p.buildDir.exists()) {
-                delete(p.buildDir)
+                //delete(p.buildDir)
             }
         }
     }
@@ -204,21 +187,33 @@ subprojects.each { Project project ->
         annotationProcessor "com.github.Anuken:jabel:93fde537c7"
     }
 
-    project.tasks.withType(JavaCompile).configureEach {
-        targetCompatibility = 8
-        sourceCompatibility = JavaVersion.VERSION_16
-        options.generatedSourceOutputDirectory.set(project.file("gen"))
+    project.tasks.withType(JavaCompile) {
         rootProject.ext.setIfHasProp("org.gradle.java.home", v -> options.forkOptions.executable = v)
-        options.encoding = "UTF-8"
         var finalAPArgs = []
         project.ext.APArgs.each { String str ->
             if (!str.contains("-A"))
                 finalAPArgs.add("-A" + str)
         }
+
+        options.encoding = "UTF-8"
+        options.compilerArgs += ["-Xlint:none"]
         options.compilerArgs += finalAPArgs
-        if (JavaVersion.current() != JavaVersion.VERSION_1_8) {
-            options.compilerArgs.addAll(['--release', '8'])
-        }
+        options.compilerArgs.addAll(['--release', '8'])
+        options.generatedSourceOutputDirectory.set(project.file("gen"))
+        options.forkOptions.jvmArgs.addAll([
+                '--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED',
+                '--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED',
+                '--add-opens=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED',
+                '--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED',
+                '--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED',
+                '--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED',
+                '--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED',
+                '--add-opens=jdk.compiler/com.sun.source.util=ALL-UNNAMED',
+                '--add-opens=java.base/sun.reflect.annotation=ALL-UNNAMED'
+        ])
+
+        targetCompatibility = 8
+        sourceCompatibility = JavaVersion.VERSION_16
 
         doFirst {
             delete options.generatedSourceOutputDirectory.get().asFile.listFiles()

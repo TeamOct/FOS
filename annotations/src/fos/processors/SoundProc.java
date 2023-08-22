@@ -10,6 +10,7 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
 import fos.annotations.AnnotationProcessor;
 import fos.annotations.FOSAnnotations;
+import fos.util.FOSProcessor;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
@@ -24,6 +25,11 @@ import java.util.Set;
 @SupportedOptions({"ProjectName", "ProjectRes", "ModPackage", "FileTree"}) // TODO remove this anno?
 @FOSAnnotations.SupportedAnnotationTypes(FOSAnnotations.CreateSoundHost.class)
 public class SoundProc extends FOSProcessor {
+
+    @Override
+    public void process(RoundEnvironment env) throws Exception {
+
+    }
 
     Seq<Fi> temp = new Seq<>();
     @Override

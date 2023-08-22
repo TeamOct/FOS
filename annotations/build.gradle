@@ -8,3 +8,10 @@ dependencies {
 tasks.withType(Jar) {
     writeProcessors()
 }
+
+tasks.withType(JavaCompile){
+    targetCompatibility = 8
+    sourceCompatibility = 8
+    options.compilerArgs.removeAll(['--release', '8'])
+    options.fork = true
+}
