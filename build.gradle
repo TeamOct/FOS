@@ -34,7 +34,7 @@ task cleanBuilds(type: Delete) {
     doLast {
         subprojects.each { Project p ->
             if (p.buildDir.exists()) {
-                //delete(p.buildDir)
+                delete(p.buildDir)
             }
         }
     }
@@ -270,13 +270,15 @@ task publishProj {
 
 task deploy {
     dependsOn subprojects.stream().<Task>map(p -> p.tasks.jar).toArray()
-    finalizedBy rootProject.tasks.cleanBuilds
+    // FIXME sucks on Windows
+    //finalizedBy rootProject.tasks.cleanBuilds
 }
 
 task workflowCommit {
     dependsOn deploy
 }
 
+// TODO remove useless task
 task buildRelease(type: Jar) {
     dependsOn deploy
 
