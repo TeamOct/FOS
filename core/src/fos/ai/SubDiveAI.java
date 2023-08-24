@@ -1,7 +1,8 @@
 package fos.ai;
 
 import fos.content.FOSCommands;
-import fos.type.units.constructors.SubmarineUnit;
+import fos.gen.Submarine;
+import fos.gen.Submarinec;
 import mindustry.entities.units.AIController;
 
 /**
@@ -12,9 +13,9 @@ import mindustry.entities.units.AIController;
 public class SubDiveAI extends AIController {
     @Override
     public void init() {
-        if (unit instanceof SubmarineUnit sub && !sub.subSolid(sub.tileX(), sub.tileY())) {
-            sub.submerged = !sub.submerged;
-            sub.elevation = sub.submerged ? 0f : 0.005f;
+        if (unit instanceof Submarinec sub && !sub.subSolid(sub.tileX(), sub.tileY())) {
+            sub.submerged(!sub.submerged());
+            sub.elevation(sub.submerged() ? 0f : 0.005f);
         }
     }
 }

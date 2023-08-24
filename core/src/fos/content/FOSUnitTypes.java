@@ -1,17 +1,22 @@
 package fos.content;
 
+import arc.graphics.Color;
 import arc.math.Mathf;
 import fos.ai.*;
+import fos.gen.Bugc;
+import fos.gen.LumoniPlayerUnitc;
+import fos.gen.Submarinec;
 import fos.graphics.FOSPal;
 import fos.type.abilities.HackFieldAbility;
 import fos.type.bullets.*;
 import fos.type.units.*;
-import fos.type.units.constructors.LumoniPlayerUnit;
 import fos.type.units.destroyers.DestroyersUnits;
 import fos.type.units.weapons.InjectorWeapon;
+import mindustry.annotations.Annotations;
 import mindustry.content.*;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
+import mindustry.entities.part.HoverPart;
 import mindustry.entities.part.RegionPart;
 import mindustry.entities.pattern.ShootSpread;
 import mindustry.gen.*;
@@ -25,18 +30,24 @@ public class FOSUnitTypes {
     //mechs
     legion, citadel,
     //legs
-    lord, testBoss,
+    testBoss,
     //flying
     sergeant, lieutenant, captain, general, marshal,
     smoke, cloud, storm,
     testRepair, testOverdrive,
+    //hovers
+    assault,
     //payload
-    vulture,
+    vulture;
     //get stick-BUG-ged lol
-    smallBug, mediumBug, largeBug, hugeBug, titanBug,
-    smallFlying, mediumFlying, largeFlying, hugeFlying, titanFlying,
     //TODO submarines
-    subSmall;
+    public static @Annotations.EntityDef({Submarinec.class}) UnitType subSmall;
+
+    public static @Annotations.EntityDef({LumoniPlayerUnitc.class, Legsc.class}) UnitType lord;
+
+    public static @Annotations.EntityDef({Bugc.class, Crawlc.class}) UnitType smallBug, mediumBug, largeBug, hugeBug, titanBug;
+
+    public static @Annotations.EntityDef({Bugc.class, Flyingc.class}) UnitType smallFlying, mediumFlying, largeFlying, hugeFlying, titanFlying;
 
     public static void load(){
         DestroyersUnits.load();
@@ -126,7 +137,6 @@ public class FOSUnitTypes {
             mineSpeed = 8f;
             buildSpeed = 1f;
             weapons.add(FOSWeaponModules.standard1.weapon);
-            constructor = LumoniPlayerUnit::create;
         }};
 
         sergeant = new UnitType("sergeant"){{
@@ -336,6 +346,40 @@ public class FOSUnitTypes {
             speed = 1.2f;
             constructor = BuildingTetherPayloadUnit::create;
         }};
+
+        assault = new UnitType("assault"){{
+            health = 400;
+            armor = 2f;
+            constructor = ElevationMoveUnit::create;
+            hovering = true;
+            shadowElevation = 0.1f;
+            drag = 0.07f;
+            speed = 1.8f;
+            rotateSpeed = 5f;
+            engineOffset = 7f;
+            engineSize = 2f;
+            itemCapacity = 0;
+
+            abilities.add(new MoveEffectAbility(0f, -7f, Pal.sapBulletBack, Fx.missileTrailShort, 4f){{
+                teamColor = true;
+            }});
+
+            parts.add(new HoverPart(){{
+                x = 3.9f;
+                y = -4;
+                mirror = true;
+                radius = 6f;
+                phase = 90f;
+                stroke = 2f;
+                layerOffset = -0.001f;
+                color = Color.valueOf("bf92f9");
+            }});
+        }
+            @Override
+            public void update(Unit unit) {
+                super.update(unit);
+            }
+        };
 
         vulture = new CarrierUnitType("vulture"){{
             health = 400;

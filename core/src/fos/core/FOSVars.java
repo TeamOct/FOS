@@ -6,7 +6,6 @@ import arc.struct.Seq;
 import fos.content.FOSFluids;
 import fos.controllers.CapsulesController;
 import fos.files.InternalFileTree;
-import fos.type.units.constructors.*;
 import fos.ui.*;
 import fos.ui.menus.FOSMenuRenderer;
 import mindustry.ai.Pathfinder;
@@ -32,13 +31,6 @@ public class FOSVars {
 
     /** Capsules creator **/
     public static CapsulesController capsulesController;
-
-    /** ID of the {@link BugUnit} class. */
-    public static int bugEntity;
-    /** ID of the {@link BugFlyingUnit} class. */
-    public static int bugFlyingEntity;
-    /** ID of the {@link SubmarineUnit} class. */
-    public static int subEntity;
 
     /** A flowfield used in certain custom AIs. */
     public static Pathfinder.Flowfield fpos = new Pathfinder.PositionTarget(new Vec2());
@@ -79,9 +71,5 @@ public class FOSVars {
         });
 
         TechTree.roots.remove(mechTree);
-
-        bugEntity = EntityMapping.register("FOSBugUnit", BugUnit::new);
-        bugFlyingEntity = EntityMapping.register("FOSBugFlyingUnit", BugFlyingUnit::new);
-        subEntity = EntityMapping.register("FOSSubmarineUnit", SubmarineUnit::new);
     }
 }

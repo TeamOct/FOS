@@ -9,6 +9,7 @@ import arc.util.Scaling;
 import arc.util.Structs;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
+import fos.gen.LumoniPlayerUnitc;
 import fos.net.FOSPackets;
 import fos.type.content.WeaponModule;
 import fos.type.units.LumoniPlayerUnitType;
@@ -92,7 +93,7 @@ public class UpgradeCenter extends Block {
             Weapon weapon = getWeaponModules().get(weaponIndex).weapon;
             if (weapon == null) return;
 
-            if (potentialEfficiency < 1 || !(Vars.player.unit().type instanceof LumoniPlayerUnitType) || tile == null) return;
+            if (potentialEfficiency < 1 || !(Vars.player.unit() instanceof LumoniPlayerUnitc) || tile == null) return;
 
             consume();
             packet.player.unit().mounts(new WeaponMount[]{weapon.mountType.get(weapon)});

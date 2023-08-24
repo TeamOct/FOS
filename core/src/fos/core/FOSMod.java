@@ -24,7 +24,9 @@ import mindustry.mod.Mod;
 import mindustry.mod.Mods.LoadedMod;
 import mindustry.ui.*;
 import mindustry.ui.dialogs.PlanetDialog;
+import mma.annotations.ModAnnotations;
 
+@ModAnnotations.AnnotationSettings(rootPackage = "fos")
 @FOSAnnotations.Settings(map = {
         "ModPackage", "fos"
 })

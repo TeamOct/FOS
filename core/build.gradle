@@ -6,6 +6,9 @@ dependencies {
 
     compileOnly project(":annotations")
     annotationProcessor project(":annotations")
+
+    compileOnly "com.github.Zelaux.ZelauxModCore:annotations:-SNAPSHOT"
+    annotationProcessor "com.github.Zelaux.ZelauxModCore:annotations:-SNAPSHOT"
 }
 
 ext {

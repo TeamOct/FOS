@@ -5,7 +5,8 @@ import arc.math.*;
 import arc.util.Tmp;
 import fos.ai.SubDiveAI;
 import fos.content.FOSCommands;
-import fos.type.units.constructors.SubmarineUnit;
+import fos.gen.Submarine;
+import fos.gen.Submarinec;
 import mindustry.Vars;
 import mindustry.ai.UnitCommand;
 import mindustry.entities.abilities.Ability;
@@ -24,7 +25,6 @@ public class SubmarineUnitType extends UnitType {
             UnitCommand.moveCommand,
             FOSCommands.diveCommand
         };
-        constructor = SubmarineUnit::new;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class SubmarineUnitType extends UnitType {
     public void applyColor(Unit unit) {
         super.applyColor(unit);
 
-        Draw.mixcol(Tmp.c1.set(unit.tileOn().floor().mapColor).mul(0.83f), ((SubmarineUnit)unit).submerged ? 0.8f : 0f);
+        Draw.mixcol(Tmp.c1.set(unit.tileOn().floor().mapColor).mul(0.83f), ((Submarinec)unit).submerged() ? 0.8f : 0f);
     }
 
     //hopefully I did not break everything.
@@ -66,7 +66,7 @@ public class SubmarineUnitType extends UnitType {
         drawSoftShadow(unit);
 
         Draw.z(z);
-        Draw.alpha(((SubmarineUnit)unit).submerged ? 0.3f : 1f);
+        Draw.alpha(((Submarinec)unit).submerged() ? 0.3f : 1f);
 
         if(drawBody) drawOutline(unit);
         drawWeaponOutlines(unit);
@@ -112,11 +112,11 @@ public class SubmarineUnitType extends UnitType {
 
     @Override
     public void drawShadow(Unit unit) {
-        if (!((SubmarineUnit)unit).submerged) super.drawShadow(unit);
+        if (!((Submarinec)unit).submerged()) super.drawShadow(unit);
     }
 
     @Override
     public void drawSoftShadow(Unit unit) {
-        if (!((SubmarineUnit)unit).submerged) super.drawSoftShadow(unit);
+        if (!((Submarinec)unit).submerged()) super.drawSoftShadow(unit);
     }
 }
