@@ -56,7 +56,7 @@ public class FOSBullets {
             collidesAir = false;
 
             lightningColor = colors[1];
-            lightningDamage = this.damage * 2;
+            lightningDamage = this.damage * 0.2f;
             lightningLength = 9;
             lightningSpacing = 19f + (38f * (lenMultiplier - 1));
             lightningDelay = 3f;
