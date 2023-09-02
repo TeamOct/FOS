@@ -1,7 +1,6 @@
 package fos.type.units;
 
 import fos.ai.*;
-import fos.type.units.constructors.*;
 import mindustry.type.UnitType;
 import mindustry.world.meta.BlockFlag;
 
@@ -10,7 +9,6 @@ public class BugUnitType extends UnitType {
     public BugUnitType(String name, boolean flying) {
         super(name);
         omniMovement = flying;
-        constructor = flying ? BugFlyingUnit::create : BugUnit::create;
         this.flying = flying;
         targetAir = flying;
         targetGround = true;

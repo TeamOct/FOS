@@ -21,23 +21,6 @@ allprojects.each { Project project ->
 
     project.version = properties.get("version")
     project.group = properties.get("group")
-
-    tasks.withType(JavaCompile).configureEach {
-        options.fork = true
-        options.forkOptions.jvmArgs += "-Xms256m -Xmx1024m --illegal-access=permit" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED" +
-                "--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED" +
-                "--add-opens=java.base/sun.reflect.annotation=ALL-UNNAMED"
-    }
 }
 
 wrapper {
@@ -147,6 +130,7 @@ subprojects.each { Project project ->
     ]
 
     project.ext {
+        // setup annotation processors properties
         APArgs = ["ProjectName=${project.name}"]
         var src = "ProjectSrc=", res = "ProjectRes="
         project.sourceSets.main.java.srcDirs.each { var str ->
@@ -184,8 +168,7 @@ subprojects.each { Project project ->
             var srcFiles = project.sourceSets.main.java.srcDirs.getAt(0)
             if (srcFiles.exists()) {
                 srcFiles.eachFileRecurse(groovy.io.FileType.FILES) { file ->
-                    if (file.name.endsWith(".java") && ((file.text.contains(" extends AbstractProcessor")
-                            && !file.text.contains("abstract class")))) {
+                    if (file.name.endsWith(".java") && file.text.contains("@AnnotationProcessor")) {
                         text.append(file.path.substring(srcFiles.path.length() + 1)).append("\n")
                     }
                 }
@@ -204,21 +187,33 @@ subprojects.each { Project project ->
         annotationProcessor "com.github.Anuken:jabel:93fde537c7"
     }
 
-    project.tasks.withType(JavaCompile).configureEach {
-        targetCompatibility = 8
-        sourceCompatibility = JavaVersion.VERSION_16
-        options.generatedSourceOutputDirectory.set(project.file("gen"))
+    project.tasks.withType(JavaCompile) {
         rootProject.ext.setIfHasProp("org.gradle.java.home", v -> options.forkOptions.executable = v)
-        options.encoding = "UTF-8"
         var finalAPArgs = []
         project.ext.APArgs.each { String str ->
             if (!str.contains("-A"))
                 finalAPArgs.add("-A" + str)
         }
+
+        options.encoding = "UTF-8"
+        options.compilerArgs += ["-Xlint:none"]
         options.compilerArgs += finalAPArgs
-        if (JavaVersion.current() != JavaVersion.VERSION_1_8) {
-            options.compilerArgs.addAll(['--release', '8'])
-        }
+        options.compilerArgs.addAll(['--release', '8'])
+        options.generatedSourceOutputDirectory.set(project.file("gen"))
+        options.forkOptions.jvmArgs.addAll([
+                '--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED',
+                '--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED',
+                '--add-opens=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED',
+                '--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED',
+                '--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED',
+                '--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED',
+                '--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED',
+                '--add-opens=jdk.compiler/com.sun.source.util=ALL-UNNAMED',
+                '--add-opens=java.base/sun.reflect.annotation=ALL-UNNAMED'
+        ])
+
+        targetCompatibility = 8
+        sourceCompatibility = JavaVersion.VERSION_16
 
         doFirst {
             delete options.generatedSourceOutputDirectory.get().asFile.listFiles()
@@ -227,20 +222,13 @@ subprojects.each { Project project ->
 
     project.tasks.create("copyJar") {
         doLast {
-            copy {
-                from {
-                    project.tasks.jar.archiveFile.get()
-                }
-                project.ext.copyPaths.each { p ->
-                    into(p)
+            project.ext.copyPaths.each { p ->
+                copy {
+                    from project.tasks.jar
+                    into p
                 }
             }
         }
-    }
-
-    project.tasks.create("cjar") {
-        dependsOn project.tasks.jar
-        finalizedBy rootProject.tasks.cleanBuilds
     }
 
     project.tasks.jar {
@@ -282,11 +270,41 @@ task publishProj {
 
 task deploy {
     dependsOn subprojects.stream().<Task>map(p -> p.tasks.jar).toArray()
-    finalizedBy rootProject.tasks.cleanBuilds
+    // FIXME sucks on Windows
+    //finalizedBy rootProject.tasks.cleanBuilds
 }
 
 task workflowCommit {
     dependsOn deploy
+}
+
+// TODO remove useless task
+task buildRelease(type: Jar) {
+    dependsOn deploy
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from {
+        zipTree("artifacts/" + rootProject.ext.getOutputJar(project(":android")))
+        zipTree("artifacts/" + rootProject.ext.getOutputJar(project(":desktop")))
+    }
+
+    doLast {
+        def copyPaths = [
+                "$rootProject.projectDir/artifacts",
+        ]
+        if (rootProject.ext.copyProperties.containsKey("release"))
+            copyPaths += Arrays.stream(rootProject.ext.copyProperties.get("release").split(";")).toList()
+
+        copyPaths.each { p ->
+            copy {
+                from {
+                    project.tasks.jar.archiveFile.get()
+                }
+                into(p)
+            }
+        }
+    }
 }
 
 // only for local machine (WIP)

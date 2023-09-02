@@ -3,13 +3,14 @@ package fos.processors;
 import arc.audio.Sound;
 import arc.files.Fi;
 import arc.struct.Seq;
-import arc.util.Log;
 import arc.util.Structs;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
-import fos.annotations.CreateSoundHost;
+import fos.annotations.AnnotationProcessor;
+import fos.annotations.FOSAnnotations;
+import fos.util.FOSProcessor;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
@@ -20,27 +21,29 @@ import javax.lang.model.util.Types;
 import java.io.IOException;
 import java.util.Set;
 
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
-@SupportedOptions({"ProjectName", "ProjectRes", "ModPackage", "FileTree"})
-@SupportedAnnotationTypes("fos.annotations.CreateSoundHost")
-public class SoundProc extends AbstractProcessor {
-    private Types types;
-    private Elements elements;
+@AnnotationProcessor
+@SupportedOptions({"ProjectName", "ProjectRes", "ModPackage", "FileTree"}) // TODO remove this anno?
+@FOSAnnotations.SupportedAnnotationTypes(FOSAnnotations.CreateSoundHost.class)
+public class SoundProc extends FOSProcessor {
+
+    @Override
+    public void process(RoundEnvironment env) throws Exception {
+
+    }
 
     Seq<Fi> temp = new Seq<>();
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        types = processingEnv.getTypeUtils();
-        elements = processingEnv.getElementUtils();
+        super.process(annotations, roundEnv);
 
-        String[] resources = processingEnv.getOptions().get("ProjectRes").split(";");
-        String n = processingEnv.getOptions().get("ProjectName");
+        String[] resources = arguments.get("ProjectRes").split(";");
+        String packagee = arguments.get("ModPackage");
+        String fileTree = arguments.get("FileTree");
+        String n = arguments.get("ProjectName");
         String name = n.substring(0, 1).toUpperCase() + n.substring(1);
-        String packagee = processingEnv.getOptions().get("ModPackage");
-        String fileTree = processingEnv.getOptions().get("FileTree");
 
-        roundEnv.getElementsAnnotatedWith(CreateSoundHost.class).forEach(element -> {
-            CreateSoundHost annotation = element.getAnnotation(CreateSoundHost.class);
+        roundEnv.getElementsAnnotatedWith(FOSAnnotations.CreateSoundHost.class).forEach(element -> {
+            FOSAnnotations.CreateSoundHost annotation = element.getAnnotation(FOSAnnotations.CreateSoundHost.class);
 
             String[] extensions = annotation.extensions();
             String[] paths = annotation.paths();

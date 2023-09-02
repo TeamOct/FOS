@@ -1,3 +1,5 @@
+import java.util.regex.Pattern
+
 dependencies {
     compileOnly "com.github.Anuken.Arc:arc-core:$rootProject.arcVersion"
     compileOnly "com.github.Anuken.$rootProject.mindustryDependencyType:core:$rootProject.mindustryVersion"
@@ -10,64 +12,74 @@ dependencies {
 
 ext {
     sdkRoot = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT") ?: rootProject.ext.localProperties.get("sdkroot")
-    rawFile = "raw-${rootProject.ext.getOutputJar(project)}"
     dexFile = new File(project.buildDir, "dex-${rootProject.ext.getOutputJar(project)}")
     useandroid = rootProject.ext.localProperties.get("useandroid")
 }
 
-task createAndroidJar(type: Jar) {
-    archiveFileName = rootProject.ext.getOutputJar(project)
-
+project.tasks.create("createFinalJar", Jar) {
+    archiveFileName = "temp.jar"
     from {
-        [zipTree("$project.buildDir/libs/$rawFile"), zipTree(dexFile)]
+        [
+                zipTree(project.tasks.jar.archiveFile.get()),
+                zipTree(dexFile)
+        ]
+    }
+    doLast {
+        delete project.tasks.jar.archiveFile.get()
+        copy {
+            from archiveFile.get()
+            into project.tasks.jar.destinationDirectory
+            rename { name ->
+                println project.tasks.jar.archiveFile.get()
+                println project.tasks.jar.destinationDirectory.get()
+                println project.tasks.jar.archiveFileName.get()
+                project.tasks.jar.archiveFileName.get()
+            }
+        }
     }
 
-    doLast {
-        delete {
-            "$project.buildDir/libs/$rawFile"
-        }
-        copy {
-            from {
-                archiveFile.get().asFile
-            }
-            project.ext.copyPaths.each { p ->
-                into(p)
-            }
-        }
-    }
+    finalizedBy project.tasks.copyJar
 }
 
 task dex {
     doLast{
-        println "Use android ${useandroid == null || useandroid == true}."
-        if (useandroid == null || useandroid == true) {
-            if (!sdkRoot || !new File(sdkRoot).exists())
-                throw new GradleException("No valid Android SDK found.")
-            def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find {
-                f -> new File(f, "android.jar").exists()
-            }
-            if (!platformRoot)
-                throw new GradleException("No android.jar found. Ensure that you have an Android platform installed.")
+        if (!sdkRoot || !new File(sdkRoot).exists())
+            throw new GradleException("No valid Android SDK found.")
+        def platformRoot = new File("$sdkRoot/platforms/").listFiles().sort().reverse().find {
+            f -> new File(f, "android.jar").exists()
+        }
+        if (!platformRoot)
+            throw new GradleException("No android.jar found. Ensure that you have an Android platform installed.")
 
-            var classpath = (configurations.compileClasspath.asList()
-                    + configurations.runtimeClasspath.asList()
-                    + [new File(platformRoot, "android.jar")])
-            var dependencies = ""
-            for(def path : classpath){
-                dependencies += "--classpath "
-                dependencies += path.path + " "
-            }
+        var classpath = (configurations.compileClasspath.asList()
+                + configurations.runtimeClasspath.asList()
+                + [new File(platformRoot, "android.jar")])
+        var dependencies = ""
+        for(def path : classpath){
+            dependencies += "--classpath "
+            dependencies += path.path + " "
+        }
 
-            "d8 $dependencies --min-api 14 --output $dexFile.absolutePath $project.buildDir/libs/$rawFile"
+        if (System.getenv("OS") == "Windows_NT") {
+            def buildToolsRoot = new File("$sdkRoot/build-tools/").listFiles().sort().reverse().find {
+                f -> new File(f, "d8.bat").exists()
+            }
+            if (!buildToolsRoot)
+                throw new GradleException("No d8.bat found. Ensure that you have an Android build tools installed.")
+            "${buildToolsRoot}/d8.bat $dependencies ${project.tasks.jar.archiveFile.get()} --min-api 14 --output $dexFile.absolutePath"
+                    .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
+        } else {
+            "d8 $dependencies ${project.tasks.jar.archiveFile.get()} --min-api 14 --output $dexFile.absolutePath"
                     .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
         }
     }
 
-    if (useandroid == null || useandroid == true)
-        finalizedBy project.tasks.createAndroidJar
+    finalizedBy project.tasks.createFinalJar
 }
 
 project.tasks.named("jar").configure {
-    archiveFileName = rawFile
-    finalizedBy project.tasks.dex
+    println "Build android dex: ${useandroid == null || useandroid.equalsIgnoreCase("true")}."
+    if (useandroid == null || useandroid.equalsIgnoreCase("true")) {
+        finalizedBy project.tasks.dex
+    }
 }

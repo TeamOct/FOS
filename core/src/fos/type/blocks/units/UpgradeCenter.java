@@ -7,9 +7,9 @@ import arc.scene.ui.layout.Table;
 import arc.struct.Seq;
 import arc.util.*;
 import arc.util.io.*;
+import fos.gen.LumoniPlayerUnitc;
+import fos.net.FOSPackets;
 import fos.type.content.WeaponModule;
-import fos.type.packets.UpgradeCenterUpgradePacket;
-import fos.type.units.LumoniPlayerUnitType;
 import mindustry.Vars;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.*;
@@ -109,11 +109,11 @@ public class UpgradeCenter extends Block {
         }
 
         /** Called from packet. **/
-        public void upgrade(UpgradeCenterUpgradePacket packet) {
+        public void upgrade(FOSPackets.UpgradeCenterUpgradePacket packet) {
             Weapon weapon = getWeaponModules().get(weaponIndex).weapon;
             if (weapon == null) return;
 
-            if (potentialEfficiency < 1 || !(Vars.player.unit().type instanceof LumoniPlayerUnitType) || tile == null) return;
+            if (potentialEfficiency < 1 || !(Vars.player.unit() instanceof LumoniPlayerUnitc) || tile == null) return;
 
             consume();
             packet.player.unit().mounts(new WeaponMount[]{weapon.mountType.get(weapon)});
@@ -132,14 +132,17 @@ public class UpgradeCenter extends Block {
             table.row();
 
             table.button(Icon.units, Styles.clearTogglei, () -> {
-                deselect();
-
                 if (weaponIndex == -1) return;
-                UpgradeCenterUpgradePacket packet = new UpgradeCenterUpgradePacket(Vars.player, this, weaponIndex);
+                FOSPackets.UpgradeCenterUpgradePacket packet = new FOSPackets.UpgradeCenterUpgradePacket(Vars.player, this, weaponIndex);
                 if (!Vars.net.active())
                     upgrade(packet);
-                else
+                else {
+                    if (Vars.net.server())
+                        upgrade(packet);
                     Vars.net.send(packet, true);
+                }
+
+                deselect();
             });
         }
 
