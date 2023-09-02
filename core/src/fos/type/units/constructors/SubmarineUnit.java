@@ -15,9 +15,6 @@ import static mindustry.Vars.world;
  * @author Slotterleet
  */
 public class SubmarineUnit extends UnitWaterMove {
-    /** Whether a sub can get up to surface to attack land targets.
-     * TODO: move to SubmarineUnitType */
-    public boolean canSurface = true;
     /** Submerged state of a sub. */
     public boolean submerged = false;
 
@@ -51,32 +48,16 @@ public class SubmarineUnit extends UnitWaterMove {
         return super.targetable(targeter);
     }
 
-/* FIXME: this code is cursed. should I even use this in the first place?
-
-    @Override
-    public void updateDrowning() {
-        if (!submerged) {
-            drownTime -= Time.delta / 50;
-        } else {
-            //a unit actually does NOT drown, it submerges.
-            drownTime += Time.delta / tileOn().floor().drownTime * 3;
-        }
-
-        drownTime = Mathf.clamp(drownTime, 0f, 0.8f);
-    }
-*/
 
     @Override
     public void write(Writes write) {
         super.write(write);
-        write.bool(canSurface);
         write.bool(submerged);
     }
 
     @Override
     public void read(Reads read) {
         super.read(read);
-        canSurface = read.bool();
         submerged = read.bool();
     }
 }

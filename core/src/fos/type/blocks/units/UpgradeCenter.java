@@ -1,30 +1,28 @@
 package fos.type.blocks.units;
 
 import arc.graphics.Color;
+import arc.graphics.g2d.TextureRegion;
 import arc.scene.style.TextureRegionDrawable;
-import arc.scene.ui.layout.*;
+import arc.scene.ui.layout.Table;
 import arc.struct.Seq;
-import arc.util.Scaling;
-import arc.util.Structs;
-import arc.util.io.Reads;
-import arc.util.io.Writes;
+import arc.util.*;
+import arc.util.io.*;
 import fos.type.content.WeaponModule;
 import fos.type.packets.UpgradeCenterUpgradePacket;
 import fos.type.units.LumoniPlayerUnitType;
 import mindustry.Vars;
-import mindustry.content.Fx;
-import mindustry.entities.units.*;
+import mindustry.entities.units.WeaponMount;
 import mindustry.gen.*;
-import mindustry.type.Item;
-import mindustry.type.ItemStack;
-import mindustry.type.Weapon;
+import mindustry.type.*;
 import mindustry.ui.Styles;
-import mindustry.world.*;
+import mindustry.world.Block;
 import mindustry.world.blocks.ItemSelection;
-import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.consumers.ConsumeItemDynamic;
+import mindustry.world.draw.*;
 
 public class UpgradeCenter extends Block {
+    public DrawBlock drawer = new DrawMulti(new DrawDefault(), new DrawRegion("-top"));
+
     public int[] capacities = {};
     public Seq<WeaponModule> weaponModules = Vars.content.statusEffects().copy().filter(s -> s instanceof WeaponModule).as();
 
@@ -61,12 +59,34 @@ public class UpgradeCenter extends Block {
         super.init();
     }
 
+    @Override
+    public void load() {
+        super.load();
+        drawer.load(this);
+    }
+
+    @Override
+    public TextureRegion[] icons() {
+        return drawer.finalIcons(this);
+    }
+
     @SuppressWarnings("unused")
     public class UpgradeCenterBuild extends Building {
         public int weaponIndex = -1;
 
         public Seq<WeaponModule> getWeaponModules() {
             return weaponModules;
+        }
+
+        @Override
+        public void draw() {
+            drawer.draw(this);
+        }
+
+        @Override
+        public void drawLight() {
+            super.drawLight();
+            drawer.drawLight(this);
         }
 
         @Override

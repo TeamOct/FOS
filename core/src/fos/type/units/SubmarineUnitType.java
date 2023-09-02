@@ -18,6 +18,9 @@ import mindustry.type.UnitType;
 import static mindustry.Vars.player;
 
 public class SubmarineUnitType extends UnitType {
+    /** Whether this can surface or submerge. */
+    public boolean canSurface = true;
+
     public SubmarineUnitType(String name) {
         super(name);
         commands = new UnitCommand[]{
