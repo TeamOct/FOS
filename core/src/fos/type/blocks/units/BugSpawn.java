@@ -2,6 +2,7 @@ package fos.type.blocks.units;
 
 import arc.Events;
 import arc.math.Mathf;
+import fos.content.FOSUnitTypes;
 import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.gen.Unit;
@@ -9,8 +10,6 @@ import mindustry.type.UnitType;
 import mindustry.world.blocks.payloads.UnitPayload;
 import mindustry.world.blocks.units.UnitBlock;
 import mindustry.world.meta.BuildVisibility;
-
-import static fos.content.FOSUnitTypes.smallBug;
 
 public class BugSpawn extends UnitBlock {
     public float interval;
@@ -45,7 +44,7 @@ public class BugSpawn extends UnitBlock {
         private UnitType getBug() {
             UnitType[][] units = {
                 //I actually made ACTUAL bugs spawn, yay!
-                {smallBug}
+                {FOSUnitTypes.bugSmall}
             };
 
             int curTier = Mathf.round(Mathf.floor(

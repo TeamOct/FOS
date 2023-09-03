@@ -102,6 +102,10 @@ ext {
         return latestVersion
     }
 
+    // key word for natives searching
+    // paste as comment to file that's needs natives
+    nativesTrigger = "nt_gdrl_trigger"
+
     mindustryDependencyType = rootProject.properties.get("mindustryDependencyType")
     mindustryVersion = rootProject.properties.get("mindustryVersion")
     arcVersion = rootProject.properties.get("arcVersion")
@@ -122,8 +126,9 @@ subprojects.each { Project project ->
         }
     }
 
+    // bin folder only for natives
     project.sourceSets.main.java.srcDirs = [
-            "src", "gen"
+            "src", "gen", "bin"
     ]
     project.sourceSets.main.resources.srcDirs = [
             "res",
@@ -160,6 +165,9 @@ subprojects.each { Project project ->
             return new File(p, c)
         }
 
+        classesDir = "$project.buildDir/classes/java/main"
+        headersDir = "$project.buildDir/headers"
+
         writeProcessors = {
             var processorPath = child(project.sourceSets.main.resources.srcDirs.getAt(0), "META-INF/services/")
             processorPath.mkdirs()
@@ -185,6 +193,41 @@ subprojects.each { Project project ->
 
     project.dependencies {
         annotationProcessor "com.github.Anuken:jabel:93fde537c7"
+    }
+
+    project.tasks.create("compileHeaders") {
+        doLast {
+            def command = ""
+            project.sourceSets.main.java.srcDirs.each { dir ->
+                if (dir.exists()) {
+                    dir.eachFileRecurse(groovy.io.FileType.FILES) { file ->
+                        if (file.text.contains("$rootProject.ext.nativesTrigger")) {
+                            def path = file.absolutePath//.substring(dir.absolutePath.length())
+                            //path = "${project.ext.classesDir.substring(rootProject.projectDir.absolutePath.length()+1)}$path"
+                            command += "\"$path\" "
+                        }
+                    }
+                }
+            }
+
+            if (command.length() > 0) {
+                var classpath = (project.configurations.compileClasspath.asList()
+                        + project.configurations.runtimeClasspath.asList()
+                            + project.sourceSets.main.java.srcDirs.asList())
+                var dependencies = String.join(";", classpath.path)
+
+                command = "javac -cp $dependencies -h \"$project.ext.headersDir\" " + command
+                println command
+                rootProject.ext.doExec(command)
+                println C.get()
+            } else {
+                println "No headers founded for project $project."
+            }
+        }
+
+        project.tasks.withType(JavaCompile) {
+            //finalizedBy project.tasks.compileHeaders
+        }
     }
 
     project.tasks.withType(JavaCompile) {
