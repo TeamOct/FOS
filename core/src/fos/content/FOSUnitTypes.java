@@ -468,12 +468,5 @@ public class FOSUnitTypes {
                 }};
             }});
         }};
-
-        //FIXME: AP is currently broken, so assigning constructors manually for now. Should be removed after AP is fixed.
-        subSmall.constructor     = Submarine::create;
-        lord.constructor         = LegsLumoniPlayerUnit::create;
-        smallBug.constructor     = BugCrawl::create;
-        smallFlying.constructor  = BugFlying::create;
-        mediumFlying.constructor = BugFlying::create;
     }
 }
