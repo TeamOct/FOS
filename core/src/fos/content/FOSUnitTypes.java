@@ -3,9 +3,7 @@ package fos.content;
 import arc.graphics.Color;
 import arc.math.Mathf;
 import fos.ai.*;
-import fos.gen.Bugc;
-import fos.gen.LumoniPlayerUnitc;
-import fos.gen.Submarinec;
+import fos.gen.*;
 import fos.graphics.FOSPal;
 import fos.type.abilities.HackFieldAbility;
 import fos.type.bullets.*;
@@ -16,8 +14,7 @@ import mindustry.annotations.Annotations;
 import mindustry.content.*;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
-import mindustry.entities.part.HoverPart;
-import mindustry.entities.part.RegionPart;
+import mindustry.entities.part.*;
 import mindustry.entities.pattern.ShootSpread;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -486,5 +483,12 @@ public class FOSUnitTypes {
                 }};
             }});
         }};
+
+        //FIXME: AP is currently broken, so assigning constructors manually for now. Should be removed after AP is fixed.
+        subSmall.constructor     = Submarine::create;
+        lord.constructor         = LegsLumoniPlayerUnit::create;
+        smallBug.constructor     = BugCrawl::create;
+        smallFlying.constructor  = BugFlying::create;
+        mediumFlying.constructor = BugFlying::create;
     }
 }
