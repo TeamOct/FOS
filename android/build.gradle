@@ -56,8 +56,7 @@ task dex {
                 + [new File(platformRoot, "android.jar")])
         var dependencies = ""
         for(def path : classpath){
-            dependencies += "--classpath "
-            dependencies += path.path + " "
+            dependencies += "--classpath \"$path.path\" "
         }
 
         if (System.getenv("OS") == "Windows_NT") {

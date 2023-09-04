@@ -1,4 +1,4 @@
-main: "fos.core.FOSModAndroid"
+main: "fos.core.FOSMod"
 name: "fos"
 displayName: "Fictional Octo System"
 author: "Team Oct"

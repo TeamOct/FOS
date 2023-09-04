@@ -23,28 +23,25 @@ import mindustry.type.*;
 import static fos.content.FOSStatuses.hacked;
 
 public class FOSUnitTypes {
-    public static UnitType
-    //mechs
-    legion, citadel,
-    //legs
-    testBoss,
-    //flying
-    sergeant, lieutenant, captain, general, marshal,
-    smoke, cloud, storm,
-    testRepair, testOverdrive,
-    //hovers
-    assault,
-    //payload
-    vulture;
-    //get stick-BUG-ged lol
+    public static @Annotations.EntityDef({Mechc.class}) UnitType legion, citadel;
+
+    public static @Annotations.EntityDef({Unitc.class}) UnitType sergeant, lieutenant, captain, general, marshal,
+            smoke, cloud;
+
+    public static @Annotations.EntityDef({ElevationMovec.class, Unitc.class}) UnitType assault;
+
+    public static @Annotations.EntityDef({Payloadc.class, Unitc.class}) UnitType vulture;
+
+    public static @Annotations.EntityDef({BuildingTetherc.class, Payloadc.class}) UnitType testOverdrive;
+
     //TODO submarines
     public static @Annotations.EntityDef({Submarinec.class}) UnitType subSmall;
 
     public static @Annotations.EntityDef({LumoniPlayerUnitc.class, Legsc.class}) UnitType lord;
 
-    public static @Annotations.EntityDef({Bugc.class, Crawlc.class}) UnitType smallBug, mediumBug, largeBug, hugeBug, titanBug;
+    public static @Annotations.EntityDef({Bugc.class, Crawlc.class}) UnitType bugSmall;
 
-    public static @Annotations.EntityDef({Bugc.class, Flyingc.class}) UnitType smallFlying, mediumFlying, largeFlying, hugeFlying, titanFlying;
+    public static @Annotations.EntityDef({Bugc.class, Unitc.class}) UnitType bugFlyingSmall, bugFlyingMedium;
 
     public static void load(){
         DestroyersUnits.load();
@@ -65,7 +62,6 @@ public class FOSUnitTypes {
                 abilities.add(new UnitSpawnAbility(UnitTypes.atrax, 600, x, y));
                 angle += Mathf.PI2 / 8;
             }
-            constructor = MechUnit::create;
         }};
         //TODO: campaign boss
         citadel = new UnitType("citadel"){{
@@ -120,7 +116,6 @@ public class FOSUnitTypes {
                     }};
                 }}
             );
-            constructor = MechUnit::create;
         }};
 
         lord = new LumoniPlayerUnitType("lord"){{
@@ -158,7 +153,6 @@ public class FOSUnitTypes {
                     ejectEffect = Fx.casing1;
                 }}
             );
-            constructor = UnitEntity::create;
         }};
         lieutenant = new UnitType("lieutenant"){{
             health = 360;
@@ -183,7 +177,6 @@ public class FOSUnitTypes {
                     }};
                 }}
             );
-            constructor = UnitEntity::create;
         }};
         captain = new UnitType("captain"){{
             health = 900;
@@ -250,7 +243,6 @@ public class FOSUnitTypes {
                     }};
                 }}
             );
-            constructor = UnitEntity::create;
         }};
         general = new UnitType("general"){{
             health = 6250;
@@ -261,7 +253,6 @@ public class FOSUnitTypes {
             immunities.add(hacked);
             range = 40f;
             abilities.add(new HackFieldAbility(hacked, 40f, 0.002f));
-            constructor = UnitEntity::create;
         }};
         marshal = new UnitType("marshal"){{
             health = 18000;
@@ -288,7 +279,6 @@ public class FOSUnitTypes {
                     }};
                 }}
             );
-            constructor = UnitEntity::create;
         }};
 
         smoke = new UnitType("smoke"){{
@@ -317,7 +307,6 @@ public class FOSUnitTypes {
                     }};
                 }}
             );
-            constructor = UnitEntity::create;
         }};
         cloud = new UnitType("cloud"){{
             health = 400;
@@ -332,7 +321,6 @@ public class FOSUnitTypes {
             abilities.add(
                 new MoveLightningAbility(40f, 16, 0.2f, -6f, 3f, 5f, FOSPal.destroyerTrail.cpy().shiftSaturation(-0.3f))
             );
-            constructor = UnitEntity::create;
         }};
 
         testOverdrive = new UnitType("test-overdrive"){{
@@ -341,13 +329,11 @@ public class FOSUnitTypes {
             rotateSpeed = 10f;
             flying = true;
             speed = 1.2f;
-            constructor = BuildingTetherPayloadUnit::create;
         }};
 
         assault = new UnitType("assault"){{
             health = 400;
             armor = 2f;
-            constructor = ElevationMoveUnit::create;
             hovering = true;
             shadowElevation = 0.1f;
             drag = 0.07f;
@@ -387,11 +373,10 @@ public class FOSUnitTypes {
             flying = true;
             omniMovement = true;
             lowAltitude = true;
-            constructor = PayloadUnit::create;
             controller = u -> new CarrierAI();
         }};
 
-        smallBug = new BugUnitType("bug-small", false){{
+        bugSmall = new BugUnitType("bug-small", false){{
             health = 80;
             armor = 8;
             hitSize = 10f;
@@ -400,7 +385,7 @@ public class FOSUnitTypes {
             crushDamage = 0.2f;
         }};
 
-        smallFlying = new BugUnitType("bug-flying-small", true, true){{
+        bugFlyingSmall = new BugUnitType("bug-flying-small", true, true){{
             health = 60;
             armor = 1;
             hitSize = 6f;
@@ -433,7 +418,7 @@ public class FOSUnitTypes {
                 }}
             );
         }};
-        mediumFlying = new BugUnitType("bug-flying-medium", true){{
+        bugFlyingMedium = new BugUnitType("bug-flying-medium", true){{
             health = 200;
             armor = 2;
             hitSize = 12f;
@@ -464,7 +449,7 @@ public class FOSUnitTypes {
         }};
 
         //TODO
-        subSmall = new SubmarineUnitType("dummy-submarine"){{
+        subSmall = new SubmarineUnitType("sub-small"){{
             health = 250;
             speed = 0.7f;
             hitSize = 12f;

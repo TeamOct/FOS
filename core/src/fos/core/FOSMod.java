@@ -12,6 +12,7 @@ import arc.util.*;
 import fos.annotations.FOSAnnotations;
 import fos.content.*;
 import fos.controllers.CapsulesController;
+import fos.gen.FosEntityMapping;
 import fos.graphics.FOSShaders;
 import fos.net.FOSPackets;
 import fos.ui.DamageDisplay;
@@ -26,17 +27,22 @@ import mindustry.ui.*;
 import mindustry.ui.dialogs.PlanetDialog;
 import mma.annotations.ModAnnotations;
 
-@ModAnnotations.AnnotationSettings(rootPackage = "fos")
+@ModAnnotations.RootDirectoryPath(rootDirectoryPath = "core")
+@ModAnnotations.AnnotationSettings(
+        rootPackage = "fos",
+        modInfoPath = "res/mod.hjson"
+)
 @FOSAnnotations.Settings(map = {
         "ModPackage", "fos"
 })
 @FOSAnnotations.CreateSoundHost(paths="sounds/loops", extensions="mp3", className="FOSLoops", depth=-1)
-public abstract class FOSMod extends Mod {
+public class FOSMod extends Mod {
     public FOSMod() {
         if (FOSVars.debug)
             Log.level = Log.LogLevel.debug;
 
         FOSPackets.register();
+        FosEntityMapping.init();
 
         Events.on(EventType.ClientLoadEvent.class, e -> {
             clientLoaded();
