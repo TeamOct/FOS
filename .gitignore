@@ -19,4 +19,4 @@ cache/
 ### Generated files
 gen/
 bin/
-*/javax.annotation.processing.Processor
+javax.annotation.processing.Processor
