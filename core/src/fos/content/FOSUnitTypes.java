@@ -453,7 +453,7 @@ public class FOSUnitTypes {
             health = 250;
             speed = 0.7f;
             hitSize = 12f;
-            weapons.add(new Weapon("fos-subMissile-launcher"){{
+            weapons.add(new Weapon("fos-sub-missile-launcher"){{
                 reload = 22f;
                 x = 0f;
                 y = 1f;
@@ -468,12 +468,5 @@ public class FOSUnitTypes {
                 }};
             }});
         }};
-
-        //FIXME: AP is currently broken, so assigning constructors manually for now. Should be removed after AP is fixed.
-        subSmall.constructor     = Submarine::create;
-        lord.constructor         = LegsLumoniPlayerUnit::create;
-        smallBug.constructor     = BugCrawl::create;
-        smallFlying.constructor  = BugFlying::create;
-        mediumFlying.constructor = BugFlying::create;
     }
 }

@@ -28,11 +28,9 @@ public class FOSPlanets {
         /* asteroids */ uxerd;
 
     public static void load() {
-        caldemolt = new Planet("caldemolt", sun, 5f){{
+        caldemolt = new Planet("caldemolt", null, 5f){{
             bloom = true;
             hasAtmosphere = false;
-            tidalLock = true;
-            orbitRadius = 1200f; //No one will notice that (Out of bounds fix)
             drawOrbit = false;
             meshLoader = () -> new SunMesh(this, 5, 5, 0.3, 1.7, 1.2, 1, 1.1f,
                 Color.valueOf("f7c265"), Color.valueOf("ffb380"), Color.valueOf("e8d174"), Color.valueOf("ffa95e"));
