@@ -47,7 +47,7 @@ import static mindustry.type.ItemStack.with;
 public class FOSBlocks {
     public static Block
     //crafting
-    resourceExtractor, cuberiumSynthesizer, sublimator, siliconSynthesizer, brassSmelter,
+    resourceExtractor, cuberiumSynthesizer, sublimator, siliconSynthesizer, brassSmelter, arkyciteRefinery,
     //production
     rockCrusher, drillBase, drillBaseLarge, tinDrill, silverDrill, diamondDrill, vanadiumDrill,
     oreDetectorSmall, oreDetector, oreDetectorReinforced, oreDetectorOverclocked,
@@ -203,6 +203,39 @@ public class FOSBlocks {
                 //new DrawLiquidRegion(tokicite),
                 new DrawDefault()
             );
+        }};
+        arkyciteRefinery = new GenericCrafter("arkycite-refinery"){{
+            health = 900;
+            size = 4;
+            rotate = true;
+            rotateDraw = false;
+            group = BlockGroup.liquids;
+            invertFlip = true;
+            hasItems = true;
+            hasLiquids = true;
+            hasPower = true;
+            itemCapacity = 5;
+            liquidCapacity = 60f;
+            consumePower(5f);
+            consumeLiquid(arkycite, 20f/60f);
+            craftTime = 60f;
+            outputItem = new ItemStack(scrap, 1); //TODO: placeholder byproduct
+            outputLiquids = LiquidStack.with(oil, 14f/60f, water, 4f/60f);
+            liquidOutputDirections = new int[]{0, 2};
+            drawer = new DrawMulti(
+                new DrawRegion("-bottom"),
+                new DrawLiquidOutputs(),
+                new DrawLiquidRegion(arkycite){{
+                    suffix = "-input";
+                }},
+                new DrawBubbles(arkycite.color),
+                new DrawPistons(){{
+                    lenOffset = 7.5f;
+                }},
+                //new DrawGlowRegion("-glow"), зачем???
+                new DrawDefault()
+            );
+            requirements(Category.crafting, with(tin, 150, diamond, 100, silicon, 75, vanadium, 125));
         }};
         //endregion
         //region production
