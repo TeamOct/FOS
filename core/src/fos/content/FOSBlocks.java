@@ -15,7 +15,7 @@ import fos.type.blocks.special.CliffExplosive;
 import fos.type.blocks.storage.DetectorCoreBlock;
 import fos.type.blocks.units.*;
 import fos.type.bullets.*;
-import fos.type.draw.DrawDiagonalPistons;
+import fos.type.draw.*;
 import mindustry.content.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.part.*;
@@ -90,11 +90,11 @@ public class FOSBlocks {
             envRequired = envEnabled = Env.space;
             drawer = new DrawMulti(
                 new DrawRegion("-bottom"),
-                //this is the custom drawer btw
-                new DrawDiagonalPistons(){{
-                    sides = 8;
+                new DrawPistons(){{
+                    angleOffset = 45f;
+                    sides = 4;
+                    lenOffset = 7;
                     sinScl = 6f;
-                    lenOffset = 7f;
                 }},
                 new DrawDefault()
             );
@@ -219,20 +219,29 @@ public class FOSBlocks {
             consumePower(5f);
             consumeLiquid(arkycite, 20f/60f);
             craftTime = 60f;
-            outputItem = new ItemStack(scrap, 1); //TODO: placeholder byproduct
+            outputItem = new ItemStack(sulphur, 1);
             outputLiquids = LiquidStack.with(oil, 14f/60f, water, 4f/60f);
             liquidOutputDirections = new int[]{0, 2};
+            craftEffect = FOSFx.refinerySmoke;
+            lightRadius = 32f;
             drawer = new DrawMulti(
                 new DrawRegion("-bottom"),
-                new DrawLiquidOutputs(),
-                new DrawLiquidRegion(arkycite){{
+                //why DrawLiquidRegion does not rotate?!
+                //TODO: not related to this but I wanna make a PR for drawer rotations
+                new DrawRotLiquidRegion(arkycite){{
                     suffix = "-input";
                 }},
-                new DrawBubbles(arkycite.color),
+/*
+                new DrawBubbles(arkycite.color.cpy().mul(1.2f)){{
+                    spread = 12f;
+                }},
+*/
+                new DrawOutputLiquids(), //not to be confused with DrawLiquidOutputs, this one's modded!
                 new DrawPistons(){{
+                    angleOffset = 45f;
                     lenOffset = 7.5f;
                 }},
-                //new DrawGlowRegion("-glow"), зачем???
+                new DrawGlowRegion("-glow"),
                 new DrawDefault()
             );
             requirements(Category.crafting, with(tin, 150, diamond, 100, silicon, 75, vanadium, 125));

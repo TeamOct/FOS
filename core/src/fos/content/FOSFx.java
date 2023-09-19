@@ -2,7 +2,6 @@ package fos.content;
 
 import arc.graphics.g2d.*;
 import arc.math.geom.*;
-import fos.graphics.DrawUtils;
 import fos.type.bullets.OhioBeamBulletType;
 import mindustry.entities.Effect;
 import mindustry.gen.*;
@@ -87,33 +86,27 @@ public class FOSFx {
     }).followParent(true).layer(Layer.shields),
 
     tokiciteBoil = new Effect(240f, e -> {
-        Vec2 parallax;
-
         if (Groups.weather.contains(we -> we.weather instanceof ParticleWeather p && p.useWindVector)) {
             WeatherState w = Groups.weather.find(ws -> ws.weather instanceof ParticleWeather p && p.useWindVector);
-
-            parallax = DrawUtils.parallax(
-                w.windVector.x * 24f * w.intensity * e.fin(), w.windVector.y * 24f * w.intensity * e.fin(),
-                e.fin() * 0.25f, true);
+            e.x += w.windVector.x * 24f * w.intensity * e.fin();
+            e.y += w.windVector.y * 24f * w.intensity * e.fin();
         } else {
             Vec2 v = new Vec2(1, 1);
-            parallax = DrawUtils.parallax(
-                v.x * 12f * e.fin(), v.y * 12f * e.fin(),
-                e.fin() * 0.25f, false);
+            e.x += v.x * 12f * e.fin();
+            e.y += v.y * 12f * e.fin();
         }
 
-        e.x += parallax.x;
-        e.y += parallax.y;
-        Draw.color(FOSFluids.tokicite.color, 0.4f * e.fout());
+        Draw.color(e.color, 0.4f * e.fout());
         Fill.circle(e.x, e.y, 4f * (1 + e.fin()));
     }),
 
     brassSmelterCraft = new Effect(1f, e -> {
+        var c = FOSFluids.tokicite.color;
         //copypasta time
-        tokiciteBoil.at(e.x - 8f, e.y - 8f);
-        tokiciteBoil.at(e.x + 8f, e.y - 8f);
-        tokiciteBoil.at(e.x - 8f, e.y + 8f);
-        tokiciteBoil.at(e.x + 8f, e.y + 8f);
+        tokiciteBoil.at(e.x - 8f, e.y - 8f, c);
+        tokiciteBoil.at(e.x + 8f, e.y - 8f, c);
+        tokiciteBoil.at(e.x - 8f, e.y + 8f, c);
+        tokiciteBoil.at(e.x + 8f, e.y + 8f, c);
     }),
 
     deathrayDespawn = new Effect(60f, 720f, e -> {
@@ -121,5 +114,10 @@ public class FOSFx {
 
         OhioBeamBulletType.drawBeam(Pal.slagOrange, e.x, e.y, 18f * e.fout());
         OhioBeamBulletType.drawBeam(Pal.slagOrange, data.x, data.y, 18f * e.fout());
+    }),
+
+    refinerySmoke = new Effect(1f, e -> {
+        //RECYCLED ASSET TIME
+        tokiciteBoil.at(e.x, e.y, Pal.gray);
     });
 }
