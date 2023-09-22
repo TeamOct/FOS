@@ -1,5 +1,3 @@
-import java.util.regex.Pattern
-
 dependencies {
     compileOnly "com.github.Anuken.Arc:arc-core:$rootProject.arcVersion"
     compileOnly "com.github.Anuken.$rootProject.mindustryDependencyType:core:$rootProject.mindustryVersion"
@@ -56,7 +54,7 @@ task dex {
                 + [new File(platformRoot, "android.jar")])
         var dependencies = ""
         for(def path : classpath){
-            dependencies += "--classpath \"$path.path\" "
+            dependencies += "--classpath $path.path "
         }
 
         if (System.getenv("OS") == "Windows_NT") {
