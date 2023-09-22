@@ -70,6 +70,8 @@ public class FOSBlocks {
     alienMoss,
     oreTin, oreTinSurface, oreSilver, oreLithium, oreDiamond, oreVanadium, oreIridium, oreLuminium,
     bugSpawn,
+    //props
+    softbush,
     //units
     upgradeCenter, hovercraftFactory, droidConstructor,
     //storage
@@ -1158,6 +1160,12 @@ public class FOSBlocks {
         bugSpawn = new BugSpawn("bug-spawn"){{
             size = 3;
             interval = 20 * 60;
+        }};
+
+        softbush = new Prop("softbush"){{
+            variants = 3;
+            blublu.asFloor().decoration = this;
+            breakSound = Sounds.plantBreak;
         }};
         //endregion
         //region units

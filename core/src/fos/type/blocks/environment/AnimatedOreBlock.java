@@ -1,8 +1,7 @@
 package fos.type.blocks.environment;
 
-import arc.Events;
-import arc.graphics.Color;
-import arc.graphics.Texture;
+import arc.*;
+import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.graphics.gl.Shader;
 import arc.math.Mathf;
@@ -13,7 +12,7 @@ import fos.graphics.*;
 import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.game.EventType;
-import mindustry.graphics.*;
+import mindustry.graphics.Drawf;
 import mindustry.world.Tile;
 import mindustry.world.blocks.environment.OreBlock;
 
@@ -45,6 +44,19 @@ public class AnimatedOreBlock extends OreBlock {
         } else {
             throw new IllegalArgumentException("Animated ores must have 1 or more variants!");
         }
+    }
+
+    //overridden to prevent crashes. FIXME: actual regions are fucked up
+    @Override
+    public TextureRegion[] editorVariantRegions() {
+        if (editorVariantRegions == null) {
+            variantRegions();
+            editorVariantRegions = new TextureRegion[variantRegions.length];
+            for (int i = 1; i <= variantRegions.length; i++) {
+                editorVariantRegions[i-1] = Core.atlas.find(name + "-" + i + "-2");
+            }
+        }
+        return editorVariantRegions;
     }
 
     @Override
@@ -84,6 +96,7 @@ public class AnimatedOreBlock extends OreBlock {
     public abstract static class DrawRequest {
         public static Seq<DrawRequest> requests = new Seq<>();
         static {
+
             Events.run(EventType.Trigger.postDraw, () -> requests.clear());
             Events.run(EventType.Trigger.draw, () -> requests.each(DrawRequest::draw));
         }
