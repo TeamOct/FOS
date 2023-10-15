@@ -2,11 +2,11 @@ package fos.ai;
 
 import fos.type.units.LumoniPlayerUnitType;
 import mindustry.ai.Pathfinder;
-import mindustry.entities.*;
+import mindustry.entities.Units;
 import mindustry.entities.units.*;
 import mindustry.gen.*;
 
-public class GroundBossAI extends AIController implements ITargetable {
+public class GroundBossAI extends AIController implements TargetableAI {
     @Override
     public void updateMovement() {
         Building core = unit.closestEnemyCore();

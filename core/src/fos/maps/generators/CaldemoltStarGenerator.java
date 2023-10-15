@@ -1,104 +1,3 @@
-/*
- * SPOILER ALERT! Please don't look at this code, it's too early to show it... yet. Thank you.
- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 package fos.maps.generators;
 
 import arc.graphics.Color;
@@ -107,8 +6,7 @@ import fos.content.FOSTeam;
 import mindustry.content.Blocks;
 import mindustry.maps.generators.PlanetGenerator;
 import mindustry.type.Sector;
-import mindustry.world.Tile;
-import mindustry.world.Tiles;
+import mindustry.world.*;
 
 public class CaldemoltStarGenerator extends PlanetGenerator {
     //these are required to override, but have no actual use here.

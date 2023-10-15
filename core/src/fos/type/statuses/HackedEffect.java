@@ -21,7 +21,7 @@ public class HackedEffect extends StatusEffect {
 
     @Override
     public void update(Unit unit, float time) {
-        unit.damageContinuousPierce(unit.maxHealth / lifetime);
+        unit.damageContinuousPierce((unit.maxHealth * healthMultiplier) / lifetime);
         effect.at(unit.x, unit.y);
     }
 

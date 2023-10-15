@@ -9,7 +9,7 @@ import mindustry.gen.*;
 import mindustry.world.Tile;
 import mindustry.world.meta.BlockFlag;
 
-public class BugAI extends AIController implements ITargetable {
+public class BugAI extends AIController implements TargetableAI {
     private Bugc bug;
 
     @Override

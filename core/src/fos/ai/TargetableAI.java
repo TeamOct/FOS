@@ -11,7 +11,7 @@ import static mindustry.ai.Pathfinder.PositionTarget;
  * An interface for {@link mindustry.entities.units.AIController} that supports custom targeting options.
  * @author Slotterleet
  */
-public interface ITargetable {
+public interface TargetableAI {
     /** @return next tile to travel to */
     default Tile pathfindTarget(Position target, Unit unit) {
         Tile tile = unit.tileOn();
