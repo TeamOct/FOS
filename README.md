@@ -5,7 +5,7 @@ Update 1.1 brings you a brand-new star system where you can experience brand-new
 ## Credits
 - Team founder: [@Polar4ik](https://github.com/Polar4ik) (polar4ik)
 - Programmers: [@Slotterleet](https://github.com/Slotterleet) (sl0tterleet), [@nekit508](https://github.com/nekit508) (nekit508)
-- Artists: [@Motyaka](https://github.com/NotTheGrawx) (_motyaka), [@Kowkodivka](https://github.com/Kowkodivka) (rachie#0949)
+- Artists: [@NotTheGrawx](https://github.com/NotTheGrawx) (_motyaka), [@Kowkodivka](https://github.com/Kowkodivka) (rachie#0949)
 - Composer: [@SaigoN0Nozomi](https://github.com/SaigoN0Nozomi) (saigononozomi)
 - Translator: [@Slotterleet](https://github.com/Slotterleet) (sl0tterleet)
 
