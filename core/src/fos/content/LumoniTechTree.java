@@ -36,6 +36,7 @@ public class LumoniTechTree {
             });
             node(hovercraftFactory, () ->
                 node(vulture));
+            node(crudeDrill, () -> {});
             node(drillBase, () -> {
                 node(tinDrill, () ->
                     node(silverDrill, () ->

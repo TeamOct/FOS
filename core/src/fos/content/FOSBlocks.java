@@ -48,20 +48,27 @@ public class FOSBlocks {
     public static Block
     //crafting
     resourceExtractor, cuberiumSynthesizer, sublimator, siliconSynthesizer, brassSmelter, arkyciteRefinery,
+
     //production
+    crudeDrill,
     rockCrusher, drillBase, drillBaseLarge, tinDrill, silverDrill, diamondDrill, vanadiumDrill,
     oreDetectorSmall, oreDetector, oreDetectorReinforced, oreDetectorOverclocked,
+
     //distribution
     spaceDuct, spaceRouter, spaceBridge, itemCatapult, tinBelt, liquidConveyor,
+
     //liquids
     fluidPipe, pumpjack,
+
     //power
     tinWire, tinWirePole, copperWire, copperWirePole, brassWire, brassWirePole, windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
+
     //defense
     tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
     helix, sticker, particulator, pulse, breakdown, thunder, cluster, judge, newJudge,
     matrixShieldProj,
     landMine,
+
     //environment & ores
     cyanium, cyaniumAlt, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluAlt, blubluWall, purpur, purpurWall,
@@ -70,12 +77,16 @@ public class FOSBlocks {
     alienMoss,
     oreTin, oreTinSurface, oreSilver, oreLithium, oreDiamond, oreVanadium, oreIridium, oreLuminium,
     bugSpawn,
+
     //props
     softbush,
+
     //units
     upgradeCenter, hovercraftFactory, droidConstructor,
+
     //storage
     coreColony, coreFortress, coreCity, coreMetropolis, lightUnloader,
+
     //special
     nukeLauncher, bigBoy, cliffDetonator, orbitalAccelerator, mechResearchCore, bioResearchCore;
 
@@ -250,6 +261,17 @@ public class FOSBlocks {
         }};
         //endregion
         //region production
+        crudeDrill = new Drill("crude-drill"){{
+            size = 2;
+            tier = 2;
+            drillTime = 720f;
+            consumeLiquid(water, 0.08f).boost();
+            requirements(Category.production, with(tin, 10));
+            researchCost = with(tin, 25);
+            //not usable in Uxerd
+            envEnabled ^= Env.space;
+        }};
+
         rockCrusher = new HeatProducerDrill("rock-crusher"){{
             health = 300;
             size = 2;
