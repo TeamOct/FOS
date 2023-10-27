@@ -1,8 +1,6 @@
 dependencies {
     implementation "com.github.Anuken.Arc:arc-core:$rootProject.arcVersion"
     implementation "com.github.Anuken.$rootProject.mindustryDependencyType:core:$rootProject.mindustryVersion"
-
-    implementation 'com.squareup:javapoet:1.13.0'
 }
 
 tasks.withType(Jar) {

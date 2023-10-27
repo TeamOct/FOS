@@ -2,9 +2,6 @@ dependencies {
     compileOnly "com.github.Anuken.Arc:arc-core:$rootProject.arcVersion"
     compileOnly "com.github.Anuken.$rootProject.mindustryDependencyType:core:$rootProject.mindustryVersion"
 
-    compileOnly "com.github.Anuken.Arc:backend-sdl:$rootProject.arcVersion"
-    compileOnly "com.github.Anuken.Arc:natives-desktop:$rootProject.arcVersion"
-
     implementation project(":core")
 
     compileOnly project(":annotations")

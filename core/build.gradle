@@ -2,13 +2,8 @@ dependencies {
     compileOnly "com.github.Anuken.Arc:arc-core:$rootProject.arcVersion"
     compileOnly "com.github.Anuken.$rootProject.mindustryDependencyType:core:$rootProject.mindustryVersion"
 
-    implementation "com.github.liplum:MultiCrafterLib:v1.7"
-
     compileOnly project(":annotations")
     annotationProcessor project(":annotations")
-
-    compileOnly "com.github.Zelaux.ZelauxModCore:annotations:74a5591c36b"
-    annotationProcessor "com.github.Zelaux.ZelauxModCore:annotations:74a5591c36b"
 }
 
 ext {
