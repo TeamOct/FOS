@@ -1,15 +1,15 @@
 dependencies {
     if (dependenciesC.containsKey(project))
         dependenciesC.get(project).split(";").each { String dep ->
-            compileOnly dep
+            compileOnly dependencies.get(dep)
         }
     if (dependenciesI.containsKey(project))
         dependenciesI.get(project).split(";").each { String dep ->
-            implementation dep
+            implementation depdependencies.get(dep)
         }
     if (dependenciesA.containsKey(project))
         dependenciesA.get(project).split(";").each { String dep ->
-            annotationProcessor dep
+            annotationProcessor depdependencies.get(dep)
         }
 
     compileOnly project(":annotations")

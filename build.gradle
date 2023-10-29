@@ -82,33 +82,18 @@ ext {
         if (k.length() > 2) {
             switch (k.substring(k.length()-2)) {
                 case "-C":
-                    println "C"
-                    println k
-                    println v
-                    dependenciesC.put(k.substring(0, k.length()-2), v)
+                    dependenciesC.put(project(k.substring(0, k.length()-2)), v)
                     break
                 case "-I":
-                    println "I"
-                    println k
-                    println v
-                    dependenciesI.put(k.substring(0, k.length()-2), v)
+                    dependenciesI.put(project(k.substring(0, k.length()-2)), v)
                     break
                 case "-A":
-                    println "A"
-                    println k
-                    println v
-                    dependenciesA.put(k.substring(0, k.length()-2), v)
+                    dependenciesA.put(project(k.substring(0, k.length()-2)), v)
                     break
                 default:
-                    println "dep"
-                    println k
-                    println v
                     dependencies.put(k, v)
             }
         } else {
-            println "dep"
-            println k
-            println v
             dependencies.put(k, v)
         }
     })
