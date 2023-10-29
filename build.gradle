@@ -71,6 +71,33 @@ ext {
     if (new File("$rootProject.projectDir/local.properties").exists())
         localProperties.load(new FileInputStream(new File("$rootProject.projectDir/local.properties")))
 
+    dependenciesI = new HashMap<Project, String>()
+    dependenciesC = new HashMap<Project, String>()
+    dependenciesA = new HashMap<Project, String>()
+    dependencies = new HashMap<String, String>()
+    dependenciesProperties = new Properties()
+    var file = new File("$rootProject.projectDir/dependencies.properties")
+    dependenciesProperties.load(new InputStreamReader(new FileInputStream(file)))
+    dependenciesProperties.forEach((k, v) -> {
+        if (k.length() > 2) {
+            switch (k.substring(k.length()-1)) {
+                case "-C":
+                    dependenciesC.put(k.substring(0, k.length()-2), v)
+                    break
+                case "-I":
+                    dependenciesI.put(k.substring(0, k.length()-2), v)
+                    break
+                case "-A":
+                    dependenciesA.put(k.substring(0, k.length()-2), v)
+                    break
+                default:
+                    dependencies.put(k, v)
+            }
+        } else {
+            dependencies.put(k, v)
+        }
+    })
+
     setIfHasProp = { String property, Consumer<Object> set ->
         if (localProperties.containsKey(property))
             set.accept(localProperties.get(property))

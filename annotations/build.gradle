@@ -1,6 +1,16 @@
 dependencies {
-    implementation "com.github.Anuken.Arc:arc-core:$rootProject.arcVersion"
-    implementation "com.github.Anuken.$rootProject.mindustryDependencyType:core:$rootProject.mindustryVersion"
+    if (dependenciesC.containsKey(project))
+        dependenciesC.get(project).split(";").each { String dep ->
+            compileOnly dep
+        }
+    if (dependenciesI.containsKey(project))
+        dependenciesI.get(project).split(";").each { String dep ->
+            implementation dep
+        }
+    if (dependenciesA.containsKey(project))
+        dependenciesA.get(project).split(";").each { String dep ->
+            annotationProcessor dep
+        }
 }
 
 tasks.withType(Jar) {
