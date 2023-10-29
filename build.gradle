@@ -60,6 +60,10 @@ class C extends OutputStream {
     }
 }
 
+static String getVersion(String dependence) {
+    return dependence.substring(dependence.lastIndexOf(":")+1)
+}
+
 ext {
     modConfig = new Fi(rootProject.file("mod.hjson"))
 
@@ -147,8 +151,26 @@ subprojects.each { Project project ->
     // Anuke
     project.configurations.all {
         resolutionStrategy.eachDependency { details ->
-            if(details.requested.group == 'com.github.Anuken.Arc'){
-                details.useVersion "$arcVersion"
+            if(details.requested.group == "com.github.Anuken.Arc"){
+                String version = ""
+                if (rootProject.ext.dependenciesC.containsKey(project))
+                    rootProject.ext.dependenciesC.get(project).split(";").each { String dep ->
+                        if (dep.contains("com.github.Anuken.Arc"))
+                            version = getVersion(dep)
+                    }
+                if (rootProject.ext.dependenciesI.containsKey(project))
+                    rootProject.ext.dependenciesI.get(project).split(";").each { String dep ->
+                        if (dep.contains("com.github.Anuken.Arc"))
+                            version = getVersion(dep)
+                    }
+                if (rootProject.ext.dependenciesA.containsKey(project))
+                    rootProject.ext.dependenciesA.get(project).split(";").each { String dep ->
+                        if (dep.contains("com.github.Anuken.Arc"))
+                            version = getVersion(dep)
+                    }
+
+                if (version != "")
+                    details.useVersion version
             }
         }
     }
