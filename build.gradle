@@ -80,35 +80,35 @@ ext {
     dependenciesProperties.load(new InputStreamReader(new FileInputStream(file)))
     dependenciesProperties.forEach((k, v) -> {
         if (k.length() > 2) {
-            switch (k.substring(k.length()-1)) {
+            switch (k.substring(k.length()-2)) {
                 case "-C":
-                    print "C"
-                    print k
-                    print v
+                    println "C"
+                    println k
+                    println v
                     dependenciesC.put(k.substring(0, k.length()-2), v)
                     break
                 case "-I":
-                    print "I"
-                    print k
-                    print v
+                    println "I"
+                    println k
+                    println v
                     dependenciesI.put(k.substring(0, k.length()-2), v)
                     break
                 case "-A":
-                    print "A"
-                    print k
-                    print v
+                    println "A"
+                    println k
+                    println v
                     dependenciesA.put(k.substring(0, k.length()-2), v)
                     break
                 default:
-                    print "dep"
-                    print k
-                    print v
+                    println "dep"
+                    println k
+                    println v
                     dependencies.put(k, v)
             }
         } else {
-            print "dep"
-            print k
-            print v
+            println "dep"
+            println k
+            println v
             dependencies.put(k, v)
         }
     })
