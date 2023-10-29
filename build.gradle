@@ -82,18 +82,33 @@ ext {
         if (k.length() > 2) {
             switch (k.substring(k.length()-1)) {
                 case "-C":
+                    print "C"
+                    print k
+                    print v
                     dependenciesC.put(k.substring(0, k.length()-2), v)
                     break
                 case "-I":
+                    print "I"
+                    print k
+                    print v
                     dependenciesI.put(k.substring(0, k.length()-2), v)
                     break
                 case "-A":
+                    print "A"
+                    print k
+                    print v
                     dependenciesA.put(k.substring(0, k.length()-2), v)
                     break
                 default:
+                    print "dep"
+                    print k
+                    print v
                     dependencies.put(k, v)
             }
         } else {
+            print "dep"
+            print k
+            print v
             dependencies.put(k, v)
         }
     })
