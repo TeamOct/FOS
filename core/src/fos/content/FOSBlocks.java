@@ -50,7 +50,7 @@ public class FOSBlocks {
     resourceExtractor, cuberiumSynthesizer, sublimator, siliconSynthesizer, brassSmelter, arkyciteRefinery,
 
     //production
-    crudeDrill,
+    crudeDrill, improvedDrill, proficientDrill,
     rockCrusher, drillBase, drillBaseLarge, tinDrill, silverDrill, diamondDrill, vanadiumDrill,
     oreDetectorSmall, oreDetector, oreDetectorReinforced, oreDetectorOverclocked,
 
@@ -265,11 +265,32 @@ public class FOSBlocks {
             size = 2;
             tier = 2;
             drillTime = 720f;
+            squareSprite = false;
+            drawSpinSprite = false;
             consumeLiquid(water, 0.08f).boost();
             requirements(Category.production, with(tin, 10));
             researchCost = with(tin, 25);
             //not usable in Uxerd
             envEnabled ^= Env.space;
+        }};
+        improvedDrill = new Drill("improved-drill"){{
+            size = 3;
+            tier = 4;
+            drillTime = 540f;
+            squareSprite = false;
+            consumePower(1f/6f);
+            consumeLiquid(water, 0.24f).boost();
+            requirements(Category.production, with(tin, 45, silver, 30));
+            envEnabled ^= Env.space;
+        }};
+        proficientDrill = new Drill("proficient-drill"){{
+            size = 4;
+            tier = 7;
+            drillTime = 480f;
+            squareSprite = false;
+            consumePower(2f);
+            consumeLiquid(tokicite, 0.5f).boost();
+            requirements(Category.production, with(tin, 50, brass, 25, silicon, 75, vanadium, 50, iridium, 45));
         }};
 
         rockCrusher = new HeatProducerDrill("rock-crusher"){{
@@ -418,7 +439,7 @@ public class FOSBlocks {
                 shots = 2;
                 mag = 2.5f;
             }};
-            drawer = new DrawTurret("lumina-"){{
+            drawer = new DrawTurret("lumoni-"){{
                 parts.addAll(
                     new RegionPart(){{
                         mirror = false;
@@ -504,20 +525,20 @@ public class FOSBlocks {
             range = 150;
             targetAir = true;
             targetGround = false;
-            recoil = 2f;
-            reload = 90f;
+            recoil = 0f;
+            reload = 45f;
             inaccuracy = 4f;
             outlineColor = Color.valueOf("302326");
-            shoot = new ShootSpread(2, 8f);
             shootSound = Sounds.mud;
             consumeLiquid(tokicite, 0.1f);
             ammo(
                 tin, new StickyBulletType(3f, 10, 60){{
                     lifetime = 50f;
-                    width = height = 12f;
-                    trailColor = FOSPal.tin;
-                    frontColor = backColor = FOSPal.tokicite;
-                    trailWidth = 3f;
+                    width = height = 10f;
+                    trailColor = FOSPal.tinBack;
+                    backColor = FOSPal.tin;
+                    frontColor = FOSPal.tokicite;
+                    trailWidth = 2f;
                     trailLength = 8;
                     ammoMultiplier = 2f;
                     splashDamage = 40;
@@ -525,17 +546,26 @@ public class FOSBlocks {
                 }},
                 diamond, new StickyBulletType(3f, 30, 60){{
                     lifetime = 50f;
-                    width = height = 12f;
-                    trailColor = FOSPal.diamond;
-                    frontColor = backColor = FOSPal.tokicite;
-                    trailWidth = 3f;
+                    width = height = 10f;
+                    trailColor = FOSPal.diamondBack;
+                    backColor = FOSPal.diamond;
+                    frontColor = FOSPal.tokicite;
+                    trailWidth = 2f;
                     trailLength = 8;
                     ammoMultiplier = 3f;
                     splashDamage = 50;
                     splashDamageRadius = 16f;
                 }}
             );
-            drawer = new DrawTurret("lumina-");
+            drawer = new DrawTurret("lumoni-"){{
+                parts.add(
+                    new RegionPart(),
+                    new RegionPart("-barrel"){{
+                        moveY -= 3f;
+                        progress = PartProgress.recoil;
+                    }}
+                );
+            }};
             requirements(Category.turret, with(tin, 75, silver, 100));
         }};
         particulator = new ItemTurret("particulator"){{
@@ -613,7 +643,7 @@ public class FOSBlocks {
                     }};
                 }}
             );
-            drawer = new DrawTurret("lumina-");
+            drawer = new DrawTurret("lumoni-");
             consumeCoolant(0.5f).boost();
             coolantMultiplier = 2f;
             requirements(Category.turret, with(tin, 200, silver, 125, silicon, 275));
@@ -657,7 +687,7 @@ public class FOSBlocks {
                     ammoMultiplier = 1f;
                 }}
             );
-            drawer = new DrawTurret("lumina-");
+            drawer = new DrawTurret("lumoni-");
             requirements(Category.turret, with(silver, 150, silicon, 100, diamond, 75, iridium, 100));
         }};
         thunder = new PowerTurret("thunder"){

@@ -13,6 +13,8 @@ public class StickyBulletType extends BasicBulletType {
 
     public StickyBulletType(float speed, float damage, int explosionDelay) {
         super(speed, damage);
+        sprite = "fos-sticky-bullet";
+        backSprite = "bullet-back";
         this.explosionDelay = explosionDelay;
         layer = Layer.flyingUnit + 1f;
         despawnHit = true;
