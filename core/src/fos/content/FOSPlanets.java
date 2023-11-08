@@ -80,8 +80,8 @@ public class FOSPlanets {
                 r.loadout = ItemStack.list();
                 r.planetBackground = new PlanetParams(){{
                     planet = parent;
-                    zoom = 0.8f;
-                    camPos = uxerd.position.cpy().sub(lumoni.position);
+                    zoom = 0.6f;
+                    camPos = uxerd.position.cpy().sub(caldemolt.position);
                 }};
                 r.dragMultiplier = 0.2f;
                 r.borderDarkness = false;
@@ -127,7 +127,7 @@ public class FOSPlanets {
                     ).mapColor;
 
                     meshes.add(new MatMesh(
-                        new NoiseMesh(this, 8, 1, 0.03f + rand.random(0.045f) * 1.3f, 2, 0.6f, 0.38f, 20f,
+                        new NoiseMesh(this, 28 + j, 1, 0.021f + rand.random(0.052f) * 1.3f, 2, 0.6f, 0.38f, 20f,
                             color, tinted, 3, 0.6f, 0.38f, 0.5f),
                         new Mat3D().setToTranslation(Tmp.v31.setToRandomDirection(rand).setLength(rand.random(0.44f, 1.4f) * 1.3f)))
                     );

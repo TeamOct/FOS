@@ -15,7 +15,7 @@ public class SpaceMenuBackground extends MenuBackground {
         params.drawUi = false;
 
         if (Core.settings.getBool("fos-rotatemenucamera")){
-            params.camPos.rotate(Vec3.Y, 0.1f);
+            params.camPos.rotate(Vec3.Y, 0.1f /* * Time.delta */);
         }
 
         renderer.planets.render(params);
