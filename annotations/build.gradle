@@ -1,8 +1,16 @@
 dependencies {
-    implementation "com.github.Anuken.Arc:arc-core:$rootProject.arcVersion"
-    implementation "com.github.Anuken.$rootProject.mindustryDependencyType:core:$rootProject.mindustryVersion"
-
-    implementation 'com.squareup:javapoet:1.13.0'
+    if (rootProject.ext.dependenciesC.containsKey(project))
+        rootProject.ext.dependenciesC.get(project).split(";").each { String dep ->
+            compileOnly rootProject.ext.dependencies.get(dep)
+        }
+    if (rootProject.ext.dependenciesI.containsKey(project))
+        rootProject.ext.dependenciesI.get(project).split(";").each { String dep ->
+            implementation rootProject.ext.dependencies.get(dep)
+        }
+    if (rootProject.ext.dependenciesA.containsKey(project))
+        rootProject.ext.dependenciesA.get(project).split(";").each { String dep ->
+            annotationProcessor rootProject.ext.dependencies.get(dep)
+        }
 }
 
 tasks.withType(Jar) {

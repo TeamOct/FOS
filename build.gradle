@@ -60,6 +60,10 @@ class C extends OutputStream {
     }
 }
 
+static String getVersion(String dependence) {
+    return dependence.substring(dependence.lastIndexOf(":")+1)
+}
+
 ext {
     modConfig = new Fi(rootProject.file("mod.hjson"))
 
@@ -70,6 +74,33 @@ ext {
     localProperties = new Properties()
     if (new File("$rootProject.projectDir/local.properties").exists())
         localProperties.load(new FileInputStream(new File("$rootProject.projectDir/local.properties")))
+
+    dependenciesI = new HashMap<Project, String>()
+    dependenciesC = new HashMap<Project, String>()
+    dependenciesA = new HashMap<Project, String>()
+    dependencies = new HashMap<String, String>()
+    dependenciesProperties = new Properties()
+    var file = new File("$rootProject.projectDir/dependencies.properties")
+    dependenciesProperties.load(new InputStreamReader(new FileInputStream(file)))
+    dependenciesProperties.forEach((k, v) -> {
+        if (k.length() > 2) {
+            switch (k.substring(k.length()-2)) {
+                case "-C":
+                    dependenciesC.put(project(k.substring(0, k.length()-2)), v)
+                    break
+                case "-I":
+                    dependenciesI.put(project(k.substring(0, k.length()-2)), v)
+                    break
+                case "-A":
+                    dependenciesA.put(project(k.substring(0, k.length()-2)), v)
+                    break
+                default:
+                    dependencies.put(k, v)
+            }
+        } else {
+            dependencies.put(k, v)
+        }
+    })
 
     setIfHasProp = { String property, Consumer<Object> set ->
         if (localProperties.containsKey(property))
@@ -120,8 +151,26 @@ subprojects.each { Project project ->
     // Anuke
     project.configurations.all {
         resolutionStrategy.eachDependency { details ->
-            if(details.requested.group == 'com.github.Anuken.Arc'){
-                details.useVersion "$arcVersion"
+            if(details.requested.group == "com.github.Anuken.Arc"){
+                String version = ""
+                if (rootProject.ext.dependenciesC.containsKey(project))
+                    rootProject.ext.dependenciesC.get(project).split(";").each { String dep ->
+                        if (dep.contains("com.github.Anuken.Arc"))
+                            version = getVersion(dep)
+                    }
+                if (rootProject.ext.dependenciesI.containsKey(project))
+                    rootProject.ext.dependenciesI.get(project).split(";").each { String dep ->
+                        if (dep.contains("com.github.Anuken.Arc"))
+                            version = getVersion(dep)
+                    }
+                if (rootProject.ext.dependenciesA.containsKey(project))
+                    rootProject.ext.dependenciesA.get(project).split(";").each { String dep ->
+                        if (dep.contains("com.github.Anuken.Arc"))
+                            version = getVersion(dep)
+                    }
+
+                if (version != "")
+                    details.useVersion version
             }
         }
     }
@@ -244,15 +293,18 @@ subprojects.each { Project project ->
         options.compilerArgs.addAll(['--release', '8'])
         options.generatedSourceOutputDirectory.set(project.file("gen"))
         options.forkOptions.jvmArgs.addAll([
-                '--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED',
-                '--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED',
-                '--add-opens=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED',
-                '--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED',
-                '--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED',
-                '--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED',
-                '--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED',
-                '--add-opens=jdk.compiler/com.sun.source.util=ALL-UNNAMED',
-                '--add-opens=java.base/sun.reflect.annotation=ALL-UNNAMED'
+                "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
+                "--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
+                "--add-opens=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED",
+                "--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED",
+                "--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
+                "--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
+                "--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
+                "--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
+                "--add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED",
+                "--add-opens=jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED",
+                "--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED",
+                "--add-opens=java.base/sun.reflect.annotation=ALL-UNNAMED"
         ])
 
         targetCompatibility = 8
