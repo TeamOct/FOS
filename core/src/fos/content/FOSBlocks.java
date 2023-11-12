@@ -65,7 +65,7 @@ public class FOSBlocks {
 
     //defense
     tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
-    helix, sticker, particulator, pulse, breakdown, thunder, cluster, judge, newJudge,
+    helix, sticker, dot, particulator, pulse, breakdown, thunder, cluster, judge, newJudge,
     matrixShieldProj,
     landMine,
 
@@ -567,6 +567,23 @@ public class FOSBlocks {
                 );
             }};
             requirements(Category.turret, with(tin, 75, silver, 100));
+        }};
+        dot = new TractorBeamTurret("dot"){{
+            scaledHealth = 480;
+            size = 2;
+            range = 150f;
+            rotateSpeed = 7.5f;
+            shootCone = 2f;
+            laserWidth = 0.2f;
+            damage = 3f;
+            force = 0f;
+            retargetTime = 45f;
+            targetAir = targetGround = true;
+            laserColor = Color.scarlet;
+            shootSound = Sounds.laser;
+            squareSprite = false;
+            consumePower(2f);
+            requirements(Category.turret, with(silver, 50, diamond, 75, vanadium, 50));
         }};
         particulator = new ItemTurret("particulator"){{
             health = 2400;
