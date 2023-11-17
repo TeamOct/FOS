@@ -9,7 +9,7 @@ import mindustry.type.Item;
 import static mindustry.content.Items.*;
 
 public class FOSItems {
-    public static Item rawNethratium, rawElbium, rawElithite, aluminium, tin, silver, lithium, brass, sulphur, cuberium, diamond, vanadium, iridium, luminium;
+    public static Item rawNethratium, rawElbium, rawElithite, aluminium, tin, silver, lithium, brass, sulphur, cuberium, diamond, vanadium, nickel, luminium;
 
     public static Seq<Item> uxerdItems = new Seq<>(), lumoniItems = new Seq<>();
 
@@ -54,7 +54,7 @@ public class FOSItems {
             cost = 3f;
             hardness = 5;
         }};
-        iridium = new Item("iridium", Color.valueOf("a3bda7")){{
+        nickel = new Item("nickel", Color.valueOf("a3bda7")){{
             cost = 4f;
             hardness = 6;
         }};
@@ -67,11 +67,11 @@ public class FOSItems {
             public void loadIcon(){
                 super.loadIcon();
                 fullIcon = uiIcon = new ShaderTextureRegion(FOSShaders.lis,
-                    new Texture(FOSVars.internalTree.child("sprites/items/luminium/luminium.png")), (s, o) -> {}, 0);
+                    new Texture(FOSVars.internalTree.child("sprites/items/luminium.png")), (s, o) -> {}, 0);
             }
         };
 
         uxerdItems.addAll(rawNethratium, rawElbium, rawElithite, aluminium, tin, silver, lithium, titanium, cuberium);
-        lumoniItems.addAll(copper, tin, silver, diamond, sand, silicon, brass, vanadium, iridium, luminium);
+        lumoniItems.addAll(copper, tin, silver, diamond, sand, silicon, brass, vanadium, nickel, luminium);
     }
 }

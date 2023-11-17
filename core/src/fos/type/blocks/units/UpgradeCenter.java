@@ -24,7 +24,7 @@ public class UpgradeCenter extends Block {
     public DrawBlock drawer = new DrawMulti(new DrawDefault(), new DrawRegion("-top"));
 
     public int[] capacities = {};
-    public Seq<WeaponModule> weaponModules = Vars.content.statusEffects().copy().filter(s -> s instanceof WeaponModule).as();
+    public Seq<WeaponModule> weaponModules = Vars.content.statusEffects().select(s -> s instanceof WeaponModule).as();
 
     public UpgradeCenter(String name) {
         super(name);

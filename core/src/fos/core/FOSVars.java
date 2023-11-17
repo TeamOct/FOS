@@ -11,7 +11,6 @@ import fos.ui.menus.FOSMenuRenderer;
 import mindustry.ai.Pathfinder;
 import mindustry.content.TechTree;
 import mindustry.game.Objectives;
-import mindustry.gen.EntityMapping;
 import mindustry.mod.Mods;
 
 import java.util.*;
@@ -44,7 +43,7 @@ public class FOSVars {
     /** Current date & time. */
     public static Calendar date = new GregorianCalendar();
 
-    public static boolean isAprilFools = FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;;
+    public static boolean isAprilFools = FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
 
     /** JAR internal navigation **/
     public static InternalFileTree internalTree = new InternalFileTree(FOSMod.class);

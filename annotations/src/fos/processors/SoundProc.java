@@ -4,20 +4,12 @@ import arc.audio.Sound;
 import arc.files.Fi;
 import arc.struct.Seq;
 import arc.util.Structs;
-import com.squareup.javapoet.CodeBlock;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.TypeSpec;
-import fos.annotations.AnnotationProcessor;
-import fos.annotations.FOSAnnotations;
+import com.squareup.javapoet.*;
+import fos.annotations.*;
 import fos.util.FOSProcessor;
 
 import javax.annotation.processing.*;
-import javax.lang.model.SourceVersion;
-import javax.lang.model.element.Modifier;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.util.Elements;
-import javax.lang.model.util.Types;
+import javax.lang.model.element.*;
 import java.io.IOException;
 import java.util.Set;
 
@@ -57,6 +49,7 @@ public class SoundProc extends FOSProcessor {
                 for (int j = 0; j < paths.length; j++) {
                     int finalI = i;
                     temp.clear();
+                    //TODO: filter() is deprecated but gradle fails to find the new retainAll() method on my machine. -S
                     scanFiles(depth, new Fi(resources[i] + "/" + paths[j]), temp).filter(file ->
                             Structs.contains(extensions, file.extension())).each(file -> {
                         String fieldName = file.nameWithoutExtension();

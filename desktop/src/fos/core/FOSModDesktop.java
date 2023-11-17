@@ -1,16 +1,13 @@
 package fos.core;
 
-import arc.ApplicationListener;
-import arc.Core;
+import arc.*;
 import arc.audio.Music;
 import arc.backend.sdl.SdlApplication;
 import arc.backend.sdl.jni.SDL;
-import arc.graphics.Pixmap;
-import arc.graphics.Texture;
+import arc.graphics.*;
 import arc.graphics.g2d.ScreenQuad;
 import arc.graphics.gl.Shader;
 import arc.struct.Seq;
-import arc.util.Log;
 import arc.util.Reflect;
 
 public class FOSModDesktop extends FOSMod{
@@ -36,8 +33,8 @@ public class FOSModDesktop extends FOSMod{
                     new Pixmap(FOSVars.internalTree.child("alpha.png")).getPixels(), 32, 32), 0, 0));
 
             Core.app.addListener(new ApplicationListener() {
-                Texture texture = new Texture(FOSVars.internalTree.child("pain.png"));
-                Shader shader = new Shader(
+                final Texture texture = new Texture(FOSVars.internalTree.child("pain.png"));
+                final Shader shader = new Shader(
                         """
                             attribute vec4 a_position;
                             attribute vec2 a_texCoord0;
@@ -54,7 +51,7 @@ public class FOSModDesktop extends FOSMod{
                               gl_FragColor = texture2D(u_texture, v_texCoords);
                             }"""
                 );
-                ScreenQuad quad = new ScreenQuad();
+                final ScreenQuad quad = new ScreenQuad();
 
                 @Override
                 public void update() {

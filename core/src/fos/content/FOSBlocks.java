@@ -290,7 +290,7 @@ public class FOSBlocks {
             squareSprite = false;
             consumePower(2f);
             consumeLiquid(tokicite, 0.5f).boost();
-            requirements(Category.production, with(tin, 50, brass, 25, silicon, 75, vanadium, 50, iridium, 45));
+            requirements(Category.production, with(tin, 50, brass, 25, silicon, 75, vanadium, 50, nickel, 45));
         }};
 
         rockCrusher = new HeatProducerDrill("rock-crusher"){{
@@ -490,7 +490,7 @@ public class FOSBlocks {
                     trailLength = 8;
                     ammoMultiplier = 3f;
                 }},
-                iridium, new BasicBulletType(4f, 44){{
+                nickel, new BasicBulletType(4f, 44){{
                     width = 4f; height = 8f;
                     lifetime = 44f;
                     rangeChange = 44f;
@@ -690,7 +690,7 @@ public class FOSBlocks {
             shake = 2f;
             reload = 90f;
             ammo(
-                iridium, new ShieldPierceBulletType(0.1f){{
+                nickel, new ShieldPierceBulletType(0.1f){{
                     damage = 800f;
                     shootEffect = Fx.shootBig;
                     hitEffect = Fx.hitBulletColor;
@@ -705,7 +705,7 @@ public class FOSBlocks {
                 }}
             );
             drawer = new DrawTurret("lumoni-");
-            requirements(Category.turret, with(silver, 150, silicon, 100, diamond, 75, iridium, 100));
+            requirements(Category.turret, with(silver, 150, silicon, 100, diamond, 75, nickel, 100));
         }};
         thunder = new PowerTurret("thunder"){
             {
@@ -829,7 +829,7 @@ public class FOSBlocks {
             );
             consumeCoolant(5f).boost();
             coolantMultiplier = 0.25f;
-            requirements(Category.turret, with(silicon, 500, vanadium, 300, iridium, 250, luminium, 200));
+            requirements(Category.turret, with(silicon, 500, vanadium, 300, nickel, 250, luminium, 200));
         }};
         judge = new DeathrayTurret("judge1"){{
             scaledHealth = 480;
@@ -867,7 +867,7 @@ public class FOSBlocks {
                 new DrawLiquidRegion(),
                 new DrawDefault()
             );
-            requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, iridium, 1500, luminium, 1500));
+            requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, nickel, 1500, luminium, 1500));
         }};
         newJudge = new NewDeathRayTurret("judge2"){{
             scaledHealth = 480;
@@ -900,7 +900,7 @@ public class FOSBlocks {
                     new DrawLiquidRegion(),
                     new DrawDefault()
             );
-            requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, iridium, 1500, luminium, 1500));
+            requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, nickel, 1500, luminium, 1500));
         }};
 
         matrixShieldProj = new PolyForceProjector("matrix-shield-projector"){{
@@ -1216,7 +1216,7 @@ public class FOSBlocks {
             drop = vanadium;
         }};
         oreIridium = new UndergroundOreBlock("ore-iridium"){{
-            drop = iridium;
+            drop = nickel;
         }};
         oreLuminium = new AnimatedOreBlock("ore-luminium"){{
             itemDrop = luminium;
@@ -1260,7 +1260,7 @@ public class FOSBlocks {
             droneConstructTime = 1 * Time.toMinutes;
             droneRange = 80f;
             droneType = testOverdrive;
-            requirements(Category.units, BuildVisibility.debugOnly, with(brass, 275, silicon, 400, iridium, 150));
+            requirements(Category.units, BuildVisibility.debugOnly, with(brass, 275, silicon, 400, nickel, 150));
         }};
         //endregion
         //region storage

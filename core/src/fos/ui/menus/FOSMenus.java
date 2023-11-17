@@ -5,12 +5,10 @@ import arc.math.geom.Vec3;
 import arc.struct.Seq;
 import arc.util.noise.Simplex;
 import mindustry.Vars;
-import mindustry.content.Blocks;
-import mindustry.content.Planets;
+import mindustry.content.*;
 import mindustry.graphics.g3d.PlanetParams;
 import mindustry.type.Planet;
-import mindustry.world.Block;
-import mindustry.world.Tiles;
+import mindustry.world.*;
 
 import static fos.content.FOSBlocks.*;
 import static fos.content.FOSPlanets.*;
@@ -32,7 +30,7 @@ public class FOSMenus {
         }};
         random = new SpaceMenuBackground(){{
             params = new PlanetParams(){{
-                Seq<Planet> visible = Vars.content.planets().copy().filter(p -> p.visible);
+                Seq<Planet> visible = Vars.content.planets().select(p -> p.visible);
                 planet = visible.get(Mathf.floor((float) (Math.random() * visible.size)));
             }};
         }};

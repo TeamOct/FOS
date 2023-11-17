@@ -267,18 +267,11 @@ public class FOSMod extends Mod {
                 } else
                     Core.settings.put("fos-debugmode", false);
             });
-            t.checkPref("fos-haha-funny", false, b -> {
-                if (b) {
-                    Vars.ui.showConfirm("@warning", "@fos-dangerzone", () -> {
-                        Core.settings.put("fos-haha-funny", true);
-                    });
-                } else
-                    Core.settings.put("fos-haha-funny", false);
-            });
         });
     }
 
     public void addEditorTeams() {
+        //java sucks
         WidgetGroup teambuttons = (WidgetGroup)Vars.ui.editor.getChildren().get(0);
         teambuttons = (WidgetGroup)teambuttons.getChildren().get(0);
         teambuttons = (WidgetGroup)teambuttons.getChildren().get(0);

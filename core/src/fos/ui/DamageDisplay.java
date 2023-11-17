@@ -86,8 +86,8 @@ public class DamageDisplay {
         // add all in-world entities
         Groups.all.each(e -> {
             if (e instanceof Healthc he)
-            if (!entities.contains(he))
-                entities.add(he);
+                if (!entities.contains(he))
+                    entities.add(he);
         });
         world.tiles.eachTile(tile -> {
             Building building = tile.build;

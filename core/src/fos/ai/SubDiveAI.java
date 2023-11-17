@@ -1,13 +1,12 @@
 package fos.ai;
 
 import fos.content.FOSCommands;
-import fos.gen.Submarine;
 import fos.gen.Submarinec;
 import mindustry.entities.units.AIController;
 
 /**
  * This literally exists just for {@link FOSCommands}.
- * Only works with {@link SubmarineUnit}!
+ * Only works with {@link fos.gen.Submarine}!
  * @author Slotterleet
  */
 public class SubDiveAI extends AIController {

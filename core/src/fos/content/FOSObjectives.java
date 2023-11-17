@@ -2,20 +2,23 @@ package fos.content;
 
 import arc.Core;
 import fos.type.units.BossUnitType;
+import mindustry.Vars;
+import mindustry.type.UnitType;
 
-import static mindustry.game.Objectives.*;
+import static arc.Core.settings;
+import static mindustry.game.Objectives.Objective;
 
 public class FOSObjectives {
     public static class DefeatBoss implements Objective {
         public BossUnitType type;
 
-        public DefeatBoss(BossUnitType type) {
-            this.type = type;
+        public DefeatBoss(UnitType type) {
+            this.type = (BossUnitType)type;
         }
 
         @Override
         public boolean complete() {
-            return type.content.unlocked();
+            return Vars.state.isCampaign() && settings.getBool(type.name + "-defeated");
         }
 
         @Override

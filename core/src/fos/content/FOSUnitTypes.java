@@ -64,7 +64,7 @@ public class FOSUnitTypes {
             }
         }};
         //TODO: campaign boss
-        citadel = new UnitType("citadel"){{
+        citadel = new BossUnitType("citadel"){{
             health = 7500;
             armor = 40;
             hitSize = 40;

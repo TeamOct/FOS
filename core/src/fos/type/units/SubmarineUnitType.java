@@ -5,7 +5,6 @@ import arc.math.*;
 import arc.util.Tmp;
 import fos.ai.SubDiveAI;
 import fos.content.FOSCommands;
-import fos.gen.Submarine;
 import fos.gen.Submarinec;
 import mindustry.Vars;
 import mindustry.ai.UnitCommand;
