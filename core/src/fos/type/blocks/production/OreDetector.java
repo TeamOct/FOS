@@ -85,7 +85,7 @@ public class OreDetector extends Block {
             table.button(eyeIcon(), Styles.clearTogglei, () -> {
                 showOres = !showOres;
                 startTime = Time.time; //reset the timer to fix sound loop
-                configure(!showOres);
+                configure(showOres);
                 deselect();
             }).size(40);
         }

@@ -8,6 +8,7 @@ import mindustry.world.meta.BlockFlag;
 public class BugUnitType extends UnitType {
     public BugUnitType(String name, boolean flying) {
         super(name);
+        isEnemy = false;
         omniMovement = flying;
         this.flying = flying;
         targetAir = flying;

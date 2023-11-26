@@ -59,10 +59,9 @@ public class FOSPlanets {
             camRadius = 0.68f * 1.3f;
             minZoom = 0.5f;
             drawOrbit = false;
-            accessible = true;
             clipRadius = 2f;
             defaultEnv = Env.space;
-            launchCandidates.add(lumoni);
+            //launchCandidates.add(lumoni);
             solarSystem = caldemolt;
             allowLaunchLoadout = false;
             clearSectorOnLose = true;

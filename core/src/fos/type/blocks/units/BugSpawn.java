@@ -28,7 +28,7 @@ public class BugSpawn extends UnitBlock {
         public void updateTile() {
             progress += delta();
 
-            if(progress >= interval){
+            if (progress >= interval) {
                 Unit unit = getBug().create(team);
                 payload = new UnitPayload(unit);
                 payVector.setZero();
@@ -47,11 +47,22 @@ public class BugSpawn extends UnitBlock {
                 {FOSUnitTypes.bugSmall}
             };
 
+            //unit tier depends on two factors: current wave count and sector difficulty
             int curTier = Mathf.round(Mathf.floor(
                 Vars.state.rules.sector != null ? ((Vars.state.wave / 20f) + Vars.state.rules.sector.threat / 2) / 2
                 : Vars.state.wave / 20f));
             if (curTier > units[0].length) curTier = units[0].length;
             return units[Mathf.random(units.length - 1)][curTier];
+        }
+
+        @Override
+        public void onDestroyed() {
+            super.onDestroyed();
+
+            //spawn a bunch of bugs on nest destruction
+            for (int i = 0; i < Mathf.random(3, 6); i++) {
+                getBug().spawn(this.team, x + Mathf.random(-20f, 20f), y + Mathf.random(-20f, 20f));
+            }
         }
     }
 }

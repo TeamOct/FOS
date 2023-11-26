@@ -126,6 +126,8 @@ public class DetectorCoreBlock extends CoreBlock {
         public void buildConfiguration(Table table) {
             table.button(eyeIcon(), Styles.clearTogglei, () -> {
                 showOres = !showOres;
+                startTime = Time.time; //reset the timer to fix sound loop
+                configure(showOres);
                 deselect();
             }).size(40);
         }

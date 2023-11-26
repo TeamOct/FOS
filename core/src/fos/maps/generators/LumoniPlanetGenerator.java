@@ -285,11 +285,14 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
             frequencies.add(rand.random(-0.01f, 0.07f) - i * 0.01f + poles * 0.04f);
         }
 
-        //generate ores
+        //island ores
         for (ObjectMap.Entry<Room, Integer> r : islands) {
             ores(ores, r.key.x, r.key.y, r.value);
         }
+        //map ores
         ores(ores);
+        //early-game ores next to player's core
+        ores(Seq.with(oreTinSurface, oreTin, oreSilver), spawn.x, spawn.y, 20);
 
         trimDark();
         median(2);
@@ -303,7 +306,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                 if (rand.chance(0.01)){
                     for (Point2 p : Geometry.d8) {
                         Tile other = tiles.get(x + p.x, y + p.y);
-                        //if there's already a tree nearby, return
+                        //if there's already a tree nearby, do nothing
                         if (other.block() == whiteTree) return;
                     }
                     if (rand.chance(0.1)) {
@@ -353,7 +356,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
                 if (noise(x * 3f + 236, y * 3f + 213, 2, 0.6, 80) < 0.17f && isFree[0]) {
                     //arkyic stone around arkycite puddles
-                    tiles.get(x, y).circle(2, t ->
+                    tiles.get(x, y).circle(3, t ->
                         t.setFloor(arkyicStone.asFloor())
                     );
                     tiles.get(x, y).circle(4, t -> {
@@ -361,7 +364,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                     });
 
                     //more arkycite because 1x1 puddles all around do not look natural
-                    tiles.get(x, y).circle(1, t -> {
+                    tiles.get(x, y).circle(2, t -> {
                         if (rand.random(1f) < 0.25f) t.setFloor(arkyciteFloor.asFloor());
                     });
 
@@ -397,7 +400,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
     }
 
     /**
-     * This method should ensure that the given ores generate in a limited square area, no matter how many tries it takes.
+     * This method ensures that the given ores generate in a limited square area, no matter how many tries it takes.
      * This probably hurts sector generation time quite a bit, but I dunno what else to try.
      * @param ores List of ores to generate.
      * @param cx Center X coordinate.
@@ -413,13 +416,12 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                 for (int x = -rad; x <= rad; x++) {
                     for (int y = -rad; y <= rad; y++) {
                         Tile tile = tiles.get(x + cx, y + cy);
-                        if (tile == null || !tile.floor().asFloor().hasSurface()) return;
+                        if (tile == null || !tile.floor().hasSurface() || !tile.floor().supportsOverlay) return;
 
                         int i = ores.indexOf(cur);
                         int offsetX = x - 4, offsetY = y + 23;
                         if (Math.abs(0.5f - noise(offsetX + offset, offsetY + i * 999, 2, 0.7, (40 + i * 2))) > 0.26f &&
-                            Math.abs(0.5f - noise(offsetX + offset, offsetY - i * 999, 1, 1, (30 + i * 4))) > 0.37f &&
-                            tile.floor().supportsOverlay) {
+                            Math.abs(0.5f - noise(offsetX + offset, offsetY - i * 999, 1, 1, (30 + i * 4))) > 0.37f) {
                             ore = cur;
                             if (tile.block() == air) generated = true;
                         }
