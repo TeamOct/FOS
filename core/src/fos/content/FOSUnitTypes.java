@@ -2,6 +2,7 @@ package fos.content;
 
 import arc.graphics.Color;
 import arc.math.Mathf;
+import arc.math.geom.Rect;
 import fos.ai.*;
 import fos.gen.*;
 import fos.graphics.FOSPal;
@@ -10,6 +11,7 @@ import fos.type.bullets.*;
 import fos.type.units.*;
 import fos.type.units.destroyers.DestroyersUnits;
 import fos.type.units.weapons.InjectorWeapon;
+import mindustry.ai.types.GroundAI;
 import mindustry.annotations.Annotations;
 import mindustry.content.*;
 import mindustry.entities.abilities.*;
@@ -24,6 +26,8 @@ import static fos.content.FOSStatuses.hacked;
 
 public class FOSUnitTypes {
     public static @Annotations.EntityDef({Mechc.class}) UnitType legion, citadel;
+
+    public static @Annotations.EntityDef({Tankc.class}) UnitType warden;
 
     public static @Annotations.EntityDef({Unitc.class}) UnitType sergeant, lieutenant, captain, general, marshal,
             smoke, cloud;
@@ -66,7 +70,7 @@ public class FOSUnitTypes {
         //TODO: campaign boss
         citadel = new BossUnitType("citadel"){{
             health = 7500;
-            armor = 40;
+            armor = 30;
             hitSize = 40;
             speed = 0.05f;
             flying = false;
@@ -116,6 +120,139 @@ public class FOSUnitTypes {
                     }};
                 }}
             );
+        }};
+        //TODO: campaign boss
+        warden = new BossUnitType("warden"){{
+            health = 9000;
+            armor = 15;
+            hitSize = 36;
+            speed = 0.2f;
+            rotateSpeed = 0.75f;
+            omniMovement = false;
+            treadPullOffset = 1;
+            treadRects = new Rect[]{
+                new Rect(36f, 24f - 73f, 24f, 73f),
+                new Rect(30f, 80f - 37f, 18f, 37f)
+            };
+            weapons.add(new Weapon[]{
+                new Weapon("warden-artillery"){{
+                    x = 16; y = -8;
+                    rotate = true;
+                    rotateSpeed = 3f;
+                    top = true;
+                    recoil = 2f;
+                    shake = 2f;
+                    reload = 75f;
+                    shootCone = 18f;
+                    mirror = alternate = true;
+                    inaccuracy = 5f;
+                    bullet = new ArtilleryBulletType(){{
+                        width = 14f; height = 18f;
+                        damage = 30f;
+                        splashDamage = 120f;
+                        splashDamageRadius = 20f;
+                        speed = 2.5f;
+                        lifetime = 100f;
+                        trailWidth = 5f;
+                        trailLength = 12;
+                        trailEffect = Fx.artilleryTrail;
+                        shootSound = Sounds.artillery;
+                        hitEffect = despawnEffect = Fx.massiveExplosion;
+                    }};
+                }},
+                new Weapon("warden-artillery"){{
+                    x = -12; y = -16;
+                    rotate = true;
+                    rotateSpeed = 3f;
+                    top = true;
+                    recoil = 2f;
+                    shake = 2f;
+                    reload = 75f;
+                    shootCone = 18f;
+                    mirror = alternate = true;
+                    inaccuracy = 5f;
+                    bullet = new ArtilleryBulletType(){{
+                        width = 14f; height = 18f;
+                        damage = 30f;
+                        splashDamage = 120f;
+                        splashDamageRadius = 20f;
+                        speed = 2.5f;
+                        lifetime = 100f;
+                        trailWidth = 5f;
+                        trailLength = 12;
+                        trailEffect = Fx.artilleryTrail;
+                        shootSound = Sounds.artillery;
+                        hitEffect = despawnEffect = Fx.massiveExplosion;
+                    }};
+                }},
+
+                new Weapon("warden-machine-gun"){{
+                    x = 14; y = 8;
+                    rotate = false;
+                    top = false;
+                    baseRotation = 10f;
+                    recoil = 4f;
+                    shake = 0.5f;
+                    reload = 7.5f;
+                    shootCone = 15f;
+                    mirror = true;
+                    alternate = false;
+                    inaccuracy = 4f;
+                    bullet = new BasicBulletType(){{
+                        width = 8f; height = 16f;
+                        damage = 80f;
+                        speed = 5f;
+                        lifetime = 30f;
+                        shootSound = Sounds.shoot;
+                    }};
+                }},
+                new Weapon("warden-machine-gun"){{
+                    x = 18; y = 8;
+                    rotate = false;
+                    top = false;
+                    baseRotation = 10f;
+                    recoil = 4f;
+                    shake = 0.5f;
+                    reload = 7.5f;
+                    shootCone = 15f;
+                    mirror = true;
+                    alternate = false;
+                    inaccuracy = 4f;
+                    bullet = new BasicBulletType(){{
+                        width = 8f; height = 16f;
+                        damage = 80f;
+                        speed = 5f;
+                        lifetime = 30f;
+                        shootSound = Sounds.shoot;
+                    }};
+                }},
+
+                new Weapon("warden-antiair"){{
+                    x = 0; y = -4;
+                    rotate = true;
+                    top = true;
+                    rotateSpeed = 6f;
+                    shootCone = 30f;
+                    mirror = false;
+                    reload = 120f;
+                    shoot.shots = 4;
+                    shoot.shotDelay = 10f;
+                    inaccuracy = 4f;
+                    bullet = new MissileBulletType(){{
+                        width = 8f; height = 14f;
+                        damage = 60f;
+                        splashDamage = 90f;
+                        splashDamageRadius = 28f;
+                        speed = 8f;
+                        lifetime = 30f;
+                        collidesAir = true;
+                        collidesGround = false;
+                        shootSound = Sounds.missile;
+                        hitEffect = Fx.blastExplosion;
+                    }};
+                }}
+            });
+            aiController = GroundAI::new;
         }};
 
         lord = new LumoniPlayerUnitType("lord"){{
