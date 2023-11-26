@@ -76,7 +76,7 @@ public class FOSBlocks {
     cyaniumWater, crimsonStoneWater, anniteWater, blubluWater, purpurWater,
     alienMoss,
     oreTin, oreTinSurface, oreSilver, oreLithium, oreDiamond, oreVanadium, oreIridium, oreLuminium,
-    bugSpawn,
+    hiveFloor, bugSpawn,
 
     //props
     softbush,
@@ -1226,9 +1226,15 @@ public class FOSBlocks {
             lightColor = FOSPal.luminium1.cpy().a(0.6f);
             lightRadius = 6f;
         }};
+        hiveFloor = new Floor("hive"){{
+            variants = 5;
+            walkSound = Sounds.plantBreak;
+        }};
         bugSpawn = new BugSpawn("bug-spawn"){{
             size = 3;
             interval = 20 * 60;
+            drawTeamOverlay = false;
+            customShadow = true;
         }};
 
         softbush = new Prop("softbush"){{

@@ -385,6 +385,10 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
         enemies.each(espawn -> {
             tiles.getn(espawn.x, espawn.y).setBlock(bugSpawn, FOSTeam.bessin);
+            tiles.getn(espawn.x, espawn.y).circle(7, t -> t.setFloor(hiveFloor.asFloor()));
+            tiles.getn(espawn.x, espawn.y).circle(11, t -> {
+                if (rand.chance(0.35f)) t.setFloor(hiveFloor.asFloor());
+            });
             tiles.getn(espawn.x, espawn.y).setOverlay(Blocks.spawn);
         });
 

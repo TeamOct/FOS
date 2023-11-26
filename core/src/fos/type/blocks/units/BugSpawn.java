@@ -1,11 +1,13 @@
 package fos.type.blocks.units;
 
 import arc.Events;
+import arc.graphics.g2d.Draw;
 import arc.math.Mathf;
 import fos.content.FOSUnitTypes;
 import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.gen.Unit;
+import mindustry.graphics.Layer;
 import mindustry.type.UnitType;
 import mindustry.world.blocks.payloads.UnitPayload;
 import mindustry.world.blocks.units.UnitBlock;
@@ -16,7 +18,7 @@ public class BugSpawn extends UnitBlock {
 
     public BugSpawn(String name) {
         super(name);
-        scaledHealth = 1000;
+        scaledHealth = 400;
         solid = false;
         canOverdrive = false;
         buildVisibility = BuildVisibility.debugOnly;
@@ -24,6 +26,12 @@ public class BugSpawn extends UnitBlock {
 
     @SuppressWarnings("unused")
     public class BugSpawnBuild extends UnitBuild {
+        @Override
+        public void draw() {
+            Draw.z(Layer.groundUnit + 1f);
+            super.draw();
+        }
+
         @Override
         public void updateTile() {
             progress += delta();
