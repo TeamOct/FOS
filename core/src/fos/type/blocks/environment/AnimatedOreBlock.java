@@ -12,7 +12,7 @@ import fos.graphics.*;
 import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.game.EventType;
-import mindustry.graphics.Drawf;
+import mindustry.graphics.*;
 import mindustry.world.Tile;
 import mindustry.world.blocks.environment.OreBlock;
 
@@ -75,6 +75,7 @@ public class AnimatedOreBlock extends OreBlock {
                     afs.setX(tile.x);
                     afs.setY(tile.y);
                 }
+                Draw.z(Layer.floor + 1f);
                 Draw.rect(regions[variant], tile.worldx(), tile.worldy());
 
                 if (Vars.renderer.lights.enabled()) {
