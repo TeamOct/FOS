@@ -9,6 +9,9 @@ public class BugUnitType extends UnitType {
     public BugUnitType(String name, boolean flying) {
         super(name);
         isEnemy = false;
+        lightOpacity = lightRadius = 0f;
+        drawCell = false;
+        drawBody = false;
         omniMovement = flying;
         this.flying = flying;
         targetAir = flying;

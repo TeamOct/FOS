@@ -516,10 +516,15 @@ public class FOSUnitTypes {
         bugSmall = new BugUnitType("bug-small", false){{
             health = 80;
             armor = 8;
-            hitSize = 10f;
+            hitSize = 3f;
             speed = 0.3f;
-            segments = 2;
+            segments = 3;
             crushDamage = 0.2f;
+
+            //copied from renale for now
+            segmentScl = 3f;
+            segmentPhase = 5f;
+            segmentMag = 0.5f;
         }};
 
         bugFlyingSmall = new BugUnitType("bug-flying-small", true, true){{
