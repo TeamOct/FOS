@@ -24,7 +24,6 @@ public class UpgradeCenter extends Block {
     public DrawBlock drawer = new DrawMulti(new DrawDefault(), new DrawRegion("-top"));
 
     public int[] capacities = {};
-    public Seq<WeaponModule> weaponModules = Vars.content.statusEffects().select(s -> s instanceof WeaponModule).as();
 
     public UpgradeCenter(String name) {
         super(name);
@@ -43,13 +42,13 @@ public class UpgradeCenter extends Block {
             tile.weaponIndex = i >= 0 ? i : -1;
         });
 
-        consume(new ConsumeItemDynamic((UpgradeCenterBuild e) -> e.weaponIndex != -1 ? weaponModules.get(e.weaponIndex).reqs : ItemStack.empty));
+        consume(new ConsumeItemDynamic((UpgradeCenterBuild e) -> e.weaponIndex != -1 ? WeaponModule.modules.get(e.weaponIndex).reqs : ItemStack.empty));
     }
 
     @Override
     public void init() {
         capacities = new int[Vars.content.items().size];
-        for(WeaponModule wm : weaponModules) {
+        for(WeaponModule wm : WeaponModule.modules) {
             for(ItemStack stack : wm.reqs) {
                 capacities[stack.item.id] = Math.max(capacities[stack.item.id], stack.amount * 2);
                 itemCapacity = Math.max(itemCapacity, stack.amount * 2);
@@ -75,7 +74,7 @@ public class UpgradeCenter extends Block {
         public int weaponIndex = -1;
 
         public Seq<WeaponModule> getWeaponModules() {
-            return weaponModules;
+            return WeaponModule.modules;
         }
 
         @Override
@@ -99,12 +98,12 @@ public class UpgradeCenter extends Block {
             table.table(t -> {
                 t.left();
                 t.image().update(i -> {
-                    i.setDrawable(weaponIndex == -1 ? Icon.cancel : reg.set(weaponModules.get(weaponIndex).uiIcon));
+                    i.setDrawable(weaponIndex == -1 ? Icon.cancel : reg.set(WeaponModule.modules.get(weaponIndex).uiIcon));
                     i.setScaling(Scaling.fit);
                     i.setColor(weaponIndex == -1 ? Color.lightGray : Color.white);
                 }).size(32).padBottom(-4).padRight(2);
 
-                t.label(() -> weaponIndex == -1 ? "@none" : weaponModules.get(weaponIndex).localizedName).wrap().width(230f).color(Color.lightGray);
+                t.label(() -> weaponIndex == -1 ? "@none" : WeaponModule.modules.get(weaponIndex).localizedName).wrap().width(230f).color(Color.lightGray);
             }).left();
         }
 
@@ -121,9 +120,9 @@ public class UpgradeCenter extends Block {
 
         @Override
         public void buildConfiguration(Table table) {
-            if (weaponModules.any()) {
-                ItemSelection.buildTable(UpgradeCenter.this, table, weaponModules, () -> weaponIndex == -1 ? null :
-                        weaponModules.get(weaponIndex), wm -> configure(weaponModules.indexOf(i -> i == wm)),
+            if (WeaponModule.modules.any()) {
+                ItemSelection.buildTable(UpgradeCenter.this, table, WeaponModule.modules, () -> weaponIndex == -1 ? null :
+                                WeaponModule.modules.get(weaponIndex), wm -> configure(WeaponModule.modules.indexOf(i -> i == wm)),
                         selectionRows, selectionColumns);
             } else {
                 table.table(Styles.black3, t -> t.add("@none").color(Color.lightGray));
@@ -149,7 +148,7 @@ public class UpgradeCenter extends Block {
         @Override
         public int getMaximumAccepted(Item item) {
             Seq<ItemStack> seq = new Seq<>();
-            seq.add(weaponModules.get(weaponIndex).reqs);
+            seq.add(WeaponModule.modules.get(weaponIndex).reqs);
 
             ItemStack stack = seq.find(s -> s.item == item);
             return stack != null ? stack.amount : 0;
@@ -158,7 +157,7 @@ public class UpgradeCenter extends Block {
         @Override
         public boolean acceptItem(Building source, Item item) {
             return weaponIndex != -1 && items.get(item) < getMaximumAccepted(item) &&
-                Structs.contains(weaponModules.get(weaponIndex).reqs, stack -> stack.item == item);
+                Structs.contains(WeaponModule.modules.get(weaponIndex).reqs, stack -> stack.item == item);
         }
 
         @Override

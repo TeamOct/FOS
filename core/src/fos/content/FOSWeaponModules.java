@@ -1,6 +1,7 @@
 package fos.content;
 
 import fos.type.bullets.SmartBulletType;
+import fos.type.content.ModuleWeapon;
 import fos.type.content.WeaponModule;
 import mindustry.content.Fx;
 import mindustry.entities.bullet.*;
@@ -20,7 +21,7 @@ public class FOSWeaponModules {
         shotgun1, shotgun2, shotgun3, shotgun4, shotgun5;
 
     public static void load() {
-        standard1 = new WeaponModule("standard1", new Weapon("fos-standard-weapon1"){{
+        standard1 = new WeaponModule("standard1", new ModuleWeapon("fos-standard-weapon1"){{
             x = 0; y = 0;
             alternate = mirror = false;
             rotate = true;
@@ -33,7 +34,7 @@ public class FOSWeaponModules {
                 lifetime = 60f;
             }};
         }}).reqs(with(tin, 75, silver, 75));
-        standard2 = new WeaponModule("standard2", new Weapon("fos-standard-weapon2"){{
+        standard2 = new WeaponModule("standard2", new ModuleWeapon("fos-standard-weapon2"){{
             x = 0; y = 0;
             alternate = mirror = false;
             rotate = true;
@@ -57,7 +58,7 @@ public class FOSWeaponModules {
                 }};
             }};
         }}).reqs(with(tin, 150, silver, 150));
-        standard3 = new WeaponModule("standard3", new Weapon("fos-standard-weapon3"){{
+        standard3 = new WeaponModule("standard3", new ModuleWeapon("fos-standard-weapon3"){{
             x = 0; y = 0;
             alternate = mirror = false;
             rotate = true;
@@ -73,8 +74,8 @@ public class FOSWeaponModules {
             }};
         }}).reqs(with(tin, 250, diamond, 150, silicon, 300));
         //TODO: placeholder
-        standard4 = new WeaponModule("standard4", new Weapon()).reqs(with(lead, 1));
-        standard5 = new WeaponModule("standard5", new Weapon("fos-standard-weapon5"){{
+        standard4 = new WeaponModule("standard4", new ModuleWeapon()).reqs(with(lead, 1));
+        standard5 = new WeaponModule("standard5", new ModuleWeapon("fos-standard-weapon5"){{
             x = 0; y = 0;
             alternate = mirror = false;
             rotate = true;
@@ -113,7 +114,7 @@ public class FOSWeaponModules {
             }};
         }}).reqs(with(tin, 500, silver, 500, vanadium, 300, nickel, 250, luminium, 200));
 
-        shotgun1 = new WeaponModule("shotgun1", new Weapon("fos-shotgun-mount1"){{
+        shotgun1 = new WeaponModule("shotgun1", new ModuleWeapon("fos-shotgun-mount1"){{
             x = y = 0;
             alternate = mirror = false;
             rotate = true;
@@ -135,9 +136,9 @@ public class FOSWeaponModules {
             }};
         }}).reqs(with(tin, 60, silver, 50));
         //TODO: placeholders
-        shotgun2 = new WeaponModule("shotgun2", new Weapon()).reqs(with(lead, 1));
-        shotgun3 = new WeaponModule("shotgun3", new Weapon()).reqs(with(lead, 1));
-        shotgun4 = new WeaponModule("shotgun4", new Weapon()).reqs(with(lead, 1));
-        shotgun5 = new WeaponModule("shotgun5", new Weapon()).reqs(with(lead, 1));
+        shotgun2 = new WeaponModule("shotgun2", new ModuleWeapon()).reqs(with(lead, 1));
+        shotgun3 = new WeaponModule("shotgun3", new ModuleWeapon()).reqs(with(lead, 1));
+        shotgun4 = new WeaponModule("shotgun4", new ModuleWeapon()).reqs(with(lead, 1));
+        shotgun5 = new WeaponModule("shotgun5", new ModuleWeapon()).reqs(with(lead, 1));
     }
 }

@@ -5,21 +5,20 @@ import fos.FOSTypeIO;
 import mindustry.annotations.Annotations;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.*;
-import mindustry.io.TypeIO;
 
 // FIXME mounts
 @Annotations.Component
-public abstract class LumoniPlayerUnitComp implements Weaponsc, Entityc, Syncc {
+public abstract class LumoniPlayerUnitComp implements Weaponsc, Entityc, Syncc, Unitc {
     @Annotations.Import WeaponMount[] mounts;
 
     @Override
     public void write(Writes write) {
-        TypeIO.writeMounts(write, mounts);
+        FOSTypeIO.writeMounts2(write, this);
     }
 
     @Override
     public void read(Reads read) {
-        mounts = FOSTypeIO.readMounts(read);
+        mounts = FOSTypeIO.readMounts2(read, type());
     }
 
 /*

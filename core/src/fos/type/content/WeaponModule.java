@@ -1,18 +1,27 @@
 package fos.type.content;
 
+import arc.struct.Seq;
 import mindustry.gen.Unit;
 import mindustry.type.*;
 
 //YES, this looks very cursed lmao
-//FOR MODDERS: applying this "status effect" will have no effect whatsoever
+/**
+ * FOR MODDERS: applying this "status effect" will have no effect whatsoever
+ **/
 public class WeaponModule extends StatusEffect {
-    public Weapon weapon;
+    public static Seq<WeaponModule> modules = new Seq<>();
+
+    public int id;
+    public ModuleWeapon weapon;
     public ItemStack[] reqs;
 
-    public WeaponModule(String name, Weapon weapon) {
+    public WeaponModule(String name, ModuleWeapon weapon) {
         super(name);
+        id = modules.size;
+        modules.add(this);
         permanent = false;
         this.weapon = weapon;
+        weapon.apply(this);
     }
 
     @Override
@@ -43,3 +52,4 @@ public class WeaponModule extends StatusEffect {
         return this;
     }
 }
+
