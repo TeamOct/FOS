@@ -40,7 +40,7 @@ public class WeaponSet extends StatusEffect {
         for (Weapon weapon : weapons)
             weapon.load();
 
-        fullIcon = weapons.first().region;
+        fullIcon = uiIcon = weapons.first().region;
     }
 
     @Override
