@@ -21,7 +21,7 @@ import mindustry.world.consumers.ConsumeItemDynamic;
 import mindustry.world.draw.*;
 
 public class UpgradeCenter extends Block {
-    public DrawBlock drawer = new DrawMulti(new DrawDefault(), new DrawRegion("-top"));
+    public DrawBlock drawer = new DrawDefault();
 
     public int[] capacities = {};
 

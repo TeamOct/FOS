@@ -1249,6 +1249,13 @@ public class FOSBlocks {
             size = 3;
             consumePower(3f);
             requirements(Category.units, with(tin, 250, silver, 200));
+            drawer = new DrawMulti(
+                new DrawDefault(),
+                new DrawPower(){{
+                    emptyLightColor = Color.valueOf("00000000");
+                }},
+                new DrawRegion("-top")
+            );
         }};
         hovercraftFactory = new UnitFactory("hovercraft-factory"){{
             scaledHealth = 120;
