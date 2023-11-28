@@ -265,7 +265,7 @@ public class FOSUnitTypes {
             mineTier = 2;
             mineSpeed = 8f;
             buildSpeed = 1f;
-            weapons.add(FOSWeaponModules.standard1.weapon);
+            weapons.add(FOSWeaponModules.standard1.weapons);
         }};
 
         sergeant = new UnitType("sergeant"){{

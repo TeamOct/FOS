@@ -9,9 +9,8 @@ import arc.util.*;
 import arc.util.io.*;
 import fos.gen.LumoniPlayerUnitc;
 import fos.net.FOSPackets;
-import fos.type.content.WeaponModule;
+import fos.type.content.WeaponSet;
 import mindustry.Vars;
-import mindustry.entities.units.WeaponMount;
 import mindustry.gen.*;
 import mindustry.type.*;
 import mindustry.ui.Styles;
@@ -22,8 +21,6 @@ import mindustry.world.draw.*;
 
 public class UpgradeCenter extends Block {
     public DrawBlock drawer = new DrawDefault();
-
-    public int[] capacities = {};
 
     public UpgradeCenter(String name) {
         super(name);
@@ -39,18 +36,16 @@ public class UpgradeCenter extends Block {
         config(Integer.class, (UpgradeCenterBuild tile, Integer i) -> {
             if (!configurable) return;
 
-            tile.weaponIndex = i >= 0 ? i : -1;
+            tile.weaponSet = i != -1 ? WeaponSet.sets.get(i) : null;
         });
 
-        consume(new ConsumeItemDynamic((UpgradeCenterBuild e) -> e.weaponIndex != -1 ? WeaponModule.modules.get(e.weaponIndex).reqs : ItemStack.empty));
+        consume(new ConsumeItemDynamic((UpgradeCenterBuild e) -> e.weaponSet != null ? e.weaponSet.reqs : ItemStack.empty));
     }
 
     @Override
     public void init() {
-        capacities = new int[Vars.content.items().size];
-        for(WeaponModule wm : WeaponModule.modules) {
+        for(WeaponSet wm : WeaponSet.sets) {
             for(ItemStack stack : wm.reqs) {
-                capacities[stack.item.id] = Math.max(capacities[stack.item.id], stack.amount * 2);
                 itemCapacity = Math.max(itemCapacity, stack.amount * 2);
             }
         }
@@ -71,11 +66,7 @@ public class UpgradeCenter extends Block {
 
     @SuppressWarnings("unused")
     public class UpgradeCenterBuild extends Building {
-        public int weaponIndex = -1;
-
-        public Seq<WeaponModule> getWeaponModules() {
-            return WeaponModule.modules;
-        }
+        public WeaponSet weaponSet;
 
         @Override
         public void draw() {
@@ -98,32 +89,31 @@ public class UpgradeCenter extends Block {
             table.table(t -> {
                 t.left();
                 t.image().update(i -> {
-                    i.setDrawable(weaponIndex == -1 ? Icon.cancel : reg.set(WeaponModule.modules.get(weaponIndex).uiIcon));
+                    i.setDrawable(weaponSet == null ? Icon.cancel : reg.set(weaponSet.uiIcon));
                     i.setScaling(Scaling.fit);
-                    i.setColor(weaponIndex == -1 ? Color.lightGray : Color.white);
+                    i.setColor(weaponSet == null ? Color.lightGray : Color.white);
                 }).size(32).padBottom(-4).padRight(2);
 
-                t.label(() -> weaponIndex == -1 ? "@none" : WeaponModule.modules.get(weaponIndex).localizedName).wrap().width(230f).color(Color.lightGray);
+                t.label(() -> weaponSet == null ? "@none" : weaponSet.localizedName).wrap().width(230f).color(Color.lightGray);
             }).left();
         }
 
         /** Called from packet. **/
         public void upgrade(FOSPackets.UpgradeCenterUpgradePacket packet) {
-            Weapon weapon = getWeaponModules().get(weaponIndex).weapon;
-            if (weapon == null) return;
-
-            if (potentialEfficiency < 1 || !(Vars.player.unit() instanceof LumoniPlayerUnitc) || tile == null) return;
+            if (potentialEfficiency < 1 || !(Vars.player.unit() instanceof LumoniPlayerUnitc lpc) || tile == null) return;
 
             consume();
-            packet.player.unit().mounts(new WeaponMount[]{weapon.mountType.get(weapon)});
+            packet.weaponSet.applyToUnit(lpc);
         }
 
         @Override
         public void buildConfiguration(Table table) {
-            if (WeaponModule.modules.any()) {
-                ItemSelection.buildTable(UpgradeCenter.this, table, WeaponModule.modules, () -> weaponIndex == -1 ? null :
-                                WeaponModule.modules.get(weaponIndex), wm -> configure(WeaponModule.modules.indexOf(i -> i == wm)),
-                        selectionRows, selectionColumns);
+            if (WeaponSet.sets.any()) {
+                ItemSelection.buildTable(UpgradeCenter.this, table, WeaponSet.sets,
+                        () -> weaponSet == null ? null : weaponSet,
+                        ws -> configure(ws == null ? -1 : ws.id),
+                        selectionRows, selectionColumns
+                );
             } else {
                 table.table(Styles.black3, t -> t.add("@none").color(Color.lightGray));
             }
@@ -131,8 +121,9 @@ public class UpgradeCenter extends Block {
             table.row();
 
             table.button(Icon.units, Styles.clearTogglei, () -> {
-                if (weaponIndex == -1) return;
-                FOSPackets.UpgradeCenterUpgradePacket packet = new FOSPackets.UpgradeCenterUpgradePacket(Vars.player, this, weaponIndex);
+                if (weaponSet == null) return;
+                FOSPackets.UpgradeCenterUpgradePacket packet = new FOSPackets.UpgradeCenterUpgradePacket(Vars.player,
+                        this, weaponSet);
                 if (!Vars.net.active())
                     upgrade(packet);
                 else {
@@ -148,7 +139,7 @@ public class UpgradeCenter extends Block {
         @Override
         public int getMaximumAccepted(Item item) {
             Seq<ItemStack> seq = new Seq<>();
-            seq.add(WeaponModule.modules.get(weaponIndex).reqs);
+            seq.add(weaponSet.reqs);
 
             ItemStack stack = seq.find(s -> s.item == item);
             return stack != null ? stack.amount : 0;
@@ -156,22 +147,22 @@ public class UpgradeCenter extends Block {
 
         @Override
         public boolean acceptItem(Building source, Item item) {
-            return weaponIndex != -1 && items.get(item) < getMaximumAccepted(item) &&
-                Structs.contains(WeaponModule.modules.get(weaponIndex).reqs, stack -> stack.item == item);
+            return weaponSet != null && items.get(item) < getMaximumAccepted(item) &&
+                Structs.contains(weaponSet.reqs, stack -> stack.item == item);
         }
 
         @Override
         public void write(Writes write) {
             super.write(write);
 
-            write.i(weaponIndex);
+            write.i(weaponSet.id);
         }
 
         @Override
         public void read(Reads read, byte revision) {
             super.read(read, revision);
 
-            weaponIndex = read.i();
+            weaponSet = WeaponSet.sets.get(read.i());
         }
     }
 }
