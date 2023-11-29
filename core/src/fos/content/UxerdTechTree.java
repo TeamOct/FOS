@@ -3,12 +3,12 @@ package fos.content;
 import arc.struct.*;
 import mindustry.content.Liquids;
 import mindustry.game.Objectives.*;
-import mindustry.type.*;
+import mindustry.type.Item;
 
 import static fos.content.FOSBlocks.*;
 import static fos.content.FOSItems.*;
-import static mindustry.content.Blocks.*;
-import static mindustry.content.Items.*;
+import static mindustry.content.Blocks.coreNucleus;
+import static mindustry.content.Items.titanium;
 import static mindustry.content.TechTree.*;
 
 public class UxerdTechTree {
@@ -56,8 +56,8 @@ public class UxerdTechTree {
                 });
                 node(plasmaLauncher);
                 node(oreDetectorSmall, () ->
-                    node(drillBase, () ->
-                        node(tinDrill)));
+                    node(tinDrill)
+                );
             }));
         });
         FOSPlanets.uxerd.unlockedOnLand = Seq.with(spaceDuct, rockCrusher, heatGenerator);

@@ -72,18 +72,15 @@ public class LumoniTechTree {
             });
 
             // UNDERGROUND DRILLS
-            node(drillBase, () -> {
-                node(tinDrill, () ->
-                    node(silverDrill, () ->
-                        {} //TODO: T2 drill base
-                    )
-                );
-
-                // ORE DETECTORS
-                node(oreDetector, () -> {
-                    node(oreDetectorOverclocked);
-                    node(oreDetectorReinforced);
-                });
+            node(tinDrill, () ->
+                node(silverDrill, () ->
+                    {} //TODO: T2 drill base
+                )
+            );
+            // ORE DETECTORS
+            node(oreDetector, () -> {
+                node(oreDetectorOverclocked);
+                node(oreDetectorReinforced);
             });
 
             // FACTORIES. TODO

@@ -51,7 +51,7 @@ public class FOSBlocks {
 
     //production
     crudeDrill, improvedDrill, proficientDrill,
-    rockCrusher, drillBase, drillBaseLarge, tinDrill, silverDrill, diamondDrill, vanadiumDrill,
+    rockCrusher, tinDrill, silverDrill, diamondDrill, vanadiumDrill,
     oreDetectorSmall, oreDetector, oreDetectorReinforced, oreDetectorOverclocked,
 
     //distribution
@@ -304,24 +304,12 @@ public class FOSBlocks {
             researchCost = with(rawNethratium, 150);
             envRequired = envEnabled = Env.space;
         }};
-        drillBase = new DrillBase("drill-base"){{
-            scaledHealth = 30;
-            size = 2;
-            envEnabled |= Env.space;
-            requirements(Category.production, with(tin, 10));
-            researchCost = with(tin, 100);
-        }};
-        drillBaseLarge = new DrillBase("drill-base-large"){{
-            scaledHealth = 30;
-            size = 3;
-            requirements(Category.production, with(silver, 45, silicon, 50));
-        }};
         tinDrill = new UndergroundDrill("tin-drill"){{
             size = 2;
             tier = 3;
             drillTime = 360f;
             envEnabled |= Env.space;
-            requirements(Category.production, with(tin, 5));
+            requirements(Category.production, with(tin, 15));
             researchCost = with(tin, 50);
             consumeLiquid(water, 0.08f).boost();
         }};
@@ -329,7 +317,7 @@ public class FOSBlocks {
             size = 2;
             tier = 4;
             drillTime = 300f;
-            requirements(Category.production, with(silver, 10));
+            requirements(Category.production, with(tin, 10, silver, 10));
             consumeLiquid(water, 0.1f).boost();
         }};
         diamondDrill = new UndergroundDrill("diamond-drill"){{
@@ -337,7 +325,7 @@ public class FOSBlocks {
             tier = 5;
             drillTime = 255f;
             consumePower(2f);
-            requirements(Category.production, with(silicon, 25, diamond, 40));
+            requirements(Category.production, with(silver, 45, silicon, 75, diamond, 40));
             consumeLiquid(tokicite, 0.2f).boost();
         }};
         vanadiumDrill = new UndergroundDrill("vanadium-drill"){{
@@ -345,7 +333,7 @@ public class FOSBlocks {
             tier = 6;
             drillTime = 210f;
             consumePower(3f);
-            requirements(Category.production, with(tin, 30, silver, 50, vanadium, 50));
+            requirements(Category.production, with(tin, 30, silver, 95, silicon, 50, vanadium, 50));
             consumeLiquid(tokicite, 0.25f).boost();
         }};
         oreDetectorSmall = new OreDetector("ore-detector-small"){{
