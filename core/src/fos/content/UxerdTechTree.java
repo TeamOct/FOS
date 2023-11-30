@@ -50,7 +50,7 @@ public class UxerdTechTree {
                     node(cliffDetonator);
                     node(sublimator, () -> node(fluidPipe));
                     node(cuberiumSynthesizer, () -> {
-                        node(orbitalAccelerator, Seq.with(new Research(coreFortress)), () -> {});
+                        /* TODO: move to Lumoni */ node(orbitalAccelerator, Seq.with(new Research(coreFortress)), () -> {});
                         node(bigBoy);
                     });
                 });

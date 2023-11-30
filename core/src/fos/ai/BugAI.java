@@ -3,6 +3,7 @@ package fos.ai;
 import arc.math.Mathf;
 import fos.gen.Bugc;
 import mindustry.Vars;
+import mindustry.content.Blocks;
 import mindustry.entities.Units;
 import mindustry.entities.units.AIController;
 import mindustry.gen.*;
@@ -19,7 +20,7 @@ public class BugAI extends AIController implements TargetableAI {
         if (bug.isFollowed()) {
             int followers = Units.count(unit.x, unit.y, 240f, u -> u instanceof Bugc);
 
-            if (followers >= 10 + Mathf.floor(Vars.state.wave / 10f)) {
+            if (followers >= 5 + Mathf.floor(Vars.state.wave / 2f)) {
                 bug.invading(true);
             }
         } else {
@@ -60,7 +61,17 @@ public class BugAI extends AIController implements TargetableAI {
 
             targetTile = pathfindTarget(bug.following(), unit);
         } else {
-            targetTile = pathfindTarget(vec.set(unit).add(36, 30), unit);
+            //find a random point to walk at
+            boolean foundTile = false;
+            while (!foundTile) {
+                int x = Mathf.random(-15, 15);
+                int y = Mathf.random(-15, 15);
+                Tile t = Vars.world.tile(unit.tileX() + x, unit.tileY() + y);
+                if (t != null && t.block() == Blocks.air) {
+                    targetTile = pathfindTarget(vec.set(unit).add(36, 30), unit);
+                    foundTile = true;
+                }
+            }
         }
 
         if (targetTile == tile) return;
@@ -73,7 +84,7 @@ public class BugAI extends AIController implements TargetableAI {
     public Teamc findTarget(float x, float y, float range, boolean air, boolean ground) {
         Teamc result = findMainTarget(x, y, range, air, ground);
 
-        return checkTarget(result, x, y, range) ? Units.closestEnemy(unit.team, unit.x, unit.y, 800f, Unitc::isPlayer) : result;
+        return checkTarget(result, x, y, range) ? Units.closestEnemy(unit.team, unit.x, unit.y, 240f, Unitc::isPlayer) : result;
     }
 
     @Override
