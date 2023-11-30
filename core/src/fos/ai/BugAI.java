@@ -46,7 +46,7 @@ public class BugAI extends AIController implements TargetableAI {
 
             if (target != null) {
                 if (unit.within(target, 32f)) {
-                    circleAttack(60f);
+                    circleAttack(24f);
                     return;
                 } else {
                     targetTile = pathfindTarget(target, unit);
@@ -55,21 +55,22 @@ public class BugAI extends AIController implements TargetableAI {
         } else if (bug.following() != null) {
             //if already close enough to another bug when idle, stand still
             Unit nearest = Units.closest(unit.team, unit.x, unit.y, u -> (u instanceof Bugc) && u != this.unit);
-            if (Mathf.within(unit.x, unit.y, nearest.x, nearest.y, 6f) && !bug.invading()) return;
+            if (Mathf.within(unit.x, unit.y, nearest.x, nearest.y, 12f) && !bug.invading()) return;
 
             bug.invading(bug.following() instanceof Bugc bf && bf.invading());
 
             targetTile = pathfindTarget(bug.following(), unit);
-        } else {
+        } else if (!bug.idle()) {
             //find a random point to walk at
             boolean foundTile = false;
             while (!foundTile) {
-                int x = Mathf.random(-15, 15);
-                int y = Mathf.random(-15, 15);
+                int x = Mathf.random(-5, 5);
+                int y = Mathf.random(-5, 5);
                 Tile t = Vars.world.tile(unit.tileX() + x, unit.tileY() + y);
                 if (t != null && t.block() == Blocks.air) {
-                    targetTile = pathfindTarget(vec.set(unit).add(36, 30), unit);
+                    targetTile = pathfindTarget(vec.set(unit).add(x*8, y*8), unit);
                     foundTile = true;
+                    bug.idle(true);
                 }
             }
         }

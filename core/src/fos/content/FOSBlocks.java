@@ -949,8 +949,7 @@ public class FOSBlocks {
             requirements(Category.distribution, with(aluminium, 120, lithium, 75, silver, 100, titanium, 125));
             envRequired = envEnabled = Env.space;
         }};
-        //TODO was supposed to be a duct, but current sprites were made for a conveyor instead
-        tinBelt = new Conveyor("tin-belt"){{
+        tinBelt = new PipeConveyor("tin-belt"){{
             health = 10;
             speed = 0.05f;
             displayedSpeed = 6.9f;
@@ -1223,6 +1222,7 @@ public class FOSBlocks {
             interval = 20 * 60;
             drawTeamOverlay = false;
             customShadow = true;
+            createRubble = false;
         }};
 
         softbush = new Prop("softbush"){{
@@ -1293,6 +1293,7 @@ public class FOSBlocks {
             unitCapModifier = 7;
             itemCapacity = 5000;
             unitType = FOSUnitTypes.lord;
+            squareSprite = false;
             requirements(Category.effect, with(tin, 2500, silver, 2000, diamond, 1500));
         }};
         coreMetropolis = new DetectorCoreBlock("core-metropolis"){{
@@ -1301,6 +1302,7 @@ public class FOSBlocks {
             unitCapModifier = 10;
             itemCapacity = 8000;
             unitType = FOSUnitTypes.lord;
+            squareSprite = false;
             requirements(Category.effect, with(tin, 4500, silver, 3500, diamond, 3000));
         }};
         lightUnloader = new Unloader("light-unloader"){{

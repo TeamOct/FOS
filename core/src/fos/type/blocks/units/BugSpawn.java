@@ -21,7 +21,8 @@ public class BugSpawn extends UnitBlock {
         scaledHealth = 400;
         solid = false;
         canOverdrive = false;
-        buildVisibility = BuildVisibility.debugOnly;
+        unitCapModifier = 15;
+        buildVisibility = BuildVisibility.editorOnly;
     }
 
     @SuppressWarnings("unused")

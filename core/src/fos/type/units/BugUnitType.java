@@ -1,6 +1,9 @@
 package fos.type.units;
 
+import arc.graphics.Color;
 import fos.ai.*;
+import mindustry.content.Fx;
+import mindustry.gen.Sounds;
 import mindustry.type.UnitType;
 import mindustry.world.meta.BlockFlag;
 
@@ -12,6 +15,11 @@ public class BugUnitType extends UnitType {
         lightOpacity = lightRadius = 0f;
         drawCell = false;
         drawBody = false;
+        outlineColor = Color.valueOf("5a2a1b");
+        createScorch = false;
+        createWreck = false;
+        deathExplosionEffect = Fx.none;
+        deathSound = Sounds.noammo;
         omniMovement = flying;
         this.flying = flying;
         targetAir = flying;
