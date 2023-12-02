@@ -23,7 +23,13 @@ public class LumoniTechTree {
             );
 
             // TRANSPORT. TODO
-            node(tinBelt, () -> {});
+            node(tinBelt, () -> {
+                node(tinJunction, () -> {
+                    node(tinRouter, () -> {
+                        node(tinBridge);
+                    });
+                });
+            });
 
             // POWER. TODO
             node(windTurbine, () ->
@@ -77,6 +83,7 @@ public class LumoniTechTree {
                     {} //TODO: T2 drill base
                 )
             );
+
             // ORE DETECTORS
             node(oreDetector, () -> {
                 node(oreDetectorOverclocked);
