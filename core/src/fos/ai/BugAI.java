@@ -46,7 +46,10 @@ public class BugAI extends AIController implements TargetableAI {
 
             if (target != null) {
                 if (unit.within(target, 32f)) {
-                    circleAttack(24f);
+                    vec.set(target).sub(unit);
+                    vec.setLength(unit.speed());
+                    faceMovement();
+                    unit.moveAt(vec);
                     return;
                 } else {
                     targetTile = pathfindTarget(target, unit);

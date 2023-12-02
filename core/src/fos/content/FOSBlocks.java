@@ -568,7 +568,6 @@ public class FOSBlocks {
             retargetTime = 45f;
             targetAir = targetGround = true;
             laserColor = Color.scarlet;
-            shootSound = Sounds.laser;
             squareSprite = false;
             consumePower(2f);
             requirements(Category.turret, with(silver, 50, diamond, 75, vanadium, 50));
@@ -1142,10 +1141,12 @@ public class FOSBlocks {
         cyaniumWall = new StaticWall("cyanium-wall"){{
             variants = 4;
         }};
+/*
         cyaniumAlt = new Floor("cyanium-alt"){{
             variants = 4;
             wall = cyaniumWall;
         }};
+*/
         crimsonStone = new Floor("crimson-stone"){};
         crimsonStoneWall = new StaticWall("crimson-stone-wall"){{
             variants = 1;
@@ -1218,11 +1219,13 @@ public class FOSBlocks {
             walkSound = Sounds.plantBreak;
         }};
         bugSpawn = new BugSpawn("bug-spawn"){{
+            scaledHealth = 400;
             size = 3;
             interval = 20 * 60;
             drawTeamOverlay = false;
             customShadow = true;
             createRubble = false;
+            unitCapModifier = 15;
         }};
 
         softbush = new Prop("softbush"){{

@@ -18,10 +18,8 @@ public class BugSpawn extends UnitBlock {
 
     public BugSpawn(String name) {
         super(name);
-        scaledHealth = 400;
         solid = false;
         canOverdrive = false;
-        unitCapModifier = 15;
         buildVisibility = BuildVisibility.editorOnly;
     }
 
@@ -53,7 +51,7 @@ public class BugSpawn extends UnitBlock {
         private UnitType getBug() {
             UnitType[][] units = {
                 //I actually made ACTUAL bugs spawn, yay!
-                {FOSUnitTypes.bugSmall}
+                {FOSUnitTypes.bugSmall, FOSUnitTypes.bugMedium}
             };
 
             //unit tier depends on two factors: current wave count and sector difficulty

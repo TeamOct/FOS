@@ -43,7 +43,7 @@ public class FOSUnitTypes {
 
     public static @Annotations.EntityDef({LumoniPlayerUnitc.class, Legsc.class}) UnitType lord;
 
-    public static @Annotations.EntityDef({Bugc.class, Crawlc.class}) UnitType bugSmall;
+    public static @Annotations.EntityDef({Bugc.class, Crawlc.class}) UnitType bugSmall, bugMedium;
 
     public static @Annotations.EntityDef({Bugc.class, Unitc.class}) UnitType bugFlyingSmall, bugFlyingMedium;
 
@@ -516,12 +516,26 @@ public class FOSUnitTypes {
         bugSmall = new BugUnitType("bug-small", false){{
             health = 80;
             armor = 8;
-            hitSize = 3f;
+            hitSize = 6f;
             speed = 0.3f;
             segments = 3;
             crushDamage = 0.2f;
 
             //copied from renale for now
+            segmentScl = 3f;
+            segmentPhase = 5f;
+            segmentMag = 0.5f;
+        }};
+
+        bugMedium = new BugUnitType("bug-medium", false){{
+            health = 240;
+            armor = 20;
+            hitSize = 6f;
+            speed = 0.25f;
+            segments = 3;
+            crushDamage = 0.6f;
+
+            //copied from renale too, he's the same size for some reason
             segmentScl = 3f;
             segmentPhase = 5f;
             segmentMag = 0.5f;
