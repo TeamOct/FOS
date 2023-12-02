@@ -1137,7 +1137,7 @@ public class FOSBlocks {
             shallow = true;
             supportsOverlay = true;
         }};
-        cyanium = new Floor("cyanium"){};
+        cyanium = new Floor("cyanium");
         cyaniumWall = new StaticWall("cyanium-wall"){{
             variants = 4;
         }};
@@ -1147,7 +1147,7 @@ public class FOSBlocks {
             wall = cyaniumWall;
         }};
 */
-        crimsonStone = new Floor("crimson-stone"){};
+        crimsonStone = new Floor("crimson-stone");
         crimsonStoneWall = new StaticWall("crimson-stone-wall"){{
             variants = 1;
         }};
@@ -1155,25 +1155,25 @@ public class FOSBlocks {
             itemDrop = rawElithite;
             variants = 4;
         }};
-        elithiteWall = new StaticWall("elithite-wall"){};
+        elithiteWall = new StaticWall("elithite-wall");
         elbium = new Floor("elbium"){{
             itemDrop = rawElbium;
             variants = 4;
         }};
-        elbiumWall = new StaticWall("elbium-wall"){};
+        elbiumWall = new StaticWall("elbium-wall");
         nethratium = new Floor("nethratium"){{
             itemDrop = rawNethratium;
             variants = 4;
         }};
-        nethratiumWall = new StaticWall("nethratium-wall"){};
+        nethratiumWall = new StaticWall("nethratium-wall");
         annite = new Floor("annite"){{
             variants = 4;
         }};
-        anniteWall = new StaticWall("annite-wall"){};
+        anniteWall = new StaticWall("annite-wall");
         blublu = new Floor("blublu"){{
             variants = 4;
         }};
-        blubluWall = new StaticWall("blublu-wall"){};
+        blubluWall = new StaticWall("blublu-wall");
         blubluAlt = new Floor("blublu-alt"){{
             variants = 4;
             wall = blubluWall;
@@ -1181,8 +1181,8 @@ public class FOSBlocks {
         purpur = new Floor("purpur"){{
             variants = 4;
         }};
-        purpurWall = new StaticWall("purpur-wall"){};
-        alienMoss = new OverlayFloor("alien-moss"){};
+        purpurWall = new StaticWall("purpur-wall");
+        alienMoss = new OverlayFloor("alien-moss");
         oreTin = new UndergroundOreBlock("ore-tin"){{
             drop = tin;
             variants = 3;
