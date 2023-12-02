@@ -1206,7 +1206,7 @@ public class FOSBlocks {
         oreIridium = new UndergroundOreBlock("ore-iridium"){{
             drop = nickel;
         }};
-        oreLuminium = new AnimatedOreBlock("ore-luminium"){{
+        oreLuminium = new AnimatedOreBlock("ore-luminium", FOSShaders.los){{
             itemDrop = luminium;
             variants = 3;
             shader = FOSShaders.los;

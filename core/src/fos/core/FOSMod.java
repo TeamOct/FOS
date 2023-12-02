@@ -247,6 +247,7 @@ public class FOSMod extends Mod {
                 s == 7 ? "@setting.fos-menutheme.lumoniterrain" :
                 "@setting.fos-menutheme.default");
             t.checkPref("fos-rotatemenucamera", true);
+            t.checkPref("fos-animatedore", true);
             t.checkPref("fos-damagedisplay", true);
             t.sliderPref("fos-damagedisplayfrequency", 30, 3, 120, 3, s ->
                 Core.bundle.format("setting.seconds", s / 60f));
