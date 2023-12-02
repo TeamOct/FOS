@@ -30,7 +30,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         {crimsonStone, purpur, crimsonStone, purpur, crimsonStone, purpur},
         {crimsonStone, purpur, purpur, crimsonStone, purpur, purpur},
         {purpur, blublu, purpur, blublu, purpur, blublu},
-        {blublu, annite, blublu, annite, annite, annite},
+        {blublu, purpur, blublu, purpur, purpur, purpur},
         {annite, cyanium, cyanium, cyanium, annite, annite},
         {cyanium, cyanium, cyanium, annite, cyanium, cyanium}
     };
@@ -40,7 +40,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         if (isWater(position, 0.2f)) return 0.1f;
 
         position = Tmp.v33.set(position).scl(scl);
-        return Mathf.pow(Simplex.noise2d(seed, 5, 0.5f, 1f/3f, position.x, position.y), 2f);
+        return Mathf.pow(Simplex.noise3d(seed, 5, 0.5f, 1f/3f, position.x, position.y, position.z), 2f);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
     }
 
     protected float waterNoise(Vec3 pos, double octaves, double falloff, double scl, float mag, float offset) {
-        return Simplex.noise2d(seed, octaves, falloff, scl, pos.x + offset, pos.y + offset) * mag;
+        return Simplex.noise3d(seed, octaves, falloff, scl, pos.x + offset, pos.y + offset, pos.z + offset) * mag;
     }
 
     protected boolean isWater(Vec3 position, float value) {
@@ -126,7 +126,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
     Block getBlock(Vec3 position) {
         if (isWater(position, 0.18f)) return deepwater;
-        if (Simplex.noise2d(seed, 5, 0.8f, 1, position.x, position.y) > 0.8f) return tokiciteFloor;
+        if (Simplex.noise3d(seed, 5, 0.8f, 1, position.x, position.y, position.z) > 0.8f) return tokiciteFloor;
 
         return getSolidBlock(position);
     }
