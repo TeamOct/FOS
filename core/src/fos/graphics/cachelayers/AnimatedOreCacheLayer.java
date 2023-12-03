@@ -3,6 +3,7 @@ package fos.graphics.cachelayers;
 import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.gl.Shader;
+import arc.util.Log;
 import mindustry.Vars;
 import mindustry.graphics.CacheLayer;
 

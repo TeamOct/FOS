@@ -5,6 +5,7 @@ import arc.graphics.Color;
 import arc.struct.Seq;
 import arc.util.*;
 import fos.graphics.*;
+import fos.graphics.cachelayers.AnimatedOreCacheLayer;
 import fos.type.blocks.campaign.*;
 import fos.type.blocks.defense.*;
 import fos.type.blocks.distribution.*;
@@ -1209,7 +1210,6 @@ public class FOSBlocks {
         oreLuminium = new AnimatedOreBlock("ore-luminium", FOSShaders.los){{
             itemDrop = luminium;
             variants = 3;
-            shader = FOSShaders.los;
             emitLight = true;
             lightColor = FOSPal.luminium1.cpy().a(0.6f);
             lightRadius = 6f;
