@@ -56,7 +56,7 @@ public class FOSBlocks {
     oreDetectorSmall, oreDetector, oreDetectorReinforced, oreDetectorOverclocked,
 
     //distribution
-    spaceDuct, spaceRouter, spaceBridge, itemCatapult, tinBelt, liquidConveyor,
+    spaceDuct, spaceRouter, spaceBridge, itemCatapult, tinRouter, tinJunction, tinBridge, tinBelt, liquidConveyor,
 
     //liquids
     fluidPipe, pumpjack,
@@ -265,7 +265,7 @@ public class FOSBlocks {
         crudeDrill = new Drill("crude-drill"){{
             size = 2;
             tier = 2;
-            drillTime = 720f;
+            drillTime = 360f;
             squareSprite = false;
             drawSpinSprite = false;
             consumeLiquid(water, 0.08f).boost();
@@ -277,9 +277,9 @@ public class FOSBlocks {
         improvedDrill = new Drill("improved-drill"){{
             size = 3;
             tier = 4;
-            drillTime = 540f;
+            drillTime = 240f;
             squareSprite = false;
-            consumePower(1f/6f);
+            consumePower(1f);
             consumeLiquid(water, 0.24f).boost();
             requirements(Category.production, with(tin, 45, silver, 30));
             envEnabled ^= Env.space;
@@ -287,9 +287,9 @@ public class FOSBlocks {
         proficientDrill = new Drill("proficient-drill"){{
             size = 4;
             tier = 7;
-            drillTime = 480f;
+            drillTime = 200f;
             squareSprite = false;
-            consumePower(2f);
+            consumePower(6f);
             consumeLiquid(tokicite, 0.5f).boost();
             requirements(Category.production, with(tin, 50, brass, 25, silicon, 75, vanadium, 50, nickel, 45));
         }};
@@ -949,11 +949,31 @@ public class FOSBlocks {
             requirements(Category.distribution, with(aluminium, 120, lithium, 75, silver, 100, titanium, 125));
             envRequired = envEnabled = Env.space;
         }};
+        tinRouter = new Router("tin-router"){{
+            researchCost = with(tin, 90);
+            requirements(Category.distribution, with(tin, 3));
+        }};
+        tinJunction = new Junction("tin-junction"){{
+            speed = 16f;
+            researchCost = with(tin, 60);
+            requirements(Category.distribution, with(tin, 2));
+        }};
+        tinBridge = new BufferedItemBridge("tin-bridge"){{
+            fadeIn = moveArrows = false;
+            range = 4;
+            speed = 44f;
+            arrowSpacing = 6f;
+            bufferCapacity = 14;
+            researchCost = with(tin, 150);
+            requirements(Category.distribution, with(tin, 10));
+        }};
         tinBelt = new PipeConveyor("tin-belt"){{
             health = 10;
             speed = 0.05f;
             displayedSpeed = 6.9f;
             researchCost = with(tin, 30);
+            junctionReplacement = tinJunction;
+            bridgeReplacement = tinBridge;
             requirements(Category.distribution, with(tin, 1));
         }};
         //endregion
@@ -1075,7 +1095,6 @@ public class FOSBlocks {
             albedo = 1f;
         }};
         cyaniumWater = new Floor("cyanium-water"){{
-            variants = 4;
             isLiquid = true;
             status = StatusEffects.wet;
             liquidDrop = water;
