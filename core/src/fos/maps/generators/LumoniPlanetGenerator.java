@@ -319,8 +319,12 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
             if (floor == deepwater) {
                 for (Point2 p : Geometry.d8) {
                     Tile other = tiles.get(x + p.x, y + p.y);
+
                     if (other != null && other.floor() != deepwater && other.floor() != getFlooded(other.floor())) {
-                        floor = getFlooded(other.floor());
+                        other.circle(2, t -> {
+                            if (t.floor() != getFlooded(other.floor()))
+                                t.setFloor(getFlooded(other.floor()).asFloor());
+                        });
                         break;
                     }
                 }
@@ -350,7 +354,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
                 //only generate 1x1 puddles with a certain distance between them
                 /* java sucks */ final boolean[] isFree = {true};
-                tiles.get(x, y).circle(6, t -> {
+                tiles.get(x, y).circle(36, t -> {
                     if (t.floor() == arkyciteFloor) isFree[0] = false;
                 });
 
