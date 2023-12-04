@@ -29,7 +29,7 @@ import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.liquid.Conduit;
-import mindustry.world.blocks.power.SolarGenerator;
+import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.storage.Unloader;
 import mindustry.world.blocks.units.UnitFactory;
@@ -62,6 +62,7 @@ public class FOSBlocks {
 
     //power
     tinWire, tinWirePole, copperWire, copperWirePole, brassWire, brassWirePole, windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
+        copperBattery, brassBattery,
 
     //defense
     tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
@@ -1080,6 +1081,21 @@ public class FOSBlocks {
             size = 2;
             powerProduction = 0.5f;
             requirements(Category.power, with(lithium, 50, silver, 75, rawElithite, 50));
+        }};
+
+        copperBattery = new Battery("copper-battery"){{
+            scaledHealth = 120;
+            size = 1;
+            consumePowerBuffered(3000);
+            baseExplosiveness = 1f;
+            requirements(Category.power, with(tin, 5, copper, 15));
+        }};
+        brassBattery = new Battery("brass-battery"){{
+            scaledHealth = 120;
+            size = 2;
+            consumePowerBuffered(20000);
+            baseExplosiveness = 3f;
+            requirements(Category.power, with(tin, 25, brass, 60));
         }};
         //endregion
         //region environment & ores

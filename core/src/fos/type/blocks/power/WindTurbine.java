@@ -35,7 +35,7 @@ public class WindTurbine extends PowerGenerator {
             if (b != null && b.block.solid) {
                 a += 1 / (size * 4f);
                 Draw.z(Layer.blockOver);
-                Drawf.square((x + edge.x) * 8, (y + edge.y) * 8, 4f, Mathf.PI / 4, Color.valueOf("ff0000"));
+                Drawf.square((x + edge.x) * 8, (y + edge.y) * 8, 4f, Mathf.degRad * 45, Color.valueOf("ff0000"));
             }
         }
 
