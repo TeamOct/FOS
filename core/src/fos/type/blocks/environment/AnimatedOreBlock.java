@@ -18,16 +18,13 @@ import mindustry.world.Tile;
 import mindustry.world.blocks.environment.OreBlock;
 
 public class AnimatedOreBlock extends OreBlock {
-    public int frames = 1;
     protected TextureRegion[] regions;
 
     // TODO make base shader for animated ore block
     public Shader shader;
 
-    public CacheLayer layer;
-
     public AnimatedOreBlock(String name, Shader shader) {
         super(name);
-        layer = new AnimatedOreCacheLayer(shader);
+        cacheLayer = new AnimatedOreCacheLayer(shader);
     }
 }
