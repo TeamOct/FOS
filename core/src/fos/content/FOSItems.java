@@ -42,7 +42,10 @@ public class FOSItems {
         brass = new Item("brass", Color.valueOf("b57050")){{
             cost = 2f;
         }};
-        sulphur = new Item("sulphur", Color.valueOf("000000" /*TODO*/));
+        sulphur = new Item("sulphur", Color.valueOf("f0b454")){{
+            flammability = 0.6f;
+            cost = 0.5f;
+        }};
         cuberium = new Item("cuberium", Color.valueOf("855992")){{
             cost = 3f;
         }};
