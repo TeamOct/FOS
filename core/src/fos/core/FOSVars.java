@@ -6,6 +6,7 @@ import arc.struct.Seq;
 import fos.content.FOSFluids;
 import fos.controllers.CapsulesController;
 import fos.files.InternalFileTree;
+import fos.graphics.FOSOreRenderer;
 import fos.ui.*;
 import fos.ui.menus.FOSMenuRenderer;
 import mindustry.ai.Pathfinder;
@@ -50,6 +51,9 @@ public class FOSVars {
 
     /** Main menu renderer **/
     public static FOSMenuRenderer menuRenderer = new FOSMenuRenderer();
+
+    /** Ore cache renderer **/
+    public static FOSOreRenderer oreRenderer;
 
     /** Mod reference **/
     public static Mods.LoadedMod mod;
