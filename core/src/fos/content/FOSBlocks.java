@@ -5,7 +5,6 @@ import arc.graphics.Color;
 import arc.struct.Seq;
 import arc.util.*;
 import fos.graphics.*;
-import fos.graphics.cachelayers.AnimatedOreCacheLayer;
 import fos.type.blocks.campaign.*;
 import fos.type.blocks.defense.*;
 import fos.type.blocks.distribution.*;
@@ -349,6 +348,7 @@ public class FOSBlocks {
         oreDetector = new OreDetector("ore-detector"){{
             health = 960;
             size = 3;
+            squareSprite = false;
             requirements(Category.production, with(tin, 50));
             consumePower(0.5f);
             researchCost = with(tin, 150);
@@ -358,6 +358,7 @@ public class FOSBlocks {
             armor = 3;
             size = 3;
             speed = 0.4f;
+            squareSprite = false;
             requirements(Category.production, with(tin, 125, vanadium, 60));
             consumePower(0.5f);
         }};
@@ -367,6 +368,7 @@ public class FOSBlocks {
             speed = 1.4f;
             effectColor = Color.valueOf("e37f36");
             drillEfficiencyMultiplier = 1.5f;
+            squareSprite = false;
             requirements(Category.production, with(tin, 125, silicon, 60, vanadium, 30));
             consumePower(2f);
         }};
