@@ -28,11 +28,12 @@ vec3 hsv2rgb(vec3 c){
 
 void main(){
     vec2 coords = vec2(v_texCoords.x * u_resolution.x + u_campos.x, v_texCoords.y * u_resolution.y + u_campos.y);
+    float random = rand(ceil(vec2(coords.x, coords.y) / 8. * u_cameraScale));
 
     vec4 c = texture2D(u_texture, v_texCoords);
 
     vec3 hsv = rgb2hsv(c.rgb);
-    hsv.r += sin(u_time + rand(vec2(coords.x / u_cameraScale, coords.y / u_cameraScale)) * 100.0) * 0.08 - 0.04;
+    hsv.r += sin(u_time + random) * 0.16 - 0.04;
     c = vec4(hsv2rgb(hsv), c.a);
 
     gl_FragColor = c;

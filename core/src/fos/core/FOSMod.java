@@ -13,6 +13,7 @@ import fos.annotations.FOSAnnotations;
 import fos.content.*;
 import fos.controllers.CapsulesController;
 import fos.gen.FosEntityMapping;
+import fos.graphics.FOSOreRenderer;
 import fos.graphics.FOSShaders;
 import fos.net.FOSPackets;
 import fos.ui.DamageDisplay;
@@ -83,6 +84,8 @@ public class FOSMod extends Mod {
 
     @Override
     public void loadContent() {
+        FOSVars.oreRenderer = new FOSOreRenderer();
+
         SplashTexts.load();
 
         FOSShaders.init();
