@@ -54,6 +54,8 @@ public class BugAI extends AIController implements TargetableAI {
                 } else {
                     targetTile = pathfindTarget(target, unit);
                 }
+            } else {
+                target = bug.closestEnemyCore();
             }
         } else if (bug.following() != null) {
             //if already close enough to another bug when idle, stand still
