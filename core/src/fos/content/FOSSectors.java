@@ -1,22 +1,22 @@
 package fos.content;
 
-import mindustry.content.Planets;
 import mindustry.type.SectorPreset;
 
 public class FOSSectors {
     public static SectorPreset
     /* Serpulo */ siloTerminal,
-    /* Lumoni */ beginning;
+    /* Lumoni */ crashLanding;
 
     public static void load() {
+/*
+        //TODO: probably remove and/or move to lumoni
         siloTerminal = new SectorPreset("siloTerminal", Planets.serpulo, 95){{
             difficulty = 7;
         }};
+*/
 
-        //FIXME
-        /*beginning = new SectorPreset("beginning", FOSPlanets.lumina, 9){{
-            captureWave = 2;
-            difficulty = 2;
-        }};*/
+        crashLanding = new SectorPreset("crashLanding", FOSPlanets.lumoni, 89){{
+            difficulty = 1;
+        }};
     }
 }
