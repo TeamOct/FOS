@@ -196,6 +196,7 @@ public class FOSBlocks {
             consumeItems(with(diamond, 1, sand, 8));
             outputItems = with(silicon, 8);
             requirements(Category.crafting, with(tin, 180, silver, 150, diamond, 100));
+            drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawArcSmelt(), new DrawDefault());
         }};
         brassSmelter = new GenericCrafter("brass-smelter"){{
             scaledHealth = 40;
