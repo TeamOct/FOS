@@ -1326,6 +1326,7 @@ public class FOSBlocks {
             itemCapacity = 2500;
             unitType = FOSUnitTypes.lord;
             squareSprite = false;
+            alwaysUnlocked = true;
             requirements(Category.effect, with(tin, 2000, silver, 1250));
         }};
         coreCity = new DetectorCoreBlock("core-city"){{
