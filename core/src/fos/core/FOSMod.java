@@ -13,8 +13,7 @@ import fos.annotations.FOSAnnotations;
 import fos.content.*;
 import fos.controllers.CapsulesController;
 import fos.gen.FosEntityMapping;
-import fos.graphics.FOSOreRenderer;
-import fos.graphics.FOSShaders;
+import fos.graphics.*;
 import fos.net.FOSPackets;
 import fos.ui.DamageDisplay;
 import fos.ui.menus.*;
@@ -105,7 +104,6 @@ public class FOSMod extends Mod {
         FOSSectors.load();
 
         LumoniTechTree.load();
-        SerpuloTechTree.load();
         UxerdTechTree.load();
 
         FOSVars.capsulesController = new CapsulesController();

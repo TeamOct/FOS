@@ -66,7 +66,7 @@ public class FOSPlanets {
             allowLaunchLoadout = false;
             clearSectorOnLose = true;
             accessible = true;
-            alwaysUnlocked = true;
+            //alwaysUnlocked = true;
             itemWhitelist = uxerdItems;
             generator = new UxerdAsteroidGenerator(){{
                 seed = 8;
@@ -143,7 +143,7 @@ public class FOSPlanets {
             atmosphereColor = Color.valueOf("288a5d27");
             iconColor = annite.mapColor;
             meshLoader = () -> new HexMesh(this, 5);
-            startSector = 9;
+            startSector = 89;
             generator = new LumoniPlanetGenerator(){{
                 defaultLoadout = FOSSchematics.lumoniLoadout;
             }};

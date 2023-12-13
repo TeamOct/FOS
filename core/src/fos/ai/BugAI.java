@@ -58,11 +58,11 @@ public class BugAI extends AIController implements TargetableAI {
                 target = bug.closestEnemyCore();
             }
         } else if (bug.following() != null) {
+            bug.invading(bug.following() instanceof Bugc bf && bf.invading());
+
             //if already close enough to another bug when idle, stand still
             Unit nearest = Units.closest(unit.team, unit.x, unit.y, u -> (u instanceof Bugc) && u != this.unit);
             if (Mathf.within(unit.x, unit.y, nearest.x, nearest.y, 12f) && !bug.invading()) return;
-
-            bug.invading(bug.following() instanceof Bugc bf && bf.invading());
 
             targetTile = pathfindTarget(bug.following(), unit);
         } else if (!bug.idle()) {

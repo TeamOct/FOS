@@ -16,7 +16,9 @@ public class FOSSectors {
 */
 
         crashLanding = new SectorPreset("crashLanding", FOSPlanets.lumoni, 89){{
+            alwaysUnlocked = true;
             difficulty = 1;
+            captureWave = 2;
         }};
     }
 }

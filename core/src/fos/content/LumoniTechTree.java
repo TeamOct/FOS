@@ -7,6 +7,7 @@ import static fos.content.FOSBlocks.*;
 import static fos.content.FOSFluids.tokicite;
 import static fos.content.FOSItems.*;
 import static fos.content.FOSObjectives.DefeatBoss;
+import static fos.content.FOSSectors.crashLanding;
 import static fos.content.FOSUnitTypes.*;
 import static fos.content.FOSWeaponModules.*;
 import static mindustry.content.Items.*;
@@ -154,7 +155,10 @@ public class LumoniTechTree {
                 });
             });
 
-            //TODO: sectors
+            // SECTORS
+            node(crashLanding, () -> {
+                //TODO
+            });
         });
     }
 }
