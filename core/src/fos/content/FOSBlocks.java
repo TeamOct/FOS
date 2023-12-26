@@ -1280,6 +1280,7 @@ public class FOSBlocks {
         upgradeCenter = new UpgradeCenter("upgrade-center"){{
             health = 1500;
             size = 3;
+            solid = true;
             consumePower(3f);
             requirements(Category.units, with(tin, 250, silver, 200));
             drawer = new DrawMulti(
