@@ -54,8 +54,6 @@ public class BugAI extends AIController implements TargetableAI {
                 } else {
                     targetTile = pathfindTarget(target, unit);
                 }
-            } else {
-                target = bug.closestEnemyCore();
             }
         } else if (bug.following() != null) {
             bug.invading(bug.following() instanceof Bugc bf && bf.invading());
@@ -90,7 +88,7 @@ public class BugAI extends AIController implements TargetableAI {
     public Teamc findTarget(float x, float y, float range, boolean air, boolean ground) {
         Teamc result = findMainTarget(x, y, range, air, ground);
 
-        return checkTarget(result, x, y, range) ? Units.closestEnemy(unit.team, unit.x, unit.y, 240f, Unitc::isPlayer) : result;
+        return checkTarget(result, x, y, range) ? bug.closestEnemyCore() : result;
     }
 
     @Override
