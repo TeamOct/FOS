@@ -1122,7 +1122,6 @@ public class FOSBlocks {
             status = StatusEffects.wet;
             liquidDrop = water;
             cacheLayer = CacheLayer.water;
-            wall = cyaniumWall;
             speedMultiplier = 0.8f;
             statusDuration = 50f;
             albedo = 0.9f;
@@ -1134,7 +1133,6 @@ public class FOSBlocks {
             status = StatusEffects.wet;
             liquidDrop = water;
             cacheLayer = CacheLayer.water;
-            wall = crimsonStoneWall;
             speedMultiplier = 0.8f;
             statusDuration = 50f;
             albedo = 0.9f;
@@ -1147,7 +1145,6 @@ public class FOSBlocks {
             status = StatusEffects.wet;
             liquidDrop = water;
             cacheLayer = CacheLayer.water;
-            wall = anniteWall;
             speedMultiplier = 0.8f;
             statusDuration = 50f;
             albedo = 0.9f;
@@ -1160,7 +1157,6 @@ public class FOSBlocks {
             status = StatusEffects.wet;
             liquidDrop = water;
             cacheLayer = CacheLayer.water;
-            wall = blubluWall;
             speedMultiplier = 0.8f;
             statusDuration = 50f;
             albedo = 0.9f;
@@ -1173,7 +1169,6 @@ public class FOSBlocks {
             status = StatusEffects.wet;
             liquidDrop = water;
             cacheLayer = CacheLayer.water;
-            wall = purpurWall;
             speedMultiplier = 0.8f;
             statusDuration = 50f;
             albedo = 0.9f;
@@ -1183,6 +1178,7 @@ public class FOSBlocks {
         cyanium = new Floor("cyanium");
         cyaniumWall = new StaticWall("cyanium-wall"){{
             variants = 4;
+            cyaniumWater.asFloor().wall = this;
         }};
 /*
         cyaniumAlt = new Floor("cyanium-alt"){{
@@ -1193,6 +1189,7 @@ public class FOSBlocks {
         crimsonStone = new Floor("crimson-stone");
         crimsonStoneWall = new StaticWall("crimson-stone-wall"){{
             variants = 1;
+            crimsonStoneWater.asFloor().wall = this;
         }};
         elithite = new Floor("elithite"){{
             itemDrop = rawElithite;
@@ -1212,19 +1209,27 @@ public class FOSBlocks {
         annite = new Floor("annite"){{
             variants = 4;
         }};
-        anniteWall = new StaticWall("annite-wall");
+        anniteWall = new StaticWall("annite-wall"){{
+            anniteWater.asFloor().wall = this;
+        }};
         blublu = new Floor("blublu"){{
             variants = 4;
         }};
-        blubluWall = new StaticWall("blublu-wall");
+        blubluWall = new StaticWall("blublu-wall"){{
+            blubluWater.asFloor().wall = this;
+        }};
+/*
         blubluAlt = new Floor("blublu-alt"){{
             variants = 4;
             wall = blubluWall;
         }};
+*/
         purpur = new Floor("purpur"){{
             variants = 4;
         }};
-        purpurWall = new StaticWall("purpur-wall");
+        purpurWall = new StaticWall("purpur-wall"){{
+            purpurWater.asFloor().wall = this;
+        }};
         alienMoss = new OverlayFloor("alien-moss");
         oreTin = new UndergroundOreBlock("ore-tin"){{
             drop = tin;
