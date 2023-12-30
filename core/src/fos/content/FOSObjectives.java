@@ -40,4 +40,18 @@ public class FOSObjectives {
             return Core.bundle.format("requirement.findincrates");
         }
     }
+
+    public static class TBDObjective implements Objective {
+        public TBDObjective(){}
+
+        @Override
+        public boolean complete() {
+            return false;
+        }
+
+        @Override
+        public String display() {
+            return Core.bundle.format("requirement.tbd");
+        }
+    }
 }

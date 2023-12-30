@@ -5,7 +5,7 @@ import mindustry.type.SectorPreset;
 public class FOSSectors {
     public static SectorPreset
     /* Serpulo */ siloTerminal,
-    /* Lumoni */ crashLanding;
+    /* Lumoni */ crashLanding, ruins;
 
     public static void load() {
 /*
@@ -15,9 +15,14 @@ public class FOSSectors {
         }};
 */
 
-        crashLanding = new SectorPreset("crashLanding", FOSPlanets.lumoni, 89){{
+        crashLanding = new SectorPreset("crash-landing", FOSPlanets.lumoni, 89){{
             alwaysUnlocked = true;
             difficulty = 1;
+            captureWave = 2;
+        }};
+
+        ruins = new SectorPreset("ruins", FOSPlanets.lumoni, 26){{
+            difficulty = 2;
             captureWave = 2;
         }};
     }

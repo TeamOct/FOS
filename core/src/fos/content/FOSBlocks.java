@@ -11,7 +11,7 @@ import fos.type.blocks.distribution.*;
 import fos.type.blocks.environment.*;
 import fos.type.blocks.power.*;
 import fos.type.blocks.production.*;
-import fos.type.blocks.special.CliffExplosive;
+import fos.type.blocks.special.*;
 import fos.type.blocks.storage.DetectorCoreBlock;
 import fos.type.blocks.units.*;
 import fos.type.bullets.*;
@@ -89,7 +89,7 @@ public class FOSBlocks {
     coreColony, coreFortress, coreCity, coreMetropolis, lightUnloader,
 
     //special
-    nukeLauncher, bigBoy, cliffDetonator, orbitalAccelerator, mechResearchCore, bioResearchCore;
+    nukeLauncher, bigBoy, cliffDetonator, orbitalAccelerator, mechResearchCore, bioResearchCore, soontm;
 
     public static void load() {
         //region crafting
@@ -457,15 +457,6 @@ public class FOSBlocks {
                     trailLength = 8;
                     ammoMultiplier = 2f;
                 }},
-                silver, new BasicBulletType(3f, 25){{
-                    width = 3f; height = 6f;
-                    lifetime = 44f;
-                    trailColor = frontColor = FOSPal.silver;
-                    backColor = FOSPal.silverBack;
-                    trailWidth = 1.5f;
-                    trailLength = 8;
-                    ammoMultiplier = 2f;
-                }},
                 diamond, new BasicBulletType(3f, 35){{
                     width = 3f; height = 6f;
                     lifetime = 44f;
@@ -476,6 +467,17 @@ public class FOSBlocks {
                     ammoMultiplier = 3f;
                     pierce = true;
                     pierceCap = 2;
+                }},
+                silicon, new BasicBulletType(3f, 28){{
+                    width = 3f; height = 6f;
+                    lifetime = 44f;
+                    trailColor = frontColor = Pal.unitFront;
+                    backColor = Pal.unitBack;
+                    trailWidth = 1.5f;
+                    trailLength = 8;
+                    ammoMultiplier = 3f;
+                    homingRange = 56f;
+                    homingPower = 0.1f;
                 }},
                 vanadium, new BasicBulletType(4f, 40){{
                     width = 3f; height = 6f;
@@ -1431,5 +1433,7 @@ public class FOSBlocks {
             displayedSpeed = 4.2f;
             researchCost = with(Items.copper, 5);
         }};
+
+        soontm = new PlaceholderBlock();
     }
 }
