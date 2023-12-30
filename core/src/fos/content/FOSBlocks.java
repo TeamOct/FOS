@@ -1127,6 +1127,7 @@ public class FOSBlocks {
             albedo = 0.9f;
             shallow = true;
             supportsOverlay = true;
+            variants = 4;
         }};
         crimsonStoneWater = new Floor("crimson-stone-water"){{
             isLiquid = true;
@@ -1175,12 +1176,14 @@ public class FOSBlocks {
             shallow = true;
             supportsOverlay = true;
         }};
-        cyanium = new Floor("cyanium");
+        cyanium = new Floor("cyanium"){{
+            variants = 4;
+        }};
         cyaniumWall = new StaticWall("cyanium-wall"){{
             variants = 4;
             cyaniumWater.asFloor().wall = this;
         }};
-/*
+/*      TODO: this sucks
         cyaniumAlt = new Floor("cyanium-alt"){{
             variants = 4;
             wall = cyaniumWall;
@@ -1218,7 +1221,7 @@ public class FOSBlocks {
         blubluWall = new StaticWall("blublu-wall"){{
             blubluWater.asFloor().wall = this;
         }};
-/*
+/*      TODO: this sucks
         blubluAlt = new Floor("blublu-alt"){{
             variants = 4;
             wall = blubluWall;
