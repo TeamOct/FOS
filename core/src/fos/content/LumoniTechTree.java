@@ -5,22 +5,23 @@ import mindustry.game.Objectives;
 import mindustry.type.ItemStack;
 
 import static fos.content.FOSBlocks.*;
-import static fos.content.FOSFluids.tokicite;
 import static fos.content.FOSItems.*;
 import static fos.content.FOSSectors.*;
 import static fos.content.FOSWeaponModules.*;
 import static mindustry.content.Items.*;
-import static mindustry.content.Liquids.*;
+import static mindustry.content.Liquids.water;
 import static mindustry.content.TechTree.*;
-import static mindustry.game.Objectives.Research;
 
 public class LumoniTechTree {
     public static void load() {
         FOSPlanets.lumoni.techTree = nodeRoot("@planet.fos-lumoni.name", coreFortress, true, () -> {
             // CORES
+            soontm();
+/*
             node(coreCity, () ->
                 node(coreMetropolis)
             );
+*/
 
             // TRANSPORT. TODO
             node(tinBelt, () -> {
@@ -35,7 +36,10 @@ public class LumoniTechTree {
             node(windTurbine, () ->
                 node(tinWire, () ->
                     node(copperWire, () ->
+                        soontm()
+/*
                         node(brassWire)
+*/
                     )
                 )
             );
@@ -165,26 +169,40 @@ public class LumoniTechTree {
                 nodeProduce(silver, () ->
                     nodeProduce(diamond, () -> {
                         nodeProduce(silicon, () -> {});
+
+                        soontm();
+/*
                         nodeProduce(vanadium, () ->
                             nodeProduce(nickel, () ->
                                 nodeProduce(luminium, () -> {})
                             )
                         );
+*/
+                        soontm();
+/*
                         nodeProduce(sulphur, Seq.with(new Research(arkyciteRefinery)), () -> {});
+*/
                     })
                 );
                 nodeProduce(copper, () ->
+                    soontm()
+/*
                     nodeProduce(brass, () -> {})
+*/
                 );
             });
 
             // FLUIDS
             nodeProduce(water, () -> {
+                soontm();
+                soontm();
+/*
                 nodeProduce(tokicite, () -> {
                 });
                 nodeProduce(arkycite, () -> {
                     nodeProduce(oil, () -> {});
                 });
+*/
             });
 
             // SECTORS
