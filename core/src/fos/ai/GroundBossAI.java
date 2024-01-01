@@ -1,6 +1,5 @@
 package fos.ai;
 
-import fos.type.units.LumoniPlayerUnitType;
 import mindustry.ai.Pathfinder;
 import mindustry.entities.Units;
 import mindustry.entities.units.*;
@@ -10,7 +9,7 @@ public class GroundBossAI extends AIController implements TargetableAI {
     @Override
     public void updateMovement() {
         Building core = unit.closestEnemyCore();
-        Unit player = Units.closestEnemy(unit.team, unit.x, unit.y, 999f, u -> u.type instanceof LumoniPlayerUnitType);
+        Unit player = Units.closestEnemy(unit.team, unit.x, unit.y, unit.range() * 10, Unitc::isPlayer);
         Teamc curTarget = player != null ? player : core;
 
         if (curTarget == null) return;
@@ -22,9 +21,7 @@ public class GroundBossAI extends AIController implements TargetableAI {
                     mount.target = curTarget;
                 }
             }
-        }
-
-        if (!unit.within(curTarget, unit.type.range)) {
+        } else {
             if (player == null) {
                 pathfind(Pathfinder.fieldCore);
             } else {

@@ -6,7 +6,7 @@ import arc.math.geom.Rect;
 import fos.ai.*;
 import fos.gen.*;
 import fos.graphics.FOSPal;
-import fos.type.abilities.HackFieldAbility;
+import fos.type.abilities.*;
 import fos.type.bullets.*;
 import fos.type.units.*;
 import fos.type.units.destroyers.DestroyersUnits;
@@ -21,6 +21,7 @@ import mindustry.entities.pattern.ShootSpread;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
+import mindustry.type.weapons.RepairBeamWeapon;
 
 import static fos.content.FOSStatuses.hacked;
 
@@ -29,8 +30,10 @@ public class FOSUnitTypes {
 
     public static @Annotations.EntityDef({Tankc.class}) UnitType warden;
 
-    public static @Annotations.EntityDef({Unitc.class}) UnitType sergeant, lieutenant, captain, general, marshal,
-            smoke, cloud;
+    public static @Annotations.EntityDef({Unitc.class}) UnitType
+        sergeant, lieutenant, captain, general, marshal,
+        smoke, cloud,
+        legionnaire;
 
     public static @Annotations.EntityDef({ElevationMovec.class, Unitc.class}) UnitType assault;
 
@@ -50,22 +53,68 @@ public class FOSUnitTypes {
     public static void load(){
         DestroyersUnits.load();
 
+        legionnaire = new UnitType("legionnaire"){{
+            health = 150;
+            hitSize = 8;
+            speed = 2.5f;
+            accel = 0.08f;
+            drag = 0.04f;
+            isEnemy = false;
+            omniMovement = false;
+            outlineColor = Color.valueOf("2b2f36");
+            weapons.add(
+                new Weapon(){{
+                    top = false;
+                    rotate = true;
+                    rotateSpeed = 6f;
+                    reload = 30f;
+                    bullet = new BasicBulletType(2.5f, 55){{
+                        width = 7f;
+                        height = 9f;
+                        lifetime = 45f;
+                        shootEffect = Fx.shootSmall;
+                        smokeEffect = Fx.shootSmallSmoke;
+                        ammoMultiplier = 2;
+                        trailWidth = 3;
+                        trailLength = 8;
+                    }};
+                }}
+            );
+            aiController = ProtectorAI::new;
+        }};
         //TODO: campaign boss
         legion = new UnitType("legion"){{
-            health = 25000;
-            armor = 25;
+            health = 4500;
+            armor = 10;
             hitSize = 25;
-            speed = 0.1f;
+            speed = 0.3f;
             flying = false;
             canBoost = false;
+            outlineColor = Color.valueOf("2b2f36");
+            range = 40f;
+
+            weapons.add(
+                new RepairBeamWeapon("legion-beam"){{
+                    x = 4; y = 0;
+                    mirror = true;
+                    bullet = new BulletType(){{
+                        maxRange = 40f;
+                    }};
+                }}
+            );
+
+            abilities.add(new UnitResistanceAbility(legionnaire, 0.1f));
 
             float angle = 0f;
-            for(int i = 0; i < 8; i++){
+            int units = 1;
+            for(int i = 0; i < units; i++){
                 float x = Mathf.cos(angle) * 32;
                 float y = Mathf.sin(angle) * 32;
-                abilities.add(new UnitSpawnAbility(UnitTypes.atrax, 600, x, y));
-                angle += Mathf.PI2 / 8;
+                abilities.add(new UnitSpawnAbility(legionnaire, 600, x, y));
+                angle += Mathf.PI2 / units;
             }
+
+            //aiController = GroundBossAI::new;
         }};
         //TODO: campaign boss
         citadel = new BossUnitType("citadel"){{

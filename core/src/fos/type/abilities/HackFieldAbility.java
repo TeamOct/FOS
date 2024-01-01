@@ -1,15 +1,18 @@
 package fos.type.abilities;
 
-import arc.*;
-import arc.graphics.*;
-import arc.math.*;
-import fos.content.*;
+import arc.graphics.Color;
+import arc.math.Mathf;
+import arc.scene.ui.layout.Table;
+import fos.content.FOSStatuses;
 import mindustry.content.StatusEffects;
-import mindustry.entities.*;
-import mindustry.entities.abilities.*;
-import mindustry.gen.*;
-import mindustry.graphics.*;
-import mindustry.type.*;
+import mindustry.entities.Units;
+import mindustry.entities.abilities.Ability;
+import mindustry.gen.Unit;
+import mindustry.graphics.Drawf;
+import mindustry.type.StatusEffect;
+import mindustry.world.meta.*;
+
+import static mindustry.Vars.tilesize;
 
 public class HackFieldAbility extends Ability {
     public StatusEffect status;
@@ -22,8 +25,9 @@ public class HackFieldAbility extends Ability {
     }
 
     @Override
-    public String localized() {
-        return Core.bundle.format("ability.hackfield", range / 8f, FOSStatuses.hacked.emoji());
+    public void addStats(Table t) {
+        t.add("[lightgray]" + Stat.range.localized() + ": [white]" + range / tilesize + " " + StatUnit.blocks.localized());
+        t.row();
     }
 
     @Override

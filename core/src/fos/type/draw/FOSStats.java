@@ -4,5 +4,6 @@ import mindustry.world.meta.Stat;
 
 public class FOSStats {
     public static final Stat
-    lifetime = new Stat("lifetime");
+    lifetime = new Stat("lifetime"),
+    unitDamageRes = new Stat("unitdamageres");
 }
