@@ -25,5 +25,7 @@ public class ProtectorAI extends AIController {
 
         // Just circle around the unit. That's the entire move set of this AI.
         circle(protectTarget, protectTarget.hitSize * 2);
+
+        faceMovement();
     }
 }
