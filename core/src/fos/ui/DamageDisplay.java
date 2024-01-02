@@ -34,7 +34,7 @@ public class DamageDisplay {
         HealthInfo data = e.data();
 
         float dmgScale = Mathf.clamp(1f + data.amount / 2500, 1f, 5f);
-        float scale = Mathf.sin(e.fin() * 3.14f / 2f) * dmgScale;
+        float scale = Mathf.sin(e.fout() * 3.14f / 2f) * dmgScale;
 
         if (scale == 0) return;
 

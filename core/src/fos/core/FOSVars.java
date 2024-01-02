@@ -26,6 +26,11 @@ public class FOSVars {
     public static ResearchCoreDialog researchCoreDialog;
     /** Special tech trees accessed only by certain blocks. */
     public static TechTree.TechNode mechTree, bioTree;
+    /**
+     * This mod's classic damage display system.
+     * Why did I even make it a variable.
+     */
+    public static ClassicDamageDisplay classicDamageDisplay;
     /** This mod's damage display system. */
     public static DamageDisplay damageDisplay;
 

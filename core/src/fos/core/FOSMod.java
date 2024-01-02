@@ -15,7 +15,7 @@ import fos.controllers.CapsulesController;
 import fos.gen.FosEntityMapping;
 import fos.graphics.*;
 import fos.net.FOSPackets;
-import fos.ui.DamageDisplay;
+import fos.ui.*;
 import fos.ui.menus.*;
 import mindustry.Vars;
 import mindustry.ai.Pathfinder;
@@ -26,6 +26,8 @@ import mindustry.mod.Mods.LoadedMod;
 import mindustry.ui.*;
 import mindustry.ui.dialogs.PlanetDialog;
 import mma.annotations.ModAnnotations;
+
+import static arc.Core.settings;
 
 @ModAnnotations.RootDirectoryPath(rootDirectoryPath = "core")
 @ModAnnotations.AnnotationSettings(
@@ -73,10 +75,10 @@ public class FOSMod extends Mod {
 
             //realistic mode - no sound FX in places with no atmosphere, such as asteroids
             // FIXME запхнуть в таймер и менять звук только при изменении настроек и загрузке
-            if (Core.settings.getBool("fos-realisticmode") && Vars.state.rules.sector != null && !Vars.state.rules.sector.planet.hasAtmosphere) {
+            if (settings.getBool("fos-realisticmode") && Vars.state.rules.sector != null && !Vars.state.rules.sector.planet.hasAtmosphere) {
                 Core.audio.soundBus.setVolume(0f);
             } else {
-                Core.audio.soundBus.setVolume(Core.settings.getInt("sfxvol") / 100f);
+                Core.audio.soundBus.setVolume(settings.getInt("sfxvol") / 100f);
             }
         });
     }
@@ -156,6 +158,7 @@ public class FOSMod extends Mod {
         Vars.ui.editor.shown(this::addEditorTeams);
 
         //damage display
+        FOSVars.classicDamageDisplay = new ClassicDamageDisplay();
         FOSVars.damageDisplay = new DamageDisplay();
 
         //add a new font page for... reasons
@@ -201,7 +204,7 @@ public class FOSMod extends Mod {
         //check for "Fictional Octo System OST" mod. if it doesn't exist, prompt to download from GitHub
         LoadedMod ost = Vars.mods.getMod("fosost");
         if (ost == null) {
-            if (!Core.settings.getBool("fos-ostdontshowagain")) {
+            if (!settings.getBool("fos-ostdontshowagain")) {
                 Vars.ui.showCustomConfirm("@fos.noosttitle", Core.bundle.get("fos.noost"),
                         "@mods.browser.add", "@no",
                         () -> Vars.ui.mods.githubImportMod("TeamOct/FOS-OST", true), () -> {});
@@ -224,7 +227,7 @@ public class FOSMod extends Mod {
             }
         });
 
-        int tn = Core.settings.getInt("fos-menutheme");
+        int tn = settings.getInt("fos-menutheme");
         MenuBackground bg = (
                 tn == 2 ? FOSMenus.uxerdSpace :
                 tn == 3 ? FOSMenus.lumoniSpace :
@@ -249,14 +252,23 @@ public class FOSMod extends Mod {
                 "@setting.fos-menutheme.default");
             t.checkPref("fos-rotatemenucamera", true);
             t.checkPref("fos-animatedore", true);
-            t.checkPref("fos-damagedisplay", true);
+            t.checkPref("fos-classicdamagedisplay", false, b -> {
+                if (b) {
+                    settings.put("fos-damagedisplay", false);
+                }
+            });
+            t.checkPref("fos-damagedisplay", true, b -> {
+                if (b) {
+                    settings.put("fos-classicdamagedisplay", false);
+                }
+            });
             t.sliderPref("fos-damagedisplayfrequency", 30, 3, 120, 3, s ->
                 Core.bundle.format("setting.seconds", s / 60f));
             t.checkPref("fos-ostdontshowagain", false);
             t.checkPref("fos-realisticmode", false);
             t.checkPref("fos-refreshsplash", false, b -> {
                 Time.run(60f, () ->
-                        Core.settings.put("fos-refreshsplash", false)
+                        settings.put("fos-refreshsplash", false)
                 );
                 int n = Mathf.floor((float) Math.random() * SplashTexts.splashes.size);
                 Vars.mods.locateMod("fos").meta.subtitle = SplashTexts.splashes.get(n);
@@ -264,10 +276,10 @@ public class FOSMod extends Mod {
             t.checkPref("fos-debugmode", false, b -> {
                 if (b) {
                     Vars.ui.showConfirm("@warning", "@fos-dangerzone", () -> {
-                        Core.settings.put("fos-debugmode", true);
+                        settings.put("fos-debugmode", true);
                     });
                 } else
-                    Core.settings.put("fos-debugmode", false);
+                    settings.put("fos-debugmode", false);
             });
         });
     }
