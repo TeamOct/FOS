@@ -137,15 +137,7 @@ public class ClassicDamageDisplay {
             }
 
             if (buildings == null) {
-                buildings = new ObjectFloatMap<>();
-                for (int x = 0; x < world.width(); x++) {
-                    for (int y = 0; y < world.height(); y++) {
-                        Building b = world.build(x, y);
-                        if (b != null) {
-                            buildings.put(b, b.health);
-                        }
-                    }
-                }
+                initBuildings();
             } else {
                 buildings.each(b -> {
                     //make sure to track heals
@@ -177,6 +169,8 @@ public class ClassicDamageDisplay {
 
         //region buildings
         Events.on(BlockBuildEndEvent.class, e -> {
+            if (buildings == null)
+                initBuildings();
             Building b = world.build(e.tile.x, e.tile.y);
             if (b != null) {
                 if (e.breaking) {
@@ -194,27 +188,6 @@ public class ClassicDamageDisplay {
         float worldy = target.y() + Mathf.random(16f, 24f);
 
         damageShowEffect.at(worldx, worldy, 0f, new DamageInfo(0, null, 0f, target.team()));
-/*
-        Table table = new Table(Styles.none).margin(4);
-        table.touchable = Touchable.disabled;
-        table.update(() -> {
-            if(state.isMenu()) table.remove();
-            Vec2 v = Core.camera.project(worldx, worldy);
-            table.setPosition(v.x, v.y, Align.center);
-        });
-        table.actions(Actions.delay(1.5f), Actions.remove());
-        table.add("0").style(Styles.outlineLabel).color(Pal.gray);
-        table.pack();
-        table.act(0f);
-        //make sure it's at the back
-        Core.scene.root.addChildAt(0, table);
-
-        Events.run(Trigger.update, () -> table.update(() -> {
-            table.y += 1f;
-            float a = Time.delta / 60f;
-            table.getChildren().each(e -> e.color.a -= a);
-        }));
-*/
     }
 
     private static void showDamage(Integer damage, @Nullable Bullet bullet, Teamc target) {
@@ -224,72 +197,25 @@ public class ClassicDamageDisplay {
         float worldy = target.y() + Mathf.random(16f, 24f) * scl;
 
         damageShowEffect.at(worldx, worldy, 0f, new DamageInfo(pierce ? 1 : 0, bullet, damage, target.team()));
-
-/*
-        Table table = new Table(Styles.none).margin(4);
-        table.touchable = Touchable.disabled;
-        table.update(() -> {
-            if(state.isMenu()) table.remove();
-            Vec2 v = Core.camera.project(worldx, worldy);
-            table.setPosition(v.x, v.y, Align.center);
-        });
-        table.actions(Actions.delay(1f), Actions.remove());
-        //hi meep :)
-        if (bullet != null && bullet.owner instanceof Building b && b.block.name.equals("prog-mats-caliber") && damage > bullet.type.damage) {
-            table.add("CRITICAL").color(Color.green).fontScale(Math.max(1, scl)).center();
-            table.row();
-            table.add("HIT!!!").color(Color.green).fontScale(Math.max(1, scl)).center();
-            table.row();
-        }
-        if (damage == 0) {
-            table.add("0").style(Styles.outlineLabel).color(Pal.gray);
-        } else {
-            table.add(damage.toString()).style(Styles.outlineLabel).color(color).fontScale(bullet == null ? 0.5f : Math.max(1, scl));
-            if (pierce) table.image(Icon.modeAttackSmall).color(color).fontScale(Math.max(1, scl));
-        }
-        table.pack();
-        table.act(0f);
-        //make sure it's at the back
-        Core.scene.root.addChildAt(0, table);
-
-        Events.run(Trigger.update, () -> table.update(() -> {
-            table.y += 1f;
-            float a = Time.delta / 60f;
-            table.getChildren().each(e -> e.color.a -= a);
-        }));
-*/
     }
 
     private static void showHeal(Integer amount, Teamc target) {
-        Color color = target.team().color;
         float worldx = target.x() + Mathf.random(-6f, 6f);
         float worldy = target.y() + Mathf.random(16f, 24f);
 
         damageShowEffect.at(worldx, worldy, 0f, new DamageInfo(2, null, amount, target.team()));
+    }
 
-/*
-        Table table = new Table(Styles.none).margin(4);
-        table.touchable = Touchable.disabled;
-        table.update(() -> {
-            if(state.isMenu()) table.remove();
-            Vec2 v = Core.camera.project(worldx, worldy);
-            table.setPosition(v.x, v.y, Align.center);
-        });
-        table.actions(Actions.delay(1.5f), Actions.remove());
-        float scl = 1 + (Mathf.floor(amount / 200f) / 10f);
-        table.add(amount.toString()).style(Styles.outlineLabel).color(Pal.heal).fontScale(Math.max(1, scl));
-        table.image(Icon.wrench).color(color).fontScale(Math.max(1, scl));
-        table.pack();
-        table.act(0f);
-        //make sure it's at the back
-        Core.scene.root.addChildAt(0, table);
-
-        Events.run(Trigger.update, () -> table.update(() -> {
-            table.y += 1f;
-            float a = Time.delta / 60f;
-            table.getChildren().each(e -> e.color.a -= a);
-        }));
-*/
+    private static void initBuildings() {
+        buildings = new ObjectFloatMap<>();
+        for (int x = 0; x < world.width(); x++) {
+            for (int y = 0; y < world.height(); y++) {
+                Building b = world.build(x, y);
+                if (b != null) {
+                    buildings.put(b, b.health);
+                }
+            }
+        }
     }
 
     static class DamageInfo {
