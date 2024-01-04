@@ -54,12 +54,14 @@ public class FOSUnitTypes {
         DestroyersUnits.load();
 
         legionnaire = new UnitType("legionnaire"){{
-            health = 150;
+            health = 200;
             hitSize = 8;
             speed = 2.5f;
             accel = 0.08f;
             drag = 0.04f;
             isEnemy = false;
+            flying = true;
+            targetPriority = -2f;
             outlineColor = Color.valueOf("2b2f36");
             weapons.add(
                 new Weapon(){{
@@ -100,6 +102,24 @@ public class FOSUnitTypes {
                     mirror = true;
                     bullet = new BulletType(){{
                         maxRange = 40f;
+                    }};
+                }},
+                new Weapon("legion-sapper"){{
+                    x = 8f; y = 9f;
+                    mirror = true;
+                    alternate = true;
+                    reload = 40f;
+                    top = false;
+                    rotate = false;
+                    shootCone = 25f;
+                    shootSound = Sounds.sap;
+                    bullet = new SapBulletType(){{
+                        length = 80f;
+                        damage = 60;
+                        hitColor = color = Color.valueOf("bf92f9");
+                        sapStrength = 0.6f;
+                        despawnEffect = Fx.none;
+                        shootEffect = Fx.shootSmall;
                     }};
                 }}
             );

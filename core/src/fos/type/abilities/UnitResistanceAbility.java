@@ -30,20 +30,24 @@ public class UnitResistanceAbility extends Ability {
     public void draw(Unit unit) {
         super.draw(unit);
 
-        int units = Groups.unit.count(u -> u.type == unitType);
-        for (int i = 0; i < units; i++) {
-            Draw.color(unit.team.color);
-            Draw.alpha(resistance);
-            Fill.circle(unit.x, unit.y, unit.hitSize);
-            Lines.stroke(2f);
-            Lines.circle(unit.x, unit.y, unit.hitSize);
-        }
+        int units = countUnits(unit);
+
+        Draw.color(unit.team.color);
+        Draw.alpha(Math.max(resistance * units, 0.5f));
+
+        Fill.circle(unit.x, unit.y, unit.hitSize);
+        Lines.stroke(2f);
+        Lines.circle(unit.x, unit.y, unit.hitSize);
     }
 
     @Override
     public void update(Unit unit) {
         // Apply damage resistance based on the amount of given unit type.
-        int units = Groups.unit.count(u -> u.type == unitType);
+        int units = countUnits(unit);
         unit.healthMultiplier += resistance * units;
+    }
+
+    private int countUnits(Unit unit) {
+        return Groups.unit.count(u -> u.team == unit.team && u.type == unitType);
     }
 }

@@ -66,6 +66,7 @@ public class BugAI extends AIController implements TargetableAI {
         } else if (!bug.idle()) {
             //find a random point to walk at
             boolean foundTile = false;
+            //FIXME: why the hell does it crash on line 69? (the next one)
             while (!foundTile) {
                 int x = Mathf.random(-5, 5);
                 int y = Mathf.random(-5, 5);
