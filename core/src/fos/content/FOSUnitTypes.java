@@ -60,13 +60,14 @@ public class FOSUnitTypes {
             accel = 0.08f;
             drag = 0.04f;
             isEnemy = false;
-            omniMovement = false;
             outlineColor = Color.valueOf("2b2f36");
             weapons.add(
                 new Weapon(){{
+                    x = 2f; y = 3f;
+                    mirror = true;
+                    alternate = true;
                     top = false;
-                    rotate = true;
-                    rotateSpeed = 6f;
+                    rotate = false;
                     reload = 30f;
                     bullet = new BasicBulletType(2.5f, 55){{
                         width = 7f;

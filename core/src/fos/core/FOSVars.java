@@ -7,7 +7,7 @@ import fos.content.FOSFluids;
 import fos.controllers.CapsulesController;
 import fos.files.InternalFileTree;
 import fos.graphics.FOSOreRenderer;
-import fos.ui.*;
+import fos.ui.ResearchCoreDialog;
 import fos.ui.menus.FOSMenuRenderer;
 import mindustry.ai.Pathfinder;
 import mindustry.content.TechTree;
@@ -26,13 +26,14 @@ public class FOSVars {
     public static ResearchCoreDialog researchCoreDialog;
     /** Special tech trees accessed only by certain blocks. */
     public static TechTree.TechNode mechTree, bioTree;
-    /**
-     * This mod's classic damage display system.
-     * Why did I even make it a variable.
-     */
-    public static ClassicDamageDisplay classicDamageDisplay;
-    /** This mod's damage display system. */
-    public static DamageDisplay damageDisplay;
+    //TODO: they're completely pointless right now
+//    /**
+//     * This mod's classic damage display system.
+//     * Why did I even make it a variable.
+//     */
+//    public static ClassicDamageDisplay classicDamageDisplay;
+//    /** This mod's damage display system. */
+//    public static DamageDisplay damageDisplay;
 
     /** Capsules creator **/
     public static CapsulesController capsulesController;

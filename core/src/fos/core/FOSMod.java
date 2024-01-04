@@ -158,8 +158,8 @@ public class FOSMod extends Mod {
         Vars.ui.editor.shown(this::addEditorTeams);
 
         //damage display
-        FOSVars.classicDamageDisplay = new ClassicDamageDisplay();
-        FOSVars.damageDisplay = new DamageDisplay();
+        new ClassicDamageDisplay();
+        new DamageDisplay();
 
         //add a new font page for... reasons
         Seq<Font> fonts = Seq.with(Fonts.def, Fonts.outline);
