@@ -1,5 +1,6 @@
 package fos;
 
+import arc.struct.Seq;
 import arc.util.Log;
 import arc.util.Strings;
 import arc.util.io.Reads;

@@ -8,6 +8,7 @@ import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.*;
 import mindustry.io.TypeIO;
+import mindustry.type.UnitType;
 
 // FIXME mounts
 @Annotations.Component
@@ -16,6 +17,18 @@ public abstract class LumoniPlayerUnitComp implements Weaponsc, Entityc, Syncc, 
     transient WeaponSet weaponSet = null;
     @Annotations.Import WeaponMount[] mounts;
     @Annotations.Import Ability[] abilities;
+
+    @Annotations.Replace
+    @Override
+    public void setType(UnitType unitType) { // created for deleting abilities and mounts replacement
+        type(unitType);
+        maxHealth(type().health);
+        drag(type().drag);
+        armor(type().armor);
+        hitSize(type().hitSize);
+        hovering(type().hovering);
+        if (controller() == null) controller(type().createController(self()));
+    }
 
     @Override
     public void write(Writes write) {
