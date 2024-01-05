@@ -6,14 +6,12 @@ import arc.util.io.Reads;
 import arc.util.io.Writes;
 import fos.gen.LumoniPlayerUnitc;
 import fos.type.content.WeaponSet;
-import fos.type.units.abilities.FOSAbility;
+import fos.type.abilities.FOSAbility;
 import mindustry.annotations.Annotations;
 import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.Unitc;
-import mindustry.gen.Weaponsc;
 import mindustry.io.TypeIO;
-import mindustry.type.UnitType;
 import mindustry.type.Weapon;
 
 import java.io.IOException;

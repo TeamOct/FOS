@@ -1,4 +1,4 @@
-package fos.type.units.abilities;
+package fos.type.abilities;
 
 import arc.util.io.Reads;
 import arc.util.io.Writes;
