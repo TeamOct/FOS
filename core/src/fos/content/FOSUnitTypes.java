@@ -17,7 +17,7 @@ import mindustry.content.*;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.part.*;
-import mindustry.entities.pattern.ShootSpread;
+import mindustry.entities.pattern.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
@@ -33,7 +33,7 @@ public class FOSUnitTypes {
     public static @Annotations.EntityDef({Unitc.class}) UnitType
         sergeant, lieutenant, captain, general, marshal,
         smoke, cloud,
-        legionnaire;
+        legionnaire, legionnaireReplica;
 
     public static @Annotations.EntityDef({ElevationMovec.class, Unitc.class}) UnitType assault;
 
@@ -56,12 +56,14 @@ public class FOSUnitTypes {
         legionnaire = new UnitType("legionnaire"){{
             health = 200;
             hitSize = 8;
+            rotateSpeed = 6f;
             speed = 2.5f;
             accel = 0.08f;
             drag = 0.04f;
             isEnemy = false;
             flying = true;
             targetPriority = -2f;
+            playerControllable = false;
             outlineColor = Color.valueOf("2b2f36");
             weapons.add(
                 new Weapon(){{
@@ -83,7 +85,40 @@ public class FOSUnitTypes {
                     }};
                 }}
             );
-            aiController = ProtectorAI::new;
+            controller = u -> new ProtectorAI();
+        }};
+        legionnaireReplica = new UnitType("legionnaire-replica"){{
+            health = 150;
+            hitSize = 12;
+            rotateSpeed = 6f;
+            speed = 2f;
+            accel = 0.08f;
+            drag = 0.04f;
+            isEnemy = false;
+            flying = true;
+            targetPriority = -2f;
+            playerControllable = false;
+            outlineColor = Color.valueOf("2b2f36");
+            weapons.add(
+                new Weapon(){{
+                    x = 0f; y = 3f;
+                    mirror = false;
+                    top = false;
+                    rotate = false;
+                    reload = 30f;
+                    bullet = new BasicBulletType(2.5f, 55){{
+                        width = 7f;
+                        height = 9f;
+                        lifetime = 45f;
+                        shootEffect = Fx.shootSmall;
+                        smokeEffect = Fx.shootSmallSmoke;
+                        ammoMultiplier = 2;
+                        trailWidth = 3;
+                        trailLength = 8;
+                    }};
+                }}
+            );
+            controller = u -> new ProtectorAI();
         }};
         //TODO: campaign boss
         legion = new UnitType("legion"){{
@@ -105,7 +140,7 @@ public class FOSUnitTypes {
                     }};
                 }},
                 new Weapon("legion-sapper"){{
-                    x = 8f; y = 9f;
+                    x = 0f; y = 6f;
                     mirror = true;
                     alternate = true;
                     reload = 40f;
@@ -113,6 +148,10 @@ public class FOSUnitTypes {
                     rotate = false;
                     shootCone = 25f;
                     shootSound = Sounds.sap;
+                    shoot = new ShootAlternate(){{
+                        barrels = 2;
+                        spread = 4f;
+                    }};
                     bullet = new SapBulletType(){{
                         length = 80f;
                         damage = 60;

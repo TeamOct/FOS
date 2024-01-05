@@ -2,6 +2,7 @@ package fos.type.content;
 
 import arc.struct.Seq;
 import fos.gen.LumoniPlayerUnitc;
+import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.Unit;
 import mindustry.type.*;
@@ -9,7 +10,7 @@ import mindustry.type.*;
 //YES, this looks very cursed lmao
 /**
  * FOR MODDERS: applying this "status effect" will have no effect whatsoever
- **/
+ */
 public class WeaponSet extends StatusEffect {
     public static Seq<WeaponSet> sets = new Seq<>();
 
@@ -17,12 +18,23 @@ public class WeaponSet extends StatusEffect {
     public Seq<Weapon> weapons;
     public ItemStack[] reqs;
 
+    public Seq<Ability> abilities = new Seq<>();
+
     public WeaponSet(String name, Weapon... weapons) {
         super(name);
         id = sets.size;
         sets.add(this);
         permanent = false;
         this.weapons = new Seq<>(weapons);
+    }
+
+    public WeaponSet(String name, Seq<Ability> abilities, Weapon... weapons) {
+        this(name, weapons);
+        this.abilities = abilities;
+    }
+
+    public WeaponSet(String name, Seq<Ability> abilities) {
+        this(name, abilities, new Weapon());
     }
 
     @Override
@@ -52,11 +64,13 @@ public class WeaponSet extends StatusEffect {
         lpc.isEditedWeapons(true);
         lpc.weaponSet(this);
         lpc.mounts(getMounts());
+        if (!abilities.isEmpty())
+            lpc.abilities(abilities.toArray());
     }
 
     /**
      * Applies weapons to unit.
-     **/
+     */
     public WeaponMount[] getMounts() {
         WeaponMount[] mounts = new WeaponMount[weapons.size];
 

@@ -32,8 +32,10 @@ public class UnitResistanceAbility extends Ability {
 
         int units = countUnits(unit);
 
+        if (units == 0) return;
+
         Draw.color(unit.team.color);
-        Draw.alpha(Math.max(resistance * units, 0.5f));
+        Draw.alpha(Math.min(resistance * units, 0.5f));
 
         Fill.circle(unit.x, unit.y, unit.hitSize);
         Lines.stroke(2f);

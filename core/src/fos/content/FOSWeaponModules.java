@@ -1,12 +1,18 @@
 package fos.content;
 
+import arc.Events;
+import arc.struct.Seq;
+import fos.type.abilities.UnitResistanceAbility;
 import fos.type.bullets.SmartBulletType;
 import fos.type.content.WeaponSet;
 import mindustry.content.Fx;
+import mindustry.entities.abilities.UnitSpawnAbility;
 import mindustry.entities.bullet.*;
+import mindustry.game.EventType;
 import mindustry.gen.Sounds;
 import mindustry.graphics.Pal;
 import mindustry.type.Weapon;
+import mindustry.type.weapons.RepairBeamWeapon;
 
 import static fos.content.FOSItems.*;
 import static mindustry.content.Items.*;
@@ -17,9 +23,11 @@ import static mindustry.type.ItemStack.with;
 public class FOSWeaponModules {
     public static WeaponSet
         standard1, standard2, standard3, standard4, standard5,
-        shotgun1, shotgun2, shotgun3, shotgun4, shotgun5;
+        shotgun1, shotgun2, shotgun3, shotgun4, shotgun5,
+        legionFabricator;
 
     public static void load() {
+        // BASIC / ASSAULT RIFLES
         standard1 = new WeaponSet("standard1", new Weapon("fos-standard-weapon1"){{
             x = 0; y = 0;
             alternate = mirror = false;
@@ -113,6 +121,7 @@ public class FOSWeaponModules {
             }};
         }}).reqs(with(tin, 500, silver, 500, vanadium, 300, nickel, 250, luminium, 200));
 
+        // SHOTGUNS
         shotgun1 = new WeaponSet("shotgun1", new Weapon("fos-shotgun-mount1"){{
             x = y = 0;
             alternate = mirror = false;
@@ -139,5 +148,23 @@ public class FOSWeaponModules {
         shotgun3 = new WeaponSet("shotgun3", new Weapon()).reqs(with(lead, 1));
         shotgun4 = new WeaponSet("shotgun4", new Weapon()).reqs(with(lead, 1));
         shotgun5 = new WeaponSet("shotgun5", new Weapon()).reqs(with(lead, 1));
+
+        // BOSS WEAPONS
+        legionFabricator = new WeaponSet("legion-fabricator",
+            new RepairBeamWeapon("legion-beam-replica"){{
+                x = 0; y = 0;
+                mirror = false;
+                bullet = new BulletType(){{
+                    maxRange = 40f;
+                }};
+            }}
+        ){{
+            Events.on(EventType.ContentInitEvent.class, e -> {
+                abilities = Seq.with(
+                    new UnitResistanceAbility(FOSUnitTypes.legionnaireReplica, 0.05f),
+                    new UnitSpawnAbility(FOSUnitTypes.legionnaireReplica, 600, -16, 0)
+                );
+            });
+        }}.reqs(with(tin, 200, silver, 125, silicon, 150));
     }
 }
