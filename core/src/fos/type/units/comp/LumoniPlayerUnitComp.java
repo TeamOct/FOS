@@ -7,7 +7,6 @@ import mindustry.annotations.Annotations;
 import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.*;
-import mindustry.io.TypeIO;
 
 // FIXME mounts
 @Annotations.Component
