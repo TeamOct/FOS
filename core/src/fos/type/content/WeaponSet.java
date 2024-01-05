@@ -63,9 +63,9 @@ public class WeaponSet extends StatusEffect {
     public void applyToUnit(LumoniPlayerUnitc lpc) {
         lpc.isEditedWeapons(true);
         lpc.weaponSet(this);
+
         lpc.mounts(getMounts());
-        if (!abilities.isEmpty())
-            lpc.abilities(abilities.toArray());
+        lpc.abilities(abilities.toArray(Ability.class));
     }
 
     /**

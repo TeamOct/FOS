@@ -22,8 +22,6 @@ public abstract class LumoniPlayerUnitComp implements Weaponsc, Entityc, Syncc, 
         write.bool(isEditedWeapons);
         write.i(weaponSet == null ? -1 : weaponSet.id);
         FOSTypeIO.writeMounts2(write, this);
-        // FIXME
-        TypeIO.writeAbilities(write, abilities);
     }
 
     @Override
@@ -31,8 +29,6 @@ public abstract class LumoniPlayerUnitComp implements Weaponsc, Entityc, Syncc, 
         isEditedWeapons = read.bool();
         int weaponSetId = read.i();
         weaponSet = weaponSetId == -1 ? null : WeaponSet.sets.get(weaponSetId);
-        mounts = FOSTypeIO.readMounts2(read, type());
-        // FIXME
-        TypeIO.readAbilities(read, abilities);
+        mounts = FOSTypeIO.readMounts2(read, this);
     }
 }
