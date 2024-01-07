@@ -4,10 +4,8 @@ import arc.util.io.*;
 import fos.FOSTypeIO;
 import fos.type.content.WeaponSet;
 import mindustry.annotations.Annotations;
-import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.*;
-import mindustry.io.TypeIO;
 import mindustry.type.UnitType;
 
 // FIXME mounts
@@ -16,7 +14,6 @@ public abstract class LumoniPlayerUnitComp implements Weaponsc, Entityc, Syncc, 
     transient boolean isEditedWeapons = false;
     transient WeaponSet weaponSet = null;
     @Annotations.Import WeaponMount[] mounts;
-    @Annotations.Import Ability[] abilities;
 
     @Annotations.Replace
     @Override

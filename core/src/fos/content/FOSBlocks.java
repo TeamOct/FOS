@@ -1264,7 +1264,7 @@ public class FOSBlocks {
             variants = 3;
             emitLight = true;
             lightColor = FOSPal.luminium1.cpy().a(0.6f);
-            lightRadius = 6f;
+            lightRadius = 9f;
         }};
         hiveFloor = new Floor("hive"){{
             variants = 5;
