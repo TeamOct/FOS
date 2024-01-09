@@ -15,10 +15,15 @@ public class WeaponSet extends StatusEffect {
     public static Seq<WeaponSet> sets = new Seq<>();
 
     public int id;
+    /** Weapons this set contains. */
     public Seq<Weapon> weapons;
-    public ItemStack[] reqs;
-
+    /** Abilities this set contains, if any. */
     public Seq<Ability> abilities = new Seq<>();
+    /** Items required to produce the set. */
+    public ItemStack[] reqs;
+    /** Production time of this set, in ticks. */
+    public float produceTime = 300f;
+
 
     public WeaponSet(String name, Weapon... weapons) {
         super(name);
@@ -87,9 +92,22 @@ public class WeaponSet extends StatusEffect {
 
     /**
      * Sets the module's requirements.
-     * @return the weapon set for chaining. */
+     * @param reqs Items needed for production.
+     * @return the weapon set for chaining.
+     */
     public WeaponSet reqs(ItemStack[] reqs) {
         this.reqs = reqs;
+
+        return this;
+    }
+
+    /**
+     * Sets the module's production time.
+     * @param ticks Production time, in ticks.
+     * @return the weapon set for chaining.
+     */
+    public WeaponSet produceTime(float ticks) {
+        this.produceTime = ticks;
 
         return this;
     }

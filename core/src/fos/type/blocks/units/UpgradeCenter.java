@@ -1,7 +1,8 @@
 package fos.type.blocks.units;
 
+import arc.Core;
 import arc.graphics.Color;
-import arc.graphics.g2d.TextureRegion;
+import arc.graphics.g2d.*;
 import arc.scene.style.TextureRegionDrawable;
 import arc.scene.ui.layout.Table;
 import arc.struct.Seq;
@@ -12,14 +13,16 @@ import fos.net.FOSPackets;
 import fos.type.content.WeaponSet;
 import mindustry.Vars;
 import mindustry.gen.*;
+import mindustry.graphics.*;
 import mindustry.type.*;
-import mindustry.ui.Styles;
+import mindustry.ui.*;
 import mindustry.world.Block;
 import mindustry.world.blocks.ItemSelection;
 import mindustry.world.consumers.ConsumeItemDynamic;
 import mindustry.world.draw.*;
 
 public class UpgradeCenter extends Block {
+    public TextureRegion topRegion;
     public DrawBlock drawer = new DrawDefault();
 
     public UpgradeCenter(String name) {
@@ -57,20 +60,62 @@ public class UpgradeCenter extends Block {
     public void load() {
         super.load();
         drawer.load(this);
+        topRegion = Core.atlas.find(name + "-top");
     }
 
     @Override
     public TextureRegion[] icons() {
-        return drawer.finalIcons(this);
+        Seq<TextureRegion> i = new Seq<>(TextureRegion.class);
+        i.add(drawer.finalIcons(this));
+        i.add(topRegion);
+
+        return i.toArray();
+    }
+
+    @Override
+    public void setBars() {
+        super.setBars();
+
+        removeBar("items");
+        addBar("items", (UpgradeCenterBuild e) -> new Bar(
+            () -> Core.bundle.format("bar.items", e.items.total()),
+            () -> Pal.items,
+            () -> {
+                int capacity = 0;
+                if (e.weaponSet == null) {
+                    capacity = Integer.MAX_VALUE;
+                } else {
+                    for (ItemStack s : e.weaponSet.reqs) {
+                        capacity += s.amount;
+                    }
+                }
+
+                return (float) e.items.total() / capacity;
+            }
+        ));
+
+        addBar("progress", (UpgradeCenterBuild e) -> new Bar("bar.progress", Pal.ammo, e::fraction));
     }
 
     @SuppressWarnings("unused")
     public class UpgradeCenterBuild extends Building {
         public WeaponSet weaponSet;
+        public float progress;
+
+        public float fraction() {
+            return weaponSet == null ? 0 : progress / weaponSet.produceTime;
+        }
 
         @Override
         public void draw() {
             drawer.draw(this);
+
+            if (weaponSet != null) {
+                Draw.draw(Layer.blockOver, () -> Drawf.construct(this, weaponSet, 0f, fraction(), 1f, progress));
+            }
+
+            Draw.z(Layer.blockOver + 0.1f);
+            Draw.rect(topRegion, x, y);
         }
 
         @Override
@@ -98,11 +143,29 @@ public class UpgradeCenter extends Block {
             }).left();
         }
 
+        @Override
+        public void updateTile() {
+            if (!configurable) {
+                weaponSet = null;
+            }
+
+            if (efficiency > 0 && weaponSet != null && fraction() < 1) {
+                progress += edelta();
+            }
+        }
+
+        // Do not waste power if the building does nothing.
+        @Override
+        public boolean shouldConsume() {
+            return enabled && weaponSet != null && fraction() < 1;
+        }
+
         /** Called from packet. **/
         public void upgrade(FOSPackets.UpgradeCenterUpgradePacket packet) {
-            if (potentialEfficiency < 1 || !(Vars.player.unit() instanceof LumoniPlayerUnitc lpc) || tile == null) return;
+            if (fraction() < 1 || !(Vars.player.unit() instanceof LumoniPlayerUnitc lpc) || tile == null) return;
 
             consume();
+            progress = 0;
             packet.weaponSet.applyToUnit(lpc);
         }
 
@@ -111,7 +174,10 @@ public class UpgradeCenter extends Block {
             if (WeaponSet.sets.any()) {
                 ItemSelection.buildTable(UpgradeCenter.this, table, WeaponSet.sets,
                         () -> weaponSet == null ? null : weaponSet,
-                        ws -> configure(ws == null ? -1 : ws.id),
+                        ws -> {
+                            configure(ws == null ? -1 : ws.id);
+                            progress = 0;
+                        },
                         selectionRows, selectionColumns
                 );
             } else {
@@ -120,20 +186,22 @@ public class UpgradeCenter extends Block {
 
             table.row();
 
-            table.button(Icon.units, Styles.clearTogglei, () -> {
-                if (weaponSet == null) return;
-                FOSPackets.UpgradeCenterUpgradePacket packet = new FOSPackets.UpgradeCenterUpgradePacket(Vars.player,
+            if (fraction() >= 1) {
+                table.button(Icon.units, Styles.clearTogglei, () -> {
+                    if (weaponSet == null) return;
+                    FOSPackets.UpgradeCenterUpgradePacket packet = new FOSPackets.UpgradeCenterUpgradePacket(Vars.player,
                         this, weaponSet);
-                if (!Vars.net.active())
-                    upgrade(packet);
-                else {
-                    if (Vars.net.server())
+                    if (!Vars.net.active())
                         upgrade(packet);
-                    Vars.net.send(packet, true);
-                }
+                    else {
+                        if (Vars.net.server())
+                            upgrade(packet);
+                        Vars.net.send(packet, true);
+                    }
 
-                deselect();
-            });
+                    deselect();
+                });
+            }
         }
 
         @Override

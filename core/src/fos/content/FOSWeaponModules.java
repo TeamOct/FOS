@@ -165,6 +165,6 @@ public class FOSWeaponModules {
                     new UnitSpawnAbility(FOSUnitTypes.legionnaireReplica, 600, -16, 0)
                 );
             });
-        }}.reqs(with(tin, 200, silver, 125, silicon, 150));
+        }}.reqs(with(tin, 200, silver, 125, silicon, 150)).produceTime(60 * 20);
     }
 }

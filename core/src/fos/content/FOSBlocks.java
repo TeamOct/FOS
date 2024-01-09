@@ -1298,8 +1298,8 @@ public class FOSBlocks {
                 new DrawDefault(),
                 new DrawPower("-glow"){{
                     emptyLightColor = Color.valueOf("00000000");
-                }},
-                new DrawRegion("-top")
+                }}
+                // -top region is drawn inside draw() method
             );
         }};
         hovercraftFactory = new UnitFactory("hovercraft-factory"){{
