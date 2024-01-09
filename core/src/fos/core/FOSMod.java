@@ -40,6 +40,7 @@ import static arc.Core.settings;
 @FOSAnnotations.CreateSoundHost(paths="sounds/loops", extensions="mp3", className="FOSLoops", depth=-1)
 public class FOSMod extends Mod {
     public FOSMod() {
+        Log.debug("[FOS] main class construction");
         if (FOSVars.debug)
             Log.level = Log.LogLevel.debug;
 
@@ -85,6 +86,11 @@ public class FOSMod extends Mod {
 
     @Override
     public void loadContent() {
+        Log.debug("[FOS] loading content");
+        FOSVars.mod = Vars.mods.getMod(getClass());
+
+        ConveyorSpritesPacker.pack(); // generate conveyor regions
+
         FOSVars.oreRenderer = new FOSOreRenderer();
 
         SplashTexts.load();
@@ -114,9 +120,9 @@ public class FOSMod extends Mod {
 
     @Override
     public void init() {
+        Log.debug("[FOS] initialization");
         //initialize mod variables
         FOSVars.load();
-        FOSVars.mod = Vars.mods.getMod(getClass());
 
         //TODO: is it necessary now?
         //renderer.planets.cam.far = Mathf.pow(2, 20);
