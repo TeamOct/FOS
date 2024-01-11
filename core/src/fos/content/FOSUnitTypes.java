@@ -132,14 +132,14 @@ public class FOSUnitTypes {
             range = 40f;
 
             weapons.add(
-                new RepairBeamWeapon("legion-beam"){{
+                new RepairBeamWeapon("fos-legion-beam"){{
                     x = 4; y = 0;
                     mirror = true;
                     bullet = new BulletType(){{
                         maxRange = 40f;
                     }};
                 }},
-                new Weapon("legion-sapper"){{
+                new Weapon("fos-legion-sapper"){{
                     x = 0f; y = 6f;
                     mirror = true;
                     alternate = true;
