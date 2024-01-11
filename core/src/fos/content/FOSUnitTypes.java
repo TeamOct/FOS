@@ -512,7 +512,7 @@ public class FOSUnitTypes {
             weapons.add(
                 new InjectorWeapon(){{
                     x = 0; y = 4;
-                    reload = 3600f;
+                    reload = 1800f;
                     shoot.firstShotDelay = 300f;
                     inaccuracy = 0f;
                     bullet = new InjectorBasicBulletType(1, true){{
