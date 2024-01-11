@@ -4,7 +4,6 @@ import arc.Core;
 import arc.graphics.Color;
 import arc.struct.Seq;
 import arc.util.*;
-import fos.core.FOSVars;
 import fos.graphics.*;
 import fos.type.blocks.campaign.*;
 import fos.type.blocks.defense.*;
@@ -1272,8 +1271,8 @@ public class FOSBlocks {
             itemDrop = luminium;
             variants = 3;
             emitLight = true;
-            lightColor = FOSPal.luminium1.cpy().a(0.6f);
-            lightRadius = 9f;
+            lightColor = FOSPal.luminium1.cpy().a(0.3f);
+            lightRadius = 18f;
         }};
         hiveFloor = new Floor("hive"){{
             variants = 5;

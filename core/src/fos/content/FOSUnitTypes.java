@@ -505,14 +505,14 @@ public class FOSUnitTypes {
             health = 18000;
             hitSize = 36;
             speed = 0.8f;
-            range = 280f;
+            range = 400f;
             flying = true;
             immunities.add(hacked);
             aiController = InjectorAI::new;
             weapons.add(
                 new InjectorWeapon(){{
                     x = 0; y = 4;
-                    reload = 900f;
+                    reload = 3600f;
                     shoot.firstShotDelay = 300f;
                     inaccuracy = 0f;
                     bullet = new InjectorBasicBulletType(1, true){{

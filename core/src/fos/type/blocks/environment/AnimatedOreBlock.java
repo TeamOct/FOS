@@ -6,6 +6,7 @@ import arc.graphics.g2d.*;
 import arc.graphics.gl.Shader;
 import fos.graphics.cachelayers.AnimatedOreCacheLayer;
 import mindustry.Vars;
+import mindustry.content.Blocks;
 import mindustry.game.EventType;
 import mindustry.graphics.Drawf;
 import mindustry.world.Tile;
@@ -27,7 +28,7 @@ public class AnimatedOreBlock extends OreBlock {
         super.drawBase(tile);
 
         Events.run(EventType.Trigger.draw, () -> {
-            if (tile != null && tile.overlay() == this && Vars.renderer.lights.enabled()) {
+            if (tile != null && tile.block() == Blocks.air && tile.overlay() == this && Vars.renderer.lights.enabled()) {
                 drawEnvironmentLight(tile);
             }
         });
