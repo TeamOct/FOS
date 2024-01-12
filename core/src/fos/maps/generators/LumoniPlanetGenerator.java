@@ -407,6 +407,23 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         state.rules.spawns = LumoniWaves.generate(difficulty, new Rand(), state.rules.attackMode);
     }
 
+    @Override
+    public void ores(Seq<Block> ores) {
+        pass((x, y) -> {
+            if (!floor.asFloor().hasSurface()) return;
+
+            int offsetX = x - 4, offsetY = y + 23;
+            for (int i = ores.size - 1; i >= 0; i--) {
+                Block entry = ores.get(i);
+                if (Math.abs(0.5f - noise(offsetX, offsetY + i*999, 2, 0.7, (40 + i * 2))) > 0.24f &&
+                    Math.abs(0.5f - noise(offsetX, offsetY - i*999, 1, 1, (30 + i * 4))) > 0.33f) {
+                    ore = entry;
+                    break;
+                }
+            }
+        });
+    }
+
     /**
      * This method ensures that the given ores generate in a limited square area, no matter how many tries it takes.
      * This probably hurts sector generation time quite a bit, but I dunno what else to try.
@@ -428,8 +445,8 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
                         int i = ores.indexOf(cur);
                         int offsetX = x - 4, offsetY = y + 23;
-                        if (Math.abs(0.5f - noise(offsetX + offset, offsetY + i * 999, 2, 0.7, (40 + i * 2))) > 0.26f &&
-                            Math.abs(0.5f - noise(offsetX + offset, offsetY - i * 999, 1, 1, (30 + i * 4))) > 0.37f) {
+                        if (Math.abs(0.5f - noise(offsetX + offset, offsetY + i * 999, 2, 0.7, (40 + i * 2))) > 0.24f &&
+                            Math.abs(0.5f - noise(offsetX + offset, offsetY - i * 999, 1, 1, (30 + i * 4))) > 0.33f) {
                             ore = cur;
                             if (tile.block() == air) generated = true;
                         }
