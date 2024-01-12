@@ -151,9 +151,11 @@ public class FOSWeaponModules {
 
         // BOSS WEAPONS
         legionFabricator = new WeaponSet("legion-fabricator",
-            new RepairBeamWeapon("legion-beam-replica"){{
+            new RepairBeamWeapon("fos-legion-beam-replica"){{
                 x = 0; y = 0;
                 mirror = false;
+                beamWidth = 0.4f;
+                repairSpeed = 0.2f;
                 bullet = new BulletType(){{
                     maxRange = 40f;
                 }};

@@ -56,7 +56,7 @@ public class FOSUnitTypes {
         legionnaire = new UnitType("legionnaire"){{
             health = 200;
             hitSize = 8;
-            rotateSpeed = 6f;
+            rotateSpeed = 12f;
             speed = 2.5f;
             accel = 0.08f;
             drag = 0.04f;
@@ -73,6 +73,7 @@ public class FOSUnitTypes {
                     top = false;
                     rotate = false;
                     reload = 30f;
+                    shootCone = 15f;
                     bullet = new BasicBulletType(2.5f, 55){{
                         width = 7f;
                         height = 9f;
@@ -82,6 +83,7 @@ public class FOSUnitTypes {
                         ammoMultiplier = 2;
                         trailWidth = 3;
                         trailLength = 8;
+                        keepVelocity = false;
                     }};
                 }}
             );
@@ -90,7 +92,7 @@ public class FOSUnitTypes {
         legionnaireReplica = new UnitType("legionnaire-replica"){{
             health = 150;
             hitSize = 12;
-            rotateSpeed = 6f;
+            rotateSpeed = 12f;
             speed = 2f;
             accel = 0.08f;
             drag = 0.04f;
@@ -106,6 +108,7 @@ public class FOSUnitTypes {
                     top = false;
                     rotate = false;
                     reload = 30f;
+                    shootCone = 15f;
                     bullet = new BasicBulletType(2.5f, 55){{
                         width = 7f;
                         height = 9f;
@@ -115,6 +118,7 @@ public class FOSUnitTypes {
                         ammoMultiplier = 2;
                         trailWidth = 3;
                         trailLength = 8;
+                        keepVelocity = false;
                     }};
                 }}
             );
@@ -135,6 +139,7 @@ public class FOSUnitTypes {
                 new RepairBeamWeapon("fos-legion-beam"){{
                     x = 4; y = 0;
                     mirror = true;
+                    beamWidth = 0.6f;
                     bullet = new BulletType(){{
                         maxRange = 40f;
                     }};
