@@ -410,7 +410,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
     @Override
     public void ores(Seq<Block> ores) {
         pass((x, y) -> {
-            if (!floor.asFloor().hasSurface()) return;
+            if ((!floor.asFloor().hasSurface() && !floor.asFloor().supportsOverlay) || floor == deepwater) return;
 
             int offsetX = x - 4, offsetY = y + 23;
             for (int i = ores.size - 1; i >= 0; i--) {
@@ -441,7 +441,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                 for (int x = -rad; x <= rad; x++) {
                     for (int y = -rad; y <= rad; y++) {
                         Tile tile = tiles.get(x + cx, y + cy);
-                        if (tile == null || !tile.floor().hasSurface() || !tile.floor().supportsOverlay) return;
+                        if (tile == null || (!tile.floor().hasSurface() && !tile.floor().supportsOverlay) || tile.floor() == deepwater) return;
 
                         int i = ores.indexOf(cur);
                         int offsetX = x - 4, offsetY = y + 23;
