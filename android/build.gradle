@@ -72,7 +72,7 @@ task dex {
         String executableName = System.getenv("OS") == "Windows_NT" ? "d8.bat" : "d8"
 
         def buildToolsRoot = new File("$sdkRoot/build-tools/").listFiles().sort().reverse().find {
-            f -> new File(f, ).exists(executableName)
+            f -> new File(f, executableName).exists()
         }
         if (!buildToolsRoot)
             throw new GradleException("No $executableName found. Ensure that you have an Android build tools installed.")
