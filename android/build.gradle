@@ -69,18 +69,13 @@ task dex {
             dependencies += "--classpath $path.path "
         }
 
-        if (System.getenv("OS") == "Windows_NT") {
-            def buildToolsRoot = new File("$sdkRoot/build-tools/").listFiles().sort().reverse().find {
-                f -> new File(f, "d8.bat").exists()
-            }
-            if (!buildToolsRoot)
-                throw new GradleException("No d8.bat found. Ensure that you have an Android build tools installed.")
-            "${buildToolsRoot}/d8.bat $dependencies ${project.tasks.jar.archiveFile.get()} --min-api 14 --output $dexFile.absolutePath"
-                    .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
-        } else {
-            "d8 $dependencies ${project.tasks.jar.archiveFile.get()} --min-api 14 --output $dexFile.absolutePath"
-                    .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
+        def buildToolsRoot = new File("$sdkRoot/build-tools/").listFiles().sort().reverse().find {
+            f -> new File(f, "d8.bat").exists()
         }
+        if (!buildToolsRoot)
+            throw new GradleException("No d8.bat found. Ensure that you have an Android build tools installed.")
+        "${buildToolsRoot}/d8${System.getenv("OS") == "Windows_NT" ? ".bat" : ""} $dependencies ${project.tasks.jar.archiveFile.get()} --min-api 14 --output $dexFile.absolutePath"
+                 .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
     }
 
     finalizedBy project.tasks.createFinalJar
