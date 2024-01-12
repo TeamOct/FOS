@@ -69,12 +69,14 @@ task dex {
             dependencies += "--classpath $path.path "
         }
 
+        String executableName = System.getenv("OS") == "Windows_NT" ? "d8.bat" : "d8"
+
         def buildToolsRoot = new File("$sdkRoot/build-tools/").listFiles().sort().reverse().find {
-            f -> new File(f, "d8.bat").exists()
+            f -> new File(f, ).exists(executableName)
         }
         if (!buildToolsRoot)
-            throw new GradleException("No d8.bat found. Ensure that you have an Android build tools installed.")
-        "${buildToolsRoot}/d8${System.getenv("OS") == "Windows_NT" ? ".bat" : ""} $dependencies ${project.tasks.jar.archiveFile.get()} --min-api 14 --output $dexFile.absolutePath"
+            throw new GradleException("No $executableName found. Ensure that you have an Android build tools installed.")
+        "$buildToolsRoot/$executableName $dependencies ${project.tasks.jar.archiveFile.get()} --min-api 14 --output $dexFile.absolutePath"
                  .execute(null, projectDir).waitForProcessOutput(System.out, System.err)
     }
 
