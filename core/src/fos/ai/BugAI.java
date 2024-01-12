@@ -66,7 +66,6 @@ public class BugAI extends AIController implements TargetableAI {
         } else if (!bug.idle()) {
             //find a random point to walk at
             boolean foundTile = false;
-            //FIXME: why the hell does it crash on line 69? (the next one)
             while (!foundTile) {
                 int x = Mathf.random(-5, 5);
                 int y = Mathf.random(-5, 5);
@@ -93,7 +92,7 @@ public class BugAI extends AIController implements TargetableAI {
     }
 
     @Override
-    public Teamc findMainTarget(float x, float y, float range, boolean air, boolean ground){
+    public Teamc findMainTarget(float x, float y, float range, boolean air, boolean ground) {
         for(BlockFlag flag : unit.type.targetFlags) {
             Teamc target;
             if (flag != null) {
@@ -105,6 +104,6 @@ public class BugAI extends AIController implements TargetableAI {
             if (target != null) return target;
         }
 
-        return targetFlag(x, y, null, true);
+        return Units.closestTarget(unit.team, x, y, range, u -> false, b -> true);
     }
 }
