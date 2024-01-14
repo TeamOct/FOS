@@ -30,6 +30,12 @@ public class ProtectorAI extends AIController {
             protectTarget = Units.closest(unit.team, unit.x, unit.y, u -> u.isPlayer() || u.type == FOSUnitTypes.legion);
         }
 
+        // couldn't find a new ally to protect? commit seppuku
+        if (protectTarget == null) {
+            unit.kill();
+            return;
+        }
+
         if (!protectTarget.isPlayer()) {
             super.updateTargeting();
         } else {
