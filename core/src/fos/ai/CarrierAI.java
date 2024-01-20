@@ -11,12 +11,12 @@ import static mindustry.Vars.indexer;
 public class CarrierAI extends AIController {
     @Override
     public void updateMovement() {
-        PayloadUnit u = (PayloadUnit) unit;
+        Payloadc u = (Payloadc) unit;
 
         //derelict block a unit could pick up
-        Building a = indexer.findTile(Team.derelict, u.x, u.y, 320f, build -> build.block.size * 8 * build.block.size * 8 <= unit.type.payloadCapacity);
+        Building a = indexer.findTile(Team.derelict, u.x(), u.y(), 320f, build -> build.block.size * 8 * build.block.size * 8 <= unit.type.payloadCapacity);
         //nearest research core
-        Building b = indexer.findTile(u.team, u.x, u.y, 320f, build -> build.block instanceof ResearchCore);
+        Building b = indexer.findTile(u.team(), u.x(), u.y(), 320f, build -> build.block instanceof ResearchCore);
         
         if (!u.hasPayload()) {
             if (a != null) {
