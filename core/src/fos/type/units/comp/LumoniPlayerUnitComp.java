@@ -25,6 +25,10 @@ public abstract class LumoniPlayerUnitComp implements Weaponsc, Entityc, Syncc, 
         hitSize(type().hitSize);
         hovering(type().hovering);
         if (controller() == null) controller(type().createController(self()));
+
+        if (this.mounts().length != unitType.weapons.size) {
+            this.setupWeapons(unitType);
+        }
     }
 
     @Override

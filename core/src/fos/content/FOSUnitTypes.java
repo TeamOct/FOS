@@ -53,7 +53,7 @@ public class FOSUnitTypes {
     public static void load(){
         DestroyersUnits.load();
 
-        legionnaire = new UnitType("legionnaire"){{
+        legionnaire = new FOSUnitType("legionnaire"){{
             health = 200;
             hitSize = 8;
             rotateSpeed = 12f;
@@ -64,7 +64,6 @@ public class FOSUnitTypes {
             flying = true;
             targetPriority = -2f;
             playerControllable = false;
-            outlineColor = Color.valueOf("2b2f36");
             weapons.add(
                 new Weapon(){{
                     x = 2f; y = 3f;
@@ -89,7 +88,7 @@ public class FOSUnitTypes {
             );
             controller = u -> new ProtectorAI();
         }};
-        legionnaireReplica = new UnitType("legionnaire-replica"){{
+        legionnaireReplica = new FOSUnitType("legionnaire-replica"){{
             health = 150;
             hitSize = 12;
             rotateSpeed = 12f;
@@ -100,7 +99,6 @@ public class FOSUnitTypes {
             flying = true;
             targetPriority = -2f;
             playerControllable = false;
-            outlineColor = Color.valueOf("2b2f36");
             weapons.add(
                 new Weapon(){{
                     x = 0f; y = 3f;
@@ -124,15 +122,13 @@ public class FOSUnitTypes {
             );
             controller = u -> new ProtectorAI();
         }};
-        //TODO: campaign boss
-        legion = new UnitType("legion"){{
+        legion = new BossUnitType("legion"){{
             health = 4500;
             armor = 10;
             hitSize = 25;
             speed = 0.3f;
             flying = false;
             canBoost = false;
-            outlineColor = Color.valueOf("2b2f36");
             range = 40f;
 
             weapons.add(
@@ -146,10 +142,10 @@ public class FOSUnitTypes {
                 }},
                 new Weapon("fos-legion-sapper"){{
                     x = 0f; y = 6f;
-                    mirror = true;
-                    alternate = true;
+                    mirror = false;
                     reload = 40f;
                     top = false;
+                    layerOffset = -0.05f;
                     rotate = false;
                     shootCone = 25f;
                     shootSound = Sounds.sap;
@@ -186,15 +182,17 @@ public class FOSUnitTypes {
             health = 7500;
             armor = 30;
             hitSize = 40;
+            rotateSpeed = 2f;
             speed = 0.05f;
             flying = false;
             canBoost = false;
             weapons.add(
-                new Weapon("citadel-shotgun"){{
-                    x = 24; y = 4;
+                new Weapon("fos-citadel-shotgun"){{
+                    x = 18; y = 0;
                     rotate = false;
                     mirror = true;
                     alternate = true;
+                    //layerOffset = -0.15f;
                     recoil = 4f;
                     recoilTime = 60f;
                     reload = 30f;
@@ -208,9 +206,10 @@ public class FOSUnitTypes {
                         velocityRnd = 0.1f;
                     }};
                 }},
-                new Weapon("citadel-launcher"){{
-                    x = 18; y = -20;
+                new Weapon("fos-citadel-stickybomb-launcher"){{
+                    x = 8; y = -10;
                     rotate = true;
+                    rotateSpeed = 1f;
                     mirror = true;
                     alternate = true;
                     recoil = 2f;
@@ -219,7 +218,7 @@ public class FOSUnitTypes {
                     bullet = new StickyBulletType(2f, 1f, 180){{
                         lifetime = 120f;
                         width = height = 16f;
-                        trailWidth = 4f;
+                        trailWidth = 3f;
                         trailLength = 12;
                         trailColor = Pal.plastaniumBack;
                         backColor = Pal.plastaniumBack;
@@ -249,7 +248,7 @@ public class FOSUnitTypes {
                 new Rect(30f, 80f - 37f, 18f, 37f)
             };
             weapons.add(new Weapon[]{
-                new Weapon("warden-artillery"){{
+                new Weapon("fos-warden-artillery"){{
                     x = 16; y = -8;
                     rotate = true;
                     rotateSpeed = 3f;
@@ -274,7 +273,7 @@ public class FOSUnitTypes {
                         hitEffect = despawnEffect = Fx.massiveExplosion;
                     }};
                 }},
-                new Weapon("warden-artillery"){{
+                new Weapon("fos-warden-artillery"){{
                     x = -12; y = -16;
                     rotate = true;
                     rotateSpeed = 3f;
@@ -300,7 +299,7 @@ public class FOSUnitTypes {
                     }};
                 }},
 
-                new Weapon("warden-machine-gun"){{
+                new Weapon("fos-warden-machine-gun"){{
                     x = 14; y = 8;
                     rotate = false;
                     top = false;
@@ -320,7 +319,7 @@ public class FOSUnitTypes {
                         shootSound = Sounds.shoot;
                     }};
                 }},
-                new Weapon("warden-machine-gun"){{
+                new Weapon("fos-warden-machine-gun"){{
                     x = 18; y = 8;
                     rotate = false;
                     top = false;
@@ -341,7 +340,7 @@ public class FOSUnitTypes {
                     }};
                 }},
 
-                new Weapon("warden-antiair"){{
+                new Weapon("fos-warden-antiair"){{
                     x = 0; y = -4;
                     rotate = true;
                     top = true;

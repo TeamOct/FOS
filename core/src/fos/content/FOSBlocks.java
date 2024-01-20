@@ -499,8 +499,11 @@ public class FOSBlocks {
                     trailLength = 8;
                     ammoMultiplier = 4f;
                 }},
-                luminium, new BasicBulletType(4.5f, 52.5f){{
+                //TODO: trail shader?
+                luminium, new BasicBulletType(){{
                     width = 4f; height = 8f;
+                    speed = 4.5f;
+                    damage = 52.5f;
                     lifetime = 44f;
                     rangeChange = 66f;
                     trailColor = frontColor = FOSPal.luminium1;

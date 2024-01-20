@@ -7,6 +7,7 @@ import mindustry.type.ItemStack;
 import static fos.content.FOSBlocks.*;
 import static fos.content.FOSItems.*;
 import static fos.content.FOSSectors.*;
+import static fos.content.FOSUnitTypes.legion;
 import static fos.content.FOSWeaponModules.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.Liquids.water;
@@ -160,8 +161,10 @@ public class LumoniTechTree {
                 soontm();
                 //TODO: support
                 soontm();
-                //TODO: boss-specific weapons
-                soontm();
+                // BOSS-SPECIFIC WEAPONS
+                node(legionFabricator, Seq.with(new FOSObjectives.DefeatBoss(legion)), () -> {
+                    soontm();
+                });
             });
 
             // ITEMS

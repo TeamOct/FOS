@@ -2,20 +2,21 @@ package fos.graphics;
 
 import arc.Core;
 import arc.graphics.gl.Shader;
+import arc.math.Mathf;
 import arc.util.Time;
 import fos.core.FOSVars;
-import mindustry.Vars;
 
-import static arc.Core.camera;
-import static arc.Core.graphics;
+import static arc.Core.*;
 
 public class FOSShaders {
     public static LuminiumItemShader lis;
     public static LuminiumOreShader los;
+    public static LuminiumTrailShader lts;
 
     public static void init() {
         lis = new LuminiumItemShader();
         los = new LuminiumOreShader();
+        lts = new LuminiumTrailShader();
     }
 
     public static class LuminiumItemShader extends Shader {
@@ -48,6 +49,21 @@ public class FOSShaders {
 
             setUniformf("u_cameraScale", graphics.getWidth() / camera.width);
             setUniformf("u_time", Time.globalTime / 60f % 3.14f);
+        }
+    }
+
+    public static class LuminiumTrailShader extends Shader {
+
+        public LuminiumTrailShader() {
+            super(FOSVars.internalTree.child("shaders/los.vert"), FOSVars.internalTree.child("shaders/luminium-trail.frag"));
+        }
+
+        @Override
+        public void apply() {
+            super.apply();
+
+            setUniformf("u_resolution", Core.camera.width, Core.camera.height);
+            setUniformf("u_time", Time.globalTime / 60f % Mathf.PI);
         }
     }
 }

@@ -2,7 +2,6 @@ package fos.content;
 
 import arc.Core;
 import fos.type.units.BossUnitType;
-import mindustry.Vars;
 import mindustry.type.UnitType;
 
 import static arc.Core.settings;
@@ -18,12 +17,12 @@ public class FOSObjectives {
 
         @Override
         public boolean complete() {
-            return Vars.state.isCampaign() && settings.getBool(type.name + "-defeated");
+            return settings.getBool(type.name + "-defeated");
         }
 
         @Override
         public String display() {
-            return Core.bundle.format("requirement.defeatboss", type);
+            return Core.bundle.format("requirement.defeatboss", type.localizedName);
         }
     }
 
