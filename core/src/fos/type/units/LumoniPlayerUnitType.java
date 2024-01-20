@@ -1,7 +1,7 @@
 package fos.type.units;
 
-import mindustry.type.*;
-import mindustry.world.meta.*;
+import mindustry.type.UnitType;
+import mindustry.world.meta.Stat;
 
 public class LumoniPlayerUnitType extends UnitType {
     public LumoniPlayerUnitType(String name) {

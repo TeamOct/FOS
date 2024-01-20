@@ -26,6 +26,10 @@ public class FOSWeaponModules {
         shotgun1, shotgun2, shotgun3, shotgun4, shotgun5,
         legionFabricator;
 
+    // THIS IS VERY IMPORTANT!
+    // NOTE: PLEASE SET RELOAD AND RECOILTIME AT ONCE, OTHERWISE WEAPONS WILL FLY LIKE CRAZY
+    // WE DON'T KNOW HOW THIS HAPPENS. SO HERE'S THIS BAND-AID SOLUTION FOR THIS ISSUE. -S
+
     public static void load() {
         // BASIC / ASSAULT RIFLES
         standard1 = new WeaponSet("standard1", new Weapon("fos-standard-weapon1"){{
@@ -34,7 +38,7 @@ public class FOSWeaponModules {
             rotate = true;
             top = true;
             recoil = 0.4f;
-            reload = 20f;
+            reload = recoilTime = 20f;
             bullet = new BasicBulletType(2.5f, 36){{
                 width = 7f; height = 9f;
                 trailLength = 8;
@@ -46,7 +50,7 @@ public class FOSWeaponModules {
             alternate = mirror = false;
             rotate = true;
             recoil = 0.3f;
-            reload = 40f;
+            reload = recoilTime = 40f;
             bullet = new BasicBulletType(2f, 90){{
                 width = 8f; height = 10f;
                 lifetime = 40f;
@@ -70,7 +74,7 @@ public class FOSWeaponModules {
             alternate = mirror = false;
             rotate = true;
             recoil = 2f;
-            reload = 15f;
+            reload = recoilTime = 15f;
             inaccuracy = 8f;
             cooldownTime = 30f;
             bullet = new BasicBulletType(3.5f, 60f){{
@@ -87,7 +91,7 @@ public class FOSWeaponModules {
             alternate = mirror = false;
             rotate = true;
             recoil = 4f;
-            reload = 10f;
+            reload = recoilTime = 10f;
             bullet = new BasicBulletType(13f, 240){{
                 pierce = true;
                 pierceCap = 10;
@@ -130,7 +134,7 @@ public class FOSWeaponModules {
             inaccuracy = 30f;
             shoot.shots = 4;
             shoot.shotDelay = 0f;
-            reload = 90f;
+            reload = recoilTime = 90f;
             shootSound = Sounds.shotgun;
             ejectEffect = Fx.casing2;
             bullet = new ShrapnelBulletType(){{

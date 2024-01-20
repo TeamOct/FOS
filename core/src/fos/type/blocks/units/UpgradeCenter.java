@@ -60,7 +60,7 @@ public class UpgradeCenter extends Block {
     public void load() {
         super.load();
         drawer.load(this);
-        topRegion = Core.atlas.find(name + "-top");
+        topRegion = Core.atlas.find(name + "-top2");
     }
 
     @Override
@@ -104,6 +104,12 @@ public class UpgradeCenter extends Block {
 
         public float fraction() {
             return weaponSet == null ? 0 : progress / weaponSet.produceTime;
+        }
+
+        @Override
+        public float warmup() {
+            // TODO: i can't use Mathf.lerp -_-
+            return fraction() == 1 ? 0 : efficiency;
         }
 
         @Override
@@ -224,6 +230,7 @@ public class UpgradeCenter extends Block {
             super.write(write);
 
             write.i(weaponSet.id);
+            write.f(progress);
         }
 
         @Override
@@ -231,6 +238,7 @@ public class UpgradeCenter extends Block {
             super.read(read, revision);
 
             weaponSet = WeaponSet.sets.get(read.i());
+            progress = read.f();
         }
     }
 }

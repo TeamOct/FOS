@@ -1307,9 +1307,7 @@ public class FOSBlocks {
             requirements(Category.units, with(tin, 250, silver, 200));
             drawer = new DrawMulti(
                 new DrawDefault(),
-                new DrawPower("-glow"){{
-                    emptyLightColor = Color.valueOf("00000000");
-                }}
+                new DrawFlame()
                 // -top region is drawn inside draw() method
             );
         }};
