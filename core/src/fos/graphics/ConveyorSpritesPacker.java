@@ -30,22 +30,13 @@ public class ConveyorSpritesPacker { // TODO rename
         Log.info("Conveyor sprites packer working.");
         String prefix = getPrefix();
         Log.info("prefix: @", prefix);
-        for (TextureAtlas.AtlasRegion region : Core.atlas.getRegions()) {
-            Log.infoList(prefix, region.name);
-            if (!region.name.startsWith(prefix)) continue;
-
-            //generateRegions(region, prefix);
-        }
+        for (TextureAtlas.AtlasRegion region : Core.atlas.getRegions())
+            if (region.name.startsWith(prefix))
+                generateRegions(region, prefix);
     }
 
     static Seq<TextureAtlas.AtlasRegion> generatedRegions = new Seq<>();
     public static void generateRegions(TextureAtlas.AtlasRegion region, String prefix) { // TODO generate via template
-        try {
-            MultiPacker packer = (MultiPacker) ConveyorSpritesPacker.packer.get(Vars.mods);
-        } catch (Exception blyat) {
-            throw new RuntimeException(blyat);
-        }
-
         Log.info("generating regions for @", region);
         String name = region.name.substring(prefix.length()+1);
         Log.info("  name @", name);

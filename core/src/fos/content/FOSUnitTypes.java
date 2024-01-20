@@ -379,7 +379,7 @@ public class FOSUnitTypes {
             mineSpeed = 8f;
             buildSpeed = 1f;
             outlineColor = Color.valueOf("2b2f36");
-            weapons.add(FOSWeaponModules.standard1.weapons);
+            weapons.add(FOSWeaponModules.standard2.weapons);
         }};
 
         sergeant = new UnitType("sergeant"){{
