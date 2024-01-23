@@ -16,6 +16,7 @@ import mindustry.graphics.*;
 import mindustry.logic.Ranged;
 import mindustry.ui.Styles;
 import mindustry.world.*;
+import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 
 import static mindustry.Vars.*;
@@ -32,6 +33,8 @@ public class OreDetector extends Block {
     public Color effectColor = Color.valueOf("4b95ff");
     /** Efficiency of drills powered by this detector. */
     public float drillEfficiencyMultiplier = 1f;
+    /** Drawer. You know the drill by this point. */
+    public DrawBlock drawer = new DrawDefault();
 
     public OreDetector(String name) {
         super(name);
@@ -48,6 +51,12 @@ public class OreDetector extends Block {
     }
 
     @Override
+    public void load() {
+        super.load();
+        drawer.load(this);
+    }
+
+    @Override
     public void setStats() {
         super.setStats();
 
@@ -58,6 +67,11 @@ public class OreDetector extends Block {
     public void drawPlace(int x, int y, int rotation, boolean valid){
         super.drawPlace(x, y, rotation, valid);
         Drawf.dashCircle(x * tilesize + offset, y * tilesize + offset, range, Color.valueOf("4b95ff"));
+    }
+
+    @Override
+    protected TextureRegion[] icons() {
+        return drawer.icons(this);
     }
 
     @SuppressWarnings("unused")
@@ -114,6 +128,8 @@ public class OreDetector extends Block {
         @Override
         public void draw() {
             super.draw();
+            drawer.draw(this);
+
             if (canConsume() && team == player.team()) {
                 Draw.z(Layer.light);
                 Draw.alpha(0.6f);
@@ -134,6 +150,12 @@ public class OreDetector extends Block {
                 Draw.reset();
                 if (showOres) locateOres(range());
             }
+        }
+
+        @Override
+        public void drawLight() {
+            super.drawLight();
+            drawer.drawLight(this);
         }
 
         @Override
