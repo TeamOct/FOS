@@ -2,9 +2,14 @@ import arc.files.Fi
 
 import java.util.function.Consumer
 
+static String getVersion(String dependence) {
+    return dependence.substring(dependence.lastIndexOf(":")+1)
+}
+
 buildscript {
     repositories {
         mavenCentral()
+        mavenLocal()
         maven { url "https://www.jitpack.io" }
         maven { url "https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository" }
     }
@@ -40,33 +45,7 @@ task cleanBuilds(type: Delete) {
     }
 }
 
-class C extends OutputStream {
-    static String out = ""
-
-    @Override
-    void write(int b) throws IOException {
-        out += String.valueOf((char) b)
-    }
-
-    static String get() {
-        String t = out
-        out = ""
-        return t
-    }
-
-    @Override
-    String toString() {
-        return out
-    }
-}
-
-static String getVersion(String dependence) {
-    return dependence.substring(dependence.lastIndexOf(":")+1)
-}
-
 ext {
-    modConfig = new Fi(rootProject.file("mod.hjson"))
-
     copyProperties = new Properties()
     if (rootProject.file("copy.properties").exists())
         copyProperties.load(new FileInputStream(rootProject.file("copy.properties")))
@@ -110,41 +89,16 @@ ext {
     doExec = { String cmd ->
         C.get()
         var proc = cmd.execute(null, rootProject.projectDir)
-        proc.waitForProcessOutput(new PrintStream(new C()), System.err)
+        proc.waitForProcessOutput(System.out, System.err)
     }
 
     getOutputJar = {Project p ->
         return "${rootProject.name}-${p.name}-${p.version}.jar"
     }
 
-    // WIP
-    getLastestVersion = { String dep ->
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(new URL("https://jitpack.io/com/github/$dep/").openStream()))
-        String line, latestVersion
-        println reader.readLine()
-        while ((line = reader.readLine()) != null) {
-            println line
-            if (line.matches(".?[0-9.]+[/]?")) {
-                println line
-                latestVersion = line.substring(0, line.length()-1)
-            }
-        }
-        return latestVersion
+    child = { File p, String c ->
+        return new File(p, c)
     }
-
-    // key word for natives searching
-    // paste as comment to file that's needs natives
-    nativesTrigger = "nt_gdrl_trigger"
-
-    mindustryDependencyType = rootProject.properties.get("mindustryDependencyType")
-    mindustryVersion = rootProject.properties.get("mindustryVersion")
-    arcVersion = rootProject.properties.get("arcVersion")
-
-    if (mindustryVersion == "-")
-        mindustryVersion = getLastestVersion("Anuken/$mindustryDependencyType")
-    if (arcVersion == "-")
-        arcVersion = getLastestVersion("Anuken/Arc")
 }
 
 subprojects.each { Project project ->
@@ -205,22 +159,15 @@ subprojects.each { Project project ->
         }
 
         copyPaths = [
-                "$rootProject.projectDir/artifacts",
+                //"$rootProject.projectDir/artifacts",
         ]
         if (rootProject.ext.copyProperties.containsKey(project.name))
             copyPaths += Arrays.stream(rootProject.ext.copyProperties.get(project.name).split(";")).toList()
 
-        child = { File p, String c ->
-            return new File(p, c)
-        }
-
-        classesDir = "$project.buildDir/classes/java/main"
-        headersDir = "$project.buildDir/headers"
-
         writeProcessors = {
-            var processorPath = child(project.sourceSets.main.resources.srcDirs.getAt(0), "META-INF/services/")
+            var processorPath = rootProject.ext.child(project.sourceSets.main.resources.srcDirs.getAt(0), "META-INF/services/")
             processorPath.mkdirs()
-            var processorFile = child(processorPath, ("javax.annotation.processing.Processor"))
+            var processorFile = rootProject.ext.child(processorPath, ("javax.annotation.processing.Processor"))
             var text = new StringBuilder()
             var srcFiles = project.sourceSets.main.java.srcDirs.getAt(0)
             if (srcFiles.exists()) {
@@ -241,42 +188,20 @@ subprojects.each { Project project ->
     }
 
     project.dependencies {
+        if (rootProject.ext.dependenciesC.containsKey(project))
+            rootProject.ext.dependenciesC.get(project).split(";").each { String dep ->
+                compileOnly rootProject.ext.dependencies.get(dep)
+            }
+        if (rootProject.ext.dependenciesI.containsKey(project))
+            rootProject.ext.dependenciesI.get(project).split(";").each { String dep ->
+                implementation rootProject.ext.dependencies.get(dep)
+            }
+        if (rootProject.ext.dependenciesA.containsKey(project))
+            rootProject.ext.dependenciesA.get(project).split(";").each { String dep ->
+                annotationProcessor rootProject.ext.dependencies.get(dep)
+            }
+
         annotationProcessor "com.github.Anuken:jabel:93fde537c7"
-    }
-
-    project.tasks.create("compileHeaders") {
-        doLast {
-            def command = ""
-            project.sourceSets.main.java.srcDirs.each { dir ->
-                if (dir.exists()) {
-                    dir.eachFileRecurse(groovy.io.FileType.FILES) { file ->
-                        if (file.text.contains("$rootProject.ext.nativesTrigger")) {
-                            def path = file.absolutePath//.substring(dir.absolutePath.length())
-                            //path = "${project.ext.classesDir.substring(rootProject.projectDir.absolutePath.length()+1)}$path"
-                            command += "\"$path\" "
-                        }
-                    }
-                }
-            }
-
-            if (command.length() > 0) {
-                var classpath = (project.configurations.compileClasspath.asList()
-                        + project.configurations.runtimeClasspath.asList()
-                            + project.sourceSets.main.java.srcDirs.asList())
-                var dependencies = String.join(";", classpath.path)
-
-                command = "javac -cp $dependencies -h \"$project.ext.headersDir\" " + command
-                println command
-                rootProject.ext.doExec(command)
-                println C.get()
-            } else {
-                println "No headers founded for project $project."
-            }
-        }
-
-        project.tasks.withType(JavaCompile) {
-            //finalizedBy project.tasks.compileHeaders
-        }
     }
 
     project.tasks.withType(JavaCompile) {
@@ -351,7 +276,6 @@ subprojects.each { Project project ->
                 artifactId project.name
                 version project.version
                 from components.java
-                println "Dependency path for project ${project} is ${groupId}:${artifactId}:${version}"
             }
         }
     }
@@ -363,25 +287,14 @@ task publishProj {
     }
 }
 
-task deploy {
-    dependsOn subprojects.stream().<Task>map(p -> p.tasks.jar).toArray()
-    // FIXME sucks on Windows
-    //finalizedBy rootProject.tasks.cleanBuilds
-}
-
-task workflowCommit {
-    dependsOn deploy
-}
-
-// TODO remove useless task
 task buildRelease(type: Jar) {
-    dependsOn deploy
+    dependsOn subprojects.stream().<Task>map(p -> p.tasks.jar).toArray()
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     from {
-        zipTree("artifacts/" + rootProject.ext.getOutputJar(project(":android")))
-        zipTree("artifacts/" + rootProject.ext.getOutputJar(project(":desktop")))
+        zipTree(project(":android").tasks.jar.archiveFile.get())
+        zipTree(project(":desktop").tasks.jar.archiveFile.get())
     }
 
     doLast {
@@ -400,42 +313,10 @@ task buildRelease(type: Jar) {
             }
         }
     }
+
+    finalizedBy rootProject.tasks.cleanBuilds
 }
 
-// only for local machine (WIP)
-task createRelease {
-    dependsOn deploy
-
-    doLast {
-        var vers = new Properties()
-        vers.load(new FileInputStream(project.file("version.properties")))
-        var descr = ""
-
-        if (vers.containsKey("description"))
-            descr = vers.get("description")
-
-        var un = "", ue = "", ut = ""
-        var tagName = project.version
-
-        // setup github user
-        setIfHasProp("username", v -> un = v)
-        setIfHasProp("useremail", v -> ue = v)
-        setIfHasProp("usertoken", v -> ut = v)
-        doExec("git config user.name $un --replace-all")
-        doExec("git config user.email $ue --replace-all")
-        var addr = "https://$un:$ut@github.com/${project.group}.git"
-
-        // delete older tag with same name
-        doExec("git tag")
-        var tags = C.get().split("\n")
-        if (Arrays.stream(tags).toList().contains(tagName)) {
-            doExec("git tag -d $tagName")
-            doExec("git push $addr -d tag $tagName")
-            C.print()
-        }
-
-        // push new tag
-        doExec("git tag -a $tagName -m \"${descr}")
-        doExec("git push $addr main $tagName")
-    }
+task workflowBuild {
+    dependsOn buildRelease
 }

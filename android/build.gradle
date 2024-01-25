@@ -1,19 +1,6 @@
 import java.util.regex.Pattern
 
 dependencies {
-    if (rootProject.ext.dependenciesC.containsKey(project))
-        rootProject.ext.dependenciesC.get(project).split(";").each { String dep ->
-            compileOnly rootProject.ext.dependencies.get(dep)
-        }
-    if (rootProject.ext.dependenciesI.containsKey(project))
-        rootProject.ext.dependenciesI.get(project).split(";").each { String dep ->
-            implementation rootProject.ext.dependencies.get(dep)
-        }
-    if (rootProject.ext.dependenciesA.containsKey(project))
-        rootProject.ext.dependenciesA.get(project).split(";").each { String dep ->
-            annotationProcessor rootProject.ext.dependencies.get(dep)
-        }
-
     implementation project(":core")
 
     compileOnly project(":annotations")
@@ -40,9 +27,6 @@ project.tasks.create("createFinalJar", Jar) {
             from archiveFile.get()
             into project.tasks.jar.destinationDirectory
             rename { name ->
-                println project.tasks.jar.archiveFile.get()
-                println project.tasks.jar.destinationDirectory.get()
-                println project.tasks.jar.archiveFileName.get()
                 project.tasks.jar.archiveFileName.get()
             }
         }

@@ -32,7 +32,7 @@ import static arc.Core.settings;
 @ModAnnotations.RootDirectoryPath(rootDirectoryPath = "core")
 @ModAnnotations.AnnotationSettings(
         rootPackage = "fos",
-        modInfoPath = "res/mod.hjson"
+        modInfoPath = "res/mod.json"
 )
 @FOSAnnotations.Settings(map = {
         "ModPackage", "fos"
@@ -123,10 +123,6 @@ public class FOSMod extends Mod {
         Log.debug("[FOS] initialization");
         //initialize mod variables
         FOSVars.load();
-
-        //TODO: is it necessary now?
-        //renderer.planets.cam.far = Mathf.pow(2, 20);
-        //renderer.planets.projector.setScaling(1 / renderer.planets.cam.far);
 
         //this flowfield is required for modded AIs
         Pathfinder.Flowfield pt = FOSVars.fpos;

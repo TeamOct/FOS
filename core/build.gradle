@@ -1,21 +1,24 @@
 dependencies {
-    if (rootProject.ext.dependenciesC.containsKey(project))
-        rootProject.ext.dependenciesC.get(project).split(";").each { String dep ->
-            compileOnly rootProject.ext.dependencies.get(dep)
-        }
-    if (rootProject.ext.dependenciesI.containsKey(project))
-        rootProject.ext.dependenciesI.get(project).split(";").each { String dep ->
-            implementation rootProject.ext.dependencies.get(dep)
-        }
-    if (rootProject.ext.dependenciesA.containsKey(project))
-        rootProject.ext.dependenciesA.get(project).split(";").each { String dep ->
-            annotationProcessor rootProject.ext.dependencies.get(dep)
-        }
-
     compileOnly project(":annotations")
     annotationProcessor project(":annotations")
 }
 
-ext {
+tasks.withType(JavaCompile) {
+    doFirst {
+        copy {
+            from(rootProject.file("mod.json"))
+            into(project.sourceSets.main.resources.srcDirs.first())
+        }
+    }
 
+    doLast {
+        delete(rootProject.ext.child(project.sourceSets.main.resources.srcDirs.first(), "mod.json"))
+    }
+}
+
+jar {
+    from(rootProject.rootDir) {
+        include "mod.json"
+        include "icon.png"
+    }
 }
