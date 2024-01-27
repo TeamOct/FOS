@@ -6,6 +6,7 @@ static String getVersion(String dependence) {
     return dependence.substring(dependence.lastIndexOf(":")+1)
 }
 
+// attach Arc to build scripts
 buildscript {
     repositories {
         mavenCentral()
@@ -19,33 +20,32 @@ buildscript {
     }
 }
 
+// configure all projects
 allprojects.each { Project project ->
+    // attach repositories
+    project.repositories {
+        mavenCentral()
+        mavenLocal()
+        maven { url "https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository" }
+        maven { url "https://www.jitpack.io" }
+    }
+
+    // apply plugins
     project.plugins.apply("java")
     project.plugins.apply("idea")
     project.plugins.apply("maven-publish")
 
+    // set version and group
     project.version = properties.get("version")
     project.group = properties.get("group")
 }
 
-wrapper {
-    gradleVersion = "8.1.1"
-}
-
+// no source code for root project
 sourceSets.main.java.srcDirs = []
 sourceSets.main.resources.srcDirs = []
 
-task cleanBuilds(type: Delete) {
-    doLast {
-        subprojects.each { Project p ->
-            if (p.buildDir.exists()) {
-                delete(p.buildDir)
-            }
-        }
-    }
-}
-
 ext {
+    // load configs
     copyProperties = new Properties()
     if (rootProject.file("copy.properties").exists())
         copyProperties.load(new FileInputStream(rootProject.file("copy.properties")))
@@ -54,13 +54,21 @@ ext {
     if (new File("$rootProject.projectDir/local.properties").exists())
         localProperties.load(new FileInputStream(new File("$rootProject.projectDir/local.properties")))
 
+    // setup annotation processors properties (global)
+    var GAPAProps = new Fi(rootProject.file("APA.properties")) // global (for every projects)
+    GAPArgs = []
+    if (GAPAProps.exists()) {
+        GAPArgs += Arrays.stream(GAPAProps.readString().replaceAll("\n", "").replaceAll("\r", "").split(";")).toList()
+    }
+
+    // parse dependencies
     dependenciesI = new HashMap<Project, String>()
     dependenciesC = new HashMap<Project, String>()
     dependenciesA = new HashMap<Project, String>()
-    dependencies = new HashMap<String, String>()
+    dependenciesList = new HashMap<String, String>()
     dependenciesProperties = new Properties()
-    var file = new File("$rootProject.projectDir/dependencies.properties")
-    dependenciesProperties.load(new InputStreamReader(new FileInputStream(file)))
+    dependenciesProperties.load(new InputStreamReader(new FileInputStream(
+            new File("$rootProject.projectDir/dependencies.properties"))))
     dependenciesProperties.forEach((k, v) -> {
         if (k.length() > 2) {
             switch (k.substring(k.length()-2)) {
@@ -74,33 +82,49 @@ ext {
                     dependenciesA.put(project(k.substring(0, k.length()-2)), v)
                     break
                 default:
-                    dependencies.put(k, v)
+                    dependenciesList.put(k, v)
             }
         } else {
-            dependencies.put(k, v)
+            dependenciesList.put(k, v)
         }
     })
 
+    // calls set if localProperties contains property
     setIfHasProp = { String property, Consumer<Object> set ->
         if (localProperties.containsKey(property))
             set.accept(localProperties.get(property))
     }
 
+    // executes command
     doExec = { String cmd ->
         C.get()
         var proc = cmd.execute(null, rootProject.projectDir)
         proc.waitForProcessOutput(System.out, System.err)
     }
 
+    // returns output jar name for specified project
     getOutputJar = {Project p ->
         return "${rootProject.name}-${p.name}-${p.version}.jar"
     }
 
+    // returns child of the file
     child = { File p, String c ->
         return new File(p, c)
     }
 }
 
+// deletes build dirs in the subprojects
+task cleanBuilds(type: Delete) {
+    doLast {
+        subprojects.each { Project p ->
+            if (p.buildDir.exists()) {
+                delete(p.buildDir)
+            }
+        }
+    }
+}
+
+// configure every subproject
 subprojects.each { Project project ->
     // Anuke
     project.configurations.all {
@@ -129,16 +153,19 @@ subprojects.each { Project project ->
         }
     }
 
-    // bin folder only for natives
+    // setup sourcesets
+    // src - java sources
+    // gen - generated java sources
+    // res - resources (e.g. assets)
     project.sourceSets.main.java.srcDirs = [
-            "src", "gen", "bin"
+            "src", "gen"
     ]
     project.sourceSets.main.resources.srcDirs = [
             "res",
     ]
 
     project.ext {
-        // setup annotation processors properties
+        // setup annotation processors properties (local)
         APArgs = ["ProjectName=${project.name}"]
         var src = "ProjectSrc=", res = "ProjectRes="
         project.sourceSets.main.java.srcDirs.each { var str ->
@@ -149,21 +176,18 @@ subprojects.each { Project project ->
         }
         APArgs.add(src.substring(0, src.length()-1))
         APArgs.add(res.substring(0, res.length()-1))
-        var APAProps = new Fi(project.file("APA.properties"))
-        var GAPAProps = new Fi(rootProject.file("APA.properties"))
-        if (GAPAProps.exists()) {
-            APArgs += Arrays.stream(GAPAProps.readString().replaceAll("\n", "").replaceAll("\r", "").split(";")).toList()
-        }
+        var APAProps = new Fi(project.file("APA.properties")) // local (only for this project)
         if (APAProps.exists()) {
             APArgs += Arrays.stream(APAProps.readString().replaceAll("\n", "").replaceAll("\r", "").split(";")).toList()
         }
+        APArgs += rootProject.ext.GAPArgs
 
-        copyPaths = [
-                //"$rootProject.projectDir/artifacts",
-        ]
+        // load paths where output jar will be copied
+        copyPaths = []
         if (rootProject.ext.copyProperties.containsKey(project.name))
             copyPaths += Arrays.stream(rootProject.ext.copyProperties.get(project.name).split(";")).toList()
 
+        // writes javax.annotation.processing.Processor file
         writeProcessors = {
             var processorPath = rootProject.ext.child(project.sourceSets.main.resources.srcDirs.getAt(0), "META-INF/services/")
             processorPath.mkdirs()
@@ -181,40 +205,37 @@ subprojects.each { Project project ->
         }
     }
 
-    project.repositories {
-        mavenCentral()
-        maven { url "https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository" }
-        maven { url "https://www.jitpack.io" }
-    }
-
     project.dependencies {
+        // setup parsed dependencies
         if (rootProject.ext.dependenciesC.containsKey(project))
             rootProject.ext.dependenciesC.get(project).split(";").each { String dep ->
-                compileOnly rootProject.ext.dependencies.get(dep)
+                compileOnly rootProject.ext.dependenciesList.get(dep)
             }
         if (rootProject.ext.dependenciesI.containsKey(project))
             rootProject.ext.dependenciesI.get(project).split(";").each { String dep ->
-                implementation rootProject.ext.dependencies.get(dep)
+                implementation rootProject.ext.dependenciesList.get(dep)
             }
         if (rootProject.ext.dependenciesA.containsKey(project))
             rootProject.ext.dependenciesA.get(project).split(";").each { String dep ->
-                annotationProcessor rootProject.ext.dependencies.get(dep)
+                annotationProcessor rootProject.ext.dependenciesList.get(dep)
             }
 
+        // needs for translate mod to 64 bytecode
         annotationProcessor "com.github.Anuken:jabel:93fde537c7"
     }
 
     project.tasks.withType(JavaCompile) {
-        rootProject.ext.setIfHasProp("org.gradle.java.home", v -> options.forkOptions.executable = v)
+        // preprocess annotation processors properties
         var finalAPArgs = []
         project.ext.APArgs.each { String str ->
             if (!str.contains("-A"))
                 finalAPArgs.add("-A" + str)
         }
+        options.compilerArgs.addAll(finalAPArgs)
 
+        // setup compile options
         options.encoding = "UTF-8"
-        options.compilerArgs += ["-Xlint:none"]
-        options.compilerArgs += finalAPArgs
+        options.compilerArgs.addAll(["-Xlint:none"])
         options.compilerArgs.addAll(['--release', '8'])
         options.generatedSourceOutputDirectory.set(project.file("gen"))
         options.forkOptions.jvmArgs.addAll([
@@ -232,14 +253,20 @@ subprojects.each { Project project ->
                 "--add-opens=java.base/sun.reflect.annotation=ALL-UNNAMED"
         ])
 
+        // if you want to specify jvm path
+        rootProject.ext.setIfHasProp("org.gradle.java.home", v -> options.forkOptions.executable = v)
+
+        // project should be complied in 64 bytecode version
         targetCompatibility = 8
         sourceCompatibility = JavaVersion.VERSION_16
 
         doFirst {
+            // clear previously generated sources
             delete options.generatedSourceOutputDirectory.get().asFile.listFiles()
         }
     }
 
+    // copy output jar
     project.tasks.create("copyJar") {
         doLast {
             project.ext.copyPaths.each { p ->
@@ -264,6 +291,7 @@ subprojects.each { Project project ->
         finalizedBy project.tasks.copyJar
     }
 
+    // for jitpack publishing
     project.java {
         withSourcesJar()
         withJavadocJar()
@@ -281,12 +309,7 @@ subprojects.each { Project project ->
     }
 }
 
-task publishProj {
-    doLast {
-        publishToMavenLocal
-    }
-}
-
+// builds jar with android and desktop sources
 task buildRelease(type: Jar) {
     dependsOn subprojects.stream().<Task>map(p -> p.tasks.jar).toArray()
 
@@ -298,6 +321,7 @@ task buildRelease(type: Jar) {
     }
 
     doLast {
+        // copy it to specified directories
         def copyPaths = [
                 "$rootProject.projectDir/artifacts",
         ]
@@ -317,6 +341,7 @@ task buildRelease(type: Jar) {
     finalizedBy rootProject.tasks.cleanBuilds
 }
 
+// for github actions
 task workflowBuild {
     dependsOn buildRelease
 }
