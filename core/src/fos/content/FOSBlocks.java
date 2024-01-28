@@ -71,8 +71,8 @@ public class FOSBlocks {
     landMine,
 
     //environment & ores
-    cyanium, cyaniumAlt, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
-    annite, anniteWall, blublu, blubluAlt, blubluWall, purpur, purpurWall,
+    cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
+    annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
     tokiciteFloor,
     cyaniumWater, crimsonStoneWater, anniteWater, blubluWater, purpurWater,
     alienMoss,
@@ -83,7 +83,7 @@ public class FOSBlocks {
     softbush,
 
     //units
-    upgradeCenter, hovercraftFactory, droidConstructor,
+    upgradeCenter, hovercraftFactory, droidConstructor, draugFactory,
 
     //storage
     coreColony, coreFortress, coreCity, coreMetropolis, lightUnloader,
@@ -1328,6 +1328,16 @@ public class FOSBlocks {
             droneRange = 80f;
             droneType = testOverdrive;
             requirements(Category.units, BuildVisibility.debugOnly, with(brass, 275, silicon, 400, nickel, 150));
+        }};
+        draugFactory = new V5UnitFactory("draug-factory"){{
+            scaledHealth = 60;
+            size = 4;
+            consumePower(2);
+            unitRequirements = with();
+            maxSpawn = 1;
+            unitType = UnitTypes.mono;
+            produceTime = 1200f;
+            requirements(Category.units, BuildVisibility.debugOnly, with(tin, 150, silver, 250));
         }};
         //endregion
         //region storage

@@ -34,7 +34,14 @@ public class OreDetector extends Block {
     /** Efficiency of drills powered by this detector. */
     public float drillEfficiencyMultiplier = 1f;
     /** Drawer. You know the drill by this point. */
-    public DrawBlock drawer = new DrawDefault();
+    public DrawBlock drawer = new DrawMulti(
+        new DrawDefault(),
+        new DrawFlame(){{
+            lightRadius = 8f;
+            lightSinMag = 0f;
+        }},
+        new DrawRegion("-top2") // why the fuck is DrawFlame hard-coded to have a -top suffix???
+    );
 
     public OreDetector(String name) {
         super(name);
@@ -88,6 +95,11 @@ public class OreDetector extends Block {
         @Override
         public float range() {
             return range * potentialEfficiency;
+        }
+
+        @Override
+        public float warmup() {
+            return showOres ? efficiency : 0f;
         }
 
         protected TextureRegionDrawable eyeIcon() {
