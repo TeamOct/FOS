@@ -8,6 +8,7 @@ import arc.math.geom.Point2;
 import arc.util.Time;
 import fos.content.FOSAttributes;
 import mindustry.Vars;
+import mindustry.game.Team;
 import mindustry.graphics.*;
 import mindustry.world.Tile;
 import mindustry.world.blocks.power.PowerGenerator;
@@ -43,6 +44,21 @@ public class WindTurbine extends PowerGenerator {
     }
 
     @Override
+    public boolean canPlaceOn(Tile tile, Team team, int rotation) {
+        float a = 0;
+
+        Point2[] edges = getEdges();
+        for (Point2 edge : edges) {
+            Tile t = Vars.world.tile(tile.x + edge.x, tile.y + edge.y);
+            if (t != null && t.solid()) {
+                a += 1 / (size * 2f);
+            }
+        }
+
+        return a < 1;
+    }
+
+    @Override
     public void setStats() {
         super.setStats();
 
@@ -73,6 +89,7 @@ public class WindTurbine extends PowerGenerator {
             }
 
             productionEfficiency = Math.min(productionEfficiency, 1f - (1 / (size * 2f)) * no);
+            productionEfficiency = Math.max(0, productionEfficiency);
 
             totalProgress += Time.delta * productionEfficiency;
         }
