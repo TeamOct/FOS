@@ -18,6 +18,7 @@ public class DrawOutputLiquids extends DrawLiquidOutputs {
                 int realRot = (side + build.rotation) % 4;
                 Draw.alpha(amount / crafter.liquidCapacity);
                 Draw.rect(liquidOutputRegions[realRot > 1 ? 1 : 0][i], build.x, build.y, realRot * 90);
+                Draw.reset();
             }
         }
     }

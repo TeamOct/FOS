@@ -15,7 +15,7 @@ import fos.type.blocks.special.*;
 import fos.type.blocks.storage.DetectorCoreBlock;
 import fos.type.blocks.units.*;
 import fos.type.bullets.*;
-import fos.type.draw.*;
+import fos.type.draw.DrawOutputLiquids;
 import mindustry.content.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.part.*;
@@ -245,23 +245,21 @@ public class FOSBlocks {
             lightRadius = 32f;
             drawer = new DrawMulti(
                 new DrawRegion("-bottom"),
-                //why DrawLiquidRegion does not rotate?!
-                //TODO: not related to this but I wanna make a PR for drawer rotations
-                new DrawRotLiquidRegion(arkycite){{
-                    suffix = "-input";
-                }},
 /*
                 new DrawBubbles(arkycite.color.cpy().mul(1.2f)){{
                     spread = 12f;
                 }},
 */
-                new DrawOutputLiquids(), //not to be confused with DrawLiquidOutputs, this one's modded!
                 new DrawPistons(){{
-                    angleOffset = 45f;
-                    lenOffset = 7.5f;
+                    lenOffset = 5f;
+                    sinScl = 3f;
+                }},
+                new DrawLiquidRegion(arkycite){{
+                    suffix = "-input";
                 }},
                 new DrawGlowRegion("-glow"),
-                new DrawDefault()
+                new DrawDefault(),
+                new DrawOutputLiquids() //not to be confused with DrawLiquidOutputs, this one's modded!
             );
             requirements(Category.crafting, with(tin, 150, diamond, 100, silicon, 75, vanadium, 125));
         }};
