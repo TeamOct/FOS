@@ -90,6 +90,7 @@ public class FOSWeaponModules {
             x = 0; y = 0;
             alternate = mirror = false;
             rotate = true;
+            top = true;
             recoil = 4f;
             reload = recoilTime = 10f;
             bullet = new BasicBulletType(13f, 240){{

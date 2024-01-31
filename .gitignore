@@ -20,3 +20,4 @@ cache/
 gen/
 bin/
 javax.annotation.processing.Processor
+core/annotations/src/main/resources/classids.properties
