@@ -6,6 +6,7 @@ import arc.struct.Seq;
 import arc.util.*;
 import fos.graphics.*;
 import fos.type.blocks.campaign.*;
+import fos.type.blocks.crafting.ResourceExtractor;
 import fos.type.blocks.defense.*;
 import fos.type.blocks.distribution.*;
 import fos.type.blocks.environment.*;
@@ -95,70 +96,72 @@ public class FOSBlocks {
         //region crafting
 
         //fine, I will document this block right here.
-        resourceExtractor = new MultiCrafter("resource-extractor"){{
-            //since MultiCrafter extends Block, any field from Block class works here as well.
-            itemCapacity = 15;
-            size = 3;
-            hasItems = acceptsItems = true;
-            configurable = true;
-            envRequired = envEnabled = Env.space;
-            drawer = new DrawMulti(
-                new DrawRegion("-bottom"),
-                new DrawPistons(){{
-                    angleOffset = 45f;
-                    sides = 4;
-                    lenOffset = 7;
-                    sinScl = 6f;
-                }},
-                new DrawDefault()
-            );
-            requirements(Category.crafting, with(rawNethratium, 50, rawElithite, 25));
-            consumePower(2f);
+        resourceExtractor = new ResourceExtractor("resource-extractor"){
+            {
+                //ResourceExtractor is a multi-crafter, and since MultiCrafter class extends Block, any field from Block class works here as well.
+                itemCapacity = 15;
+                size = 3;
+                hasItems = acceptsItems = true;
+                configurable = true;
+                envRequired = envEnabled = Env.space;
+                drawer = new DrawMulti(
+                    new DrawRegion("-bottom"),
+                    new DrawPistons(){{
+                        angleOffset = 45f;
+                        sides = 4;
+                        lenOffset = 7;
+                        sinScl = 6f;
+                    }},
+                    new DrawDefault()
+                );
+                requirements(Category.crafting, with(rawNethratium, 50, rawElithite, 25));
+                consumePower(2f);
 
-            //list of recipes used by this multicrafter, 3 in total here
-            resolvedRecipes = Seq.with(
-                new Recipe(
-                    //IOEntry input: this recipe's input goes here
-                    new IOEntry(
-                        //input items go here (can be empty if you wish to use fluids only)
-                        Seq.with(ItemStack.with(rawNethratium, 2)),
-                        //input fluids go here (there are no fluids required so this is empty)
-                        Seq.with(/* example: LiquidStack.with(water, 10) */)
+                //list of recipes used by this multi-crafter, 3 in total here
+                resolvedRecipes = Seq.with(
+                    new Recipe(
+                        //IOEntry input: this recipe's input goes here
+                        new IOEntry(
+                            //input items go here (can be empty if you wish to use fluids only)
+                            Seq.with(ItemStack.with(rawNethratium, 2)),
+                            //input fluids go here (there are no fluids required so this is empty)
+                            Seq.with(/* example: LiquidStack.with(water, 10) */)
+                        ),
+                        //IOEntry output: this recipe's output goes here
+                        new IOEntry(
+                            //output items
+                            Seq.with(ItemStack.with(aluminium, 1)),
+                            //output fluids, again, it can be empty
+                            Seq.with()
+                        ),
+                        //float craftTime: self-explanatory. measured in ticks
+                        60f
                     ),
-                    //IOEntry output: this recipe's output goes here
-                    new IOEntry(
-                        //output items
-                        Seq.with(ItemStack.with(aluminium, 1)),
-                        //output fluids, again, it can be empty
-                        Seq.with()
+                    new Recipe(
+                        new IOEntry(
+                            Seq.with(ItemStack.with(rawElbium, 4)),
+                            Seq.with()
+                        ),
+                        new IOEntry(
+                            Seq.with(ItemStack.with(tin, 1, lithium, 1)),
+                            Seq.with()
+                        ),
+                        90f
                     ),
-                    //float craftTime: self-explanatory. measured in ticks
-                    60f
-                ),
-                new Recipe(
-                    new IOEntry(
-                        Seq.with(ItemStack.with(rawElbium, 4)),
-                        Seq.with()
-                    ),
-                    new IOEntry(
-                        Seq.with(ItemStack.with(tin, 1, lithium, 1)),
-                        Seq.with()
-                    ),
-                    90f
-                ),
-                new Recipe(
-                    new IOEntry(
-                        Seq.with(ItemStack.with(rawElithite, 6)),
-                        Seq.with()
-                    ),
-                    new IOEntry(
-                        Seq.with(ItemStack.with(silver, 1, titanium, 1)),
-                        Seq.with()
-                    ),
-                    120f
-                )
-            );
-        }};
+                    new Recipe(
+                        new IOEntry(
+                            Seq.with(ItemStack.with(rawElithite, 6)),
+                            Seq.with()
+                        ),
+                        new IOEntry(
+                            Seq.with(ItemStack.with(silver, 1, titanium, 1)),
+                            Seq.with()
+                        ),
+                        120f
+                    )
+                );
+            }
+        };
         cuberiumSynthesizer = new GenericCrafter("cuberium-synthesizer"){{
             scaledHealth = 10;
             size = 3;
