@@ -7,6 +7,7 @@ import mindustry.type.Item;
 
 import static fos.content.FOSBlocks.*;
 import static fos.content.FOSItems.*;
+import static fos.content.FOSUnitTypes.*;
 import static mindustry.content.Blocks.coreNucleus;
 import static mindustry.content.Items.titanium;
 import static mindustry.content.TechTree.*;
@@ -31,11 +32,12 @@ public class UxerdTechTree {
                 node(spaceBridge);
                 node(itemCatapult, Seq.with(new Research(heatGenerator)), () -> {});
             });
-            nodeProduce(rawNethratium, () ->
+            nodeProduce(rawNethratium, () -> {
                 nodeProduce(aluminium, () -> {
                     nodeProduce(Liquids.hydrogen, () -> {});
                     nodeProduce(FOSFluids.oxygen, () -> {});
-            }));
+
+            });
             nodeProduce(rawElbium, () -> {
                 nodeProduce(tin, () -> {});
                 nodeProduce(lithium, () -> {});
@@ -44,6 +46,8 @@ public class UxerdTechTree {
                 nodeProduce(titanium, () -> {});
                 nodeProduce(silver, () -> nodeProduce(cuberium, Seq.with(new Research(tin), new Research(titanium), new Research(FOSFluids.oxygen)), () -> {}));
             });
+            });
+            node(arrow);
             node(rockCrusher, Seq.with(new OnPlanet(FOSPlanets.uxerd)), () -> node(heatGenerator, () -> {
                 node(solarPanelMedium);
                 node(resourceExtractor, () -> {
@@ -52,6 +56,9 @@ public class UxerdTechTree {
                     node(cuberiumSynthesizer, () -> {
                         /* TODO: move to Lumoni */ node(orbitalAccelerator, Seq.with(new Research(coreFortress)), () -> {});
                         node(bigBoy);
+                        node(cuberiumWall, () -> {
+                            node(cuberiumWallLarge);
+                        });
                     });
                 });
                 node(plasmaLauncher);
@@ -59,6 +66,9 @@ public class UxerdTechTree {
                     node(tinDrill)
                 );
             }));
+            node(lithiumAssembler,() -> {
+                node(violation);
+            });
         });
         FOSPlanets.uxerd.unlockedOnLand = Seq.with(spaceDuct, rockCrusher, heatGenerator);
     }

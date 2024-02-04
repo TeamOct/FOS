@@ -16,6 +16,7 @@ import mindustry.annotations.Annotations;
 import mindustry.content.*;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
+import mindustry.entities.effect.ParticleEffect;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
 import mindustry.gen.*;
@@ -33,7 +34,8 @@ public class FOSUnitTypes {
     public static @Annotations.EntityDef({Unitc.class}) UnitType
         sergeant, lieutenant, captain, general, marshal,
         smoke, cloud,
-        legionnaire, legionnaireReplica;
+        legionnaire, legionnaireReplica,
+        violation;
 
     public static @Annotations.EntityDef({ElevationMovec.class, Unitc.class}) UnitType assault;
 
@@ -572,6 +574,57 @@ public class FOSUnitTypes {
             abilities.add(
                 new MoveLightningAbility(40f, 16, 0.2f, -6f, 3f, 5f, FOSPal.destroyerTrail.cpy().shiftSaturation(-0.3f))
             );
+        }};
+        violation = new UnitType("violation"){{
+            health = 640;
+            armor = 6;
+            hitSize = 13f;
+            rotateSpeed = 3.5f;
+            flying = true;
+            targetAir = false;
+            omniMovement = false;
+            outlineColor = Color.valueOf("2b2f36");
+            trailColor = engineColor = FOSPal.destroyerTrail;
+            speed = 5f;
+            accel = 0.006f;
+            drag = 0.13f;
+            engineOffset = 3f;
+            engineSize = 2f;
+            abilities.add(
+                    new MoveEffectAbility(){{
+                        teamColor = true;
+                        y = -2.8f;
+                        effect = new ParticleEffect(){{
+                            particles = 3;
+                            line = true;
+                            lenFrom = 3.5f;
+                            sizeFrom = 2.8f;
+                            sizeTo = 0;
+                            lifetime = 32;
+                            rotWithParent = true;
+                        }};
+                    }}
+            );
+            weapons.add(new Weapon("artillery-launcher"){{
+                reload = 22f;
+                x = 0f;
+                y = 2f;
+                rotate = false;
+                inaccuracy = 4.5f;
+                shootCone = 35;
+                shake = 0.6f;
+                ejectEffect = Fx.casing2;
+                shootSound = Sounds.bang;
+                bullet = new ArtilleryBulletType(3.5f, 10, "shell"){{
+                    hitEffect = Fx.flakExplosion;
+                    knockback = 1.4f;
+                    lifetime = 40f;
+                    width = height = 11f;
+                    collidesTiles = false;
+                    splashDamageRadius = 12f * 0.75f;
+                    splashDamage = 15f;
+                }};
+            }});
         }};
 
         testOverdrive = new UnitType("test-overdrive"){{

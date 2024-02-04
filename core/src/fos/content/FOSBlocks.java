@@ -67,7 +67,7 @@ public class FOSBlocks {
 
     //defense
     tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
-    helix, sticker, dot, particulator, pulse, breakdown, thunder, cluster, judge, newJudge,
+    helix, sticker, dot, particulator, pulse, breakdown, thunder, cluster, judge, newJudge, arrow,
     matrixShieldProj,
     landMine,
 
@@ -84,7 +84,7 @@ public class FOSBlocks {
     softbush,
 
     //units
-    upgradeCenter, hovercraftFactory, droidConstructor, draugFactory,
+    upgradeCenter, hovercraftFactory, droidConstructor, draugFactory, lithiumAssembler,
 
     //storage
     coreColony, coreFortress, coreCity, coreMetropolis, lightUnloader,
@@ -904,6 +904,61 @@ public class FOSBlocks {
             );
             requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, nickel, 1500, luminium, 1500));
         }};
+        arrow = new ItemTurret("arrow"){{
+            health = 1900;
+            size = 3;
+            range = 170;
+            targetAir = targetGround = true;
+            recoil = 2;
+            reload = 60;
+            inaccuracy = 2;
+            outlineColor = Color.valueOf("302326");
+            heatColor = FOSPal.tin;
+            shootSound = Sounds.shootBig;
+            squareSprite = false;
+            ammo(
+                    lithium, new BasicBulletType(){{
+                        speed = 4;
+                        damage = 60;
+                        lifetime = 42.5f;
+                        width = 12f; height = 18f;
+                        backColor = FOSPal.tinBack;
+                        frontColor = trailColor = lightColor = FOSPal.tin;
+                        trailEffect = Fx.artilleryTrail;
+                        trailWidth = 3;
+                        trailLength = 20;
+                        ammoMultiplier = 1;
+                        splashDamage = 15f;
+                        splashDamageRadius = 30f;
+                        pierce = true;
+                        pierceCap = 3;
+                        hitEffect = despawnEffect = Fx.explosion;
+                    }}
+            );
+            drawer = new DrawTurret("uxerd-"){{
+                parts.add(new RegionPart("-side"){{
+                   progress = PartProgress.recoil;
+                   mirror = true;
+                   under = true;
+                   moveX = 1f;
+                   moveY = -1.5f;
+                   moveRot = -15f;
+                }},
+                   new RegionPart("-back"){{
+                   progress = PartProgress.recoil;
+                   heatColor = FOSPal.tin;
+                   layerOffset = 0.0001f;
+                   mirror = false;
+                   under = true;
+                   moveY = -2.8f;
+                   }}
+                );
+            }};
+            consumeCoolant(0.5f).boost();
+            coolantMultiplier = 2f;
+            requirements(Category.turret, with(aluminium, 190, lithium, 125, tin, 60));
+            envRequired = envEnabled = Env.space;
+        }};
 
         matrixShieldProj = new PolyForceProjector("matrix-shield-projector"){{
             health = 480;
@@ -1340,6 +1395,16 @@ public class FOSBlocks {
             produceTime = 1200f;
             requirements(Category.units, BuildVisibility.debugOnly, with(tin, 150, silver, 250));
         }};
+        lithiumAssembler = new UnitFactory("lithium-assembler"){{
+            scaledHealth = 125;
+            size = 3;
+            consumePower(3.5f);
+            requirements(Category.units, with(lithium, 180, aluminium, 110, tin, 90));
+            plans.add(
+                    new UnitPlan(FOSUnitTypes.violation, 25f * 60, with(aluminium, 30))
+            );
+            envEnabled |= Env.space;
+        }};
         //endregion
         //region storage
         coreColony = new DetectorCoreBlock("core-colony"){{
@@ -1422,6 +1487,7 @@ public class FOSBlocks {
             health = 40;
             size = 1;
             requirements(Category.effect, with(titanium, 75, lithium, 150));
+            envEnabled |= Env.space;
         }};
         orbitalAccelerator = new OrbitalAccelerator("orbital-accelerator"){{
             health = 5000;
