@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/TeamOct/fictional-octo-system.svg)](https://jitpack.io/#TeamOct/fictional-octo-system)
+
 # Fictional Octo System
 ### FOS IS IN A PRE-RELEASE STATE RIGHT NOW - BROKEN, UNFINISHED OR UNBALANCED CONTENT MAY BE PRESENT!
 
