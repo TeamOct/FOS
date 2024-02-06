@@ -35,6 +35,9 @@ public class FOSUnitTypes {
         smoke, cloud,
         legionnaire, legionnaireReplica;
 
+    public static @Annotations.EntityDef({Legsc.class}) UnitType
+        radix, foetus, vitarus;
+
     public static @Annotations.EntityDef({ElevationMovec.class, Unitc.class}) UnitType assault;
 
     public static @Annotations.EntityDef({Payloadc.class, Unitc.class}) UnitType vulture;
@@ -382,7 +385,7 @@ public class FOSUnitTypes {
             weapons.add(FOSWeaponModules.standard1.weapons);
         }};
 
-        sergeant = new UnitType("sergeant"){{
+        sergeant = new FOSUnitType("sergeant"){{
             health = 150;
             hitSize = 12;
             speed = 1.2f;
@@ -405,7 +408,7 @@ public class FOSUnitTypes {
                 }}
             );
         }};
-        lieutenant = new UnitType("lieutenant"){{
+        lieutenant = new FOSUnitType("lieutenant"){{
             health = 360;
             hitSize = 16;
             speed = 2.4f;
@@ -429,7 +432,7 @@ public class FOSUnitTypes {
                 }}
             );
         }};
-        captain = new UnitType("captain"){{
+        captain = new FOSUnitType("captain"){{
             health = 900;
             hitSize = 20;
             speed = 1.1f;
@@ -495,7 +498,7 @@ public class FOSUnitTypes {
                 }}
             );
         }};
-        general = new UnitType("general"){{
+        general = new FOSUnitType("general"){{
             health = 6250;
             hitSize = 20;
             speed = 1.5f;
@@ -505,7 +508,7 @@ public class FOSUnitTypes {
             range = 40f;
             abilities.add(new HackFieldAbility(hacked, 40f, 0.002f));
         }};
-        marshal = new UnitType("marshal"){{
+        marshal = new FOSUnitType("marshal"){{
             health = 18000;
             hitSize = 36;
             speed = 0.8f;
@@ -532,7 +535,7 @@ public class FOSUnitTypes {
             );
         }};
 
-        smoke = new UnitType("smoke"){{
+        smoke = new FOSUnitType("smoke"){{
             health = 200;
             armor = 3f;
             hitSize = 9f;
@@ -559,7 +562,7 @@ public class FOSUnitTypes {
                 }}
             );
         }};
-        cloud = new UnitType("cloud"){{
+        cloud = new FOSUnitType("cloud"){{
             health = 400;
             armor = 4;
             hitSize = 12f;
@@ -571,6 +574,187 @@ public class FOSUnitTypes {
             drag = 0.2f;
             abilities.add(
                 new MoveLightningAbility(40f, 16, 0.2f, -6f, 3f, 5f, FOSPal.destroyerTrail.cpy().shiftSaturation(-0.3f))
+            );
+        }};
+
+        radix = new FOSUnitType("radix"){{
+            health = 600;
+            armor = 1;
+            speed = 0.8f;
+            hitSize = 12;
+            rotateSpeed = 2f;
+            targetAir = false;
+
+            legCount = 3;
+
+            weapons.add(
+                new Weapon("fos-radix-weapon"){{
+                    x = 8; y = -2;
+                    recoil = 1f;
+                    mirror = alternate = true;
+                    reload = 45f;
+                    rotate = false;
+                    ejectEffect = Fx.none;
+                    bullet = new BasicBulletType(){{
+                        damage = 40;
+                        lifetime = 45;
+                        speed = 5f;
+                        width = height = 10f;
+                        collidesAir = false;
+
+                        trailLength = 12;
+                        trailWidth = 3;
+                        trailEffect = Fx.artilleryTrail;
+                        trailColor = backColor = Pal.accent.cpy().mul(0.8f);
+                        frontColor = Pal.accent;
+
+                        fragBullets = 9;
+                        fragOnHit = true;
+                        fragBullet = new LightningBulletType(){{
+                            damage = 60;
+                            lightningLength = 2;
+                            lightningLengthRand = 2;
+                        }};
+                    }};
+                }}
+            );
+        }};
+        foetus = new FOSUnitType("foetus"){{
+            health = 1100;
+            armor = 3;
+            speed = 0.5f;
+            hitSize = 18;
+            rotateSpeed = 1.8f;
+            targetAir = false;
+
+            legCount = 3;
+
+            weapons.add(
+                new Weapon("fos-foetus-weapon"){{
+                    x = 0; y = -4;
+                    recoil = 3f;
+                    mirror = false;
+                    reload = 120f;
+                    ejectEffect = Fx.none;
+                    shoot = new ShootMulti(
+                        new ShootAlternate(){{
+                            barrels = shots = 3;
+                            spread = 3.5f;
+                        }},
+                        new ShootHelix(){{
+                            mag = 3f;
+                        }}
+                    );
+                    bullet = new BasicBulletType(){{
+                        damage = 150;
+                        speed = 3;
+                        lifetime = 85;
+                        width = height = 12;
+
+                        collidesAir = false;
+                        pierce = pierceBuilding = true;
+                        pierceCap = 1;
+
+                        trailLength = 6;
+                        trailWidth = 4;
+                        trailEffect = Fx.artilleryTrail;
+                        trailColor = backColor = Pal.accent.cpy().mul(0.8f);
+                        frontColor = Pal.accent;
+
+                        intervalBullets = 1;
+                        bulletInterval = 4;
+                        intervalBullet = new LightningBulletType(){{
+                            damage = 30;
+                            collidesAir = false;
+                            ammoMultiplier = 1f;
+                            lightningColor = Pal.accent;
+                            lightningLength = 3;
+                            lightningLengthRand = 6;
+
+                            //for visual stats only.
+                            //buildingDamageMultiplier = 0.25f;
+
+                            lightningType = new BulletType(0.0001f, 0f){{
+                                lifetime = Fx.lightning.lifetime;
+                                hitEffect = Fx.hitLancer;
+                                despawnEffect = Fx.none;
+                                status = StatusEffects.shocked;
+                                statusDuration = 10f;
+                                hittable = false;
+                                lightColor = Color.white;
+                                //buildingDamageMultiplier = 0.25f;
+                            }};
+                        }};
+                    }};
+                }}
+            );
+        }};
+        vitarus = new FOSUnitType("vitarus"){{
+            health = 2100;
+            armor = 4;
+            speed = 0.4f;
+            hitSize = 22;
+            rotateSpeed = 1.5f;
+
+            weapons.add(
+                new Weapon("fos-vitarus-weapon"){{
+                    x = 0; y = 6;
+                    recoil = 5f;
+                    mirror = false;
+                    reload = 120f;
+                    ejectEffect = Fx.none;
+
+                    bullet = new BasicBulletType(){{
+                        damage = 160;
+                        speed = 6;
+                        lifetime = 45;
+                        width = height = 8f;
+                        lightRadius = 4f;
+
+                        pierce = pierceBuilding = true;
+                        pierceCap = 3;
+
+                        trailLength = 9;
+                        trailWidth = 3;
+                        trailEffect = Fx.artilleryTrail;
+                        trailColor = backColor = Pal.accent.cpy().mul(0.8f);
+                        frontColor = Pal.accent;
+
+                        fragBullets = 13;
+                        fragRandomSpread = 30f;
+                        fragBullet = new LightningBulletType(){{
+                            damage = 75;
+                            lightningLength = 6;
+                            lightningLengthRand = 6;
+                            lightningColor = Pal.accent;
+                        }};
+                    }};
+                }},
+                new Weapon("fos-vitarus-point-weapon"){{
+                    x = 9; y = -4;
+                    mirror = alternate = true;
+                    rotate = true;
+                    top = true;
+                    reload = 30f;
+
+                    shootSound = Sounds.pew;
+                    shoot = new ShootHelix(){{
+                        shots = 2;
+                        mag = 2.5f;
+                    }};
+
+                    bullet = new BasicBulletType(){{
+                        damage = 30;
+                        speed = 3;
+                        lifetime = 120;
+                        width = 3; height = 3;
+
+                        trailLength = 8;
+                        trailWidth = 1.5f;
+                        trailColor = backColor = Pal.accent.cpy().mul(0.8f);
+                        frontColor = Pal.accent;
+                    }};
+                }}
             );
         }};
 
@@ -594,11 +778,11 @@ public class FOSUnitTypes {
             engineSize = 2f;
             itemCapacity = 0;
 
-            abilities.add(new MoveEffectAbility(0f, -7f, Pal.sapBulletBack, Fx.missileTrailShort, 4f){{
+            abilities.add(new MoveEffectAbility(0f, -7f, Pal.sapBulletBack, Fx.missileTrailShort, 4f) {{
                 teamColor = true;
             }});
 
-            parts.add(new HoverPart(){{
+            parts.add(new HoverPart() {{
                 x = 3.9f;
                 y = -4;
                 mirror = true;
@@ -608,12 +792,7 @@ public class FOSUnitTypes {
                 layerOffset = -0.001f;
                 color = Color.valueOf("bf92f9");
             }});
-        }
-            @Override
-            public void update(Unit unit) {
-                super.update(unit);
-            }
-        };
+        }};
 
         vulture = new CarrierUnitType("vulture"){{
             health = 400;
