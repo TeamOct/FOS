@@ -90,6 +90,6 @@ public class FlyingBugAI extends AIController {
             if (target != null) return target;
         }
 
-        return targetFlag(x, y, null, true);
+        return Units.closestTarget(unit.team, x, y, range, u -> false, b -> true);
     }
 }
