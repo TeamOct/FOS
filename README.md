@@ -1,7 +1,11 @@
-[![](https://jitpack.io/v/TeamOct/fictional-octo-system.svg)](https://jitpack.io/#TeamOct/fictional-octo-system)
-
 # Fictional Octo System
 ### FOS IS IN A PRE-RELEASE STATE RIGHT NOW - BROKEN, UNFINISHED OR UNBALANCED CONTENT MAY BE PRESENT!
+
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/TeamOct/fictional-octo-system/workflow-build.yml)](https://github.com/TeamOct/fictional-octo-system/actions)
+[![GitHub Repo stars](https://img.shields.io/github/stars/TeamOct/fictional-octo-system)](https://github.com/TeamOct/fictional-octo-system/stargazers)
+[![Discord](https://img.shields.io/discord/833695554767683656?label=Team%20Oct%20Discord)](https://discord.gg/F9j8WvU4Bv)
+[![](https://jitpack.io/v/TeamOct/fictional-octo-system.svg)](https://jitpack.io/#TeamOct/fictional-octo-system)
+
 
 This mod brings you to the brand-new star system to explore as a standalone campaign. No prerequisites needed to meet - no matter your progress with Mindustry, you can start playing anytime!
 
