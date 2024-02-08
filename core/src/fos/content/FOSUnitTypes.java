@@ -57,8 +57,8 @@ public class FOSUnitTypes {
         DestroyersUnits.load();
 
         legionnaire = new FOSUnitType("legionnaire"){{
-            health = 200;
-            hitSize = 8;
+            health = 100;
+            hitSize = 12;
             rotateSpeed = 12f;
             speed = 2.5f;
             accel = 0.08f;
@@ -76,7 +76,7 @@ public class FOSUnitTypes {
                     rotate = false;
                     reload = 30f;
                     shootCone = 15f;
-                    bullet = new BasicBulletType(2.5f, 55){{
+                    bullet = new BasicBulletType(2.5f, 22.75f){{
                         width = 7f;
                         height = 9f;
                         lifetime = 45f;
@@ -92,7 +92,7 @@ public class FOSUnitTypes {
             controller = u -> new ProtectorAI();
         }};
         legionnaireReplica = new FOSUnitType("legionnaire-replica"){{
-            health = 150;
+            health = 75;
             hitSize = 12;
             rotateSpeed = 12f;
             speed = 2f;
@@ -110,7 +110,7 @@ public class FOSUnitTypes {
                     rotate = false;
                     reload = 30f;
                     shootCone = 15f;
-                    bullet = new BasicBulletType(2.5f, 55){{
+                    bullet = new BasicBulletType(2.5f, 22.75f){{
                         width = 7f;
                         height = 9f;
                         lifetime = 45f;
@@ -126,7 +126,7 @@ public class FOSUnitTypes {
             controller = u -> new ProtectorAI();
         }};
         legion = new BossUnitType("legion"){{
-            health = 4500;
+            health = 2250;
             armor = 10;
             hitSize = 25;
             speed = 0.3f;
@@ -158,7 +158,7 @@ public class FOSUnitTypes {
                     }};
                     bullet = new SapBulletType(){{
                         length = 80f;
-                        damage = 60;
+                        damage = 30;
                         hitColor = color = Color.valueOf("bf92f9");
                         sapStrength = 0.6f;
                         despawnEffect = Fx.none;
@@ -182,7 +182,7 @@ public class FOSUnitTypes {
         }};
         //TODO: campaign boss
         citadel = new BossUnitType("citadel"){{
-            health = 7500;
+            health = 3750;
             armor = 30;
             hitSize = 40;
             rotateSpeed = 2f;
@@ -201,7 +201,7 @@ public class FOSUnitTypes {
                     reload = 30f;
                     inaccuracy = 10f;
                     shoot.shots = 6;
-                    bullet = new BasicBulletType(4f, 30f){{
+                    bullet = new BasicBulletType(4f, 15f){{
                         lifetime = 40f;
                         width = 4f; height = 8f;
                         trailWidth = 2f;
@@ -229,7 +229,7 @@ public class FOSUnitTypes {
                         ejectEffect = Fx.smokeCloud;
                         hitSound = Sounds.mud;
                         despawnEffect = Fx.explosion;
-                        splashDamage = 80f;
+                        splashDamage = 40f;
                         splashDamageRadius = 16f;
                         collidesGround = collidesAir = true;
                         collidesTiles = true;
@@ -239,7 +239,7 @@ public class FOSUnitTypes {
         }};
         //TODO: campaign boss
         warden = new BossUnitType("warden"){{
-            health = 9000;
+            health = 4500;
             armor = 15;
             hitSize = 36;
             speed = 0.2f;
@@ -264,8 +264,8 @@ public class FOSUnitTypes {
                     inaccuracy = 5f;
                     bullet = new ArtilleryBulletType(){{
                         width = 14f; height = 18f;
-                        damage = 30f;
-                        splashDamage = 120f;
+                        damage = 15f;
+                        splashDamage = 60f;
                         splashDamageRadius = 20f;
                         speed = 2.5f;
                         lifetime = 100f;
@@ -289,8 +289,8 @@ public class FOSUnitTypes {
                     inaccuracy = 5f;
                     bullet = new ArtilleryBulletType(){{
                         width = 14f; height = 18f;
-                        damage = 30f;
-                        splashDamage = 120f;
+                        damage = 15f;
+                        splashDamage = 60f;
                         splashDamageRadius = 20f;
                         speed = 2.5f;
                         lifetime = 100f;
@@ -316,7 +316,7 @@ public class FOSUnitTypes {
                     inaccuracy = 4f;
                     bullet = new BasicBulletType(){{
                         width = 8f; height = 16f;
-                        damage = 80f;
+                        damage = 40f;
                         speed = 5f;
                         lifetime = 30f;
                         shootSound = Sounds.shoot;
@@ -336,7 +336,7 @@ public class FOSUnitTypes {
                     inaccuracy = 4f;
                     bullet = new BasicBulletType(){{
                         width = 8f; height = 16f;
-                        damage = 80f;
+                        damage = 40f;
                         speed = 5f;
                         lifetime = 30f;
                         shootSound = Sounds.shoot;
@@ -356,7 +356,7 @@ public class FOSUnitTypes {
                     inaccuracy = 4f;
                     bullet = new MissileBulletType(){{
                         width = 8f; height = 14f;
-                        damage = 60f;
+                        damage = 30f;
                         splashDamage = 90f;
                         splashDamageRadius = 28f;
                         speed = 8f;
@@ -372,8 +372,8 @@ public class FOSUnitTypes {
         }};
 
         lord = new LumoniPlayerUnitType("lord"){{
-            health = 2400;
-            armor = 6;
+            health = 1200;
+            armor = 3;
             hitSize = 10;
             speed = 0.8f;
             flying = false;
@@ -386,7 +386,7 @@ public class FOSUnitTypes {
         }};
 
         sergeant = new FOSUnitType("sergeant"){{
-            health = 150;
+            health = 75;
             hitSize = 12;
             speed = 1.2f;
             flying = true;
@@ -398,7 +398,7 @@ public class FOSUnitTypes {
             aiController = InjectorAI::new;
             weapons.add(
                 new InjectorWeapon("fos-injector"){{
-                    bullet = new InjectorBasicBulletType(0, 0.3f, 50, 300, false){{
+                    bullet = new InjectorBasicBulletType(0, 0.3f, 25, 200, false){{
                         homingPower = 1;
                         speed = 1.2f;
                     }};
@@ -409,7 +409,7 @@ public class FOSUnitTypes {
             );
         }};
         lieutenant = new FOSUnitType("lieutenant"){{
-            health = 360;
+            health = 180;
             hitSize = 16;
             speed = 2.4f;
             flying = true;
@@ -426,8 +426,8 @@ public class FOSUnitTypes {
                     rotate = true;
                     reload = 120f;
                     bullet = new InjectorBlastBulletType(0.1f, false){{
-                        splashDamage = 20f;
-                        splashDamageRadius = 32f;
+                        splashDamage = 10f;
+                        splashDamageRadius = 16f;
                     }};
                 }}
             );
@@ -453,8 +453,8 @@ public class FOSUnitTypes {
                     shoot.shotDelay = 10f;
                     inaccuracy = 12f;
                     shootSound = Sounds.missile;
-                    bullet = new InjectorBasicBulletType(0f, 0.95f, 600, 5000, false){{
-                        damage = 25f;
+                    bullet = new InjectorBasicBulletType(0f, 0.95f, 300, 2500, false){{
+                        damage = 12.5f;
                         speed = 2.4f; lifetime = 90f;
                         width = 8f; height = 16f;
                         sprite = "missile";
@@ -480,8 +480,8 @@ public class FOSUnitTypes {
                     shoot.shotDelay = 10f;
                     inaccuracy = 12f;
                     shootSound = Sounds.missile;
-                    bullet = new InjectorBasicBulletType(0f, 0.95f, 600, 5000, false){{
-                        damage = 25f;
+                    bullet = new InjectorBasicBulletType(0f, 0.95f, 300, 2500, false){{
+                        damage = 12.5f;
                         speed = 2.4f; lifetime = 90f;
                         width = 8f; height = 16f;
                         sprite = "missile";
@@ -498,8 +498,9 @@ public class FOSUnitTypes {
                 }}
             );
         }};
+        //TODO: rework, the entire concept of this unit is flawed -S
         general = new FOSUnitType("general"){{
-            health = 6250;
+            health = 3250;
             hitSize = 20;
             speed = 1.5f;
             flying = true;
@@ -509,7 +510,7 @@ public class FOSUnitTypes {
             abilities.add(new HackFieldAbility(hacked, 40f, 0.002f));
         }};
         marshal = new FOSUnitType("marshal"){{
-            health = 18000;
+            health = 9000;
             hitSize = 36;
             speed = 0.8f;
             range = 400f;
@@ -536,7 +537,7 @@ public class FOSUnitTypes {
         }};
 
         smoke = new FOSUnitType("smoke"){{
-            health = 200;
+            health = 100;
             armor = 3f;
             hitSize = 9f;
             rotateSpeed = 3f;
@@ -554,7 +555,7 @@ public class FOSUnitTypes {
             weapons.add(
                 new Weapon(){{
                     shootCone = 360f;
-                    bullet = new ExplosionBulletType(120f, 16f){{
+                    bullet = new ExplosionBulletType(60f, 16f){{
                         targetAir = true;
                         targetGround = false;
                         buildingDamageMultiplier = 0.2f;
@@ -563,7 +564,7 @@ public class FOSUnitTypes {
             );
         }};
         cloud = new FOSUnitType("cloud"){{
-            health = 400;
+            health = 200;
             armor = 4;
             hitSize = 12f;
             rotateSpeed = 2f;
@@ -573,12 +574,12 @@ public class FOSUnitTypes {
             accel = 0.005f;
             drag = 0.2f;
             abilities.add(
-                new MoveLightningAbility(40f, 16, 0.2f, -6f, 3f, 5f, FOSPal.destroyerTrail.cpy().shiftSaturation(-0.3f))
+                new MoveLightningAbility(20f, 16, 0.2f, -6f, 3f, 5f, FOSPal.destroyerTrail.cpy().shiftSaturation(-0.3f))
             );
         }};
 
         radix = new FOSUnitType("radix"){{
-            health = 600;
+            health = 300;
             armor = 1;
             speed = 0.8f;
             hitSize = 12;
@@ -596,7 +597,7 @@ public class FOSUnitTypes {
                     rotate = false;
                     ejectEffect = Fx.none;
                     bullet = new BasicBulletType(){{
-                        damage = 40;
+                        damage = 20;
                         lifetime = 45;
                         speed = 5f;
                         width = height = 10f;
@@ -611,7 +612,7 @@ public class FOSUnitTypes {
                         fragBullets = 9;
                         fragOnHit = true;
                         fragBullet = new LightningBulletType(){{
-                            damage = 60;
+                            damage = 30;
                             lightningLength = 2;
                             lightningLengthRand = 2;
                         }};
@@ -620,7 +621,7 @@ public class FOSUnitTypes {
             );
         }};
         foetus = new FOSUnitType("foetus"){{
-            health = 1100;
+            health = 550;
             armor = 3;
             speed = 0.5f;
             hitSize = 18;
@@ -646,7 +647,7 @@ public class FOSUnitTypes {
                         }}
                     );
                     bullet = new BasicBulletType(){{
-                        damage = 150;
+                        damage = 75;
                         speed = 3;
                         lifetime = 85;
                         width = height = 12;
@@ -664,7 +665,7 @@ public class FOSUnitTypes {
                         intervalBullets = 1;
                         bulletInterval = 4;
                         intervalBullet = new LightningBulletType(){{
-                            damage = 30;
+                            damage = 15;
                             collidesAir = false;
                             ammoMultiplier = 1f;
                             lightningColor = Pal.accent;
@@ -705,7 +706,7 @@ public class FOSUnitTypes {
                     ejectEffect = Fx.none;
 
                     bullet = new BasicBulletType(){{
-                        damage = 160;
+                        damage = 80;
                         speed = 6;
                         lifetime = 45;
                         width = height = 8f;
@@ -723,7 +724,7 @@ public class FOSUnitTypes {
                         fragBullets = 13;
                         fragRandomSpread = 30f;
                         fragBullet = new LightningBulletType(){{
-                            damage = 75;
+                            damage = 37.5f;
                             lightningLength = 6;
                             lightningLengthRand = 6;
                             lightningColor = Pal.accent;
@@ -744,7 +745,7 @@ public class FOSUnitTypes {
                     }};
 
                     bullet = new BasicBulletType(){{
-                        damage = 30;
+                        damage = 15;
                         speed = 3;
                         lifetime = 120;
                         width = 3; height = 3;
@@ -767,7 +768,7 @@ public class FOSUnitTypes {
         }};
 
         assault = new UnitType("assault"){{
-            health = 400;
+            health = 200;
             armor = 2f;
             hovering = true;
             shadowElevation = 0.1f;

@@ -41,7 +41,7 @@ public class FOSBullets {
     }
 
     private static BulletType tLaser(float dmgMultiplier, int lenMultiplier, String color, BulletType frag) {
-        return new LaserBulletType(1500f * dmgMultiplier){{
+        return new LaserBulletType(750f * dmgMultiplier){{
             speed = 0f; //just in case
             lifetime = 1f;
             width = 48f * (1f / lenMultiplier);

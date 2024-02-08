@@ -449,7 +449,7 @@ public class FOSBlocks {
                 );
             }};
             ammo(
-                tin, new BasicBulletType(3f, 20){{
+                tin, new BasicBulletType(3f, 10){{
                     width = 3f; height = 6f;
                     lifetime = 44f;
                     trailColor = frontColor = FOSPal.tin;
@@ -458,7 +458,7 @@ public class FOSBlocks {
                     trailLength = 8;
                     ammoMultiplier = 2f;
                 }},
-                diamond, new BasicBulletType(3f, 35){{
+                diamond, new BasicBulletType(3f, 18){{
                     width = 3f; height = 6f;
                     lifetime = 44f;
                     trailColor = frontColor = FOSPal.diamond;
@@ -469,7 +469,7 @@ public class FOSBlocks {
                     pierce = true;
                     pierceCap = 2;
                 }},
-                silicon, new BasicBulletType(3f, 28){{
+                silicon, new BasicBulletType(3f, 14){{
                     width = 3f; height = 6f;
                     lifetime = 44f;
                     trailColor = frontColor = Pal.unitFront;
@@ -480,7 +480,7 @@ public class FOSBlocks {
                     homingRange = 56f;
                     homingPower = 0.1f;
                 }},
-                vanadium, new BasicBulletType(4f, 40){{
+                vanadium, new BasicBulletType(4f, 20){{
                     width = 3f; height = 6f;
                     lifetime = 44f;
                     rangeChange = 44f;
@@ -490,7 +490,7 @@ public class FOSBlocks {
                     trailLength = 8;
                     ammoMultiplier = 3f;
                 }},
-                nickel, new BasicBulletType(4f, 44){{
+                nickel, new BasicBulletType(4f, 22){{
                     width = 4f; height = 8f;
                     lifetime = 44f;
                     rangeChange = 44f;
@@ -504,7 +504,7 @@ public class FOSBlocks {
                 luminium, new BasicBulletType(){{
                     width = 4f; height = 8f;
                     speed = 4.5f;
-                    damage = 52.5f;
+                    damage = 26.25f;
                     lifetime = 44f;
                     rangeChange = 66f;
                     trailColor = frontColor = FOSPal.luminium1;
@@ -578,7 +578,7 @@ public class FOSBlocks {
             rotateSpeed = 7.5f;
             shootCone = 2f;
             laserWidth = 0.2f;
-            damage = 3f;
+            damage = 1.5f;
             force = 0f;
             retargetTime = 45f;
             targetAir = targetGround = true;
@@ -599,11 +599,11 @@ public class FOSBlocks {
             shootSound = Sounds.shootBig;
             squareSprite = false;
             ammo(
-                tin, new BasicBulletType(2f, 80){{
+                silver, new BasicBulletType(2f, 40){{
                     lifetime = 60f;
                     width = 16f; height = 24f;
-                    backColor = FOSPal.tinBack;
-                    frontColor = trailColor = lightColor = FOSPal.tin;
+                    backColor = FOSPal.silverBack;
+                    frontColor = trailColor = lightColor = FOSPal.silver;
                     trailEffect = Fx.artilleryTrail;
                     trailWidth = 4;
                     trailLength = 20;
@@ -614,12 +614,12 @@ public class FOSBlocks {
                     fragOnHit = true;
                     hitEffect = despawnEffect = Fx.explosion;
                     fragBullets = 6;
-                    fragBullet = new BasicBulletType(0.8f, 10){{
+                    fragBullet = new BasicBulletType(0.8f, 5){{
                         lifetime = 60f * 30; //frags will stay for pretty long
                         drag = 0.024f;
                         width = height = 6f;
-                        backColor = FOSPal.tinBack;
-                        frontColor = trailColor = FOSPal.tin;
+                        backColor = FOSPal.silverBack;
+                        frontColor = trailColor = FOSPal.silver;
                         trailEffect = Fx.artilleryTrail;
                         trailLength = 8;
                         pierceArmor = true;
@@ -630,11 +630,11 @@ public class FOSBlocks {
                         despawnEffect = Fx.none;
                     }};
                 }},
-                silver, new BasicBulletType(2f, 120){{
+                vanadium, new BasicBulletType(2f, 60){{
                     lifetime = 60f;
                     width = 16f; height = 24f;
-                    backColor = FOSPal.silverBack;
-                    frontColor = trailColor = lightColor = FOSPal.silver;
+                    backColor = vanadium.color.cpy().mul(0.8f);
+                    frontColor = trailColor = lightColor = vanadium.color;
                     trailEffect = Fx.artilleryTrail;
                     trailWidth = 4;
                     trailLength = 20;
@@ -645,12 +645,12 @@ public class FOSBlocks {
                     fragOnHit = true;
                     hitEffect = despawnEffect = Fx.explosion;
                     fragBullets = 7;
-                    fragBullet = new BasicBulletType(0.8f, 16){{
+                    fragBullet = new BasicBulletType(0.8f, 8){{
                         lifetime = 60f * 30; //frags will stay for pretty long
                         drag = 0.024f;
                         width = height = 6f;
-                        backColor = FOSPal.silverBack;
-                        frontColor = trailColor = FOSPal.silver;
+                        backColor = vanadium.color.cpy().mul(0.8f);
+                        frontColor = trailColor = vanadium.color;
                         trailEffect = Fx.artilleryTrail;
                         trailLength = 8;
                         pierceArmor = true;
@@ -693,7 +693,7 @@ public class FOSBlocks {
             reload = 90f;
             ammo(
                 nickel, new ShieldPierceBulletType(0.1f){{
-                    damage = 800f;
+                    damage = 400f;
                     shootEffect = Fx.shootBig;
                     hitEffect = Fx.hitBulletColor;
                     smokeEffect = Fx.smokeCloud;
@@ -805,7 +805,7 @@ public class FOSBlocks {
                 };
             }};
             ammo(
-                diamond, new MissileBulletType(5f, 10){{
+                diamond, new MissileBulletType(5f, 5){{
                     lifetime = 56f;
                     width = height = 8f;
                     trailWidth = 3f;
@@ -818,7 +818,7 @@ public class FOSBlocks {
                     splashDamageRadius = 50f;
                     homingPower = 0f;
                     fragBullets = 3;
-                    fragBullet = new BasicBulletType(1f, 5){{
+                    fragBullet = new BasicBulletType(1f, 2.5f){{
                         lifetime = 20f;
                         width = height = 8f;
                         frontColor = FOSPal.diamond;
@@ -852,7 +852,7 @@ public class FOSBlocks {
             shake = 10f;
             outlineIcon = false;
             squareSprite = false;
-            shootType = new OhioBeamBulletType(7200f, 18f);
+            shootType = new OhioBeamBulletType(3600f, 18f);
             lightRadius = 96f;
             drawer = new DrawMulti(
                 new DrawRegion("-bottom"),
@@ -890,7 +890,7 @@ public class FOSBlocks {
             shootDuration = 600f;
             chargeTime = 180f;
             shootType = new DeathRayBulletType(){{
-                damage = 2000f / 60f;
+                damage = 1000f / 60f;
                 raySize = 20f;
             }};
             drawer = new DrawMulti(
@@ -927,7 +927,7 @@ public class FOSBlocks {
             teamAlpha = 0.1f;
             tendrils = 0;
             shots = 1;
-            bullet = new ExplosionBulletType(480f, 20f);
+            bullet = new ExplosionBulletType(240f, 20f);
             requirements(Category.effect, with(copper, 30, vanadium, 40));
         }};
         //endregion
