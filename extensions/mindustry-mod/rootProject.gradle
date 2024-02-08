@@ -1,0 +1,4 @@
+project.ext {
+    mindustryVersion = project.ext.settings?.dependencies?.mindustryVersion ?: "v146"
+    useJitpackForMindustryDependency = project.ext.settings?.dependencies?.useJitpackForMindustryDependency ?: ""
+}

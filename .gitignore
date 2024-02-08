@@ -1,23 +1,15 @@
-### Gradle
-/local.properties
+### Gradle files
+/.gradle/
 build/
 cache/
-/.gradle/
-/artifacts/
-/copy.properties
+javax.annotation.processing.Processor
+artifacts/
 
-### IntelliJ IDEA
-/.idea/
-
-### Aseprite
-*.aseprite
-*.ase
-
-### Secret dev-only stuff
-*/tz/*
+### Local files
+/settings/local.json
 
 ### Generated files
 gen/
-bin/
-javax.annotation.processing.Processor
-core/annotations/src/main/resources/classids.properties
+
+### Idea files
+/.idea/

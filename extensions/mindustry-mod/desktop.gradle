@@ -1,0 +1,3 @@
+project.dependencies {
+    implementation project.parent.project("core")
+}

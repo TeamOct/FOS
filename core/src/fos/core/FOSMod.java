@@ -9,7 +9,6 @@ import arc.scene.ui.ImageButton;
 import arc.scene.ui.layout.*;
 import arc.struct.Seq;
 import arc.util.*;
-import fos.annotations.FOSAnnotations;
 import fos.content.*;
 import fos.controllers.CapsulesController;
 import fos.gen.FosEntityMapping;
@@ -34,10 +33,6 @@ import static arc.Core.settings;
         rootPackage = "fos",
         modInfoPath = "res/mod.json"
 )
-@FOSAnnotations.Settings(map = {
-        "ModPackage", "fos"
-})
-@FOSAnnotations.CreateSoundHost(paths="sounds/loops", extensions="mp3", className="FOSLoops", depth=-1)
 public class FOSMod extends Mod {
     public FOSMod() {
         Log.debug("[FOS] main class construction");

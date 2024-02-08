@@ -24,7 +24,6 @@ public class HackFieldAbility extends Ability {
         this.chance = chance;
     }
 
-    @Override
     public void addStats(Table t) {
         t.add("[lightgray]" + Stat.range.localized() + ": [white]" + range / tilesize + " " + StatUnit.blocks.localized());
         t.row();

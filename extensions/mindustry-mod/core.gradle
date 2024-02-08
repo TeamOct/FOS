@@ -1,0 +1,10 @@
+dependencies {
+    compileOnly "com.github.Anuken.Mindustry${project.parent.ext.useJitpackForMindustryDependency ? "Jitpack" : ""}:core:$project.parent.ext.mindustryVersion"
+}
+
+project.tasks.jar { Jar jar ->
+    jar.from(project.parent.projectDir) { CopySpec copys ->
+        copys.include("mod.json")
+        copys.include("icon.png")
+    }
+}
