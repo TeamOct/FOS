@@ -1,5 +1,5 @@
 dependencies {
-    compileOnly "com.github.Anuken.Mindustry${project.parent.ext.useJitpackForMindustryDependency ? "Jitpack" : ""}:core:$project.parent.ext.mindustryVersion"
+    compileOnly project.parent.ext.mindustryDependence
 }
 
 project.tasks.jar { Jar jar ->
