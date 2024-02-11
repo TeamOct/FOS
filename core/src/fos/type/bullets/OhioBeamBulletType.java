@@ -5,7 +5,8 @@ import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.math.geom.Point2;
 import fos.content.FOSFx;
-import mindustry.content.StatusEffects;
+import mindustry.Vars;
+import mindustry.content.*;
 import mindustry.entities.Effect;
 import mindustry.entities.bullet.ContinuousBulletType;
 import mindustry.gen.*;
@@ -21,6 +22,8 @@ public class OhioBeamBulletType extends ContinuousBulletType {
     public Color color = Pal.slagOrange;
     /** The beam radius. */
     public float width;
+    /** Evaporation effect when a ray lands on liquid. */
+    public Effect evaporationEffect = Fx.smokePuff;
 
     public OhioBeamBulletType(float dps, float width) {
         super();
@@ -80,6 +83,9 @@ public class OhioBeamBulletType extends ContinuousBulletType {
 
             b.vel.setLength(b.type.speed);
             b.vel.setAngle(b.angleTo(t.targetPos));
+
+            //don't reload the turret when it's still shooting.
+            t.reloadCounter = ((Turret) t.block).reload;
         }
     }
 
@@ -99,6 +105,17 @@ public class OhioBeamBulletType extends ContinuousBulletType {
 
     @Override
     public void draw(Bullet b) {
+        // hopefully this doesn't break the effect.
+        evaporationEffect.layer(Layer.debris + 0.1f);
+
+        var centerTile = b.tileOn();
+        centerTile.circle((int) (width / Vars.tilesize + 1), t -> {
+            if (t.floor().isLiquid && !t.solid())
+                evaporationEffect.at(t.worldx(), t.worldy(), t.floor().liquidDrop.gasColor);
+        });
+
+        evaporationEffect.layer(Layer.effect);
+
         Lines.stroke(80f, color);
         drawBeam(color, b.x, b.y, width);
         if (b.owner instanceof Turret.TurretBuild t) {

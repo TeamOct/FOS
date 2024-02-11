@@ -6,7 +6,7 @@ import arc.math.geom.Rect;
 import fos.ai.*;
 import fos.gen.*;
 import fos.graphics.FOSPal;
-import fos.type.abilities.*;
+import fos.type.abilities.UnitResistanceAbility;
 import fos.type.bullets.*;
 import fos.type.units.*;
 import fos.type.units.destroyers.DestroyersUnits;
@@ -26,32 +26,57 @@ import mindustry.type.weapons.RepairBeamWeapon;
 import static fos.content.FOSStatuses.hacked;
 
 public class FOSUnitTypes {
-    public static @Annotations.EntityDef({Mechc.class}) UnitType legion, citadel;
+    public static @Annotations.EntityDef({Mechc.class}) UnitType
+        // MECH BOSSES
+        legion, citadel;
 
-    public static @Annotations.EntityDef({Tankc.class}) UnitType warden;
+    public static @Annotations.EntityDef({Tankc.class}) UnitType
+        // TANK BOSSES
+        warden;
+
+    public static @Annotations.EntityDef({Unitc.class, ElevationMovec.class}) UnitType
+        // HOVERCRAFT (INJECTORS)
+        sergeant, lieutenant, captain;
 
     public static @Annotations.EntityDef({Unitc.class}) UnitType
-        sergeant, lieutenant, captain, general, marshal,
+        // FLYING (DESTROYERS)? TODO
         smoke, cloud,
+
+        // FLYING (LEGION SUMMONS)
         legionnaire, legionnaireReplica;
 
     public static @Annotations.EntityDef({Legsc.class}) UnitType
+        // LEGS (ELIMINATORS)
         radix, foetus, vitarus;
 
-    public static @Annotations.EntityDef({ElevationMovec.class, Unitc.class}) UnitType assault;
+    public static @Annotations.EntityDef({ElevationMovec.class, Unitc.class}) UnitType
+        // HOVERCRAFT (DESTROYERS)? TODO
+        assault;
 
-    public static @Annotations.EntityDef({Payloadc.class, Unitc.class}) UnitType vulture;
+    public static @Annotations.EntityDef({Payloadc.class, Unitc.class}) UnitType
+        // PAYLOAD
+        vulture;
 
-    public static @Annotations.EntityDef({BuildingTetherc.class, Payloadc.class}) UnitType testOverdrive;
+    public static @Annotations.EntityDef({BuildingTetherc.class, Payloadc.class}) UnitType
+        // TETHER
+        testOverdrive;
 
     //TODO submarines
-    public static @Annotations.EntityDef({Submarinec.class}) UnitType subSmall;
+    public static @Annotations.EntityDef({Submarinec.class}) UnitType
+        // SUBMARINES TODO
+        subSmall;
 
-    public static @Annotations.EntityDef({LumoniPlayerUnitc.class, Legsc.class}) UnitType lord;
+    public static @Annotations.EntityDef({LumoniPlayerUnitc.class, Legsc.class}) UnitType
+        // PLAYER UNITS
+        lord;
 
-    public static @Annotations.EntityDef({Bugc.class, Crawlc.class}) UnitType bugSmall, bugMedium;
+    public static @Annotations.EntityDef({Bugc.class, Crawlc.class}) UnitType
+        // CRAWLING INSECTS
+        bugSmall, bugMedium;
 
-    public static @Annotations.EntityDef({Bugc.class, Unitc.class}) UnitType bugFlyingSmall, bugFlyingMedium;
+    public static @Annotations.EntityDef({Bugc.class, Unitc.class}) UnitType
+        // FLYING INSECTS
+        bugFlyingSmall, bugFlyingMedium;
 
     public static void load(){
         DestroyersUnits.load();
@@ -389,7 +414,7 @@ public class FOSUnitTypes {
             health = 75;
             hitSize = 12;
             speed = 1.2f;
-            flying = true;
+            hovering = true;
             omniMovement = true;
             immunities.add(hacked);
             circleTarget = true;
@@ -412,8 +437,7 @@ public class FOSUnitTypes {
             health = 180;
             hitSize = 16;
             speed = 2.4f;
-            flying = true;
-            circleTarget = true;
+            hovering = true;
             omniMovement = true;
             aiController = InjectorAI::new;
             trailColor = FOSPal.hackedBack;
@@ -436,7 +460,7 @@ public class FOSUnitTypes {
             health = 900;
             hitSize = 20;
             speed = 1.1f;
-            flying = true;
+            hovering = true;
             trailColor = FOSPal.hackedBack;
             trailLength = 8;
             aiController = InjectorAI::new;
@@ -494,43 +518,6 @@ public class FOSUnitTypes {
                         hitSound = Sounds.explosion;
                         trailChance = 0.2f;
                         trailColor = FOSPal.hacked;
-                    }};
-                }}
-            );
-        }};
-        //TODO: rework, the entire concept of this unit is flawed -S
-        general = new FOSUnitType("general"){{
-            health = 3250;
-            hitSize = 20;
-            speed = 1.5f;
-            flying = true;
-            aiController = InjectorAI::new;
-            immunities.add(hacked);
-            range = 40f;
-            abilities.add(new HackFieldAbility(hacked, 40f, 0.002f));
-        }};
-        marshal = new FOSUnitType("marshal"){{
-            health = 9000;
-            hitSize = 36;
-            speed = 0.8f;
-            range = 400f;
-            flying = true;
-            immunities.add(hacked);
-            aiController = InjectorAI::new;
-            weapons.add(
-                new InjectorWeapon(){{
-                    x = 0; y = 4;
-                    reload = 1800f;
-                    shoot.firstShotDelay = 300f;
-                    inaccuracy = 0f;
-                    bullet = new InjectorBasicBulletType(1, true){{
-                        chargeEffect = Fx.lancerLaserCharge;
-                        speed = 6f; lifetime = 64f;
-                        width = height = 18f;
-                        homingRange = 280f;
-                        homingPower = 1f;
-                        backColor = FOSPal.hackedBack;
-                        frontColor = FOSPal.hacked;
                     }};
                 }}
             );

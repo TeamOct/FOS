@@ -9,13 +9,13 @@ import mindustry.game.SpawnGroup;
 import mindustry.type.UnitType;
 
 import static fos.content.FOSUnitTypes.*;
-import static mindustry.content.UnitTypes.*;
 
 public class LumoniWaves {
     public static Seq<SpawnGroup> generate(float difficulty, Rand rand, boolean attack) {
         UnitType[][] species = {
-            {dagger, mace, fortress, scepter, reign}, //TODO temp
-            {sergeant, lieutenant, captain, general, marshal}
+            {smoke, cloud, vitarus}, //TODO replace vitarus with a tier 3 eliminator
+            {sergeant, lieutenant, captain},
+            {radix, foetus, vitarus}
         };
 
         //required progression:
@@ -93,7 +93,7 @@ public class LumoniWaves {
         int bossWave = (int)(rand.random(50, 70) * Mathf.lerp(1f, 0.5f, difficulty));
         int bossSpacing = (int)(rand.random(25, 40) * Mathf.lerp(1f, 0.5f, difficulty));
 
-        int bossTier = difficulty < 0.6 ? 3 : 4;
+        int bossTier = /*difficulty < 0.6 ? 3 : 4*/ 2; // TODO: tier 3 is maximum for now
 
         //main boss progression
         out.add(new SpawnGroup(Structs.random(species)[bossTier]){{

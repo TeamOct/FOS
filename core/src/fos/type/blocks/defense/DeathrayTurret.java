@@ -32,9 +32,9 @@ public class DeathrayTurret extends LaserTurret {
     public class DeathrayTurretBuild extends LaserTurretBuild {
         public @Nullable Bullet bullet;
 
-        private final Boolf<Unit> unitCons = e ->
+        protected final Boolf<Unit> unitCons = e ->
             (!Mathf.within(this.x, this.y, e.x, e.y, minRange)) && !e.dead() && unitFilter.get(e) && (e.isGrounded() || targetAir) && (!e.isGrounded() || targetGround);
-        private final Boolf<Building> buildCons = build ->
+        protected final Boolf<Building> buildCons = build ->
             !Mathf.within(this.x, this.y, build.x, build.y, minRange) && targetGround && buildingFilter.get(build);
 
         @Override
@@ -119,7 +119,7 @@ public class DeathrayTurret extends LaserTurret {
             this.bullet = bullet;
         }
 
-        private boolean hasTargets() {
+        protected boolean hasTargets() {
             return Units.closestTarget(team, x, y, range, unitCons, buildCons) != null;
         }
     }

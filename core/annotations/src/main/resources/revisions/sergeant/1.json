@@ -1,0 +1,1 @@
+{version:1,fields:[{name:elevation,type:float},{name:health,type:float},{name:vel,type:arc.math.geom.Vec2},{name:x,type:float},{name:y,type:float}]}

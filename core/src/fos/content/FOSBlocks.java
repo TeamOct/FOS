@@ -854,21 +854,43 @@ public class FOSBlocks {
             squareSprite = false;
             shootType = new OhioBeamBulletType(3600f, 18f);
             lightRadius = 96f;
-            drawer = new DrawMulti(
-                new DrawRegion("-bottom"),
-                new DrawPower("-glow"){{
-                    emptyLightColor = Color.valueOf("30608200");
-                    fullLightColor = Color.valueOf("306082");
-                }},
-                new DrawShape(){{
-                    color = Pal.slagOrange;
-                    sides = 48;
-                    radius = 18f;
-                    useWarmupRadius = true;
-                }},
-                new DrawLiquidRegion(),
-                new DrawDefault()
-            );
+            drawer = new DrawTurret("e-"){{
+                parts.addAll(
+                    new RegionPart("-glow"){{
+                        color = Color.valueOf("306082");
+                        colorTo = Pal.turretHeat;
+                        progress = PartProgress.warmup;
+                    }},
+                    new ShapePart(){{
+                        x = -8; y = -8;
+                        rotation = 45f;
+                        color = Pal.accent;
+                        colorTo = Color.clear;
+                        progress = PartProgress.reload;
+                    }},
+                    new ShapePart(){{
+                        x = -8; y = 8;
+                        rotation = 315f;
+                        color = Pal.accent;
+                        colorTo = Color.clear;
+                        progress = PartProgress.reload;
+                    }},
+                    new ShapePart(){{
+                        x = 8; y = 8;
+                        rotation = 225f;
+                        color = Pal.accent;
+                        colorTo = Color.clear;
+                        progress = PartProgress.reload;
+                    }},
+                    new ShapePart(){{
+                        x = 8; y = -8;
+                        rotation = 135f;
+                        color = Pal.accent;
+                        colorTo = Color.clear;
+                        progress = PartProgress.reload;
+                    }}
+                );
+            }};
             requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, nickel, 1500, luminium, 1500));
         }};
         newJudge = new NewDeathRayTurret("judge2"){{

@@ -2,7 +2,8 @@ package fos.type.units;
 
 import arc.graphics.Color;
 import fos.ai.*;
-import mindustry.content.Fx;
+import fos.content.FOSStatuses;
+import mindustry.content.*;
 import mindustry.gen.Sounds;
 import mindustry.type.UnitType;
 import mindustry.world.meta.BlockFlag;
@@ -20,6 +21,7 @@ public class BugUnitType extends UnitType {
         createWreck = false;
         deathExplosionEffect = Fx.none;
         deathSound = Sounds.noammo;
+        immunities.addAll(FOSStatuses.hacked, StatusEffects.disarmed, StatusEffects.sapped);
         omniMovement = flying;
         this.flying = flying;
         targetAir = flying;
