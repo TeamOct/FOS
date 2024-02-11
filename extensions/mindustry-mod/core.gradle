@@ -1,0 +1,10 @@
+dependencies {
+    compileOnly project.parent.ext.mindustryDependence
+}
+
+project.tasks.jar { Jar jar ->
+    jar.from(project.parent.projectDir) { CopySpec copys ->
+        copys.include("mod.json")
+        copys.include("icon.png")
+    }
+}

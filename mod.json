@@ -7,7 +7,7 @@
     "subtitle": "See you later!",
     "description": "A mod focused on space exploration.",
     "version": "1.1 pre-alpha",
-    "minGameVersion": 143,
+    "minGameVersion": 146,
     "java": true,
     "hidden": false,
     "hideBrowser": true

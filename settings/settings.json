@@ -1,0 +1,33 @@
+{
+    "projectSettings": {
+        "version": "v1.1-dev",
+        "group": "TeamOct/fictional-octo-system"
+    },
+
+    "dependencies": {
+        "useJitpackForMindustryDependency": false,
+        "mindustryVersion": "v146",
+
+        "list": [
+            { "multi-crafter-lib": "com.github.liplum:MultiCrafterLib:v1.7" },
+            { "zelaux-mod-core-anno": "com.github.Zelaux.ZelauxModCore:annotations:74a5591c36b" }
+        ],
+        "projects": {
+            "core": {
+                "implementation": [
+                    "list:multi-crafter-lib"
+                ],
+                "compileOnly": [
+                    "list:zelaux-mod-core-anno"
+                ],
+                "annotationProcessor": [
+                    "list:zelaux-mod-core-anno"
+                ]
+            }
+        }
+    },
+
+    "extensions": [
+        "mindustry-mod", "fos"
+    ]
+}

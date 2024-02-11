@@ -1,0 +1,12 @@
+tasks.withType(JavaCompile) { JavaCompile task ->
+    task.doFirst {
+        project.copy {
+            from(project.parent.file("mod.json"))
+            into(project.sourceSets.main.resources.srcDirs.first())
+        }
+    }
+
+    task.doLast {
+        project.delete(project.parent.ext.child(project.sourceSets.main.resources.srcDirs.first(), "mod.json"))
+    }
+}

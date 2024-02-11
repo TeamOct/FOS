@@ -18,7 +18,6 @@ public class UnitResistanceAbility extends Ability {
         this.resistance = resistance;
     }
 
-    @Override
     public void addStats(Table t) {
         t.add("[lightgray]" + Stat.unitType.localized() + ": [white]" + unitType.localizedName);
         t.row();

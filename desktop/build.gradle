@@ -1,6 +1,0 @@
-dependencies {
-    implementation project(":core")
-
-    compileOnly project(":annotations")
-    annotationProcessor project(":annotations")
-}
