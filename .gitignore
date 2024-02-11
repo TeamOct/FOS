@@ -11,5 +11,9 @@ artifacts/
 ### Generated files
 gen/
 
-### Idea files
+### IntelliJ IDEA files
 /.idea/
+
+### Aseprite files
+*.aseprite
+*.ase
