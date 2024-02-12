@@ -13,7 +13,7 @@ import static fos.content.FOSUnitTypes.*;
 public class LumoniWaves {
     public static Seq<SpawnGroup> generate(float difficulty, Rand rand, boolean attack) {
         UnitType[][] species = {
-            {smoke, cloud, vitarus}, //TODO replace vitarus with a tier 3 eliminator
+            {assault, abrupt, brunt},
             {sergeant, lieutenant, captain},
             {radix, foetus, vitarus}
         };

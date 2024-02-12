@@ -6,10 +6,9 @@ import arc.math.geom.Rect;
 import fos.ai.*;
 import fos.gen.*;
 import fos.graphics.FOSPal;
-import fos.type.abilities.UnitResistanceAbility;
+import fos.type.abilities.*;
 import fos.type.bullets.*;
 import fos.type.units.*;
-import fos.type.units.destroyers.DestroyersUnits;
 import fos.type.units.weapons.InjectorWeapon;
 import mindustry.ai.types.GroundAI;
 import mindustry.annotations.Annotations;
@@ -36,22 +35,21 @@ public class FOSUnitTypes {
 
     public static @Annotations.EntityDef({Unitc.class, ElevationMovec.class}) UnitType
         // HOVERCRAFT (INJECTORS)
-        sergeant, lieutenant, captain;
+        sergeant, lieutenant, captain,
+
+        // HOVERCRAFT (DESTROYERS)
+        assault, abrupt;
 
     public static @Annotations.EntityDef({Unitc.class}) UnitType
-        // FLYING (DESTROYERS)? TODO
-        smoke, cloud,
-
         // FLYING (LEGION SUMMONS)
-        legionnaire, legionnaireReplica;
+        legionnaire, legionnaireReplica,
+
+        // FLYING (DESTROYERS)
+        brunt;
 
     public static @Annotations.EntityDef({Legsc.class}) UnitType
         // LEGS (ELIMINATORS)
         radix, foetus, vitarus;
-
-    public static @Annotations.EntityDef({ElevationMovec.class, Unitc.class}) UnitType
-        // HOVERCRAFT (DESTROYERS)? TODO
-        assault;
 
     public static @Annotations.EntityDef({Payloadc.class, Unitc.class}) UnitType
         // PAYLOAD
@@ -79,7 +77,7 @@ public class FOSUnitTypes {
         bugFlyingSmall, bugFlyingMedium;
 
     public static void load(){
-        DestroyersUnits.load();
+        //DestroyersUnits.load();
 
         legionnaire = new FOSUnitType("legionnaire"){{
             health = 100;
@@ -434,7 +432,7 @@ public class FOSUnitTypes {
             );
         }};
         lieutenant = new FOSUnitType("lieutenant"){{
-            health = 180;
+            health = 360;
             hitSize = 16;
             speed = 2.4f;
             hovering = true;
@@ -520,48 +518,6 @@ public class FOSUnitTypes {
                         trailColor = FOSPal.hacked;
                     }};
                 }}
-            );
-        }};
-
-        smoke = new FOSUnitType("smoke"){{
-            health = 100;
-            armor = 3f;
-            hitSize = 9f;
-            rotateSpeed = 3f;
-            omniMovement = false;
-            circleTarget = true;
-            speed = 4f;
-            flying = true;
-            trailLength = 32;
-            trailColor = FOSPal.destroyerTrail;
-            abilities.add(
-                new LiquidExplodeAbility(){{
-                    liquid = Liquids.slag;
-                }}
-            );
-            weapons.add(
-                new Weapon(){{
-                    shootCone = 360f;
-                    bullet = new ExplosionBulletType(60f, 16f){{
-                        targetAir = true;
-                        targetGround = false;
-                        buildingDamageMultiplier = 0.2f;
-                    }};
-                }}
-            );
-        }};
-        cloud = new FOSUnitType("cloud"){{
-            health = 200;
-            armor = 4;
-            hitSize = 12f;
-            rotateSpeed = 2f;
-            omniMovement = false;
-            trailColor = engineColor = FOSPal.destroyerTrail;
-            speed = 5f;
-            accel = 0.005f;
-            drag = 0.2f;
-            abilities.add(
-                new MoveLightningAbility(20f, 16, 0.2f, -6f, 3f, 5f, FOSPal.destroyerTrail.cpy().shiftSaturation(-0.3f))
             );
         }};
 
@@ -754,7 +710,7 @@ public class FOSUnitTypes {
             speed = 1.2f;
         }};
 
-        assault = new UnitType("assault"){{
+        assault = new FOSUnitType("assault"){{
             health = 200;
             armor = 2f;
             hovering = true;
@@ -780,6 +736,122 @@ public class FOSUnitTypes {
                 layerOffset = -0.001f;
                 color = Color.valueOf("bf92f9");
             }});
+            weapons.add(
+                new Weapon("fos-assault-dumpster-device"){{
+                    //TODO: make a burst rocket launcher with 6 missiles later
+                    x = 3; y = 0;
+                    rotate = false;
+                    mirror = alternate = true;
+                    shoot.shots = 2;
+                    shoot.shotDelay = 20;
+                    reload = 80f;
+                    bullet = new MissileBulletType(){{
+                        damage = 50;
+                        speed = 5; lifetime = 40;
+                        homingPower = 0.1f;
+                        homingDelay = 10f;
+                        backColor = trailColor = Pal.sapBulletBack;
+                        frontColor = Pal.reactorPurple2;
+                        trailLength = 12;
+                        buildingDamageMultiplier = 0.3f;
+                    }};
+                }}
+            );
+        }};
+        abrupt = new FOSUnitType("abrupt"){{
+            health = 800;
+            armor = 4;
+            speed = 1.5f;
+            hovering = true;
+            drag = 0.06f;
+            accel = 0.2f;
+            rotateSpeed = 5f;
+
+            abilities.add(new MoveEffectAbility(0f, -7f, Pal.sapBulletBack, Fx.missileTrailShort, 4f) {{
+                teamColor = true;
+            }});
+
+            parts.add(new HoverPart() {{
+                //TODO: waiting for sprites ...
+                x = 3.9f;
+                y = -4;
+                mirror = true;
+                radius = 6f;
+                phase = 90f;
+                stroke = 2f;
+                layerOffset = -0.001f;
+                color = Color.valueOf("bf92f9");
+            }});
+
+            weapons.add(
+                new Weapon("fos-abrupt-bomber"){{
+                    x = 0; y = -5;
+                    mirror = false;
+                    reload = 240f;
+                    shoot.shots = 5;
+                    inaccuracy = 22.5f;
+                    shootSound = Sounds.artillery;
+                    bullet = new ArtilleryBulletType(){{
+                        width = height = 12;
+                        speed = 3f;
+                        lifetime = 60f;
+                        hitEffect = Fx.fallSmoke;
+                        backColor = trailColor = Pal.sapBulletBack;
+                        frontColor = Pal.reactorPurple2;
+                        trailLength = 4;
+                        buildingDamageMultiplier = 0.3f;
+
+                        fragOnHit = false;
+                        fragBullets = 1;
+                        fragRandomSpread = 0;
+                        fragBullet = new BasicBulletType(){{
+                            width = height = 12;
+                            shrinkX = shrinkY = -2;
+                            sprite = "shell";
+                            speed = 1f;
+                            drag = 0.0083f;
+                            lifetime = 120f;
+                            splashDamage = 200;
+                            splashDamageRadius = 16f;
+                            buildingDamageMultiplier = 0.3f;
+                            backColor = Pal.sapBulletBack;
+                            frontColor = Pal.reactorPurple2;
+                            hitEffect = Fx.massiveExplosion;
+                            hitSound = Sounds.boom;
+                        }};
+                    }};
+                }}
+            );
+        }};
+        brunt = new FOSUnitType("brunt"){{
+            health = 1500;
+            armor = 22.5f;
+            speed = 0.8f;
+            rotateSpeed = 2f;
+            flying = true;
+
+            abilities.add(new DamageFieldAbility(120f, 1f){{
+                borderColor = Pal.sapBulletBack.cpy().a(0.4f);
+            }});
+
+            weapons.add(
+                new Weapon(){{
+                    shootCone = 360f;
+                    range = 32f;
+                    shoot.firstShotDelay = 300f;
+                    bullet = new BombBulletType(){{
+                        splashDamage = 1000f;
+                        splashDamageRadius = 80f;
+                        status = StatusEffects.slow;
+                        statusDuration = 300f;
+                        hittable = false;
+                        killShooter = true;
+                        instantDisappear = true;
+                        hitEffect = Fx.reactorExplosion;
+                        buildingDamageMultiplier = 0.3f;
+                    }};
+                }}
+            );
         }};
 
         vulture = new CarrierUnitType("vulture"){{
