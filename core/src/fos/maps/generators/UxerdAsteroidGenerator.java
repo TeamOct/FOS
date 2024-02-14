@@ -19,15 +19,18 @@ import static fos.content.FOSBlocks.*;
 public class UxerdAsteroidGenerator extends BlankPlanetGenerator {
     /** A fallback floor if RNG fails to roll a floor. Should not happen under normal circumstances. */
     public Block defaultFloor = Blocks.stone;
-    /** All (except player spawn one) asteroid tiles. For use in {@code basegen}. */
-    public Seq<Tile> asteroids = new Seq<>();
+
 
     /** Enemy base generator. */
     public final UxerdBaseGenerator basegen = new UxerdBaseGenerator();
+
     public int amount = 28, octaves = 2;
     public float radMin = 32f, radMax = 59f, persistence = 0.4f, scale = 30f, mag = 0.46f, thresh = 0.8f;
     public float elithiteChance = 0f, elbiumChance = 0f, nethratiumChance = 0f;
     public float tinScl = 1f, silverScl = 1f, lithiumScl = 1f;
+
+    /** All (except player spawn one) asteroid tiles. For use in {@code basegen}. */
+    private final Seq<Tile> asteroids = new Seq<>();
 
     void asteroid(int ax, int ay, int rad) {
         Floor floor = (

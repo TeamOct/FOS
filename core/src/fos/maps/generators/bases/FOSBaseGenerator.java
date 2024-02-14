@@ -20,6 +20,7 @@ import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.meta.BuildVisibility;
 
 import static mindustry.Vars.*;
+import static mindustry.content.Blocks.deepwater;
 
 /**
  * Enemy base generator class for modded planets.
@@ -123,7 +124,7 @@ public abstract class FOSBaseGenerator {
     }
 
     /**
-     * Processes every tile surrounding a tile declared in the {@code cons} lambda.
+     * Processes every tile in a 160 world-unit radius surrounding a tile declared in the {@code cons} lambda.
      * @param cons A lambda with a {@code Tile} parameter
      */
     protected void pass(Cons<Tile> cons) {
@@ -195,6 +196,18 @@ public abstract class FOSBaseGenerator {
             if(posc != null){
                 posc.get(realX, realY);
             }
+
+            // java sucks
+            final boolean[] invalidTiles = {false};
+
+            tile.block.iterateTaken(realX, realY, (ex, ey) -> {
+                var t = world.tile(ex, ey);
+                if (t.dangerous() || !t.floor().hasSurface() || t.floor() == deepwater)
+                    invalidTiles[0] = true;
+            });
+
+            //do not place a schematic if an invalid tile is found.
+            if (invalidTiles[0]) return;
         }
 
         if(part.required instanceof Item item){

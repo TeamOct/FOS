@@ -49,7 +49,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         tile.block = tile.floor.asFloor().wall;
         if (tile.block == sandWall) tile.block = air;
 
-        if (Ridged.noise3d(seed, position.x, position.y, position.z, 22) > 0.18f) {
+        if (Ridged.noise3d(seed, position.x, position.y, position.z, 22) > 0.12f) {
             tile.block = air;
         }
     }
@@ -120,6 +120,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                             b;
     }
 
+    //TODO: unused
     Block getAlt(Block b) {
         return content.block(b.name + "-alt") != null ? content.block(b.name + "-alt") : b;
     }
@@ -153,6 +154,15 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
             genTile(pos, gen);
             tiles.set(x, y, new Tile(x, y, gen.floor, gen.overlay, gen.block));
+        });
+
+        terrain(stoneWall, 200f, 1f, 1.7f);
+
+        pass((x, y) -> {
+            if (block != stoneWall || block == air) return;
+
+            Vec3 pos = sector.rect.project((float)x / tiles.width, (float)y / tiles.height);
+            block = getBlock(pos);
         });
 
         class Room {
@@ -194,7 +204,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
         float constraint = 1.3f;
         float radius = width / 2f / Mathf.sqrt3;
-        int rooms = rand.random(6, 8);
+        int rooms = rand.random(2, 4);
         Seq<Room> roomseq = new Seq<>();
 
         for (int i = 0; i < rooms; i++){
@@ -223,7 +233,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
             if (i + angleStep >= 360){
                 spawn = new Room(cx, cy, rand.random(10, 18));
                 if (tiles.get(spawn.x, spawn.y).floor() == deepwater) {
-                    int rad = rand.random(48, 100);
+                    int rad = rand.random(64, 150);
                     island(spawn.x, spawn.y, rad);
                     islands.put(spawn, rad);
                 }
@@ -235,7 +245,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                     Tmp.v1.set(cx - width / 2f, cy - height / 2f).rotate(180 + enemyOffset).add(width / 2f, height / 2f);
                     Room espawn = new Room((int)Math.floor(Tmp.v1.x), (int)Math.floor(Tmp.v1.y), rand.random(10, 16));
                     if (tiles.get(espawn.x, espawn.y).floor() == deepwater) {
-                        int rad = rand.random(24, 50);
+                        int rad = rand.random(32, 75);
                         island(espawn.x, espawn.y, rad);
                         islands.put(espawn, rad);
                     }
@@ -387,14 +397,15 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
         Schematics.placeLaunchLoadout(spawn.x, spawn.y);
 
-        enemies.each(espawn -> {
-            tiles.getn(espawn.x, espawn.y).setBlock(bugSpawn, FOSTeam.bessin);
-            tiles.getn(espawn.x, espawn.y).circle(7, t -> t.setFloor(hiveFloor.asFloor()));
-            tiles.getn(espawn.x, espawn.y).circle(11, t -> {
-                if (rand.chance(0.35f)) t.setFloor(hiveFloor.asFloor());
+        if (state.rules.waveTeam == FOSTeam.bessin)
+            enemies.each(espawn -> {
+                tiles.getn(espawn.x, espawn.y).setBlock(bugSpawn, FOSTeam.bessin);
+                tiles.getn(espawn.x, espawn.y).circle(7, t -> t.setFloor(hiveFloor.asFloor()));
+                tiles.getn(espawn.x, espawn.y).circle(11, t -> {
+                    if (rand.chance(0.35f)) t.setFloor(hiveFloor.asFloor());
+                });
+                tiles.getn(espawn.x, espawn.y).setOverlay(Blocks.spawn);
             });
-            tiles.getn(espawn.x, espawn.y).setOverlay(Blocks.spawn);
-        });
 
         if (sector.hasEnemyBase()){
             basegen.generate(tiles, enemies.map(r -> tiles.getn(r.x, r.y)), tiles.get(spawn.x, spawn.y), Team.sharded, sector, difficulty);
@@ -483,7 +494,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                 if (tiles.in(x, y) && Mathf.dst(x, y, ix, iy) / rad + Simplex.noise2d(seed, 2, 0.4f, 1f / 30f, x, y) * 0.41f < 0.75f) {
                     tiles.getn(x, y).setFloor(floor);
 
-                    if (tiles.in(x, y) && Simplex.noise2d(seed + 44, 2, 0.4f, 1f / 30f, x, y) < 0.75f) {
+                    if (tiles.in(x, y) && Simplex.noise2d(seed + 44, 2, 0.4f, 1f / 30f, x, y) < 0.3f) {
                         tiles.getn(x, y).setBlock(floor.wall);
                     }
                 }
