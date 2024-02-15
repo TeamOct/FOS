@@ -24,7 +24,7 @@ import mindustry.mod.Mod;
 import mindustry.mod.Mods.LoadedMod;
 import mindustry.ui.*;
 import mindustry.ui.dialogs.PlanetDialog;
-import mmc.annotations.ModAnnotations;
+import mma.annotations.ModAnnotations;
 
 import static arc.Core.settings;
 

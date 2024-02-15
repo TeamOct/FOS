@@ -10,7 +10,7 @@
 
         "list": [
             { "multi-crafter-lib": "com.github.liplum:MultiCrafterLib:v1.7" },
-            { "zelaux-mod-core-anno": "com.github.Zelaux.ZelauxModCore:annotations:-SNAPSHOT" }
+            { "zelaux-mod-core-anno": "com.github.Zelaux.ZelauxModCore:annotations:74a5591c36b" }
         ],
         "projects": {
             "core": {

@@ -6,12 +6,15 @@ import arc.math.Mathf;
 import arc.math.geom.Point2;
 import fos.content.FOSFx;
 import mindustry.Vars;
-import mindustry.content.*;
+import mindustry.content.StatusEffects;
 import mindustry.entities.Effect;
 import mindustry.entities.bullet.ContinuousBulletType;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.world.blocks.defense.turrets.Turret;
+
+import static arc.graphics.g2d.Draw.color;
+import static arc.math.Angles.randLenVectors;
 
 /**
  * A death ray fired by the Judge turret. Currently, only works properly with turrets.
@@ -23,7 +26,15 @@ public class OhioBeamBulletType extends ContinuousBulletType {
     /** The beam radius. */
     public float width;
     /** Evaporation effect when a ray lands on liquid. */
-    public Effect evaporationEffect = Fx.smokePuff;
+    // TODO: zelauxmodcore is broken, replace with Fx.smokePuff reference later
+    public Effect evaporationEffect = new Effect(30, e -> {
+        color(e.color);
+
+        randLenVectors(e.id, 6, 4f + 30f * e.finpow(), (x, y) -> {
+            Fill.circle(e.x + x, e.y + y, e.fout() * 3f);
+            Fill.circle(e.x + x / 2f, e.y + y / 2f, e.fout());
+        });
+    });
 
     public OhioBeamBulletType(float dps, float width) {
         super();
