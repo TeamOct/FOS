@@ -97,8 +97,9 @@ public class LumoniTechTree {
             // UNDERGROUND DRILLS
             node(tinDrill, () ->
                 node(silverDrill, () -> {
-                    //TODO: T2 drill base
-                    soontm();
+                    node(diamondDrill, () -> {
+                        soontm();
+                    });
                 })
             );
 

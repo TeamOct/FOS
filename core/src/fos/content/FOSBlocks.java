@@ -21,11 +21,10 @@ import mindustry.content.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
-import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
-import mindustry.world.*;
+import mindustry.world.Block;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
@@ -1029,36 +1028,13 @@ public class FOSBlocks {
             liquidCapacity = 20f;
             requirements(Category.liquid, with(tin, 1, silver, 1));
         }};
-        pumpjack = new Pump("pumpjack"){
-            {
-                scaledHealth = 60;
-                size = 3;
-                pumpAmount = 0.25f;
-                liquidCapacity = 45f;
-                requirements(Category.liquid, with(tin, 150, silicon, 50, copper, 100, vanadium, 75));
-            }
-
-            //only placeable on arkycite
-            @Override
-            protected boolean canPump(Tile tile) {
-                return tile != null && tile.floor().liquidDrop == arkycite;
-            }
-
-            @Override
-            public boolean canPlaceOn(Tile tile, Team team, int rotation) {
-                if(isMultiblock()){
-                    Liquid last = null;
-                    for(Tile other : tile.getLinkedTilesAs(this, tempTiles)){
-                        if(other.floor().liquidDrop == null) continue;
-                        if(other.floor().liquidDrop != last && last != null) return false;
-                        last = other.floor().liquidDrop;
-                    }
-                    return last == arkycite;
-                }else{
-                    return canPump(tile);
-                }
-            }
-        };
+        pumpjack = new Pump("pumpjack"){{
+            scaledHealth = 60;
+            size = 3;
+            pumpAmount = 0.25f;
+            liquidCapacity = 45f;
+            requirements(Category.liquid, with(tin, 150, silicon, 50, copper, 100, vanadium, 75));
+        }};
         //endregion
         //region power
         tinWire = new PowerWire("tin-wire"){{
