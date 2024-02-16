@@ -201,7 +201,7 @@ public class LumoniTechTree {
             // SECTORS
             node(crashLanding, () -> {
                 node(ruins, Seq.with(new Objectives.SectorComplete(crashLanding)), () -> {
-                    soontm();
+                    node(intruders, Seq.with(new Objectives.SectorComplete(ruins)), () -> {});
                     soontm();
                     soontm();
                 });
