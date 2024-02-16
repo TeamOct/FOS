@@ -26,7 +26,7 @@ public class OhioBeamBulletType extends ContinuousBulletType {
     /** The beam radius. */
     public float width;
     /** Evaporation effect when a ray lands on liquid. */
-    // TODO: zelauxmodcore is broken, replace with Fx.smokePuff reference later
+    // TODO: ZMC is broken, replace with Fx.smokePuff reference later
     public Effect evaporationEffect = new Effect(30, e -> {
         color(e.color);
 
@@ -34,7 +34,7 @@ public class OhioBeamBulletType extends ContinuousBulletType {
             Fill.circle(e.x + x, e.y + y, e.fout() * 3f);
             Fill.circle(e.x + x / 2f, e.y + y / 2f, e.fout());
         });
-    });
+    }).layer(Layer.debris + 0.1f);
 
     public OhioBeamBulletType(float dps, float width) {
         super();
@@ -116,16 +116,11 @@ public class OhioBeamBulletType extends ContinuousBulletType {
 
     @Override
     public void draw(Bullet b) {
-        // hopefully this doesn't break the effect.
-        evaporationEffect.layer(Layer.debris + 0.1f);
-
         var centerTile = b.tileOn();
         centerTile.circle((int) (width / Vars.tilesize + 1), t -> {
             if (t.floor().isLiquid && !t.solid())
                 evaporationEffect.at(t.worldx(), t.worldy(), t.floor().liquidDrop.gasColor);
         });
-
-        evaporationEffect.layer(Layer.effect);
 
         Lines.stroke(80f, color);
         drawBeam(color, b.x, b.y, width);

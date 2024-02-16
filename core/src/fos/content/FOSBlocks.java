@@ -21,6 +21,7 @@ import mindustry.content.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
+import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
@@ -47,31 +48,31 @@ import static mindustry.type.ItemStack.with;
 
 public class FOSBlocks {
     public static Block
-    //crafting
+    // CRAFTING
     resourceExtractor, cuberiumSynthesizer, sublimator, siliconSynthesizer, brassSmelter, arkyciteRefinery,
 
-    //production
+    // PRODUCTION
     crudeDrill, improvedDrill, proficientDrill,
     rockCrusher, tinDrill, silverDrill, diamondDrill, vanadiumDrill,
     oreDetectorSmall, oreDetector, oreDetectorReinforced, oreDetectorOverclocked,
 
-    //distribution
+    // DISTRIBUTION
     spaceDuct, spaceRouter, spaceBridge, itemCatapult, tinRouter, tinJunction, tinBridge, tinBelt, liquidConveyor,
 
-    //liquids
+    // FLUIDS
     fluidPipe, pumpjack,
 
-    //power
+    // POWER
     tinWire, tinWirePole, copperWire, copperWirePole, brassWire, brassWirePole, windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
-        copperBattery, brassBattery,
+    copperBattery, brassBattery,
 
-    //defense
+    // DEFENSE
     tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
     helix, sticker, dot, particulator, pulse, breakdown, thunder, cluster, judge, newJudge,
     matrixShieldProj,
     landMine,
 
-    //environment & ores
+    // ENVIRONMENT & ORES
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
     tokiciteFloor,
@@ -80,16 +81,16 @@ public class FOSBlocks {
     oreTin, oreTinSurface, oreSilver, oreLithium, oreDiamond, oreVanadium, oreIridium, oreLuminium,
     hiveFloor, bugSpawn,
 
-    //props
+    // PROPS
     softbush,
 
-    //units
+    // UNITS
     upgradeCenter, hovercraftFactory, droidConstructor, draugFactory,
 
-    //storage
+    // STORAGE & CORES
     coreColony, coreFortress, coreCity, coreMetropolis, lightUnloader,
 
-    //special
+    // SPECIAL
     nukeLauncher, bigBoy, cliffDetonator, orbitalAccelerator, mechResearchCore, bioResearchCore, soontm;
 
     public static void load() {
@@ -578,7 +579,7 @@ public class FOSBlocks {
             rotateSpeed = 7.5f;
             shootCone = 2f;
             laserWidth = 0.2f;
-            damage = 1.5f;
+            damage = 2f;
             force = 0f;
             retargetTime = 45f;
             targetAir = targetGround = true;
@@ -1037,10 +1038,25 @@ public class FOSBlocks {
                 requirements(Category.liquid, with(tin, 150, silicon, 50, copper, 100, vanadium, 75));
             }
 
-            //only placeable on oil
+            //only placeable on arkycite
             @Override
             protected boolean canPump(Tile tile) {
-                return tile != null && tile.floor().liquidDrop == oil;
+                return tile != null && tile.floor().liquidDrop == arkycite;
+            }
+
+            @Override
+            public boolean canPlaceOn(Tile tile, Team team, int rotation) {
+                if(isMultiblock()){
+                    Liquid last = null;
+                    for(Tile other : tile.getLinkedTilesAs(this, tempTiles)){
+                        if(other.floor().liquidDrop == null) continue;
+                        if(other.floor().liquidDrop != last && last != null) return false;
+                        last = other.floor().liquidDrop;
+                    }
+                    return last == arkycite;
+                }else{
+                    return canPump(tile);
+                }
             }
         };
         //endregion
@@ -1289,6 +1305,7 @@ public class FOSBlocks {
         }};
         oreVanadium = new UndergroundOreBlock("ore-vanadium"){{
             drop = vanadium;
+            variants = 3;
         }};
         oreIridium = new UndergroundOreBlock("ore-iridium"){{
             drop = nickel;
@@ -1390,18 +1407,18 @@ public class FOSBlocks {
         coreCity = new DetectorCoreBlock("core-city"){{
             health = 4600;
             size = 4;
-            unitCapModifier = 7;
+            unitCapModifier = 8;
             itemCapacity = 5000;
-            unitType = FOSUnitTypes.lord;
+            unitType = FOSUnitTypes.king;
             squareSprite = false;
-            requirements(Category.effect, with(tin, 2500, silver, 2000, diamond, 1500));
+            requirements(Category.effect, with(tin, 2500, silver, 2000, diamond, 750, silicon, 2500, vanadium, 1500));
         }};
         coreMetropolis = new DetectorCoreBlock("core-metropolis"){{
             health = 8000;
             size = 5;
-            unitCapModifier = 10;
+            unitCapModifier = 12;
             itemCapacity = 8000;
-            unitType = FOSUnitTypes.lord;
+            unitType = FOSUnitTypes.king; //TODO: replace
             squareSprite = false;
             requirements(Category.effect, with(tin, 4500, silver, 3500, diamond, 3000));
         }};

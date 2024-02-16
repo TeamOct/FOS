@@ -5,24 +5,25 @@ import mindustry.game.Objectives;
 import mindustry.type.ItemStack;
 
 import static fos.content.FOSBlocks.*;
+import static fos.content.FOSFluids.tokicite;
 import static fos.content.FOSItems.*;
 import static fos.content.FOSSectors.*;
 import static fos.content.FOSUnitTypes.legion;
 import static fos.content.FOSWeaponModules.*;
 import static mindustry.content.Items.*;
-import static mindustry.content.Liquids.water;
+import static mindustry.content.Liquids.*;
 import static mindustry.content.TechTree.*;
 
 public class LumoniTechTree {
     public static void load() {
         FOSPlanets.lumoni.techTree = nodeRoot("@planet.fos-lumoni.name", coreFortress, true, () -> {
             // CORES
-            soontm();
-/*
             node(coreCity, () ->
+                soontm()
+/*
                 node(coreMetropolis)
-            );
 */
+            );
 
             // TRANSPORT. TODO
             node(tinBelt, () -> {
@@ -37,10 +38,7 @@ public class LumoniTechTree {
             node(windTurbine, () ->
                 node(tinWire, () ->
                     node(copperWire, () ->
-                        soontm()
-/*
                         node(brassWire)
-*/
                     )
                 )
             );
@@ -50,12 +48,10 @@ public class LumoniTechTree {
                 node(tinWallLarge);
                 node(diamondWall, () -> {
                     node(diamondWallLarge);
-                    soontm();
-/*
-                    node(vanadiumWall, () ->
-                        node(vanadiumWallLarge)
-                    );
-*/
+                    node(vanadiumWall, () -> {
+                        node(vanadiumWallLarge);
+                        soontm();
+                    });
                 });
             });
 
@@ -78,21 +74,24 @@ public class LumoniTechTree {
 
             // TURRETS
             node(helix, Seq.with(new Objectives.OnSector(ruins)), () -> {
-                soontm();
-/*
                 node(sticker, () -> {
+                    soontm();
+/*
                     node(particulator, () ->
                         node(cluster));
+*/
                 });
                 node(dot, () -> {
+                    soontm();
+/*
                     node(pulse);
                     node(thunder, () -> {
                         //TODO: make them researchable at the same time
                         node(judge);
                         node(newJudge);
                     });
-                });
 */
+                });
             });
 
             // UNDERGROUND DRILLS
@@ -103,27 +102,26 @@ public class LumoniTechTree {
                 })
             );
 
+            // FLUID PUMP(S?)
+            node(pumpjack);
+
             // ORE DETECTORS
             node(oreDetector, () -> {
-                soontm();
-/*
                 node(oreDetectorOverclocked);
                 node(oreDetectorReinforced);
-*/
             });
 
             // FACTORIES. TODO
             node(siliconSynthesizer, Seq.with(new Objectives.OnSector(ruins)), () -> {
-                soontm();
-/*
-                node(brassSmelter);
-                node(arkyciteRefinery, */
-                /* TODO: sector handicap *//*
-                 () -> {
-                    // TODO: a certain other refinery block
+                node(brassSmelter, () -> {
                     soontm();
-                });
+/*
+                    node(arkyciteRefinery, (sector handicap), () -> {
+                        // TODO: a certain other refinery block
+                        soontm();
+                    });
 */
+                });
             });
 
             // CORE UNIT WEAPON MODULES
@@ -172,15 +170,14 @@ public class LumoniTechTree {
                 nodeProduce(silver, () ->
                     nodeProduce(diamond, () -> {
                         nodeProduce(silicon, () -> {});
-
-                        soontm();
-/*
                         nodeProduce(vanadium, () ->
+                            soontm()
+/*
                             nodeProduce(nickel, () ->
                                 nodeProduce(luminium, () -> {})
                             )
-                        );
 */
+                        );
                         soontm();
 /*
                         nodeProduce(sulphur, Seq.with(new Research(arkyciteRefinery)), () -> {});
@@ -188,24 +185,17 @@ public class LumoniTechTree {
                     })
                 );
                 nodeProduce(copper, () ->
-                    soontm()
-/*
                     nodeProduce(brass, () -> {})
-*/
                 );
             });
 
             // FLUIDS
             nodeProduce(water, () -> {
-                soontm();
-                soontm();
-/*
-                nodeProduce(tokicite, () -> {
-                });
+                nodeProduce(tokicite, () -> {});
                 nodeProduce(arkycite, () -> {
-                    nodeProduce(oil, () -> {});
+                    soontm();
+                    //nodeProduce(oil, () -> {});
                 });
-*/
             });
 
             // SECTORS

@@ -66,7 +66,7 @@ public class FOSUnitTypes {
 
     public static @Annotations.EntityDef({LumoniPlayerUnitc.class, Legsc.class}) UnitType
         // PLAYER UNITS
-        lord;
+        lord, king;
 
     public static @Annotations.EntityDef({Bugc.class, Crawlc.class}) UnitType
         // CRAWLING INSECTS
@@ -404,8 +404,19 @@ public class FOSUnitTypes {
             mineTier = 2;
             mineSpeed = 8f;
             buildSpeed = 1f;
-            outlineColor = Color.valueOf("2b2f36");
             weapons.add(FOSWeaponModules.standard1.weapons);
+        }};
+        king = new LumoniPlayerUnitType("king"){{
+            health = 2000;
+            armor = 6;
+            hitSize = 15;
+            speed = 1.5f;
+            flying = false;
+            canBoost = false;
+            mineTier = 4;
+            mineSpeed = 10f;
+            buildSpeed = 2f;
+            weapons.add(FOSWeaponModules.standard2.weapons);
         }};
 
         sergeant = new FOSUnitType("sergeant"){{
@@ -555,7 +566,7 @@ public class FOSUnitTypes {
                         fragBullets = 9;
                         fragOnHit = true;
                         fragBullet = new LightningBulletType(){{
-                            damage = 30;
+                            damage = 10;
                             lightningLength = 2;
                             lightningLengthRand = 2;
                         }};
