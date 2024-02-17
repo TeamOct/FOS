@@ -383,43 +383,51 @@ public class FOSBlocks {
         tinWall = new Wall("tin-wall"){{
             scaledHealth = 400;
             size = 1;
+            buildCostMultiplier = 3f;
             requirements(Category.defense, with(tin, 6));
         }};
         tinWallLarge = new Wall("tin-wall-large"){{
             scaledHealth = 400;
             size = 2;
+            buildCostMultiplier = 3f;
             requirements(Category.defense, with(tin, 24));
         }};
         diamondWall = new Wall("diamond-wall"){{
             scaledHealth = 625;
             size = 1;
+            buildCostMultiplier = 3f;
             requirements(Category.defense, with(diamond, 6));
         }};
         diamondWallLarge = new Wall("diamond-wall-large"){{
             scaledHealth = 625;
             size = 2;
+            buildCostMultiplier = 3f;
             requirements(Category.defense, with(diamond, 24));
         }};
         vanadiumWall = new Wall("vanadium-wall"){{
             scaledHealth = 800;
             size = 1;
+            buildCostMultiplier = 3f;
             requirements(Category.defense, with(vanadium, 6));
         }};
         vanadiumWallLarge = new Wall("vanadium-wall-large"){{
             scaledHealth = 800;
             size = 2;
+            buildCostMultiplier = 3f;
             requirements(Category.defense, with(vanadium, 24));
         }};
         cuberiumWall = new Wall("cuberium-wall"){{
             scaledHealth = 600;
             size = 1;
             absorbLasers = true;
+            buildCostMultiplier = 3f;
             requirements(Category.defense, with(cuberium, 6));
         }};
         cuberiumWallLarge = new Wall("cuberium-wall-large"){{
             scaledHealth = 600;
             size = 2;
             absorbLasers = true;
+            buildCostMultiplier = 3f;
             requirements(Category.defense, with(cuberium, 24));
         }};
 
