@@ -26,7 +26,7 @@ public class ProtectorAI extends AIController {
 
     @Override
     public void updateTargeting() {
-        if (protectTarget == null || protectTarget.dead()) {
+        if (protectTarget == null || protectTarget.dead() || !protectTarget.isValid()) {
             protectTarget = Units.closest(unit.team, unit.x, unit.y, u -> u.isPlayer() || u.type == FOSUnitTypes.legion);
         }
 
