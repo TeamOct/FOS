@@ -8,7 +8,7 @@ import static fos.content.FOSBlocks.*;
 import static fos.content.FOSFluids.tokicite;
 import static fos.content.FOSItems.*;
 import static fos.content.FOSSectors.*;
-import static fos.content.FOSUnitTypes.legion;
+import static fos.content.FOSUnitTypes.*;
 import static fos.content.FOSWeaponModules.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.Liquids.*;
@@ -59,11 +59,22 @@ public class LumoniTechTree {
             });
 
             // UNIT FACTORIES. TODO
-            soontm();
-/*
-            node(hovercraftFactory, () ->
-                node(vulture));
-*/
+            node(destroyerFactory, Seq.with(new Objectives.SectorComplete(intruders)), () -> {
+                node(assault, ItemStack.with(), Seq.with(new Objectives.Research(destroyerFactory)), () -> {
+                    soontm();
+                });
+            });
+            node(eliminatorFactory, ItemStack.with(), Seq.with(new Objectives.Research(destroyerFactory)), () -> {
+                node(radix, ItemStack.with(), Seq.with(new Objectives.Research(eliminatorFactory)), () -> {
+                    soontm();
+                });
+            });
+            node(injectorFactory, ItemStack.with(), Seq.with(new Objectives.Research(destroyerFactory)), () -> {
+                node(sergeant, ItemStack.with(), Seq.with(new Objectives.Research(injectorFactory)), () -> {
+                    soontm();
+                });
+            });
+            soontm(); // reconstructor, maybe?
 
             // DRILLS
             node(crudeDrill, () -> {
@@ -205,7 +216,9 @@ public class LumoniTechTree {
             // SECTORS
             node(crashLanding, () -> {
                 node(ruins, Seq.with(new Objectives.SectorComplete(crashLanding)), () -> {
-                    node(intruders, Seq.with(new Objectives.SectorComplete(ruins)), () -> {});
+                    node(intruders, Seq.with(new Objectives.SectorComplete(ruins)), () -> {
+                        soontm();
+                    });
                     soontm();
                     soontm();
                 });

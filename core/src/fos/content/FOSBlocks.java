@@ -84,7 +84,7 @@ public class FOSBlocks {
     softbush,
 
     // UNITS
-    upgradeCenter, hovercraftFactory, droidConstructor, draugFactory,
+    upgradeCenter, destroyerFactory, eliminatorFactory, injectorFactory, droidConstructor, draugFactory,
 
     // STORAGE & CORES
     coreColony, coreFortress, coreCity, coreMetropolis, lightUnloader,
@@ -1343,13 +1343,31 @@ public class FOSBlocks {
                 // -top region is drawn inside draw() method
             );
         }};
-        hovercraftFactory = new UnitFactory("hovercraft-factory"){{
+        destroyerFactory = new UnitFactory("destroyer-factory"){{
             scaledHealth = 120;
             size = 3;
             consumePower(5f);
-            requirements(Category.units, with(tin, 100, silver, 75));
+            requirements(Category.units, with(tin, 100, silver, 75, silicon, 150));
             plans.add(
-                new UnitPlan(FOSUnitTypes.vulture, 20f * 60, with(tin, 35))
+                new UnitPlan(FOSUnitTypes.assault, 20f * 60, with(silicon, 15, silver, 15))
+            );
+        }};
+        eliminatorFactory = new UnitFactory("eliminator-factory"){{
+            scaledHealth = 120;
+            size = 3;
+            consumePower(5f);
+            requirements(Category.units, with(tin, 100, silver, 75, silicon, 150));
+            plans.add(
+                new UnitPlan(FOSUnitTypes.radix, 20f * 60, with(silicon, 15, diamond, 10))
+            );
+        }};
+        injectorFactory = new UnitFactory("injector-factory"){{
+            scaledHealth = 120;
+            size = 3;
+            consumePower(5f);
+            requirements(Category.units, with(tin, 100, silver, 75, silicon, 150));
+            plans.add(
+                new UnitPlan(FOSUnitTypes.sergeant, 20f * 60, with(silicon, 15, tin, 20))
             );
         }};
         droidConstructor = new OverdriveDroneCenter("droid-constructor"){{

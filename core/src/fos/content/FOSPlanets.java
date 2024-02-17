@@ -87,7 +87,7 @@ public class FOSPlanets {
                 r.waves = false;
                 r.defaultTeam = FOSTeam.corru;
                 r.waveTeam = Team.sharded;
-                r.bannedBlocks.addAll(container, hovercraftFactory);
+                r.bannedBlocks.addAll(container, injectorFactory);
                 r.hideBannedBlocks = true;
             };
             meshLoader = () -> {
