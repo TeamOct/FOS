@@ -90,7 +90,7 @@ public class FOSBlocks {
     coreColony, coreFortress, coreCity, coreMetropolis, lightUnloader,
 
     // SPECIAL
-    nukeLauncher, bigBoy, cliffDetonator, orbitalAccelerator, mechResearchCore, bioResearchCore, soontm;
+    nukeLauncher, bigBoy, cliffDetonator, surfaceDetonator, orbitalAccelerator, mechResearchCore, bioResearchCore, soontm;
 
     public static void load() {
         //region crafting
@@ -1124,6 +1124,10 @@ public class FOSBlocks {
             size = 1;
             consumePowerBuffered(3000);
             baseExplosiveness = 1f;
+            drawer = new DrawMulti(
+                new DrawPower(),
+                new DrawDefault()
+            );
             requirements(Category.power, with(tin, 5, copper, 15));
         }};
         brassBattery = new Battery("brass-battery"){{
@@ -1131,6 +1135,10 @@ public class FOSBlocks {
             size = 2;
             consumePowerBuffered(20000);
             baseExplosiveness = 3f;
+            drawer = new DrawMulti(
+                new DrawPower(),
+                new DrawDefault()
+            );
             requirements(Category.power, with(tin, 25, brass, 60));
         }};
         //endregion
@@ -1437,6 +1445,11 @@ public class FOSBlocks {
             health = 40;
             size = 1;
             requirements(Category.effect, with(titanium, 75, lithium, 150));
+        }};
+        surfaceDetonator = new SurfaceExplosive("surface-detonator"){{
+            health = 160;
+            size = 3;
+            requirements(Category.effect, with(copper, 50));
         }};
         orbitalAccelerator = new OrbitalAccelerator("orbital-accelerator"){{
             health = 5000;

@@ -2,18 +2,16 @@ package fos.type.blocks.special;
 
 import arc.util.Time;
 import mindustry.Vars;
-import mindustry.content.Blocks;
-import mindustry.content.Fx;
-import mindustry.gen.Building;
-import mindustry.gen.Sounds;
+import mindustry.content.*;
+import mindustry.gen.*;
 import mindustry.graphics.Drawf;
-import mindustry.world.Block;
-import mindustry.world.Tile;
+import mindustry.world.*;
 
 import static mindustry.Vars.world;
 
 public class CliffExplosive extends Block {
     public float range = 16f;
+
     public CliffExplosive(String name) {
         super(name);
         solid = true;

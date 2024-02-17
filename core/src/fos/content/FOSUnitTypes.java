@@ -33,7 +33,7 @@ public class FOSUnitTypes {
         // TANK BOSSES
         warden;
 
-    public static @Annotations.EntityDef({Unitc.class, ElevationMovec.class}) UnitType
+    public static @Annotations.EntityDef({FOSHovercraftc.class, Unitc.class}) UnitType
         // HOVERCRAFT (INJECTORS)
         sergeant, lieutenant, captain,
 

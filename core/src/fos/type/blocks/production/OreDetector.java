@@ -187,7 +187,7 @@ public class OreDetector extends Block {
                         angle += 360;
                     }
 
-                    if (angle >= c1 && angle <= c2) {
+                    if (angle >= c1 && angle <= c2 && !detectedOres.contains(ore)) {
                         detectedOres.add(ore);
                     }
                 }
