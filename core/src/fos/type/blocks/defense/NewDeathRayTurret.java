@@ -5,8 +5,7 @@ import arc.func.Floatp;
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
-import arc.math.geom.Geometry;
-import arc.math.geom.Vec2;
+import arc.math.geom.*;
 import arc.util.*;
 import arc.util.io.*;
 import mindustry.Vars;
@@ -87,7 +86,7 @@ public class NewDeathRayTurret extends PowerTurret {
     public void setBars() {
         super.setBars();
         addBar("charge", (b) -> new Bar(
-                Core.bundle.get("blocks." + name + "-charge-bar"), Pal.ammo,
+                Core.bundle.get("block." + name + ".charge-bar"), Pal.ammo,
                 () -> b instanceof NewDeathRayTurretBuild t ? t.charge : 0f
         ));
     }
