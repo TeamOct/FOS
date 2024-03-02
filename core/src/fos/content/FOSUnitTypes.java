@@ -432,13 +432,19 @@ public class FOSUnitTypes {
             aiController = InjectorAI::new;
             weapons.add(
                 new InjectorWeapon("fos-injector"){{
-                    bullet = new InjectorBasicBulletType(0, 0.3f, 25, 200, false){{
-                        homingPower = 1;
-                        speed = 1.2f;
-                    }};
                     x = 0; y = 0;
-                    reload = 60 * 5;
+                    reload = 60;
                     ejectEffect = Fx.casing1;
+                    shootSound = Sounds.bolt;
+                    bullet = new InjectorBasicBulletType(0, 0.3f, 25, 200, false){{
+                        homingPower = 0.2f;
+                        width = 4f; height = 6f;
+                        damage = 10;
+                        speed = 6f;
+                        lifetime = 50f;
+                        trailColor = FOSPal.hackedBack;
+                        trailLength = 6;
+                    }};
                 }}
             );
         }};
@@ -838,6 +844,7 @@ public class FOSUnitTypes {
             health = 1500;
             armor = 22.5f;
             speed = 0.8f;
+            hitSize = 24f;
             rotateSpeed = 2f;
             flying = true;
 

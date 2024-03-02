@@ -5,10 +5,12 @@ import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.struct.Seq;
 import arc.util.Structs;
+import arc.util.io.*;
 import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.gen.*;
 import mindustry.graphics.*;
+import mindustry.io.TypeIO;
 import mindustry.logic.LAccess;
 import mindustry.type.*;
 import mindustry.ui.*;
@@ -66,7 +68,7 @@ public class V5UnitFactory extends UnitBlock {
                 () -> unitType == null ? "[lightgray]" + Iconc.cancel :
                     Core.bundle.format("bar.unitcap",
                         Fonts.getUnicodeStr(unitType.name),
-                        e.spawned,
+                        e.spawned.size,
                         maxSpawn
                     ),
                 () -> Pal.power,
@@ -82,13 +84,6 @@ public class V5UnitFactory extends UnitBlock {
 
         public float fraction() {
             return progress / produceTime;
-        }
-
-        // some logic crap but I guess I'll add that here too
-        @Override
-        public Object senseObject(LAccess sensor) {
-            if(sensor == LAccess.config) return unitType;
-            return super.senseObject(sensor);
         }
 
         @Override
@@ -141,13 +136,15 @@ public class V5UnitFactory extends UnitBlock {
                 return;
             }
 
-            if (efficiency > 0 && payload == null) {
+            if (efficiency > 0 && payload == null && spawned.size < maxSpawn) {
                 time += edelta() * speedScl * Vars.state.rules.unitBuildSpeed(team);
                 progress += edelta() * Vars.state.rules.unitBuildSpeed(team);
                 speedScl = Mathf.lerpDelta(speedScl, 1f, 0.05f);
             } else {
                 speedScl = Mathf.lerpDelta(speedScl, 0f, 0.05f);
             }
+
+            moveOutPayload();
 
             if (progress >= produceTime) {
                 progress %= 1f;
@@ -164,9 +161,9 @@ public class V5UnitFactory extends UnitBlock {
                 spawned.add(unit);
                 Events.fire(new EventType.UnitCreateEvent(payload.unit, this));
 
-                progress = Mathf.clamp(progress, 0, produceTime);
-            } else {
                 progress = 0f;
+            } else {
+                progress = Mathf.clamp(progress, 0, produceTime);
             }
         }
 
@@ -184,6 +181,28 @@ public class V5UnitFactory extends UnitBlock {
         public boolean acceptItem(Building source, Item item) {
             return items.get(item) < getMaximumAccepted(item) &&
                 Structs.contains(unitRequirements, stack -> stack.item == item);
+        }
+
+        @Override
+        public void write(Writes write) {
+            super.write(write);
+
+            write.f(progress);
+            write.i(Math.max(spawned.size, 0));
+            for (int i = 0; i < spawned.size; i++) {
+                TypeIO.writeUnit(write, spawned.get(i));
+            }
+        }
+
+        @Override
+        public void read(Reads read, byte revision) {
+            super.read(read);
+
+            progress = read.f();
+            int units = read.i();
+            for (int i = 0; i < units; i++) {
+                spawned.add(TypeIO.readUnit(read));
+            }
         }
     }
 }

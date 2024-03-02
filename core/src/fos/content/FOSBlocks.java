@@ -15,6 +15,7 @@ import fos.type.blocks.production.*;
 import fos.type.blocks.special.*;
 import fos.type.blocks.storage.DetectorCoreBlock;
 import fos.type.blocks.units.*;
+import fos.type.bullets.PointLaserBulletType;
 import fos.type.bullets.*;
 import fos.type.draw.DrawOutputLiquids;
 import mindustry.content.*;
@@ -579,20 +580,28 @@ public class FOSBlocks {
             }};
             requirements(Category.turret, with(tin, 75, silver, 100));
         }};
-        dot = new TractorBeamTurret("dot"){{
+        dot = new PowerTurret("dot"){{
             scaledHealth = 480;
             size = 2;
-            range = 150f;
+            range = 225f;
             rotateSpeed = 7.5f;
             shootCone = 2f;
-            laserWidth = 0.2f;
-            damage = 2f;
-            force = 0f;
-            retargetTime = 45f;
             targetAir = targetGround = true;
-            laserColor = Color.scarlet;
             squareSprite = false;
+            shootSound = Sounds.tractorbeam;
+            shootEffect = Fx.lancerLaserShoot;
             consumePower(2f);
+            shootType = new PointLaserBulletType(){{
+                lifetime = 10f;
+                intervalBullets = 1;
+                bulletInterval = 8f;
+                intervalBullet = new LightningBulletType(){{
+                    lightningLength = 6;
+                    lightningLengthRand = 4;
+                    damage = 3f;
+                    lightningColor = Color.scarlet.cpy().mul(1.2f);
+                }};
+            }};
             requirements(Category.turret, with(silver, 50, diamond, 75, vanadium, 50));
         }};
         particulator = new ItemTurret("particulator"){{
@@ -1387,7 +1396,7 @@ public class FOSBlocks {
             maxSpawn = 1;
             unitType = UnitTypes.mono;
             produceTime = 1200f;
-            requirements(Category.units, BuildVisibility.debugOnly, with(tin, 150, silver, 250));
+            requirements(Category.units, BuildVisibility.sandboxOnly, with(tin, 150, silver, 250));
         }};
         //endregion
         //region storage

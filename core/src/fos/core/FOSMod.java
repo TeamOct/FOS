@@ -124,6 +124,7 @@ public class FOSMod extends Mod {
         Reflect.<Seq<Prov<Pathfinder.Flowfield>>>get(Vars.pathfinder, "fieldTypes").add(() -> pt);
         Events.on(EventType.WorldLoadEvent.class, e -> {
             if (!Vars.net.client()) {
+                // FIXME: sometimes breaks for unknown reason
                 Reflect.invoke(Vars.pathfinder, "preloadPath", new Object[]{pt}, Pathfinder.Flowfield.class);
             }
         });
