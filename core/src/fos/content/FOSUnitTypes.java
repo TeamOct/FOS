@@ -72,7 +72,7 @@ public class FOSUnitTypes {
         // CRAWLING INSECTS
         bugSmall, bugMedium;
 
-    public static @Annotations.EntityDef({Bugc.class, Unitc.class}) UnitType
+    public static @Annotations.EntityDef({Bugc.class}) UnitType
         // FLYING INSECTS
         bugFlyingSmall, bugFlyingMedium;
 

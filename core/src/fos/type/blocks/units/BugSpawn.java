@@ -4,7 +4,7 @@ import arc.Events;
 import arc.graphics.g2d.Draw;
 import arc.math.Mathf;
 import fos.content.FOSUnitTypes;
-import mindustry.Vars;
+import fos.core.FOSVars;
 import mindustry.game.EventType;
 import mindustry.gen.Unit;
 import mindustry.graphics.Layer;
@@ -20,6 +20,7 @@ public class BugSpawn extends UnitBlock {
         super(name);
         solid = false;
         canOverdrive = false;
+        rotate = false;
         buildVisibility = BuildVisibility.editorOnly;
     }
 
@@ -33,7 +34,9 @@ public class BugSpawn extends UnitBlock {
 
         @Override
         public void updateTile() {
-            progress += delta();
+            if (evo() < 0.05f) return;
+
+            progress += delta() * (1 + Math.max(0, evo() - 0.25f));
 
             if (progress >= interval) {
                 Unit unit = getBug().create(team);
@@ -47,21 +50,6 @@ public class BugSpawn extends UnitBlock {
             }
         }
 
-        @SuppressWarnings("ConstantConditions")
-        private UnitType getBug() {
-            UnitType[][] units = {
-                //I actually made ACTUAL bugs spawn, yay!
-                {FOSUnitTypes.bugSmall, FOSUnitTypes.bugMedium}
-            };
-
-            //unit tier depends on two factors: current wave count and sector difficulty
-            int curTier = Mathf.round(Mathf.floor(
-                Vars.state.rules.sector != null ? ((Vars.state.wave / 20f) + Vars.state.rules.sector.threat / 2) / 2
-                : Vars.state.wave / 20f));
-            if (curTier > units[0].length) curTier = units[0].length;
-            return units[Mathf.random(units.length - 1)][curTier];
-        }
-
         @Override
         public void onDestroyed() {
             super.onDestroyed();
@@ -70,6 +58,26 @@ public class BugSpawn extends UnitBlock {
             for (int i = 0; i < Mathf.random(3, 6); i++) {
                 getBug().spawn(this.team, x + Mathf.random(-20f, 20f), y + Mathf.random(-20f, 20f));
             }
+        }
+
+
+        @SuppressWarnings("ConstantConditions")
+        private UnitType getBug() {
+            UnitType[][] units = {
+                //I actually made ACTUAL bugs spawn, yay!
+                {FOSUnitTypes.bugSmall, FOSUnitTypes.bugMedium}
+            };
+
+            //unit tier depends on evolution, and a bit of random chance for +1 tier
+            int curTier = evo() < 0.5f ? Mathf.ceil(evo() / 0.25f) : 3;
+            if (Mathf.chance(evo())) curTier++;
+
+            if (curTier > units[0].length) curTier = units[0].length;
+            return units[Mathf.random(units.length - 1)][curTier - 1];
+        }
+
+        private float evo() {
+            return FOSVars.evoController.getTotalEvo();
         }
     }
 }

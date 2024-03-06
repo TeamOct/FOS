@@ -1,9 +1,12 @@
 package fos.type.units.comp;
 
 import arc.util.io.*;
+import mindustry.Vars;
 import mindustry.annotations.Annotations;
+import mindustry.entities.EntityCollisions;
 import mindustry.gen.*;
 import mindustry.io.TypeIO;
+import mindustry.world.blocks.defense.Wall;
 
 @Annotations.Component
 public abstract class BugComp implements Unitc {
@@ -15,6 +18,17 @@ public abstract class BugComp implements Unitc {
     transient boolean invading = false;
     /** Whether it is supposed to stand still at the moment. */
     transient boolean idle = false;
+
+    public boolean legsSolidOrWall(int x, int y) {
+        var tile = Vars.world.tile(x, y);
+        return tile == null || EntityCollisions.legsSolid(x, y) || tile.block() instanceof Wall;
+    }
+
+    @Override
+    @Annotations.Replace
+    public EntityCollisions.SolidPred solidity() {
+        return this::legsSolidOrWall;
+    }
 
     @Override
     public void write(Writes write) {

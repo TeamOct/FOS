@@ -1,6 +1,7 @@
 package fos.ai;
 
 import arc.math.Mathf;
+import fos.core.FOSVars;
 import fos.gen.Bugc;
 import mindustry.Vars;
 import mindustry.content.Blocks;
@@ -20,7 +21,7 @@ public class BugAI extends AIController implements TargetableAI {
         if (bug.isFollowed()) {
             int followers = Units.count(unit.x, unit.y, 240f, u -> u instanceof Bugc);
 
-            if (followers >= 5 + Mathf.floor(Vars.state.wave / 2f)) {
+            if (followers >= 5 + evo() * 30) {
                 bug.invading(true);
             }
         } else {
@@ -41,7 +42,7 @@ public class BugAI extends AIController implements TargetableAI {
         Tile tile = unit.tileOn();
         Tile targetTile = tile;
 
-        if (bug.invading()) {
+        if (bug.invading() && evo() >= 0.1f) {
             target = findTarget(unit.x, unit.y, 1600f, false, true);
 
             if (target != null) {
@@ -105,5 +106,9 @@ public class BugAI extends AIController implements TargetableAI {
         }
 
         return Units.closestTarget(unit.team, x, y, range, u -> false, b -> true);
+    }
+
+    private float evo() {
+        return FOSVars.evoController.getTotalEvo();
     }
 }

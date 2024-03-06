@@ -9,7 +9,7 @@ import mindustry.world.Tile;
 
 @Annotations.Component
 public abstract class FOSHovercraftComp implements Velc, Posc, Flyingc, Hitboxc {
-    // TODO: pathfinding avoids cliff blocks and I have no idea how to fix this
+    // FIXME: pathfinding avoids cliff blocks and I have no idea how to fix this
     public boolean nonCliffSolid(int x, int y) {
         Tile tile = Vars.world.tile(x, y);
         return tile == null || (tile.solid() && tile.block() != Blocks.cliff);

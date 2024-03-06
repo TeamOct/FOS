@@ -34,6 +34,9 @@ import static arc.Core.settings;
         modInfoPath = "res/mod.json"
 )
 public class FOSMod extends Mod {
+    /** Only for debugging! */
+    public FOSVars vars = new FOSVars();
+
     public FOSMod() {
         Log.debug("[FOS] main class construction");
         if (FOSVars.debug)

@@ -4,7 +4,7 @@ import arc.Core;
 import arc.math.geom.Vec2;
 import arc.struct.Seq;
 import fos.content.FOSFluids;
-import fos.controllers.CapsulesController;
+import fos.controllers.*;
 import fos.files.InternalFileTree;
 import fos.graphics.FOSOreRenderer;
 import fos.ui.ResearchCoreDialog;
@@ -63,6 +63,9 @@ public class FOSVars {
 
     /** Mod reference **/
     public static Mods.LoadedMod mod;
+
+    /** Insect evolution controller. */
+    public static EvolutionController evoController = new EvolutionController();
 
     public static void load() {
         researchCoreDialog = new ResearchCoreDialog();
