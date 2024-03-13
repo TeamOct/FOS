@@ -547,6 +547,15 @@ public class FOSUnitTypes {
             targetAir = false;
 
             legCount = 3;
+            legLength = 8f;
+            legContinuousMove = true;
+            legExtension = -2f;
+            legBaseOffset = 3f;
+            legMaxLength = 1.1f;
+            legMinLength = 0.2f;
+            legLengthScl = 0.96f;
+            legForwardScl = 1.1f;
+            legGroupSize = 1;
 
             weapons.add(
                 new Weapon("fos-radix-weapon"){{
@@ -589,6 +598,14 @@ public class FOSUnitTypes {
             targetAir = false;
 
             legCount = 3;
+            legGroupSize = 1;
+            legStraightness = 0.4f;
+            baseLegStraightness = 0.5f;
+            legLength = 9f;
+            legForwardScl = 0.45f;
+            legMoveSpace = 0.8f;
+            rippleScale = 2f;
+            legExtension = -5f;
 
             weapons.add(
                 new Weapon("fos-foetus-weapon"){{
@@ -656,6 +673,16 @@ public class FOSUnitTypes {
             speed = 0.4f;
             hitSize = 22;
             rotateSpeed = 1.5f;
+
+            legCount = 4;
+            legGroupSize = 2;
+            legStraightness = 0.6f;
+            baseLegStraightness = 0.5f;
+            legLength = 11f;
+            legForwardScl = 0.45f;
+            legMoveSpace = 1f;
+            rippleScale = 2f;
+            legExtension = -5f;
 
             weapons.add(
                 new Weapon("fos-vitarus-weapon"){{
