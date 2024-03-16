@@ -3,6 +3,7 @@ package fos.type.blocks.distribution;
 import arc.Core;
 import arc.graphics.g2d.*;
 import arc.math.geom.Geometry;
+import fos.graphics.ConveyorSpritesPacker;
 import mindustry.gen.Unit;
 import mindustry.graphics.Layer;
 import mindustry.world.blocks.distribution.Conveyor;
@@ -18,12 +19,18 @@ public class PipeConveyor extends Conveyor {
 
     @Override
     public void load() {
-        super.load();
+        String prefix = ConveyorSpritesPacker.getPrefix();
+        ConveyorSpritesPacker.generateRegions(Core.atlas.find(prefix + "-tin-belt"), prefix);
 
         pipeRegions = new TextureRegion[5];
         for (int i = 0; i < pipeRegions.length; i++) {
             pipeRegions[i] = Core.atlas.find(name + "-top-" + i);
         }
+
+        fullIcon = Core.atlas.find(name + "-full");
+        uiIcon = Core.atlas.find(name + "-ui");
+
+        super.load();
     }
 
     @SuppressWarnings("unused")

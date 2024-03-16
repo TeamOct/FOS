@@ -1040,15 +1040,7 @@ public class FOSBlocks {
             junctionReplacement = tinJunction;
             bridgeReplacement = tinBridge;
             requirements(Category.distribution, with(tin, 1));
-        }
-
-            @Override
-            public void load() {
-                String prefix = ConveyorSpritesPacker.getPrefix();
-                ConveyorSpritesPacker.generateRegions(Core.atlas.find(prefix + "-tin-belt"), prefix);
-                super.load();
-            }
-        };
+        }};
         //endregion
         //region liquids
         fluidPipe = new Conduit("fluid-pipe"){{

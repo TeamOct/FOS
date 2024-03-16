@@ -62,11 +62,9 @@ public class ConveyorSpritesPacker { // TODO rename
             }
         }
 
-/*
         TextureAtlas.AtlasRegion mainRegion = new TextureAtlas.AtlasRegion(generatedRegions.first());
         mainRegion.name = baseName;
         generatedRegions.add(mainRegion);
-*/
 
         Log.info("  generated regions @", generatedRegions);
 
