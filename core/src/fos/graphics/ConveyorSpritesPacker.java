@@ -4,10 +4,8 @@ import arc.Core;
 import arc.graphics.g2d.TextureAtlas;
 import arc.struct.Seq;
 import arc.util.Log;
-import arc.util.Reflect;
 import fos.core.FOSVars;
 import mindustry.Vars;
-import mindustry.graphics.MultiPacker;
 
 import java.lang.reflect.Field;
 
@@ -64,9 +62,11 @@ public class ConveyorSpritesPacker { // TODO rename
             }
         }
 
+/*
         TextureAtlas.AtlasRegion mainRegion = new TextureAtlas.AtlasRegion(generatedRegions.first());
         mainRegion.name = baseName;
         generatedRegions.add(mainRegion);
+*/
 
         Log.info("  generated regions @", generatedRegions);
 
