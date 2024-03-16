@@ -62,7 +62,7 @@ public class FOSBlocks {
     fluidPipe, pumpjack,
 
     // POWER
-    tinWire, tinWirePole, copperWire, copperWirePole, brassWire, brassWirePole, windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
+    tinWire, copperWire, brassWire, windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     copperBattery, brassBattery,
 
     // DEFENSE
@@ -1072,43 +1072,16 @@ public class FOSBlocks {
             consumePower(2f / 60f);
             requirements(Category.power, with(tin, 1));
         }};
-        tinWirePole = new PowerWire("tin-wire-pole"){{
-            health = 30;
-            consumesPower = true;
-            consumePower(10f / 60f);
-            maxNodes = 2;
-            laserRange = 5;
-            conveyorPlacement = false;
-            requirements(Category.power, with(tin, 25));
-        }};
         copperWire = new PowerWire("copper-wire"){{
             health = 5;
             consumesPower = true;
             consumePower(0.5f / 60f);
             requirements(Category.power, with(copper, 2));
         }};
-        copperWirePole = new PowerWire("copper-wire-pole"){{
-            health = 30;
-            consumesPower = true;
-            consumePower(5f / 60f);
-            maxNodes = 2;
-            laserRange = 10;
-            conveyorPlacement = false;
-            requirements(Category.power, with(copper, 30));
-        }};
         brassWire = new PowerWire("brass-wire"){{
             health = 8;
             //does not consume any power
             requirements(Category.power, with(brass, 1));
-        }};
-        brassWirePole = new PowerWire("brass-wire-pole"){{
-            health = 30;
-            consumesPower = true;
-            //still no power consumption
-            maxNodes = 2;
-            laserRange = 15;
-            conveyorPlacement = false;
-            requirements(Category.power, with(brass, 25));
         }};
         windTurbine = new WindTurbine("wind-turbine"){{
             health = 480;
