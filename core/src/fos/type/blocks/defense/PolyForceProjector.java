@@ -1,8 +1,8 @@
 package fos.type.blocks.defense;
 
-import arc.Events;
+import arc.*;
 import arc.func.Cons;
-import arc.graphics.Color;
+import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.math.geom.*;
@@ -23,6 +23,7 @@ public class PolyForceProjector extends ForceProjector {
     public float[] polygon = new float[]{0, 0};
     public float shockwaveDelay = 40f;
     public float shockwaveDuration = 20f;
+
     protected Vec2[] polyLines = new Vec2[]{};
     protected final Cons<Bullet> customShieldConsumer = bullet -> {
         if(bullet.team != paramEntity.team && bullet.type.absorbable && Intersector.isInPolygon(((PolyForceBuild) paramEntity).hitbox, new Vec2(bullet.x, bullet.y))){
@@ -33,11 +34,21 @@ public class PolyForceProjector extends ForceProjector {
         }
     };
 
+    public TextureRegion top1;
+    public TextureRegion top2;
+
     public PolyForceProjector(String name) {
         super(name);
         rotate = true;
         rotateDraw = false;
         shieldBreakEffect = FOSFx.rectShieldBreak;
+    }
+
+    @Override
+    public void load() {
+        super.load();
+        top1 = Core.atlas.find(name + "-top1");
+        top2 = Core.atlas.find(name + "-top2");
     }
 
     @Override
@@ -196,17 +207,40 @@ public class PolyForceProjector extends ForceProjector {
         }
 
         @Override
+        public void draw() {
+            if (block.variants != 0 && block.variantRegions != null) {
+                Draw.rect(block.variantRegions[Mathf.randomSeed(tile.pos(), 0, Math.max(0, block.variantRegions.length - 1))], x, y, drawrot());
+            } else {
+                Draw.rect(block.region, x, y, drawrot());
+            }
+
+            drawTeamTop();
+
+            if(buildup > 0f) {
+                Draw.alpha(buildup / shieldHealth * 0.75f);
+                Draw.z(Layer.blockAdditive);
+                Draw.blend(Blending.additive);
+                Draw.rect(rotation > 1 ? top2 : top1, x, y, rotdeg());
+                Draw.blend();
+                Draw.z(Layer.block);
+                Draw.reset();
+            }
+
+            drawShield();
+        }
+
+        @Override
         public void drawShield() {
             if (!broken && efficiency > 0) {
                 Polygon poly = new Polygon(curPolygon);
 
-                Draw.z(Layer.shields);
-
                 Draw.color(team.color, Color.white, Mathf.clamp(hit));
 
-                if(renderer.animateShields){
+                if (renderer.animateShields) {
+                    Draw.z(Layer.shields + 0.001f * hit);
                     Fill.poly(poly);
-                }else{
+                } else {
+                    Draw.z(Layer.shields);
                     Lines.stroke(1.5f);
                     Draw.alpha(0.09f + Mathf.clamp(0.08f * hit));
                     Fill.poly(poly);
