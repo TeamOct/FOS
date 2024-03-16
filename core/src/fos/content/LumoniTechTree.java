@@ -111,7 +111,7 @@ public class LumoniTechTree {
             // UNDERGROUND DRILLS
             node(tinDrill, () ->
                 node(silverDrill, () -> {
-                    node(diamondDrill, () -> {
+                    node(diamondDrill, Seq.with(new Objectives.OnSector(intruders)), () -> {
                         soontm();
                     });
                 })

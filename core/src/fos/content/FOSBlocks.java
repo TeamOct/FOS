@@ -15,7 +15,6 @@ import fos.type.blocks.production.*;
 import fos.type.blocks.special.*;
 import fos.type.blocks.storage.DetectorCoreBlock;
 import fos.type.blocks.units.*;
-import fos.type.bullets.PointLaserBulletType;
 import fos.type.bullets.*;
 import fos.type.draw.DrawOutputLiquids;
 import mindustry.content.*;
@@ -578,7 +577,7 @@ public class FOSBlocks {
                     }}
                 );
             }};
-            requirements(Category.turret, with(tin, 75, silver, 100));
+            requirements(Category.turret, with(tin, 75, silver, 50, silicon, 50));
         }};
         dot = new PowerTurret("dot"){{
             scaledHealth = 480;
@@ -586,21 +585,34 @@ public class FOSBlocks {
             range = 225f;
             rotateSpeed = 7.5f;
             shootCone = 2f;
+            reload = 20f;
             targetAir = targetGround = true;
             squareSprite = false;
+
             shootSound = Sounds.tractorbeam;
-            shootEffect = Fx.lancerLaserShoot;
+            shootEffect = FOSFx.dotLaserEnd;
+
             consumePower(2f);
-            shootType = new PointLaserBulletType(){{
+            drawer = new DrawTurret("lumoni-");
+            shootType = new RailBulletType(){{
+                damage = 8f;
+                length = 225f;
                 lifetime = 10f;
-                intervalBullets = 1;
-                bulletInterval = 8f;
-                intervalBullet = new LightningBulletType(){{
+                pierceDamageFactor = 0.75f;
+
+                lineEffect = FOSFx.dotLaserLine;
+                endEffect = FOSFx.dotLaserEnd;
+                shootSound = Sounds.bolt;
+
+/*
+                lightning = 1;
+                lightningType = new LightningBulletType(){{
                     lightningLength = 6;
                     lightningLengthRand = 4;
                     damage = 3f;
                     lightningColor = Color.scarlet.cpy().mul(1.2f);
                 }};
+*/
             }};
             requirements(Category.turret, with(silver, 50, diamond, 75, vanadium, 50));
         }};
@@ -682,7 +694,7 @@ public class FOSBlocks {
             drawer = new DrawTurret("lumoni-");
             consumeCoolant(0.5f).boost();
             coolantMultiplier = 2f;
-            requirements(Category.turret, with(tin, 200, silver, 125, silicon, 275));
+            requirements(Category.turret, with(tin, 200, silver, 125, silicon, 175, vanadium, 150));
         }};
         pulse = new TractorBeamTurret("pulse"){{
             health = 2400;

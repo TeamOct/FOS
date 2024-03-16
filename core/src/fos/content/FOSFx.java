@@ -1,5 +1,6 @@
 package fos.content;
 
+import arc.Core;
 import arc.graphics.g2d.*;
 import arc.math.geom.*;
 import fos.type.bullets.OhioBeamBulletType;
@@ -119,5 +120,18 @@ public class FOSFx {
     refinerySmoke = new Effect(1f, e -> {
         //RECYCLED ASSET TIME
         tokiciteBoil.at(e.x, e.y, Pal.gray);
-    });
+    }),
+
+    dotLaserLine = new Effect(10f, e -> {
+        if (!(e.data instanceof Vec2 v)) return;
+
+        Drawf.laser(Core.atlas.find("fos-point-laser"), Core.atlas.find("fos-point-laser-end"), Core.atlas.find("fos-point-laser-end"),
+            v.x, v.y, e.x, e.y, 0.4f);
+    }){{
+        clip = 550f;
+    }},
+
+    dotLaserEnd = new Effect(10f, e -> {
+        Draw.rect(Core.atlas.find("fos-point-laser-end"), e.x, e.y, 12f, 12f);
+    }).layer(Layer.effect + 0.1f);
 }
