@@ -21,9 +21,10 @@ import mindustry.content.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
-import mindustry.gen.*;
+import mindustry.gen.Sounds;
 import mindustry.graphics.*;
 import mindustry.type.*;
+import mindustry.ui.Styles;
 import mindustry.world.Block;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.*;
@@ -465,6 +466,7 @@ public class FOSBlocks {
                     trailWidth = 1.5f;
                     trailLength = 8;
                     ammoMultiplier = 2f;
+                    buildingDamageMultiplier = 0.3f;
                 }},
                 diamond, new BasicBulletType(3f, 18){{
                     width = 3f; height = 6f;
@@ -476,6 +478,7 @@ public class FOSBlocks {
                     ammoMultiplier = 3f;
                     pierce = true;
                     pierceCap = 2;
+                    buildingDamageMultiplier = 0.3f;
                 }},
                 silicon, new BasicBulletType(3f, 14){{
                     width = 3f; height = 6f;
@@ -487,6 +490,7 @@ public class FOSBlocks {
                     ammoMultiplier = 3f;
                     homingRange = 56f;
                     homingPower = 0.1f;
+                    buildingDamageMultiplier = 0.3f;
                 }},
                 vanadium, new BasicBulletType(4f, 20){{
                     width = 3f; height = 6f;
@@ -497,6 +501,7 @@ public class FOSBlocks {
                     trailWidth = 1.5f;
                     trailLength = 8;
                     ammoMultiplier = 3f;
+                    buildingDamageMultiplier = 0.3f;
                 }},
                 nickel, new BasicBulletType(4f, 22){{
                     width = 4f; height = 8f;
@@ -507,6 +512,7 @@ public class FOSBlocks {
                     trailWidth = 1.5f;
                     trailLength = 8;
                     ammoMultiplier = 4f;
+                    buildingDamageMultiplier = 0.3f;
                 }},
                 //TODO: trail shader?
                 luminium, new BasicBulletType(){{
@@ -525,6 +531,7 @@ public class FOSBlocks {
                     pierceCap = 2;
                     hitEffect = Fx.hitEmpSpark;
                     status = StatusEffects.blasted;
+                    buildingDamageMultiplier = 0.3f;
                 }}
             );
             consumeCoolant(0.25f).boost();
@@ -554,6 +561,7 @@ public class FOSBlocks {
                     ammoMultiplier = 2f;
                     splashDamage = 40;
                     splashDamageRadius = 12f;
+                    buildingDamageMultiplier = 0.3f;
                 }},
                 diamond, new StickyBulletType(3f, 30, 60){{
                     lifetime = 50f;
@@ -566,6 +574,7 @@ public class FOSBlocks {
                     ammoMultiplier = 3f;
                     splashDamage = 50;
                     splashDamageRadius = 16f;
+                    buildingDamageMultiplier = 0.3f;
                 }}
             );
             drawer = new DrawTurret("lumoni-"){{
@@ -613,6 +622,8 @@ public class FOSBlocks {
                     lightningColor = Color.scarlet.cpy().mul(1.2f);
                 }};
 */
+
+                buildingDamageMultiplier = 0.3f;
             }};
             requirements(Category.turret, with(silver, 50, diamond, 75, vanadium, 50));
         }};
@@ -642,6 +653,7 @@ public class FOSBlocks {
                     knockback = 3.2f;
                     fragOnHit = true;
                     hitEffect = despawnEffect = Fx.explosion;
+                    buildingDamageMultiplier = 0.3f;
                     fragBullets = 6;
                     fragBullet = new BasicBulletType(0.8f, 5){{
                         lifetime = 60f * 30; //frags will stay for pretty long
@@ -657,6 +669,7 @@ public class FOSBlocks {
                         collideTerrain = false;
                         hitEffect = Fx.hitBulletSmall;
                         despawnEffect = Fx.none;
+                        buildingDamageMultiplier = 0.3f;
                     }};
                 }},
                 vanadium, new BasicBulletType(2f, 60){{
@@ -673,6 +686,7 @@ public class FOSBlocks {
                     knockback = 4f;
                     fragOnHit = true;
                     hitEffect = despawnEffect = Fx.explosion;
+                    buildingDamageMultiplier = 0.3f;
                     fragBullets = 7;
                     fragBullet = new BasicBulletType(0.8f, 8){{
                         lifetime = 60f * 30; //frags will stay for pretty long
@@ -688,6 +702,7 @@ public class FOSBlocks {
                         collideTerrain = false;
                         hitEffect = Fx.hitBulletSmall;
                         despawnEffect = Fx.none;
+                        buildingDamageMultiplier = 0.3f;
                     }};
                 }}
             );
@@ -733,6 +748,7 @@ public class FOSBlocks {
                     speed = 320f;
                     hitShake = 4f;
                     ammoMultiplier = 1f;
+                    buildingDamageMultiplier = 0.3f;
                 }}
             );
             drawer = new DrawTurret("lumoni-");
@@ -751,7 +767,15 @@ public class FOSBlocks {
                 minWarmup = 0.99f;
                 shootWarmupSpeed = 0.05f;
                 shootCone = 20f;
-                shootType = FOSBullets.thunderLightning;
+                shootType = tLaser(0.1f, 5, "3030ff",
+                    tLaser(0.15f, 4, "25d5ff",
+                        tLaser(0.25f, 3, "ffff30",
+                            tLaser(0.2f, 2, "dc5b2e",
+                                tLaser(0.3f, 1, "ff3030", null)
+                            )
+                        )
+                    )
+                );
                 shootEffect = Fx.lightningShoot;
                 shootSound = Sounds.laser;
                 chargeSound = Sounds.lasercharge;
@@ -794,22 +818,60 @@ public class FOSBlocks {
                 StatValue stat = table -> {
                     table.row();
 
-                    table.table(bt -> {
-                        bt.left().defaults().padRight(3).left();
+                    table.table(Styles.grayPanel, bt -> {
+                        bt.left().top().defaults().padRight(3).left();
 
-                        bt.row();
                         bt.add(Core.bundle.format("bullet.damage", shootType.damage + "~" + (shootType.damage * 10)));
                         bt.row();
                         int val = (int)(shootType.buildingDamageMultiplier * 100 - 100);
                         bt.add(Core.bundle.format("bullet.buildingdamage", (val > 0 ? "[stat]+" : "[negstat]") + Strings.autoFixed(val, 1)));
                         bt.row();
                         bt.add("@bullet.infinitepierce");
-                    }).padTop(-9).padLeft(8).left().get().background(Tex.underline);
+                    }).padLeft(0).padTop(5).padBottom(5).growX().margin(10);
 
                     table.row();
                 };
 
                 stats.add(Stat.ammo, stat);
+            }
+
+            BulletType tLaser(float dmgMultiplier, int lenMultiplier, String color, BulletType frag) {
+                return new LaserBulletType(750f * dmgMultiplier){{
+                    speed = 0f; //just in case
+                    lifetime = 1f;
+                    width = 48f * (1f / lenMultiplier);
+                    length = 48f * lenMultiplier;
+                    colors = new Color[]{
+                        Color.valueOf(color).mul(1, 1, 1, 0.4f),
+                        Color.valueOf(color),
+                        Color.white
+                    };
+                    buildingDamageMultiplier = 0.3f;
+                    displayAmmoMultiplier = false;
+                    collidesAir = false;
+
+                    lightningColor = colors[1];
+                    lightningDamage = this.damage * 0.2f;
+                    lightningLength = 9;
+                    lightningSpacing = 19f + (38f * (lenMultiplier - 1));
+                    lightningDelay = 3f;
+                    lightningAngle = 20f;
+                    lightningAngleRand = 0f;
+
+                    intervalAngle = 0f;
+                    intervalSpread = intervalRandomSpread = 0f;
+                    bulletInterval = 1f;
+                    intervalBullets = 1;
+                    intervalBullet = frag;
+
+                    fragOnHit = false;
+                    fragAngle = 0f;
+                    fragSpread = fragRandomSpread = 0f;
+                    fragBullets = 1;
+                    fragBullet = this.copy();
+                    fragBullet.lifetime = 30;
+                    fragBullet.fragBullet = fragBullet.intervalBullet = null;
+                }};
             }
         };
         cluster = new ItemTurret("cluster"){{
@@ -821,17 +883,9 @@ public class FOSBlocks {
             targetAir = targetGround = true;
             recoil = 3f;
             shootSound = Sounds.missile;
-            shoot = new ShootBarrel(){{
-                barrels = new float[]{
-                    -7f, 0f, 0f,
-                    -5f, 0f, 0f,
-                    -3f, 0f, 0f,
-                    -1f, 0f, 0f,
-                    1f, 0f, 0f,
-                    3f, 0f, 0f,
-                    5f, 0f, 0f,
-                    7f, 0f, 0f
-                };
+            shoot = new ShootAlternate(){{
+                barrels = 8;
+                spread = 2f;
             }};
             ammo(
                 diamond, new MissileBulletType(5f, 5){{
@@ -846,6 +900,7 @@ public class FOSBlocks {
                     splashDamage = 120f;
                     splashDamageRadius = 50f;
                     homingPower = 0f;
+                    buildingDamageMultiplier = 0.3f;
                     fragBullets = 3;
                     fragBullet = new BasicBulletType(1f, 2.5f){{
                         lifetime = 20f;
@@ -855,6 +910,7 @@ public class FOSBlocks {
                         hitEffect = Fx.explosion;
                         splashDamage = 80f;
                         splashDamageRadius = 38f;
+                        buildingDamageMultiplier = 0.3f;
                     }};
                 }}
             );
@@ -881,7 +937,9 @@ public class FOSBlocks {
             shake = 10f;
             outlineIcon = false;
             squareSprite = false;
-            shootType = new OhioBeamBulletType(3600f, 18f);
+            shootType = new OhioBeamBulletType(3600f, 18f){{
+                buildingDamageMultiplier = 0.3f;
+            }};
             lightRadius = 96f;
             drawer = new DrawTurret("e-"){{
                 parts.addAll(
@@ -943,6 +1001,7 @@ public class FOSBlocks {
             shootType = new DeathRayBulletType(){{
                 damage = 1000f / 60f;
                 raySize = 20f;
+                buildingDamageMultiplier = 0.3f;
             }};
             drawer = new DrawMulti(
                     new DrawRegion("-bottom"),
@@ -978,7 +1037,9 @@ public class FOSBlocks {
             teamAlpha = 0.1f;
             tendrils = 0;
             shots = 1;
-            bullet = new ExplosionBulletType(240f, 20f);
+            bullet = new ExplosionBulletType(240f, 20f){{
+                shootEffect = Fx.blastExplosion;
+            }};
             requirements(Category.effect, with(copper, 30, vanadium, 40));
         }};
         //endregion

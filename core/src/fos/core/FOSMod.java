@@ -98,7 +98,6 @@ public class FOSMod extends Mod {
         FOSItems.load();
         FOSFluids.load();
         FOSWeaponModules.load();
-        FOSBullets.load();
         FOSStatuses.load();
         FOSUnitTypes.load();
         FOSBlocks.load();
