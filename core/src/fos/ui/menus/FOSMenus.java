@@ -4,6 +4,7 @@ import arc.math.Mathf;
 import arc.math.geom.Vec3;
 import arc.struct.Seq;
 import arc.util.noise.Simplex;
+import fos.content.FOSTeam;
 import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.graphics.g3d.PlanetParams;
@@ -12,6 +13,7 @@ import mindustry.world.*;
 
 import static fos.content.FOSBlocks.*;
 import static fos.content.FOSPlanets.*;
+import static mindustry.content.Blocks.air;
 
 public class FOSMenus {
     public static MenuBackground uxerdSpace, lumoniSpace, random, solarSystem, caldemoltSystem, lumoniTerrain;
@@ -51,7 +53,7 @@ public class FOSMenus {
         lumoniTerrain = new TerrainMenuBackground(){
             @Override
             public void generate(Tiles tiles) {
-                Seq<Block> ores = Seq.with(oreTinSurface, oreDiamond, oreLuminium);
+                Seq<Block> ores = Seq.with(oreTinSurface, Blocks.oreCopper, oreDiamond, oreLuminium);
                 int offset = Mathf.floor((float) (Math.random() * 100000));
                 int s2 = offset + 1, s3 = offset + 2;
                 Block[][] blocks = new Block[][]{
@@ -82,7 +84,6 @@ public class FOSMenus {
 
                 double tr1 = Mathf.random(0.65f, 0.85f);
                 double tr2 = Mathf.random(0.65f, 0.85f);
-                boolean tech = Mathf.chance(0.25);
 
                 Block floord = selected[0], walld = selected[1];
                 Block floord2 = selected2[0], walld2 = selected2[1];
@@ -90,8 +91,8 @@ public class FOSMenus {
                 for(int x = 0; x < width; x++) {
                     for (int y = 0; y < height; y++) {
                         Block floor = floord;
-                        Block ore = Blocks.air;
-                        Block wall = Blocks.air;
+                        Block ore = air;
+                        Block wall = air;
 
                         if (Simplex.noise2d(offset, 3, 0.5, 1 / 20.0, x, y) > 0.5) {
                             wall = walld;
@@ -99,7 +100,7 @@ public class FOSMenus {
 
                         if (Simplex.noise2d(s3, 3, 0.5, 1 / 20.0, x, y) > 0.5) {
                             floor = floord2;
-                            if (wall != Blocks.air) {
+                            if (wall != air) {
                                 wall = walld2;
                             }
                         }
@@ -111,24 +112,12 @@ public class FOSMenus {
                         if (Simplex.noise2d(s2, 2, 0.2, 1 / 15.0, x, y + 99999) > tr2) {
                             ore = ore2;
                         }
-                        if (tech) {
-                            int mx = x % 10, my = y % 10;
-                            int sclx = x / 10, scly = y / 10;
-                            if (Simplex.noise2d(offset, 2, 1f / 10f, 0.5f, sclx, scly) > 0.4f && (mx == 0 || my == 0 || mx == 10 - 1 || my == 10 - 1)) {
-                                floor = Blocks.darkPanel3;
-                                if (Mathf.dst(mx, my, 5, 5) > 10 / 2f + 1) {
-                                    floor = Blocks.darkPanel4;
-                                }
-
-
-                                if (wall != Blocks.air && Mathf.chance(0.7)) {
-                                    wall = Blocks.darkMetal;
-                                }
-                            }
-                        }
                         setTile(x, y, floor, wall, ore, tiles);
                     }
                 }
+
+                var center = tiles.get(tiles.width / 2, tiles.height / 2);
+                center.setBlock(coreFortress, FOSTeam.corru);
             }
         };
     }

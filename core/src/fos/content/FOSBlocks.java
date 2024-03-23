@@ -18,6 +18,7 @@ import fos.type.blocks.units.*;
 import fos.type.bullets.*;
 import fos.type.draw.DrawOutputLiquids;
 import mindustry.content.*;
+import mindustry.entities.Effect;
 import mindustry.entities.bullet.*;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
@@ -41,7 +42,7 @@ import multicraft.*;
 
 import static fos.content.FOSFluids.*;
 import static fos.content.FOSItems.*;
-import static fos.content.FOSUnitTypes.testOverdrive;
+import static fos.content.FOSUnitTypes.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.Liquids.*;
 import static mindustry.type.ItemStack.with;
@@ -63,7 +64,7 @@ public class FOSBlocks {
     fluidPipe, pumpjack,
 
     // POWER
-    tinWire, copperWire, brassWire, windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
+    tinWire, copperWire, brassWire, tinWirePole, copperWirePole, brassWirePole, windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     copperBattery, brassBattery,
 
     // DEFENSE
@@ -91,7 +92,10 @@ public class FOSBlocks {
     coreColony, coreFortress, coreCity, coreMetropolis, lightUnloader,
 
     // SPECIAL
-    nukeLauncher, bigBoy, cliffDetonator, surfaceDetonator, orbitalAccelerator, mechResearchCore, bioResearchCore, soontm;
+    nukeLauncher, bigBoy, cliffDetonator, surfaceDetonator, orbitalAccelerator, mechResearchCore, bioResearchCore,
+
+    // NON-PLAYER STUFF
+    soontm, citadelSpawner;
 
     public static void load() {
         //region crafting
@@ -1136,6 +1140,40 @@ public class FOSBlocks {
             //does not consume any power
             requirements(Category.power, with(brass, 1));
         }};
+        tinWirePole = new BridgeBeamNode("tin-wire-pole"){{
+            health = 30;
+            consumesPower = true;
+            consumePower(4f / 60f);
+            range = 4;
+            fogRadius = 1;
+            squareSprite = false;
+            requirements(Category.power, with(tin, 5));
+
+            ((PowerWire)tinWire).bridgeReplacement = this;
+        }};
+        copperWirePole = new BridgeBeamNode("copper-wire-pole"){{
+            health = 50;
+            consumesPower = true;
+            consumePower(1f / 60f);
+            range = 7;
+            fogRadius = 1;
+            squareSprite = false;
+            researchCostMultiplier = 0.5f;
+            requirements(Category.power, with(copper, 10));
+
+            ((PowerWire)copperWire).bridgeReplacement = this;
+        }};
+        brassWirePole = new BridgeBeamNode("brass-wire-pole"){{
+            health = 80;
+            //no power consumption
+            range = 10;
+            fogRadius = 1;
+            squareSprite = false;
+            researchCostMultiplier = 0.25f;
+            requirements(Category.power, with(brass, 20));
+
+            ((PowerWire)brassWire).bridgeReplacement = this;
+        }};
         windTurbine = new WindTurbine("wind-turbine"){{
             health = 480;
             size = 2;
@@ -1556,5 +1594,29 @@ public class FOSBlocks {
         }};
 
         soontm = new PlaceholderBlock();
+        citadelSpawner = new WaveSpawnerBlock("citadel-spawner"){{
+            size = 4;
+            unitType = citadel;
+            wave = 20;
+            spawnDelay = 300f;
+            customShadow = true;
+            animationEffects = new Effect[]{FOSFx.citadelSteam, Fx.smokeCloud};
+            drawer = new DrawMulti(
+                new DrawDefault(),
+                new DrawRegion("-cannon"){{
+                    x = -8; y = -10;
+                }},
+                new DrawRegion("-cannon"){{
+                    x = 8; y = -10;
+                }},
+                new DrawPistons(){{
+                    suffix = "-arm";
+                    sides = 2;
+                    lenOffset = 5f;
+                    sinScl = 1f;
+                    sinMag = 16f;
+                }}
+            );
+        }};
     }
 }

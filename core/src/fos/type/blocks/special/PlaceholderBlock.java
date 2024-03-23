@@ -1,6 +1,7 @@
 package fos.type.blocks.special;
 
 import mindustry.world.Block;
+import mindustry.world.meta.BuildVisibility;
 
 /**
  * A placeholder that indicates that more content will be added in the future later.
@@ -11,6 +12,7 @@ public class PlaceholderBlock extends Block {
     public PlaceholderBlock() {
         super("tbd");
         unlocked = false;
+        buildVisibility = BuildVisibility.hidden;
     }
 
     @Override

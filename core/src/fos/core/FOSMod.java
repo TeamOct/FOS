@@ -142,7 +142,7 @@ public class FOSMod extends Mod {
         SplashTexts.init();
 
         if (FOSVars.isAprilFools)
-            Musics.menu = Core.audio.newMusic(FOSVars.internalTree.child("music/mistake.mp3"));
+            Musics.menu = Vars.tree.loadMusic("mistake");
 
         //display the mod version
         FOSVars.mod.meta.description += "\n\n" + Core.bundle.get("mod.currentversion") + "\n" + FOSVars.mod.meta.version;
@@ -172,23 +172,6 @@ public class FOSMod extends Mod {
     public void clientLoaded() {
         //load this mod's settings
         constructSettings();
-
-        //add unit types to their descriptions
-        Vars.content.units().each(u ->
-                u.description += ("\n" + Core.bundle.get("unittype") + (
-                u.constructor.get() instanceof MechUnit ? Core.bundle.get("unittype.infantry") :
-                u.constructor.get() instanceof UnitEntity ? Core.bundle.get("unittype.flying") :
-                u.constructor.get() instanceof LegsUnit ? Core.bundle.get("unittype.spider") :
-                u.constructor.get() instanceof UnitWaterMove ? Core.bundle.get("unittype.ship") :
-                u.constructor.get() instanceof PayloadUnit ? Core.bundle.get("unittype.payload") :
-                u.constructor.get() instanceof TimedKillUnit ? Core.bundle.get("unittype.timedkill") :
-                u.constructor.get() instanceof TankUnit ? Core.bundle.get("unittype.tank") :
-                u.constructor.get() instanceof ElevationMoveUnit ? Core.bundle.get("unittype.hover") :
-                u.constructor.get() instanceof BuildingTetherPayloadUnit ? Core.bundle.get("unittype.tether") :
-                u.constructor.get() instanceof CrawlUnit ? Core.bundle.get("unittype.crawl") :
-                "")
-                + (u.weapons.contains(w -> w.bullet.heals()) ? Core.bundle.get("unittype.support") : ""))
-        );
 
         //disclaimer for non-debug
         if (FOSVars.earlyAccess && !FOSVars.debug)

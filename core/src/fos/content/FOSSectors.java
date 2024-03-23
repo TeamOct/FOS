@@ -5,7 +5,7 @@ import mindustry.type.SectorPreset;
 public class FOSSectors {
     public static SectorPreset
     /* Serpulo */ siloTerminal,
-    /* Lumoni */ crashLanding, ruins, intruders;
+    /* Lumoni */ crashLanding, ruins, intruders, citadel;
 
     public static void load() {
 /*
@@ -27,8 +27,13 @@ public class FOSSectors {
         }};
 
         intruders = new SectorPreset("intruders", FOSPlanets.lumoni, 67){{
-            difficulty = 4;
+            difficulty = 5;
             captureWave = 11;
+        }};
+
+        citadel = new SectorPreset("citadel", FOSPlanets.lumoni, 44){{
+            difficulty = 4;
+            captureWave = 21;
         }};
     }
 }

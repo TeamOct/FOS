@@ -1,4 +1,4 @@
-package fos.type.units;
+package fos.type.units.types;
 
 import arc.graphics.Color;
 import mindustry.type.UnitType;

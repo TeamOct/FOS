@@ -11,6 +11,7 @@ import fos.ui.ResearchCoreDialog;
 import fos.ui.menus.FOSMenuRenderer;
 import mindustry.ai.Pathfinder;
 import mindustry.content.TechTree;
+import mindustry.entities.units.BuildPlan;
 import mindustry.game.Objectives;
 import mindustry.mod.Mods;
 
@@ -63,6 +64,9 @@ public class FOSVars {
 
     /** Mod reference **/
     public static Mods.LoadedMod mod;
+
+    /** Placement plans stored for wire bridging. DO NOT MODIFY! */
+    public static Seq<BuildPlan> wirePlans = new Seq<>();
 
     public static void load() {
         researchCoreDialog = new ResearchCoreDialog();

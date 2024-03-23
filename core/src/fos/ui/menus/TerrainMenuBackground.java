@@ -3,9 +3,10 @@ package fos.ui.menus;
 import arc.Core;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
-import arc.graphics.gl.*;
+import arc.graphics.gl.FrameBuffer;
 import arc.math.*;
-import arc.scene.ui.layout.*;
+import arc.scene.ui.layout.Scl;
+import fos.content.FOSTeam;
 import mindustry.content.Blocks;
 import mindustry.world.*;
 
@@ -18,7 +19,7 @@ public class TerrainMenuBackground extends MenuBackground {
     protected int seed;
     private FrameBuffer shadows;
     private CacheBatch batch;
-    private int cacheFloor, cacheWall;
+    private int cacheFloor, cacheWall, cacheBuild;
     private final Camera camera = new Camera();
     private final Mat mat = new Mat();
 
@@ -56,24 +57,29 @@ public class TerrainMenuBackground extends MenuBackground {
         Batch prev = Core.batch;
 
         Core.batch = batch = new CacheBatch(new SpriteCache(width * height * 6, false));
-        batch.beginCache();
 
+        batch.beginCache();
         for(Tile tile : world.tiles){
             tile.floor().drawBase(tile);
         }
-
         for(Tile tile : world.tiles){
             tile.overlay().drawBase(tile);
         }
-
         cacheFloor = batch.endCache();
-        batch.beginCache();
 
-        for(Tile tile : world.tiles){
+        batch.beginCache();
+        for (Tile tile : world.tiles) {
             tile.block().drawBase(tile);
         }
-
         cacheWall = batch.endCache();
+
+        batch.beginCache();
+        for (Tile tile : world.tiles) {
+            if (tile.block().hasBuilding()) {
+                tile.build.init(tile.build.tile(), FOSTeam.corru, true, 0).draw();
+            }
+        }
+        cacheBuild = batch.endCache();
 
         Core.batch = prev;
     }
@@ -109,6 +115,9 @@ public class TerrainMenuBackground extends MenuBackground {
         Draw.flush();
         batch.beginDraw();
         batch.drawCache(cacheWall);
+        batch.endDraw();
+        batch.beginDraw();
+        batch.drawCache(cacheBuild);
         batch.endDraw();
 
         Draw.proj(mat);

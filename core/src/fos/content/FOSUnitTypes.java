@@ -8,7 +8,7 @@ import fos.gen.*;
 import fos.graphics.FOSPal;
 import fos.type.abilities.*;
 import fos.type.bullets.*;
-import fos.type.units.*;
+import fos.type.units.types.*;
 import fos.type.units.weapons.InjectorWeapon;
 import mindustry.ai.types.GroundAI;
 import mindustry.annotations.Annotations;
@@ -209,7 +209,7 @@ public class FOSUnitTypes {
             armor = 30;
             hitSize = 40;
             rotateSpeed = 2f;
-            speed = 0.05f;
+            speed = 0.2f;
             flying = false;
             canBoost = false;
             weapons.add(

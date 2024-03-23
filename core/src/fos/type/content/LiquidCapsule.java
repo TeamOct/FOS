@@ -8,7 +8,8 @@ import mindustry.type.*;
 
 /** Must be created via {@link LiquidCapsule#LiquidCapsule(java.lang.String, mindustry.type.Liquid)} and after loading mods. **/
 public class LiquidCapsule extends Item {
-    private static Pixmap top, bottom;
+    private static final Pixmap top;
+    private static final Pixmap bottom;
 
     static {
         top = new Pixmap(FOSVars.internalTree.child("sprites/items/capsule.png"));
@@ -25,7 +26,7 @@ public class LiquidCapsule extends Item {
         flammability = liquid.flammability * 0.7f;
         radioactivity = 0;
 
-        hidden = liquid.hidden;
+        hidden = true;
         alwaysUnlocked = liquid.alwaysUnlocked;
         generateIcons = true;
     }

@@ -1,6 +1,7 @@
 package fos.content;
 
 import arc.Core;
+import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.math.geom.*;
 import fos.type.bullets.OhioBeamBulletType;
@@ -9,8 +10,9 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.weather.ParticleWeather;
 
-import static arc.graphics.g2d.Draw.color;
+import static arc.graphics.g2d.Draw.*;
 import static arc.graphics.g2d.Lines.stroke;
+import static arc.math.Angles.randLenVectors;
 import static mindustry.Vars.renderer;
 
 public class FOSFx {
@@ -133,5 +135,18 @@ public class FOSFx {
 
     dotLaserEnd = new Effect(10f, e -> {
         Draw.rect(Core.atlas.find("fos-point-laser-end"), e.x, e.y, 12f, 12f);
-    }).layer(Layer.effect + 0.1f);
+    }).layer(Layer.effect + 0.1f),
+
+    citadelSteam = new Effect(40f, e -> {
+        randLenVectors(e.id, 2, 80f, 250f, 10f, ((x, y) -> {
+            color(Color.gray);
+            alpha((0.5f - Math.abs(e.fin() - 0.5f)) * 2f);
+            Fill.circle(e.x + (x * e.finpow()), e.y + (y * e.finpow()), 0.5f + e.fout() * 4f);
+        }));
+        randLenVectors(e.id, 2, 80f, 290f, 10f, ((x, y) -> {
+            color(Color.gray);
+            alpha((0.5f - Math.abs(e.fin() - 0.5f)) * 2f);
+            Fill.circle(e.x + (x * e.finpow()), e.y + (y * e.finpow()), 0.5f + e.fout() * 4f);
+        }));
+    });
 }

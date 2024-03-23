@@ -1,8 +1,7 @@
-package fos.type.units;
+package fos.type.units.types;
 
 import arc.math.Mathf;
-import mindustry.gen.Payloadc;
-import mindustry.gen.Unit;
+import mindustry.gen.*;
 import mindustry.type.UnitType;
 import mindustry.world.blocks.payloads.Payload;
 

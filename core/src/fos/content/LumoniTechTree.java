@@ -36,10 +36,15 @@ public class LumoniTechTree {
 
             // POWER. TODO
             node(windTurbine, () -> {
-                node(tinWire, () ->
-                    node(copperWire, () ->
-                        node(brassWire)
-                    )
+                node(tinWire, () -> {
+                    node(tinWirePole);
+                    node(copperWire, () -> {
+                        node(copperWirePole);
+                        node(brassWire, () -> {
+                            node(brassWirePole);
+                        });
+                    });
+                }
                 );
                 node(copperBattery, () ->
                     node(brassBattery)

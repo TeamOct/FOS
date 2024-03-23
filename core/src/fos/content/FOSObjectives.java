@@ -1,7 +1,7 @@
 package fos.content;
 
 import arc.Core;
-import fos.type.units.BossUnitType;
+import fos.type.units.types.BossUnitType;
 import mindustry.type.UnitType;
 
 import static arc.Core.settings;

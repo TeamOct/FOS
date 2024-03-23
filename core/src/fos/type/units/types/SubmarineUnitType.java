@@ -1,4 +1,4 @@
-package fos.type.units;
+package fos.type.units.types;
 
 import arc.graphics.g2d.Draw;
 import arc.math.*;
