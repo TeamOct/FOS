@@ -8,6 +8,7 @@ import fos.type.content.WeaponSet;
 import mindustry.content.Fx;
 import mindustry.entities.abilities.UnitSpawnAbility;
 import mindustry.entities.bullet.*;
+import mindustry.entities.pattern.ShootAlternate;
 import mindustry.game.EventType;
 import mindustry.gen.Sounds;
 import mindustry.graphics.Pal;
@@ -16,7 +17,7 @@ import mindustry.type.weapons.RepairBeamWeapon;
 
 import static fos.content.FOSItems.*;
 import static mindustry.content.Items.*;
-import static mindustry.type.ItemStack.with;
+import static mindustry.type.ItemStack.*;
 
 //why the heck I added FOS to class's name if weapon modules are unique to this mod anyway
 //just because it looks nicer :)
@@ -44,7 +45,7 @@ public class FOSWeaponModules {
                 trailLength = 8;
                 lifetime = 60f;
             }};
-        }}).reqs(with(tin, 75, silver, 75));
+        }}).reqs(empty);
         standard2 = new WeaponSet("standard2", new Weapon("fos-standard-weapon2"){{
             x = 0; y = 0;
             alternate = mirror = false;
@@ -68,7 +69,7 @@ public class FOSWeaponModules {
                     collidesTiles = true;
                 }};
             }};
-        }}).reqs(with(tin, 150, silver, 150));
+        }}).reqs(with(tin, 75, silver, 75));
         standard3 = new WeaponSet("standard3", new Weapon("fos-standard-weapon3"){{
             x = 0; y = 0;
             alternate = mirror = false;
@@ -83,7 +84,7 @@ public class FOSWeaponModules {
                 lifetime = 60f;
                 homingPower = 0.8f;
             }};
-        }}).reqs(with(tin, 250, diamond, 150, silicon, 300));
+        }}).reqs(with(tin, 250, silicon, 200, vanadium, 100));
         //TODO: placeholders
         standard4 = new WeaponSet("standard4", new Weapon("fos-standard-weapon4")).reqs(with(lead, 1));
         standard5 = new WeaponSet("standard5", new Weapon("fos-standard-weapon5"){{
@@ -143,14 +144,64 @@ public class FOSWeaponModules {
                 length = 48f;
                 fromColor = Pal.accentBack;
                 toColor = Pal.accent;
-                damage = 75f;
+                damage = 60f;
                 lifetime = 20f;
                 hitEffect = Fx.hitBulletSmall;
+                knockback = 4f;
             }};
-        }}).reqs(with(tin, 60, silver, 50));
+        }}).reqs(empty);
         //TODO: placeholders
-        shotgun2 = new WeaponSet("shotgun2", new Weapon()).reqs(with(lead, 1));
-        shotgun3 = new WeaponSet("shotgun3", new Weapon()).reqs(with(lead, 1));
+        shotgun2 = new WeaponSet("shotgun2", new Weapon("fos-shotgun-mount2"){{
+            x = y = 0;
+            alternate = mirror = false;
+            rotate = true;
+            rotateSpeed = 5f;
+            inaccuracy = 20f;
+            shoot.shots = 4;
+            shoot.shotDelay = 0f;
+            reload = recoilTime = 90f;
+            shootSound = Sounds.shotgun;
+            ejectEffect = Fx.casing2;
+            bullet = new ShrapnelBulletType(){{
+                width = 2f;
+                length = 80f;
+                fromColor = Pal.accentBack;
+                toColor = Pal.accent;
+                damage = 60f;
+                lifetime = 20f;
+                hitEffect = Fx.hitBulletSmall;
+                knockback = 3f;
+            }};
+        }}).reqs(with(tin, 60, silver, 90));
+        shotgun3 = new WeaponSet("shotgun3", new Weapon("fos-shotgun-mount3"){{
+            x = y = 0;
+            alternate = mirror = false;
+            rotate = true;
+            rotateSpeed = 3f;
+            shoot = new ShootAlternate(){{
+                shots = barrels = 6;
+                spread = 3f;
+            }};
+            reload = recoilTime = 40f;
+            shootSound = Sounds.cannon;
+            ejectEffect = Fx.casing3;
+            bullet = new BasicBulletType(){{
+                speed = 4f; lifetime = 20f;
+                damage = 40f;
+                hitEffect = Fx.hitBulletSmall;
+                trailLength = 4;
+                trailEffect = Fx.trailFade;
+                knockback = 5f;
+                fragOnHit = true;
+                fragBullets = 1;
+                fragBullet = new ExplosionBulletType(){{
+                    splashDamage = 60;
+                    splashDamageRadius = 16;
+                    killShooter = false;
+                    knockback = 4f;
+                }};
+            }};
+        }}).reqs(with(tin, 200, silver, 50, silicon, 200, vanadium, 100));
         shotgun4 = new WeaponSet("shotgun4", new Weapon()).reqs(with(lead, 1));
         shotgun5 = new WeaponSet("shotgun5", new Weapon()).reqs(with(lead, 1));
 

@@ -149,24 +149,30 @@ public class LumoniTechTree {
                 //RIFLES
                 node(standard1, () ->
                     node(standard2, ItemStack.with(tin, 750, silver, 600), () ->
-                        soontm()
+                        node(standard3, ItemStack.with(tin, 1250, silicon, 1000, vanadium, 500), () ->
+                            soontm())
+                    )
+                );
 /*
-                        node(standard3, ItemStack.with(tin, 2000, diamond, 1000, silicon, 2500), () ->
                             node(standard4, TODO: sector handicap,
                                 ItemStack.with(tin, 3000, silver, 2500, silicon, 4000, nickel, 2500), () ->
                                 node(standard5, ItemStack.with(tin, 5000, silver, 5000, diamond, 2500, silicon, 5000, nickel, 3500, luminium, 2500), () -> {}
                                 )
                             )
                         )
-*/
                     )
                 );
+*/
 
-                //TODO: SHOTGUNS
-                soontm();
- /*               node(shotgun1, Seq.with(new DefeatBoss(citadel)), () ->
+                //SHOTGUNS
+                node(shotgun1, Seq.with(new Objectives.SectorComplete(FOSSectors.citadel)), () ->
                     node(shotgun2, ItemStack.with(tin, 750, silver, 600), () ->
-                        node(shotgun3, ItemStack.with(tin, 2000, diamond, 1000, silicon, 2500), () ->
+                        node(shotgun3, ItemStack.with(tin, 1000, silver, 250, silicon, 1000, vanadium, 500), () ->
+                            soontm()
+                        )
+                    )
+                );
+/*
                             node(shotgun4, *//* TODO: sector handicap *//* ItemStack.with(tin, 3000, silver, 2500, silicon, 4000, nickel, 2500), () ->
                                 node(shotgun5, ItemStack.with(tin, 5000, silver, 5000, diamond, 2500, silicon, 5000, nickel, 3500, luminium, 2500), () -> {}
                                 )
@@ -181,6 +187,7 @@ public class LumoniTechTree {
                 soontm();
                 // BOSS-SPECIFIC WEAPONS
                 node(legionFabricator, Seq.with(new FOSObjectives.DefeatBoss(legion)), () -> {
+                    //TODO: citadel shotgun? or stickybomb launcher?
                     soontm();
                 });
             });
