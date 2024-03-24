@@ -231,7 +231,9 @@ public class LumoniTechTree {
                     node(intruders, Seq.with(new Objectives.SectorComplete(ruins)), () -> {
                         soontm();
                     });
-                    soontm();
+                    node(FOSSectors.citadel, Seq.with(new Objectives.SectorComplete(ruins)), () -> {
+                        soontm();
+                    });
                     soontm();
                 });
             });
