@@ -18,6 +18,7 @@ import mindustry.mod.Mods;
 import java.util.*;
 
 import static fos.content.FOSBlocks.*;
+import static mindustry.Vars.headless;
 import static mindustry.content.Items.scrap;
 import static mindustry.content.TechTree.node;
 import static mindustry.type.ItemStack.with;
@@ -69,7 +70,7 @@ public class FOSVars {
     public static Seq<BuildPlan> wirePlans = new Seq<>();
 
     public static void load() {
-        researchCoreDialog = new ResearchCoreDialog();
+        if (!headless) researchCoreDialog = new ResearchCoreDialog();
 
         mechTree = TechTree.nodeRoot("", mechResearchCore, true, () -> {
             node(helix, with(scrap, 250), () -> {

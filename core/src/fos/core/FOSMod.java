@@ -27,6 +27,7 @@ import mindustry.ui.dialogs.PlanetDialog;
 import mma.annotations.ModAnnotations;
 
 import static arc.Core.settings;
+import static mindustry.Vars.headless;
 
 @ModAnnotations.RootDirectoryPath(rootDirectoryPath = "core")
 @ModAnnotations.AnnotationSettings(
@@ -84,13 +85,16 @@ public class FOSMod extends Mod {
         Log.debug("[FOS] loading content");
         FOSVars.mod = Vars.mods.getMod(getClass());
 
-        ConveyorSpritesPacker.pack(); // generate conveyor regions
+        if (!headless) {
+            ConveyorSpritesPacker.pack(); // generate conveyor regions
 
-        FOSVars.oreRenderer = new FOSOreRenderer();
+            FOSVars.oreRenderer = new FOSOreRenderer();
+
+            FOSShaders.init();
+        }
 
         SplashTexts.load();
 
-        FOSShaders.init();
         FOSCommands.init();
 
         FOSAttributes.load();
@@ -129,7 +133,7 @@ public class FOSMod extends Mod {
         });
 
         //anything after this should not be initialized on dedicated servers.
-        if (Vars.headless) return;
+        if (headless) return;
 
         //an anti-cheat system from long ago, is it really necessary now?
         LoadedMod xf = Vars.mods.list().find(m ->

@@ -7,13 +7,14 @@ import arc.struct.Seq;
 import arc.util.Structs;
 import arc.util.io.*;
 import mindustry.Vars;
+import mindustry.content.Fx;
 import mindustry.game.EventType;
 import mindustry.gen.*;
 import mindustry.graphics.*;
-import mindustry.io.TypeIO;
 import mindustry.logic.LAccess;
 import mindustry.type.*;
 import mindustry.ui.*;
+import mindustry.world.blocks.UnitTetherBlock;
 import mindustry.world.blocks.payloads.*;
 import mindustry.world.blocks.units.UnitBlock;
 
@@ -22,7 +23,7 @@ import static mindustry.Vars.state;
 /**
  * A recreation of the old Unit Factory from Mindustry v5.
  */
-public class V5UnitFactory extends UnitBlock {
+public class MinerUnitFactory extends UnitBlock {
     public UnitType unitType;
     public ItemStack[] unitRequirements;
     public float produceTime = 1000f;
@@ -31,7 +32,7 @@ public class V5UnitFactory extends UnitBlock {
 
     public TextureRegion topRegion;
 
-    public V5UnitFactory(String name) {
+    public MinerUnitFactory(String name) {
         super(name);
         update = true;
         hasPower = true;
@@ -61,9 +62,9 @@ public class V5UnitFactory extends UnitBlock {
     public void setBars() {
         super.setBars();
 
-        addBar("progress", (V5UnitFactoryBuild e) -> new Bar("bar.progress", Pal.ammo, e::fraction));
+        addBar("progress", (MinerUnitFactoryBuild e) -> new Bar("bar.progress", Pal.ammo, e::fraction));
 
-        addBar("units", (V5UnitFactoryBuild e) ->
+        addBar("units", (MinerUnitFactoryBuild e) ->
             new Bar(
                 () -> unitType == null ? "[lightgray]" + Iconc.cancel :
                     Core.bundle.format("bar.unitcap",
@@ -77,9 +78,11 @@ public class V5UnitFactory extends UnitBlock {
         );
     }
 
-    public class V5UnitFactoryBuild extends UnitBuild {
+    public class MinerUnitFactoryBuild extends UnitBuild implements UnitTetherBlock {
         float progress;
         float speedScl;
+
+        Seq<Integer> spawnedIds = new Seq<>();
         Seq<Unit> spawned = new Seq<>();
 
         public float fraction() {
@@ -125,14 +128,24 @@ public class V5UnitFactory extends UnitBlock {
         public void updateTile() {
             super.updateTile();
 
-            for (Unit u : spawned) {
-                if (u == null || u.dead()) {
+            for (int i = 0; i < spawnedIds.size; i++) {
+                if (spawned.size >= i) {
+                    spawned.size = i+1;
+                }
+                spawned.insert(i, Groups.unit.getByID(spawnedIds.get(i)));
+            }
+
+            for (int i = 0; i < spawned.size; i++) {
+                Unit u = spawned.get(i);
+
+                if (u != null && !u.isValid()) {
+                    spawnedIds.remove(i);
                     spawned.remove(u);
                 }
             }
 
-            //do nothing if a unit is banned.
-            if (unitType.isBanned()) {
+            //do nothing if a unit is unavailable.
+            if (unitType.isBanned() || !unitType.unlockedNow()) {
                 return;
             }
 
@@ -158,13 +171,20 @@ public class V5UnitFactory extends UnitBlock {
                 payload = new UnitPayload(unit);
                 payVector.setZero();
                 consume();
-                spawned.add(unit);
+                spawned(unit.id);
                 Events.fire(new EventType.UnitCreateEvent(payload.unit, this));
-
-                progress = 0f;
             } else {
                 progress = Mathf.clamp(progress, 0, produceTime);
             }
+        }
+
+        @Override
+        public void spawned(int id) {
+            Fx.spawn.at(x, y);
+            progress = 0f;
+
+            spawnedIds.add(id);
+            spawned.add(Groups.unit.getByID(id));
         }
 
         @Override
@@ -188,9 +208,9 @@ public class V5UnitFactory extends UnitBlock {
             super.write(write);
 
             write.f(progress);
-            write.i(Math.max(spawned.size, 0));
-            for (int i = 0; i < spawned.size; i++) {
-                TypeIO.writeUnit(write, spawned.get(i));
+            write.i(Math.max(spawnedIds.size, 0));
+            for (int i = 0; i < spawnedIds.size; i++) {
+                write.i(spawnedIds.get(i));
             }
         }
 
@@ -201,7 +221,7 @@ public class V5UnitFactory extends UnitBlock {
             progress = read.f();
             int units = read.i();
             for (int i = 0; i < units; i++) {
-                spawned.add(TypeIO.readUnit(read));
+                spawnedIds.add(read.i());
             }
         }
     }

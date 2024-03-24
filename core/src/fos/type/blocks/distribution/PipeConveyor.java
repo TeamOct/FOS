@@ -8,7 +8,7 @@ import mindustry.gen.Unit;
 import mindustry.graphics.Layer;
 import mindustry.world.blocks.distribution.Conveyor;
 
-import static mindustry.Vars.tilesize;
+import static mindustry.Vars.*;
 
 public class PipeConveyor extends Conveyor {
     public TextureRegion[] pipeRegions;
@@ -19,8 +19,10 @@ public class PipeConveyor extends Conveyor {
 
     @Override
     public void load() {
-        String prefix = ConveyorSpritesPacker.getPrefix();
-        ConveyorSpritesPacker.generateRegions(Core.atlas.find(prefix + "-tin-belt"), prefix);
+        if (!headless) {
+            String prefix = ConveyorSpritesPacker.getPrefix();
+            ConveyorSpritesPacker.generateRegions(Core.atlas.find(prefix + "-tin-belt"), prefix);
+        }
 
         pipeRegions = new TextureRegion[5];
         for (int i = 0; i < pipeRegions.length; i++) {

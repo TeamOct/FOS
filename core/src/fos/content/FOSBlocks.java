@@ -1196,6 +1196,7 @@ public class FOSBlocks {
             requirements(Category.power, with(rawNethratium, 45));
             researchCost = with(rawNethratium, 135);
         }};
+/*
         plasmaLauncher = new PlasmaLauncher("plasma-launcher"){{
             health = 1500;
             size = 3;
@@ -1206,6 +1207,7 @@ public class FOSBlocks {
                 new DrawDefault()
             );
         }};
+*/
         solarPanelMedium = new SolarGenerator("solar-panel-medium"){{
             size = 2;
             powerProduction = 0.5f;
@@ -1464,7 +1466,7 @@ public class FOSBlocks {
             droneType = testOverdrive;
             requirements(Category.units, BuildVisibility.debugOnly, with(brass, 275, silicon, 400, nickel, 150));
         }};
-        draugFactory = new V5UnitFactory("draug-factory"){{
+        draugFactory = new MinerUnitFactory("draug-factory"){{
             scaledHealth = 60;
             size = 4;
             consumePower(2);
