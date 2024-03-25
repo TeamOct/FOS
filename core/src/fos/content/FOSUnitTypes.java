@@ -31,7 +31,7 @@ public class FOSUnitTypes {
 
     public static @Annotations.EntityDef({Tankc.class}) UnitType
         // TANK BOSSES
-        warden;
+        myriad, warden;
 
     public static @Annotations.EntityDef({FOSHovercraftc.class, Unitc.class}) UnitType
         // HOVERCRAFT (INJECTORS)
@@ -393,6 +393,152 @@ public class FOSUnitTypes {
             });
             aiController = GroundAI::new;
         }};
+        myriad = new BossUnitType("myriad"){{
+            hitSize = 47f;
+            treadPullOffset = 1;
+            speed = 0.48f;
+            health = 25000;
+            armor = 30f;
+            omniMovement = false;
+            crushDamage = 30f / 5f;
+            rotateSpeed = 0.7f;
+
+            float xo = 231f/2f, yo = 231f/2f;
+            treadRects = new Rect[]{new Rect(27 - xo, 152 - yo, 56, 73), new Rect(24 - xo, 51 - 9 - yo, 29, 17), new Rect(59 - xo, 18 - 9 - yo, 39, 19)};
+
+            weapons.add(new Weapon("fos-myriad-point-weapon"){{
+                shootSound = Sounds.bolt;
+                reload = 45f;
+                shootY = 7f;
+                recoil = 2f;
+                rotate = true;
+                rotateSpeed = 1.4f;
+                mirror = true;
+                x = 15f;
+                y = 15f;
+                shadow = 20f;
+                heatColor = Color.valueOf("ff7665");
+
+                bullet = new RailBulletType(){{
+                    damage = 50f;
+                    length = 200f;
+                    hitColor = Color.valueOf("ff7665");
+                    hitEffect = endEffect = Fx.dynamicSpikes.wrap(Liquids.neoplasm.color, 15f);
+                    shootEffect = Fx.shootBig2;
+                    smokeEffect = Fx.colorSpark;
+                    lineEffect = Fx.chainLightning;
+                    hitEffect = Fx.blastExplosion;
+                    splashDamage = 15f;
+                    splashDamageRadius = 20f;
+                    status = StatusEffects.blasted;
+                }};
+            }});
+            weapons.add(new Weapon("fos-myriad-weapon"){{
+                shoot = new ShootHelix(){{
+                    mag = 1f;
+                    scl = 3f;
+                }};
+                shootSound = Sounds.largeCannon;
+                layerOffset = 0.1f;
+                reload = 120f;
+                shootY = 27.5f;
+                shake = 5f;
+                recoil = 5f;
+                rotate = true;
+                rotateSpeed = 0.6f;
+                mirror = false;
+                x = 0f;
+                y = -2f;
+                shadow = 50f;
+                shootWarmupSpeed = 0.06f;
+                cooldownTime = 110f;
+                heatColor = Color.valueOf("ff7665");
+                minWarmup = 0.9f;
+
+                for(int i = 1; i <= 3; i++){
+                    int fi = i;
+                    parts.add(new RegionPart("-blade"){{
+                        progress = PartProgress.warmup.delay((3 - fi) * 0.3f).blend(PartProgress.reload, 0.3f);
+                        heatProgress = PartProgress.heat.add(0.3f).min(PartProgress.warmup);
+                        heatColor = new Color(1f, 0.1f, 0.1f);
+                        mirror = true;
+                        under = true;
+                        moveRot = -40f * fi;
+                        moveX = 3f;
+                        layerOffset = -0.002f;
+
+                        x = 11 / 4f;
+                    }});
+                }
+
+                bullet = new BasicBulletType(9f, 160f){{
+                    sprite = "missile-large";
+                    width = 12f;
+                    height = 20f;
+                    lifetime = 35f;
+                    hitSize = 6f;
+
+                    smokeEffect = Fx.shootSmokeTitan;
+                    pierceCap = 4;
+                    pierce = true;
+                    keepVelocity = false;
+                    pierceBuilding = true;
+                    hitColor = backColor = trailColor = Color.valueOf("ff7665");
+                    frontColor = Color.white;
+                    trailWidth = 4f;
+                    trailLength = 40;
+                    hitEffect = despawnEffect = Fx.dynamicSpikes.wrap(Liquids.neoplasm.color, 20f);
+
+                    shootEffect = Fx.shootBigSmoke;
+
+                    fragBullets = 4;
+                    fragSpread = 90f;
+                    fragRandomSpread = 0f;
+                    fragBullet = new SapBulletType(){{
+                        sapStrength = 0.95f;
+                        length = 100f;
+                        damage = 10;
+                        shootEffect = Fx.shootSmall;
+                        hitColor = color = Color.valueOf("ff7665");
+                        despawnEffect = Fx.none;
+                        width = 0.35f;
+                        lifetime = 15f;
+                        knockback = -2f;
+                    }};
+
+                    bulletInterval = 3f;
+                    intervalRandomSpread = 0f;
+                    intervalAngle = 0f;
+                    intervalBullets = 1;
+                    intervalBullet = new BasicBulletType(1f, 25f){{
+                        keepVelocity = false;
+                        sprite = "mine-bullet";
+                        width = height = 13f;
+                        lifetime = 1f;
+                        trailWidth = 4f;
+                        trailLength = 10;
+                        frontColor = Color.white;
+                        trailColor = backColor = hitColor = Color.valueOf("ff7665");
+                        hitEffect = despawnEffect = Fx.dynamicSpikes.wrap(Liquids.neoplasm.color, 12f);
+
+                        fragBullets = 1;
+                        fragRandomSpread = 0f;
+                        fragAngle = 180f;
+                        fragBullet = new SapBulletType(){{
+                            sapStrength = 0.95f;
+                            length = 125f;
+                            damage = 22;
+                            shootEffect = Fx.shootSmall;
+                            hitColor = color = Color.valueOf("ff7665");
+                            despawnEffect = Fx.none;
+                            width = 0.35f;
+                            lifetime = 15f;
+                            knockback = -1f;
+                        }};
+                    }};
+                }};
+            }});
+        }};
 
         lord = new LumoniPlayerUnitType("lord"){{
             health = 1200;
@@ -541,208 +687,184 @@ public class FOSUnitTypes {
         radix = new FOSUnitType("radix"){{
             health = 300;
             armor = 1;
-            speed = 0.8f;
+            speed = 0.6f;
             hitSize = 12;
             rotateSpeed = 2f;
             targetAir = false;
 
             legCount = 3;
-            legLength = 8f;
-            legContinuousMove = true;
-            legExtension = -2f;
-            legBaseOffset = 3f;
-            legMaxLength = 1.1f;
-            legMinLength = 0.2f;
-            legLengthScl = 0.96f;
-            legForwardScl = 1.1f;
+            legLength = 4.0F;
             legGroupSize = 1;
+            lockLegBase = true;
+            legContinuousMove = true;
+            legExtension = -3.0F;
+            legBaseOffset = 4.0F;
+            legMaxLength = 1.1F;
+            legMinLength = 0.2F;
+            legLengthScl = 0.925F;
+            legForwardScl = 0.9075F;
+            legMoveSpace = 2F;
 
             weapons.add(
-                new Weapon("fos-radix-weapon"){{
-                    x = 8; y = -2;
-                    recoil = 1f;
-                    mirror = alternate = true;
-                    reload = 45f;
-                    rotate = false;
-                    ejectEffect = Fx.none;
-                    bullet = new BasicBulletType(){{
-                        damage = 20;
-                        lifetime = 45;
-                        speed = 5f;
-                        width = height = 10f;
-                        collidesAir = false;
+                    new Weapon("fos-e-weapon"){{
+                        x = 0; y = 3;
+                        recoil = 1f;
+                        mirror = false;
+                        layerOffset = -0.0001f;
+                        reload = 45f;
+                        rotate = false;
+                        shootSound = Sounds.missile;
+                        bullet = new BasicBulletType(){{
+                            damage = 20;
+                            lifetime = 45;
+                            speed = 5f;
+                            width = height = 10f;
+                            collidesAir = false;
 
-                        trailLength = 12;
-                        trailWidth = 3;
-                        trailEffect = Fx.artilleryTrail;
-                        trailColor = backColor = Pal.accent.cpy().mul(0.8f);
-                        frontColor = Pal.accent;
+                            trailLength = 12;
+                            trailWidth = 3;
+                            trailEffect = Fx.artilleryTrail;
+                            trailColor = backColor = Pal.surge;
+                            frontColor = Color.white;
 
-                        fragBullets = 9;
-                        fragOnHit = true;
-                        fragBullet = new LightningBulletType(){{
-                            damage = 10;
-                            lightningLength = 2;
-                            lightningLengthRand = 2;
+                            fragBullets = 3;
+                            fragOnHit = true;
+                            fragBullet = new LightningBulletType(){{
+                                damage = 5;
+                                lightningLength = 3;
+                                lightningLengthRand = 2;
+                            }};
                         }};
-                    }};
-                }}
+                    }}
             );
         }};
         foetus = new FOSUnitType("foetus"){{
             health = 550;
             armor = 3;
-            speed = 0.5f;
+            speed = 0.4f;
             hitSize = 18;
             rotateSpeed = 1.8f;
             targetAir = false;
 
             legCount = 3;
+            legLength = 6.0F;
             legGroupSize = 1;
-            legStraightness = 0.4f;
-            baseLegStraightness = 0.5f;
-            legLength = 9f;
-            legForwardScl = 0.45f;
-            legMoveSpace = 0.8f;
-            rippleScale = 2f;
-            legExtension = -5f;
+            lockLegBase = true;
+            legContinuousMove = true;
+            legExtension = -3.0F;
+            legBaseOffset = 4.0F;
+            legMaxLength = 1.1F;
+            legMinLength = 0.2F;
+            legLengthScl = 0.925F;
+            legForwardScl = 0.9075F;
+            legMoveSpace = 1.085F;
 
-            weapons.add(
-                new Weapon("fos-foetus-weapon"){{
-                    x = 0; y = -4;
-                    recoil = 3f;
-                    mirror = false;
-                    reload = 120f;
-                    ejectEffect = Fx.none;
-                    shoot = new ShootMulti(
-                        new ShootAlternate(){{
-                            barrels = shots = 3;
-                            spread = 3.5f;
-                        }},
-                        new ShootHelix(){{
-                            mag = 3f;
-                        }}
-                    );
-                    bullet = new BasicBulletType(){{
-                        damage = 75;
-                        speed = 3;
-                        lifetime = 85;
-                        width = height = 12;
+            abilities.add(new EnergyFieldAbility(40f, 90f, 90f){{
+                x = 0; y = -2;
+                statusDuration = 120f;
+                maxTargets = 10;
+                color = Pal.surge;
+                //buildingDamageMultiplier = 1.25f;
+            }});
 
-                        collidesAir = false;
-                        pierce = pierceBuilding = true;
-                        pierceCap = 1;
+            weapons.add(new PointDefenseWeapon("fos-e-point-defense-small"){{
+                x = 9; y = -3;
+                mirror = true;
+                rotate = true;
+                rotateSpeed = 10f;
+                reload = 12f;
 
-                        trailLength = 6;
-                        trailWidth = 4;
-                        trailEffect = Fx.artilleryTrail;
-                        trailColor = backColor = Pal.accent.cpy().mul(0.8f);
-                        frontColor = Pal.accent;
+                targetInterval = 5f;
+                targetSwitchInterval = 10f;
+                recoil = 0.2f;
 
-                        intervalBullets = 1;
-                        bulletInterval = 4;
-                        intervalBullet = new LightningBulletType(){{
-                            damage = 15;
-                            collidesAir = false;
-                            ammoMultiplier = 1f;
-                            lightningColor = Pal.accent;
-                            lightningLength = 3;
-                            lightningLengthRand = 6;
-
-                            //for visual stats only.
-                            //buildingDamageMultiplier = 0.25f;
-
-                            lightningType = new BulletType(0.0001f, 0f){{
-                                lifetime = Fx.lightning.lifetime;
-                                hitEffect = Fx.hitLancer;
-                                despawnEffect = Fx.none;
-                                status = StatusEffects.shocked;
-                                statusDuration = 10f;
-                                hittable = false;
-                                lightColor = Color.white;
-                                //buildingDamageMultiplier = 0.25f;
-                            }};
-                        }};
-                    }};
-                }}
-            );
+                bullet = new BulletType(){{
+                    shootSound = Sounds.lasershoot;
+                    shootEffect = Fx.sparkShoot;
+                    hitEffect = Fx.pointHit;
+                    maxRange = 175f;
+                    damage = 50f;
+                }};
+            }});
         }};
         vitarus = new FOSUnitType("vitarus"){{
             health = 2100;
             armor = 4;
-            speed = 0.4f;
+            speed = 0.35f;
             hitSize = 22;
-            rotateSpeed = 1.5f;
+            rotateSpeed = 1f;
 
             legCount = 4;
+            legLength = 10.0F;
             legGroupSize = 2;
-            legStraightness = 0.6f;
-            baseLegStraightness = 0.5f;
-            legLength = 11f;
-            legForwardScl = 0.45f;
-            legMoveSpace = 1f;
-            rippleScale = 2f;
-            legExtension = -5f;
+            lockLegBase = true;
+            legContinuousMove = true;
+            legExtension = -3.0F;
+            legBaseOffset = 5.0F;
+            legMaxLength = 1.1F;
+            legMinLength = 0.2F;
+            legLengthScl = 0.925F;
+            legForwardScl = 0.9075F;
+            legMoveSpace = 1.085F;
 
             weapons.add(
-                new Weapon("fos-vitarus-weapon"){{
-                    x = 0; y = 6;
-                    recoil = 5f;
-                    mirror = false;
-                    reload = 120f;
-                    ejectEffect = Fx.none;
+                    new Weapon("fos-e-railgun"){{
+                        x = 12; y = 4;
+                        recoil = 5f;
+                        rotate = true;
+                        rotateSpeed = 1.25f;
+                        rotationLimit = 30f;
+                        layerOffset = -0.0001f;
+                        mirror = true;
+                        reload = 120f;
+                        shootSound = Sounds.shootSmite;
 
-                    bullet = new BasicBulletType(){{
-                        damage = 80;
-                        speed = 6;
-                        lifetime = 45;
-                        width = height = 8f;
-                        lightRadius = 4f;
+                        bullet = new RailBulletType(){{
+                            pierceCap = 1;
+                            pierce = pierceBuilding = true;
+                            collidesAir = false;
+                            damage = 75f;
+                            //buildingDamageMultiplier = 0.75f;
+                            length = 100f;
+                            hitColor = Pal.surge;
+                            hitEffect = endEffect = Fx.dynamicSpikes.wrap(Pal.surge, 16f);
+                            shootEffect = Fx.shootBig2;
+                            smokeEffect = Fx.colorSpark;
+                            lineEffect = Fx.chainLightning;
+                            hitEffect = Fx.blastExplosion;
+                            status = StatusEffects.blasted;
 
-                        pierce = pierceBuilding = true;
-                        pierceCap = 3;
-
-                        trailLength = 9;
-                        trailWidth = 3;
-                        trailEffect = Fx.artilleryTrail;
-                        trailColor = backColor = Pal.accent.cpy().mul(0.8f);
-                        frontColor = Pal.accent;
-
-                        fragBullets = 13;
-                        fragRandomSpread = 30f;
-                        fragBullet = new LightningBulletType(){{
-                            damage = 37.5f;
-                            lightningLength = 6;
-                            lightningLengthRand = 6;
-                            lightningColor = Pal.accent;
+                            fragBullets = 4;
+                            fragOnHit = true;
+                            fragRandomSpread = 0f;
+                            fragBullet = new LightningBulletType(){{
+                                damage = 10;
+                                //buildingDamageMultiplier = 0.6f;
+                                lightningLength = 7;
+                                lightningLengthRand = 7;
+                                lightningColor = hitColor = Pal.surge;
+                            }};
                         }};
-                    }};
-                }},
-                new Weapon("fos-vitarus-point-weapon"){{
-                    x = 9; y = -4;
-                    mirror = alternate = true;
-                    rotate = true;
-                    top = true;
-                    reload = 30f;
+                    }},
+                    new PointDefenseWeapon("fos-e-point-defense-medium"){{
+                        x = 0; y = 1;
+                        mirror = false;
+                        rotate = true;
+                        rotateSpeed = 10f;
+                        reload = 9f;
 
-                    shootSound = Sounds.pew;
-                    shoot = new ShootHelix(){{
-                        shots = 2;
-                        mag = 2.5f;
-                    }};
+                        targetInterval = 5f;
+                        targetSwitchInterval = 5f;
+                        recoil = 0.2f;
 
-                    bullet = new BasicBulletType(){{
-                        damage = 15;
-                        speed = 3;
-                        lifetime = 120;
-                        width = 3; height = 3;
-
-                        trailLength = 8;
-                        trailWidth = 1.5f;
-                        trailColor = backColor = Pal.accent.cpy().mul(0.8f);
-                        frontColor = Pal.accent;
-                    }};
-                }}
+                        bullet = new BulletType(){{
+                            shootSound = Sounds.lasershoot;
+                            shootEffect = Fx.sparkShoot;
+                            hitEffect = Fx.pointHit;
+                            maxRange = 200f;
+                            damage = 45f;
+                        }};
+                    }}
             );
         }};
 
