@@ -29,7 +29,7 @@ public class UpgradeCenter extends Block {
      * @param player player that upgraded weapon
      * @param tile UpgradeBuildCenter tile
      * */
-    @Annotations.Remote(called = Annotations.Loc.client, targets = Annotations.Loc.both, forward = true)
+    @Annotations.Remote(called = Annotations.Loc.both, targets = Annotations.Loc.both, forward = true)
     public static void upgrade(Player player, Tile tile) {
         // check received packet integrity (other validation server-side)
         if (tile == null || tile.build == null || !(tile.build instanceof UpgradeCenterBuild ucb)) return;

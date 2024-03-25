@@ -1,5 +1,6 @@
 package fos.type.units.comp;
 
+import arc.util.Log;
 import arc.util.io.*;
 import fos.FOSTypeIO;
 import fos.type.content.WeaponSet;
@@ -15,11 +16,10 @@ public abstract class LumoniPlayerUnitComp implements Weaponsc, Entityc, Syncc, 
     transient boolean isEditedWeapons = false;
     transient WeaponSet weaponSet = null;
     @Annotations.Import WeaponMount[] mounts;
-    //transient boolean isTypeSet = false;
 
     @Annotations.Replace
     @Override
-    public void setType(UnitType unitType) { // created for deleting abilities and mounts replacement
+    public void setType(UnitType unitType) {
         type(unitType);
         maxHealth(type().health);
         drag(type().drag);
@@ -41,7 +41,6 @@ public abstract class LumoniPlayerUnitComp implements Weaponsc, Entityc, Syncc, 
 
     @Override
     public void write(Writes write) {
-        //write.bool(isTypeSet);
         write.bool(isEditedWeapons);
         write.i(weaponSet == null ? -1 : weaponSet.id);
         FOSTypeIO.writeMounts2(write, this);
@@ -49,10 +48,19 @@ public abstract class LumoniPlayerUnitComp implements Weaponsc, Entityc, Syncc, 
 
     @Override
     public void read(Reads read) {
-        //isTypeSet = read.bool();
         isEditedWeapons = read.bool();
         int weaponSetId = read.i();
         weaponSet = weaponSetId == -1 ? null : WeaponSet.sets.get(weaponSetId);
         mounts = FOSTypeIO.readMounts2(read, this);
+    }
+
+    @Override
+    public void readSync(Reads read) {
+        isEditedWeapons = read.bool();
+    }
+
+    @Override
+    public void writeSync(Writes write) {
+        write.bool(isEditedWeapons);
     }
 }
