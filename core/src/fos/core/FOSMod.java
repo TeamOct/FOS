@@ -11,6 +11,7 @@ import arc.struct.Seq;
 import arc.util.*;
 import fos.content.*;
 import fos.controllers.CapsulesController;
+import fos.gen.FosCall;
 import fos.gen.FosEntityMapping;
 import fos.graphics.*;
 import fos.net.FOSPackets;
@@ -41,6 +42,7 @@ public class FOSMod extends Mod {
             Log.level = Log.LogLevel.debug;
 
         FOSPackets.register();
+        FosCall.registerPackets();
         FosEntityMapping.init();
 
         Events.on(EventType.ClientLoadEvent.class, e -> {
@@ -52,9 +54,10 @@ public class FOSMod extends Mod {
             if (!mobile) {
                 boolean useDiscord = !OS.hasProp("nodiscord");
                 if (useDiscord) {
-                    RichPresence presence = new RichPresence();
                     if (!state.isCampaign()) return;
                     if (state.rules.sector.planet == FOSPlanets.uxerd) {
+                        RichPresence presence = new RichPresence();
+
                         Building a = indexer.findTile(Team.sharded, 350 * 8, 350 * 8, 4000, b -> b instanceof OrbitalAcceleratorBuild);
 
                         presence.details = "Uxerd (FOS)";

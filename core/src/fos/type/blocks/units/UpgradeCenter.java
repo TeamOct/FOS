@@ -8,20 +8,35 @@ import arc.scene.ui.layout.Table;
 import arc.struct.Seq;
 import arc.util.*;
 import arc.util.io.*;
+import fos.gen.FosCall;
 import fos.gen.LumoniPlayerUnitc;
 import fos.net.FOSPackets;
 import fos.type.content.WeaponSet;
 import mindustry.Vars;
+import mindustry.annotations.Annotations;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.ui.*;
 import mindustry.world.Block;
+import mindustry.world.Tile;
 import mindustry.world.blocks.ItemSelection;
 import mindustry.world.consumers.ConsumeItemDynamic;
 import mindustry.world.draw.*;
 
 public class UpgradeCenter extends Block {
+    /** Called when player upgrades their weapon
+     * @param player player that upgraded weapon
+     * @param tile UpgradeBuildCenter tile
+     * */
+    @Annotations.Remote(called = Annotations.Loc.client, targets = Annotations.Loc.both, forward = true)
+    public static void upgrade(Player player, Tile tile) {
+        // check received packet integrity (other validation server-side)
+        if (tile == null || tile.build == null || !(tile.build instanceof UpgradeCenterBuild ucb)) return;
+
+        ucb.upgrade(player);
+    }
+
     public TextureRegion topRegion;
     public DrawBlock drawer = new DrawDefault();
 
@@ -112,6 +127,13 @@ public class UpgradeCenter extends Block {
             return fraction() == 1 ? 0 : efficiency;
         }
 
+        public void upgrade(Player player) {
+            consume();
+            progress = 0;
+
+            weaponSet.applyToUnit((LumoniPlayerUnitc) player.unit());
+        }
+
         @Override
         public void draw() {
             drawer.draw(this);
@@ -151,10 +173,6 @@ public class UpgradeCenter extends Block {
 
         @Override
         public void updateTile() {
-            if (!configurable) {
-                weaponSet = null;
-            }
-
             if (efficiency > 0 && weaponSet != null && fraction() < 1) {
                 progress += edelta();
             }
@@ -166,18 +184,9 @@ public class UpgradeCenter extends Block {
             return enabled && weaponSet != null && fraction() < 1;
         }
 
-        /** Called from packet. **/
-        public void upgrade(FOSPackets.UpgradeCenterUpgradePacket packet) {
-            if (fraction() < 1 || !(Vars.player.unit() instanceof LumoniPlayerUnitc lpc) || tile == null) return;
-
-            consume();
-            progress = 0;
-            packet.weaponSet.applyToUnit(lpc);
-        }
-
         @Override
         public void buildConfiguration(Table table) {
-            if (WeaponSet.sets.any()) {
+            if (WeaponSet.sets.size > 0) {
                 ItemSelection.buildTable(UpgradeCenter.this, table, WeaponSet.sets,
                         () -> weaponSet == null ? null : weaponSet,
                         ws -> {
@@ -186,27 +195,14 @@ public class UpgradeCenter extends Block {
                         },
                         selectionRows, selectionColumns
                 );
-            } else {
-                table.table(Styles.black3, t -> t.add("@none").color(Color.lightGray));
-            }
-
-            table.row();
-
-            if (fraction() >= 1) {
+                table.row();
                 table.button(Icon.units, Styles.clearTogglei, () -> {
-                    if (weaponSet == null) return;
-                    FOSPackets.UpgradeCenterUpgradePacket packet = new FOSPackets.UpgradeCenterUpgradePacket(Vars.player,
-                        this, weaponSet);
-                    if (!Vars.net.active())
-                        upgrade(packet);
-                    else {
-                        if (Vars.net.server())
-                            upgrade(packet);
-                        Vars.net.send(packet, true);
-                    }
-
+                    if (weaponSet == null || Vars.player == null) return;
+                    FosCall.upgrade(Vars.player, tile());
                     deselect();
-                });
+                }).visible(() -> fraction() >= 1f);
+            } else {
+                deselect();
             }
         }
 
