@@ -20,7 +20,7 @@ import mindustry.entities.pattern.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
-import mindustry.type.weapons.RepairBeamWeapon;
+import mindustry.type.weapons.*;
 
 import static fos.content.FOSStatuses.hacked;
 
