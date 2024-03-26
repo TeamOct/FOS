@@ -1,4 +1,4 @@
-project.tasks.jar { Jar task ->
+project.tasks.compileJava { JavaCompile task ->
     task.doFirst {
         project.copy { CopySpec spec ->
             spec.from project.file("mod.json")

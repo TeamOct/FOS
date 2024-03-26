@@ -8,7 +8,7 @@ import arc.scene.ui.layout.Table;
 import arc.struct.Seq;
 import arc.util.*;
 import arc.util.io.*;
-import fos.gen.FosCall;
+import fos.gen.FOSCall;
 import fos.gen.LumoniPlayerUnitc;
 import fos.net.FOSPackets;
 import fos.type.content.WeaponSet;
@@ -198,7 +198,7 @@ public class UpgradeCenter extends Block {
                 table.row();
                 table.button(Icon.units, Styles.clearTogglei, () -> {
                     if (weaponSet == null || Vars.player == null) return;
-                    FosCall.upgrade(Vars.player, tile());
+                    FOSCall.upgrade(Vars.player, tile());
                     deselect();
                 }).visible(() -> fraction() >= 1f);
             } else {

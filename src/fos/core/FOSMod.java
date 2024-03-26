@@ -11,8 +11,8 @@ import arc.struct.Seq;
 import arc.util.*;
 import fos.content.*;
 import fos.controllers.CapsulesController;
-import fos.gen.FosCall;
-import fos.gen.FosEntityMapping;
+import fos.gen.FOSCall;
+import fos.gen.FOSEntityMapping;
 import fos.graphics.*;
 import fos.net.FOSPackets;
 import fos.ui.*;
@@ -30,10 +30,12 @@ import mma.annotations.ModAnnotations;
 import static arc.Core.settings;
 import static mindustry.Vars.headless;
 
-@ModAnnotations.RootDirectoryPath(rootDirectoryPath = "core")
+@ModAnnotations.RootDirectoryPath(rootDirectoryPath = "")
 @ModAnnotations.AnnotationSettings(
         rootPackage = "fos",
-        modInfoPath = "res/mod.json"
+        modInfoPath = "res/mod.json",
+        classPrefix = "FOS",
+        revisionsPath = "revisions"
 )
 public class FOSMod extends Mod {
     public FOSMod() {
@@ -42,8 +44,11 @@ public class FOSMod extends Mod {
             Log.level = Log.LogLevel.debug;
 
         FOSPackets.register();
-        FosCall.registerPackets();
-        FosEntityMapping.init();
+        FOSCall.registerPackets();
+        FOSEntityMapping.init();
+        EntityMapping.nameMap.keys().toSeq().each(s -> {
+            EntityMapping.nameMap.put("fos-" + s, EntityMapping.nameMap.get(s));
+        });
 
         Events.on(EventType.ClientLoadEvent.class, e -> {
             clientLoaded();

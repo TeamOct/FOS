@@ -165,9 +165,9 @@ project.tasks.copyBuildRelease { Task task ->
 }
 
 project.tasks.jar { Jar jar ->
-    jar.archiveFileName = "classes.jar"
+    jar.archiveFileName.set "classes.jar"
 
-    jar.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    jar.duplicatesStrategy DuplicatesStrategy.EXCLUDE
     jar.from {
         project.configurations.runtimeClasspath.collect { File file ->
             file.isDirectory() ? file : zipTree(file)
@@ -186,6 +186,8 @@ project.tasks.buildRelease { Jar jar ->
         project.ext.useandroid ? [project.zipTree(project.tasks.jar.archiveFile.get()), project.zipTree(dexFile)] :
                 [project.zipTree(project.tasks.jar.archiveFile.get())]
     }
+
+    jar.destinationDirectory.set project.file("artifacts")
 }
 
 // create dex jar
