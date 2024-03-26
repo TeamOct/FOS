@@ -1,9 +1,16 @@
+project.ext {
+    mindustryVersion = project.ext.settings?.dependencies?.mindustryVersion ?: "v146"
+    useJitpackForMindustryDependency = project.ext.settings?.dependencies?.useJitpackForMindustryDependency ?: ""
+
+    mindustryDependence = "com.github.Anuken.Mindustry${project.ext.useJitpackForMindustryDependency ? "Jitpack" : ""}:core:$project.ext.mindustryVersion"
+}
+
 dependencies {
-    compileOnly project.parent.ext.mindustryDependence
+    compileOnly project.ext.mindustryDependence
 }
 
 project.tasks.jar { Jar jar ->
-    jar.from(project.parent.projectDir) { CopySpec copys ->
+    jar.from(project.projectDir) { CopySpec copys ->
         copys.include("mod.json")
         copys.include("icon.png")
     }

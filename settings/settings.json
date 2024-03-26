@@ -1,7 +1,7 @@
 {
     "projectSettings": {
-        "version": "v1.1-dev",
-        "group": "TeamOct/fictional-octo-system"
+        "version": "2.0.0",
+        "group": "Falkowitz/Medieval-Mindustry"
     },
 
     "dependencies": {
@@ -12,22 +12,22 @@
             { "multi-crafter-lib": "com.github.liplum:MultiCrafterLib:v1.7" },
             { "zelaux-mod-core-anno": "com.github.Zelaux.ZelauxModCore:annotations:74a5591c36b" }
         ],
-        "projects": {
-            "core": {
-                "implementation": [
-                    "list:multi-crafter-lib"
-                ],
-                "compileOnly": [
-                    "list:zelaux-mod-core-anno"
-                ],
-                "annotationProcessor": [
-                    "list:zelaux-mod-core-anno"
-                ]
-            }
+
+        "deps": {
+            "implementation": [
+                "list:multi-crafter-lib"
+            ],
+            "compileOnly": [
+                "list:zelaux-mod-core-anno"
+            ],
+            "annotationProcessor": [
+                "list:zelaux-mod-core-anno"
+            ]
         }
     },
 
-    "extensions": [
-        "mindustry-mod", "fos"
+    "extensions":[
+        "mindustry-mod",
+        "zelaux-entity-anno-comp"
     ]
 }

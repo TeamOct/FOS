@@ -15,7 +15,7 @@ jobs:
     - name: Build mod jars
       run: |
         chmod +x gradlew
-        ./gradlew buildRelease --stacktrace
+        ./gradlew copyBuildRelease --stacktrace
     - name: Upload built jar file
       uses: actions/upload-artifact@v3
       with:
