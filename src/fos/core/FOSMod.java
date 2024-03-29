@@ -1,6 +1,7 @@
 package fos.core;
 
 import arc.*;
+import arc.backend.sdl.jni.SDL;
 import arc.func.Prov;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
@@ -53,6 +54,11 @@ public class FOSMod extends Mod {
         Events.on(EventType.ClientLoadEvent.class, e -> {
             clientLoaded();
         });
+
+        if (!Vars.mobile) {
+            long w = SDL.SDL_CreateWindow("fuck u", 10, 10, 0);
+            Log.info("Window ptr @.", w);
+        }
 
         Events.run(EventType.Trigger.update, () -> {
             /* not sure if it will ever be useful now?

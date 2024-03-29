@@ -61,8 +61,12 @@ ext {
 
             if (dep == null)
                 project.logger.log(LogLevel.ERROR, "Uncknown depedency type $v")
-            else
-                project.ext.deps[k] = dep
+            else {
+                if (!project.ext.deps.containsKey(k)) {
+                    project.ext.deps[k] = []
+                }
+                project.ext.deps[k] += dep
+            }
         }
     }
 
