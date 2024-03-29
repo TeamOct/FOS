@@ -66,10 +66,11 @@ public class ClassicDamageDisplay {
             e.y + (forDraw == null ? 0f : forDraw.getRegion().height * realScale / 4f), Draw.getColor(), realScale, false, Align.left);
         // hello again meep
         if (bullet != null && bullet.owner instanceof Building b && b.block.name.equals("prog-mats-caliber") && damage > bullet.type.damage) {
+            var critColor = new Color(e.fin(), e.fout(), 0, e.fout());
             Fonts.def.draw("CRITICAL", e.x, e.y - 16f,
-                Color.green, 1f, false, Align.center);
+                critColor, 1f, false, Align.center);
             Fonts.def.draw("HIT!!!", e.x, e.y - 32f,
-                Color.green, 1f, false, Align.center);
+                critColor, 1f, false, Align.center);
         }
 
         Draw.z(Layer.effect);
@@ -90,9 +91,9 @@ public class ClassicDamageDisplay {
             float prev = units.get(e.unit, 0f);
             if (prev <= 0f) return;
 
-            int dmg = Mathf.round(prev - e.unit.health);
+            int dmg = Mathf.round(prev - (e.unit.health + e.unit.shield));
             showDamage(dmg, e.bullet, e.unit);
-            units.increment(e.unit, 0f, -(prev - e.unit.health));
+            units.increment(e.unit, 0f, -(prev - (e.unit.health + e.unit.shield)));
             //remove a killed unit
             if (units.get(e.unit, 0f) <= 0f) {
                 units.remove(e.unit, 0f);
@@ -136,6 +137,7 @@ public class ClassicDamageDisplay {
                 return;
             }
 
+            //region buildings
             if (buildings == null) {
                 initBuildings();
             } else {
@@ -149,19 +151,20 @@ public class ClassicDamageDisplay {
                     }
                 });
             }
+            //endregion
 
             //region units
             if (units == null) {
                 units = new ObjectFloatMap<>();
             }
-            Groups.unit.each(Unit::hittable, u -> units.put(u, u.health));
+            Groups.unit.each(Unit::hittable, u -> units.put(u, u.health + u.shield));
             units.each(u -> {
                 //make sure to track heals
                 if (u.key.health > u.value) {
                     showHeal(Mathf.round(u.key.health - u.value), u.key);
                     units.increment(u.key, 0f, u.key.health - u.value);
-                } else if (u.key.health < u.value) {
-                    units.increment(u.key, 0f, u.key.health - u.value);
+                } else if ((u.key.health + u.key.shield) < u.value) {
+                    units.increment(u.key, 0f, (u.key.health + u.key.shield) - u.value);
                 }
             });
             //endregion

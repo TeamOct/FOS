@@ -1,6 +1,5 @@
 package fos.type.units.comp;
 
-import arc.util.Log;
 import arc.util.io.*;
 import fos.FOSTypeIO;
 import fos.type.content.WeaponSet;
@@ -28,6 +27,7 @@ public abstract class LumoniPlayerUnitComp implements Weaponsc, Entityc, Syncc, 
         hovering(type().hovering);
         
         if (controller() == null) controller(type().createController(self()));
+
         if (!isEditedWeapons) {
             if (mounts().length != type().weapons.size) setupWeapons(type());
             if (abilities().length != type().abilities.size) {

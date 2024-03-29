@@ -3,6 +3,7 @@ package fos.content;
 import arc.graphics.Color;
 import arc.math.Mathf;
 import arc.math.geom.Rect;
+import arc.struct.Seq;
 import fos.ai.*;
 import fos.gen.*;
 import fos.graphics.FOSPal;
@@ -10,7 +11,8 @@ import fos.type.abilities.*;
 import fos.type.bullets.*;
 import fos.type.units.types.*;
 import fos.type.units.weapons.InjectorWeapon;
-import mindustry.ai.types.GroundAI;
+import mindustry.ai.UnitCommand;
+import mindustry.ai.types.*;
 import mindustry.annotations.Annotations;
 import mindustry.content.*;
 import mindustry.entities.abilities.*;
@@ -22,6 +24,7 @@ import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.weapons.*;
 
+import static fos.content.FOSItems.tin;
 import static fos.content.FOSStatuses.hacked;
 
 public class FOSUnitTypes {
@@ -33,7 +36,7 @@ public class FOSUnitTypes {
         // TANK BOSSES
         myriad, warden;
 
-    public static @Annotations.EntityDef({FOSHovercraftc.class, Unitc.class}) UnitType
+    public static @Annotations.EntityDef({ElevationMovec.class, Unitc.class}) UnitType
         // HOVERCRAFT (INJECTORS)
         sergeant, lieutenant, captain,
 
@@ -75,6 +78,10 @@ public class FOSUnitTypes {
     public static @Annotations.EntityDef({Bugc.class, Unitc.class}) UnitType
         // FLYING INSECTS
         bugFlyingSmall, bugFlyingMedium;
+
+    public static @Annotations.EntityDef({Unitc.class, Minerc.class, BuildingTetherc.class}) UnitType
+        // MINER UNITS
+        draug;
 
     public static void load(){
         //DestroyersUnits.load();
@@ -1122,6 +1129,24 @@ public class FOSUnitTypes {
                     }};
                 }}
             );
+        }};
+
+        draug = new UnitType("draug"){{
+            health = 110;
+            armor = 2;
+            flying = true;
+            drag = 0.06f;
+            accel = 0.12f;
+            speed = 1.8f;
+            isEnemy = false;
+            useUnitCap = false;
+
+            mineItems = Seq.with(tin);
+            mineTier = 2;
+            mineSpeed = 1.2f;
+
+            controller = u -> new MinerAI();
+            defaultCommand = UnitCommand.mineCommand;
         }};
 
         //TODO

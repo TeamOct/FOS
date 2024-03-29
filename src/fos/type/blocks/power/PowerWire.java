@@ -117,9 +117,9 @@ public class PowerWire extends PowerNode {
             return;
         }
 
+        //don't count the same block AND power blocks as inaccessible
         Boolf<BuildPlan> placeable = plan -> (plan.placeable(player.team())) ||
-            (plan.tile() != null && plan.tile().block() == plan.block); //don't count the same block as inaccessible
-
+            (plan.tile() != null && (plan.tile().block() == plan.block || plan.tile().block().hasPower));
         var result = FOSVars.wirePlans.clear();
         var team = player.team();
         //var rotated = plans.first().tile() != null && plans.first().tile().absoluteRelativeTo(plans.peek().x, plans.peek().y) == Mathf.mod(plans.first().rotation + 2, 4);

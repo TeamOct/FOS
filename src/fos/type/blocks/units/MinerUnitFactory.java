@@ -3,11 +3,13 @@ package fos.type.blocks.units;
 import arc.*;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
-import arc.struct.Seq;
-import arc.util.Structs;
+import arc.struct.*;
+import arc.util.*;
 import arc.util.io.*;
 import mindustry.Vars;
 import mindustry.content.Fx;
+import mindustry.core.World;
+import mindustry.entities.*;
 import mindustry.game.EventType;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -69,11 +71,11 @@ public class MinerUnitFactory extends UnitBlock {
                 () -> unitType == null ? "[lightgray]" + Iconc.cancel :
                     Core.bundle.format("bar.unitcap",
                         Fonts.getUnicodeStr(unitType.name),
-                        e.spawned.size,
+                        e.units.size,
                         maxSpawn
                     ),
                 () -> Pal.power,
-                () -> (float) e.spawned.size / maxSpawn
+                () -> (float) e.units.size / maxSpawn
             )
         );
     }
@@ -82,8 +84,8 @@ public class MinerUnitFactory extends UnitBlock {
         float progress;
         float speedScl;
 
-        Seq<Integer> spawnedIds = new Seq<>();
-        Seq<Unit> spawned = new Seq<>();
+        IntSeq readUnits = new IntSeq();
+        Seq<Unit> units = new Seq<>();
 
         public float fraction() {
             return progress / produceTime;
@@ -128,28 +130,35 @@ public class MinerUnitFactory extends UnitBlock {
         public void updateTile() {
             super.updateTile();
 
-            for (int i = 0; i < spawnedIds.size; i++) {
-                if (spawned.size >= i) {
-                    spawned.size = i+1;
-                }
-                spawned.insert(i, Groups.unit.getByID(spawnedIds.get(i)));
+            // get units from saved IDs
+            if (!readUnits.isEmpty()) {
+                //units.clear();
+                // java sucks
+                final boolean[] clear = {true};
+                readUnits.each(i -> {
+                    var unit = Groups.unit.getByID(i);
+                    if (unit != null) {
+                        units.add(unit);
+                    } else {
+                        clear[0] = false;
+                    }
+                });
+                if (clear[0]) readUnits.clear();
             }
 
-            for (int i = 0; i < spawned.size; i++) {
-                Unit u = spawned.get(i);
-
-                if (u != null && !u.isValid()) {
-                    spawnedIds.remove(i);
-                    spawned.remove(u);
+            // check if current units are alive
+            for (var u : units) {
+                if (u == null || u.dead()) {
+                    units.remove(u);
                 }
             }
 
-            //do nothing if a unit is unavailable.
+            // do nothing if a unit is unavailable
             if (unitType.isBanned() || !unitType.unlockedNow()) {
                 return;
             }
 
-            if (efficiency > 0 && payload == null && spawned.size < maxSpawn) {
+            if (efficiency > 0 && payload == null && units.size < maxSpawn) {
                 time += edelta() * speedScl * Vars.state.rules.unitBuildSpeed(team);
                 progress += edelta() * Vars.state.rules.unitBuildSpeed(team);
                 speedScl = Mathf.lerpDelta(speedScl, 1f, 0.05f);
@@ -160,31 +169,62 @@ public class MinerUnitFactory extends UnitBlock {
             moveOutPayload();
 
             if (progress >= produceTime) {
-                progress %= 1f;
-
                 Unit unit = unitType.create(team);
 /*
                 if(commandPos != null && unit.isCommandable()){
                     unit.command().commandPosition(commandPos);
                 }
 */
-                payload = new UnitPayload(unit);
+                // OH YEAH HARD-CODING TIME
+                payload = new UnitPayload(unit){
+                    @Override
+                    public boolean dump() {
+                        //TODO should not happen
+                        if(unit.type == null) return true;
+
+                        if(unit.type.isBanned()){
+                            overlayTime = 1f;
+                            overlayRegion = null;
+                            return false;
+                        }
+
+                        //check if unit can be dumped here
+                        EntityCollisions.SolidPred solid = unit.solidity();
+                        if(solid != null){
+                            Tmp.v1.trns(unit.rotation, 1f);
+
+                            int tx = World.toTile(unit.x + Tmp.v1.x), ty = World.toTile(unit.y + Tmp.v1.y);
+
+                            //cannot dump on solid blocks
+                            if(solid.solid(tx, ty)) return false;
+                        }
+
+                        //cannot dump when there's a lot of overlap going on
+                        if(!unit.type.flying && Units.count(unit.x, unit.y, unit.physicSize(), o -> o.isGrounded() && (o.type.allowLegStep == unit.type.allowLegStep)) > 0){
+                            return false;
+                        }
+
+                        //no client dumping
+                        if(Vars.net.client()) return true;
+
+                        //prevents stacking
+                        unit.vel.add(Mathf.range(0.5f), Mathf.range(0.5f));
+                        unit.add();
+                        unit.unloaded();
+                        Events.fire(new EventType.UnitUnloadEvent(unit));
+
+                        return true;
+                    }
+                };
+
                 payVector.setZero();
                 consume();
                 spawned(unit.id);
+                if (unit instanceof BuildingTetherc bt) bt.building(this);
                 Events.fire(new EventType.UnitCreateEvent(payload.unit, this));
             } else {
                 progress = Mathf.clamp(progress, 0, produceTime);
             }
-        }
-
-        @Override
-        public void spawned(int id) {
-            Fx.spawn.at(x, y);
-            progress = 0f;
-
-            spawnedIds.add(id);
-            spawned.add(Groups.unit.getByID(id));
         }
 
         @Override
@@ -208,21 +248,28 @@ public class MinerUnitFactory extends UnitBlock {
             super.write(write);
 
             write.f(progress);
-            write.i(Math.max(spawnedIds.size, 0));
-            for (int i = 0; i < spawnedIds.size; i++) {
-                write.i(spawnedIds.get(i));
+            write.i(units.size);
+            for (int i = 0; i < units.size; i++) {
+                write.i(units.get(i).id);
             }
         }
 
         @Override
         public void read(Reads read, byte revision) {
-            super.read(read);
+            super.read(read, revision);
 
             progress = read.f();
             int units = read.i();
             for (int i = 0; i < units; i++) {
-                spawnedIds.add(read.i());
+                readUnits.add(read.i());
             }
+        }
+
+        @Override
+        public void spawned(int id) {
+            Fx.spawn.at(x, y);
+            progress = 0f;
+            readUnits.add(id);
         }
     }
 }

@@ -1472,9 +1472,9 @@ public class FOSBlocks {
             consumePower(2);
             unitRequirements = with();
             maxSpawn = 1;
-            unitType = UnitTypes.mono;
+            unitType = draug;
             produceTime = 1200f;
-            requirements(Category.units, BuildVisibility.sandboxOnly, with(tin, 150, silver, 250));
+            requirements(Category.units, with(tin, 150, silver, 250, diamond, 50));
         }};
         //endregion
         //region storage
