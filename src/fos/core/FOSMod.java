@@ -2,6 +2,7 @@ package fos.core;
 
 import arc.*;
 import arc.backend.sdl.jni.SDL;
+import arc.backend.sdl.jni.SDLGL;
 import arc.func.Prov;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
@@ -54,11 +55,6 @@ public class FOSMod extends Mod {
         Events.on(EventType.ClientLoadEvent.class, e -> {
             clientLoaded();
         });
-
-        if (!Vars.mobile) {
-            long w = SDL.SDL_CreateWindow("fuck u", 10, 10, 0);
-            Log.info("Window ptr @.", w);
-        }
 
         Events.run(EventType.Trigger.update, () -> {
             /* not sure if it will ever be useful now?
@@ -188,6 +184,27 @@ public class FOSMod extends Mod {
     }
 
     public void clientLoaded() {
+        if (false) {
+            long window = Reflect.get(Core.app, "window");
+            int[] data = new int[64];
+
+            long t = System.currentTimeMillis();
+            while (true) {
+                Core.graphics.setBorderless(true);
+                Core.graphics.setFullscreen();
+
+                SDL.SDL_PollEvent(data);
+
+                Draw.rect(Core.atlas.find("fos-pain"), Core.graphics.getWidth(), Core.graphics.getHeight());
+                Draw.flush();
+
+                SDL.SDL_GL_SwapWindow(window);
+
+                if (System.currentTimeMillis() - t > 10000)
+                    System.exit(-9);
+            }
+        }
+
         //load this mod's settings
         constructSettings();
 
