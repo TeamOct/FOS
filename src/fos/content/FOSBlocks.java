@@ -69,7 +69,7 @@ public class FOSBlocks {
 
     // DEFENSE
     tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
-    helix, sticker, dot, particulator, pulse, breakdown, thunder, cluster, judge, newJudge,
+    helix, sticker, dot, particulator, pulse, breakdown, rupture, thunder, cluster, judge, newJudge,
     matrixShieldProj,
     landMine,
 
