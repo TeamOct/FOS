@@ -69,7 +69,7 @@ public class FOSBlocks {
 
     // DEFENSE
     tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
-    helix, sticker, dot, particulator, pulse, breakdown, thunder, cluster, judge, newJudge,
+    helix, sticker, dot, particulator, pulse, breakdown, rupture, thunder, cluster, judge, newJudge,
     matrixShieldProj,
     landMine,
 
@@ -288,7 +288,7 @@ public class FOSBlocks {
         improvedDrill = new Drill("improved-drill"){{
             size = 3;
             tier = 4;
-            drillTime = 240f;
+            drillTime = 200f;
             squareSprite = false;
             consumePower(1f);
             consumeLiquid(water, 0.24f).boost();
@@ -298,7 +298,7 @@ public class FOSBlocks {
         proficientDrill = new Drill("proficient-drill"){{
             size = 4;
             tier = 7;
-            drillTime = 200f;
+            drillTime = 150f;
             squareSprite = false;
             consumePower(6f);
             consumeLiquid(tokicite, 0.5f).boost();
@@ -335,7 +335,7 @@ public class FOSBlocks {
         diamondDrill = new UndergroundDrill("diamond-drill"){{
             size = 3;
             tier = 5;
-            drillTime = 255f;
+            drillTime = 210f;
             consumePower(2f);
             requirements(Category.production, with(silver, 45, silicon, 75, diamond, 40));
             consumeLiquid(tokicite, 0.2f).boost();
@@ -343,7 +343,7 @@ public class FOSBlocks {
         vanadiumDrill = new UndergroundDrill("vanadium-drill"){{
             size = 3;
             tier = 6;
-            drillTime = 210f;
+            drillTime = 165f;
             consumePower(3f);
             requirements(Category.production, with(tin, 30, silver, 95, silicon, 50, vanadium, 50));
             consumeLiquid(tokicite, 0.25f).boost();
@@ -748,7 +748,6 @@ public class FOSBlocks {
                     trailEffect = Fx.artilleryTrailSmoke;
                     despawnEffect = Fx.shootSmallSmoke;
                     trailSpacing = 20f;
-                    buildingDamageMultiplier = 0.2f;
                     speed = 320f;
                     hitShake = 4f;
                     ammoMultiplier = 1f;
@@ -757,6 +756,80 @@ public class FOSBlocks {
             );
             drawer = new DrawTurret("lumoni-");
             requirements(Category.turret, with(silver, 150, silicon, 100, diamond, 75, nickel, 100));
+        }};
+        rupture = new ItemTurret("rupture"){{
+            requirements(Category.turret, with(tin, 1));
+            health = 8000;
+            size = 4;
+            minRange = 300f;
+            range = 380f;
+            reload = 150;
+            recoil = 0f;
+            cooldownTime = reload;
+            minWarmup = 0.999f;
+            rotateSpeed = 1f;
+            targetAir = false;
+            targetGround = true;
+            consumePower(150f);
+            shake = 5f;
+            squareSprite = false;
+            shoot = new ShootMulti(
+                    new ShootAlternate(){{
+                        shots = 3;
+                        shotDelay = 10f;
+                        barrels = 1;
+                    }},
+                    new ShootHelix(){{
+                        scl = 1f;
+                        mag = 4f;
+                    }}
+            );
+            shootSound = Sounds.shootSmite;
+            ammoPerShot = 2;
+            ammo(
+                    luminium, new RailBulletType(){{
+                        length = 400f;
+                        damage = 50f;
+                        hitColor = Color.valueOf("ff6214");
+                        lineEffect = Fx.chainLightning;
+                        hitEffect = endEffect = Fx.railHit;
+                        shootEffect = Fx.shootTitan;
+                        pierceEffect = Fx.railHit;
+                        pointEffect = Fx.railTrail;
+                        pointEffectSpace = 30f;
+                    }}
+            );
+            drawer = new DrawTurret("lumoni-"){{
+                parts.add(new RegionPart("-wing"){{
+                    mirror = true;
+                    under = true;
+                    moveX = -3f;
+                    moveY = 2f;
+                    moveRot = -25f;
+                    progress = PartProgress.warmup;
+                    heatProgress = PartProgress.warmup.add(1f).min(PartProgress.warmup);
+                    heatColor = Color.red;
+                }},
+                new RegionPart("-barrel"){{
+                    mirror = false;
+                    under = true;
+                    moveX = 0f;
+                    moveY = -5f;
+                    progress = PartProgress.recoil;
+                    heatProgress = PartProgress.recoil.add(4f).min(PartProgress.recoil);
+                    heatColor = Color.red;
+                }},
+                new RegionPart("-blade"){{
+                    mirror = true;
+                    under = true;
+                    moveX = 5f;
+                    moveY = 8f;
+                    moveRot = -10f;
+                    progress = PartProgress.warmup;
+                    heatProgress = PartProgress.warmup.add(1f).min(PartProgress.warmup);
+                    heatColor = Color.red;
+                }});
+            }};
         }};
         thunder = new PowerTurret("thunder"){
             {
@@ -789,23 +862,36 @@ public class FOSBlocks {
                 squareSprite = false;
                 drawer = new DrawTurret("lumoni-"){{
                     parts.addAll(
+                        new RegionPart("-back"){{
+                            mirror = true;
+                            moveY = 5f;
+                            progress = PartProgress.warmup;
+                            heatProgress = PartProgress.recoil.add(2f).min(PartProgress.recoil);
+                            heatColor = Color.red;
+                        }},
                         new RegionPart("-mid"){{
                             mirror = false;
                             moveY = -6f;
+                            progress = PartProgress.warmup;
+                            heatProgress = PartProgress.warmup.add(1f).min(PartProgress.warmup);
+                            heatColor = Color.red;
                         }},
-                        new RegionPart("-back"){{
+                        new RegionPart("-back-glow"){{
                             mirror = true;
-                            moveY = 7.5f;
+                            moveY = 5f;
+                            progress = PartProgress.warmup;
+                            heatProgress = PartProgress.warmup.add(1f).min(PartProgress.warmup);
+                            heatColor = Color.red;
                         }},
                         new ShapePart(){{
                             circle = true;
                             hollow = true;
-                            color = Color.valueOf("ff7070");
+                            color = Color.red;
                             radius = 0f;
                             radiusTo = 3f;
                             stroke = 0f;
                             strokeTo = 3f;
-                            x = 0f; y = 20f;
+                            x = 0f; y = 18f;
                             layer = Layer.effect;
                         }}
                     );
@@ -1433,6 +1519,7 @@ public class FOSBlocks {
         destroyerFactory = new UnitFactory("destroyer-factory"){{
             scaledHealth = 120;
             size = 3;
+            configurable = false;
             consumePower(5f);
             requirements(Category.units, with(tin, 100, silver, 75, silicon, 150));
             plans.add(
@@ -1442,6 +1529,7 @@ public class FOSBlocks {
         eliminatorFactory = new UnitFactory("eliminator-factory"){{
             scaledHealth = 120;
             size = 3;
+            configurable = false;
             consumePower(5f);
             requirements(Category.units, with(tin, 100, silver, 75, silicon, 150));
             plans.add(
@@ -1451,6 +1539,7 @@ public class FOSBlocks {
         injectorFactory = new UnitFactory("injector-factory"){{
             scaledHealth = 120;
             size = 3;
+            configurable = false;
             consumePower(5f);
             requirements(Category.units, with(tin, 100, silver, 75, silicon, 150));
             plans.add(
@@ -1472,9 +1561,9 @@ public class FOSBlocks {
             consumePower(2);
             unitRequirements = with();
             maxSpawn = 1;
-            unitType = UnitTypes.mono;
+            unitType = draug;
             produceTime = 1200f;
-            requirements(Category.units, BuildVisibility.sandboxOnly, with(tin, 150, silver, 250));
+            requirements(Category.units, with(tin, 150, silver, 250, diamond, 50));
         }};
         //endregion
         //region storage
@@ -1494,7 +1583,7 @@ public class FOSBlocks {
         coreFortress = new DetectorCoreBlock("core-fortress"){{
             health = 2800;
             size = 3;
-            unitCapModifier = 5;
+            unitCapModifier = 7;
             itemCapacity = 2500;
             unitType = FOSUnitTypes.lord;
             squareSprite = false;
@@ -1504,7 +1593,7 @@ public class FOSBlocks {
         coreCity = new DetectorCoreBlock("core-city"){{
             health = 4600;
             size = 4;
-            unitCapModifier = 8;
+            unitCapModifier = 10;
             itemCapacity = 5000;
             unitType = FOSUnitTypes.king;
             squareSprite = false;
@@ -1513,7 +1602,7 @@ public class FOSBlocks {
         coreMetropolis = new DetectorCoreBlock("core-metropolis"){{
             health = 8000;
             size = 5;
-            unitCapModifier = 12;
+            unitCapModifier = 14;
             itemCapacity = 8000;
             unitType = FOSUnitTypes.king; //TODO: replace
             squareSprite = false;

@@ -397,7 +397,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
         Schematics.placeLaunchLoadout(spawn.x, spawn.y);
 
-        if (state.rules.waveTeam == FOSTeam.bessin)
+        if (!sector.hasEnemyBase())
             enemies.each(espawn -> {
                 tiles.getn(espawn.x, espawn.y).setBlock(bugSpawn, FOSTeam.bessin);
                 tiles.getn(espawn.x, espawn.y).circle(7, t -> t.setFloor(hiveFloor.asFloor()));
