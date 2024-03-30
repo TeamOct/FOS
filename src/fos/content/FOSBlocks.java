@@ -288,7 +288,7 @@ public class FOSBlocks {
         improvedDrill = new Drill("improved-drill"){{
             size = 3;
             tier = 4;
-            drillTime = 240f;
+            drillTime = 200f;
             squareSprite = false;
             consumePower(1f);
             consumeLiquid(water, 0.24f).boost();
@@ -298,7 +298,7 @@ public class FOSBlocks {
         proficientDrill = new Drill("proficient-drill"){{
             size = 4;
             tier = 7;
-            drillTime = 200f;
+            drillTime = 150f;
             squareSprite = false;
             consumePower(6f);
             consumeLiquid(tokicite, 0.5f).boost();
@@ -335,7 +335,7 @@ public class FOSBlocks {
         diamondDrill = new UndergroundDrill("diamond-drill"){{
             size = 3;
             tier = 5;
-            drillTime = 255f;
+            drillTime = 210f;
             consumePower(2f);
             requirements(Category.production, with(silver, 45, silicon, 75, diamond, 40));
             consumeLiquid(tokicite, 0.2f).boost();
@@ -343,7 +343,7 @@ public class FOSBlocks {
         vanadiumDrill = new UndergroundDrill("vanadium-drill"){{
             size = 3;
             tier = 6;
-            drillTime = 210f;
+            drillTime = 165f;
             consumePower(3f);
             requirements(Category.production, with(tin, 30, silver, 95, silicon, 50, vanadium, 50));
             consumeLiquid(tokicite, 0.25f).boost();
@@ -748,7 +748,6 @@ public class FOSBlocks {
                     trailEffect = Fx.artilleryTrailSmoke;
                     despawnEffect = Fx.shootSmallSmoke;
                     trailSpacing = 20f;
-                    buildingDamageMultiplier = 0.2f;
                     speed = 320f;
                     hitShake = 4f;
                     ammoMultiplier = 1f;
@@ -1520,6 +1519,7 @@ public class FOSBlocks {
         destroyerFactory = new UnitFactory("destroyer-factory"){{
             scaledHealth = 120;
             size = 3;
+            configurable = false;
             consumePower(5f);
             requirements(Category.units, with(tin, 100, silver, 75, silicon, 150));
             plans.add(
@@ -1529,6 +1529,7 @@ public class FOSBlocks {
         eliminatorFactory = new UnitFactory("eliminator-factory"){{
             scaledHealth = 120;
             size = 3;
+            configurable = false;
             consumePower(5f);
             requirements(Category.units, with(tin, 100, silver, 75, silicon, 150));
             plans.add(
@@ -1538,6 +1539,7 @@ public class FOSBlocks {
         injectorFactory = new UnitFactory("injector-factory"){{
             scaledHealth = 120;
             size = 3;
+            configurable = false;
             consumePower(5f);
             requirements(Category.units, with(tin, 100, silver, 75, silicon, 150));
             plans.add(
@@ -1581,7 +1583,7 @@ public class FOSBlocks {
         coreFortress = new DetectorCoreBlock("core-fortress"){{
             health = 2800;
             size = 3;
-            unitCapModifier = 5;
+            unitCapModifier = 7;
             itemCapacity = 2500;
             unitType = FOSUnitTypes.lord;
             squareSprite = false;
@@ -1591,7 +1593,7 @@ public class FOSBlocks {
         coreCity = new DetectorCoreBlock("core-city"){{
             health = 4600;
             size = 4;
-            unitCapModifier = 8;
+            unitCapModifier = 10;
             itemCapacity = 5000;
             unitType = FOSUnitTypes.king;
             squareSprite = false;
@@ -1600,7 +1602,7 @@ public class FOSBlocks {
         coreMetropolis = new DetectorCoreBlock("core-metropolis"){{
             health = 8000;
             size = 5;
-            unitCapModifier = 12;
+            unitCapModifier = 14;
             itemCapacity = 8000;
             unitType = FOSUnitTypes.king; //TODO: replace
             squareSprite = false;

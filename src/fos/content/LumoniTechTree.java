@@ -84,12 +84,24 @@ public class LumoniTechTree {
             // DRILLS
             node(crudeDrill, () -> {
                 node(improvedDrill, Seq.with(new Objectives.OnSector(ruins)), () -> {
+                    node(draugFactory, Seq.with(new Objectives.SectorComplete(tinMiningSite)), () ->
+                        node(draug, ItemStack.with(), Seq.with(new Objectives.Research(draugFactory)), () -> {})
+                    );
                     soontm();
 /*
                     node(proficientDrill));
 */
                 });
             });
+
+            // UNDERGROUND DRILLS
+            node(tinDrill, () ->
+                node(silverDrill, () -> {
+                    node(diamondDrill, Seq.with(new Objectives.OnSector(intruders)), () -> {
+                        soontm();
+                    });
+                })
+            );
 
             // TURRETS
             node(helix, Seq.with(new Objectives.OnSector(ruins)), () -> {
@@ -112,15 +124,6 @@ public class LumoniTechTree {
 */
                 });
             });
-
-            // UNDERGROUND DRILLS
-            node(tinDrill, () ->
-                node(silverDrill, () -> {
-                    node(diamondDrill, Seq.with(new Objectives.OnSector(intruders)), () -> {
-                        soontm();
-                    });
-                })
-            );
 
             // FLUID PUMP(S?)
             node(pumpjack);
@@ -234,7 +237,9 @@ public class LumoniTechTree {
                     node(FOSSectors.citadel, Seq.with(new Objectives.SectorComplete(ruins)), () -> {
                         soontm();
                     });
-                    soontm();
+                    node(tinMiningSite, Seq.with(new Objectives.SectorComplete(ruins)), () -> {
+                        soontm();
+                    });
                 });
             });
         });

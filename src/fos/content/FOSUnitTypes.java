@@ -886,6 +886,7 @@ public class FOSUnitTypes {
         assault = new FOSUnitType("assault"){{
             health = 200;
             armor = 2f;
+            hitSize = 9f;
             hovering = true;
             shadowElevation = 0.1f;
             drag = 0.07f;
@@ -1134,6 +1135,7 @@ public class FOSUnitTypes {
         draug = new UnitType("draug"){{
             health = 110;
             armor = 2;
+            hitSize = 10f;
             flying = true;
             drag = 0.06f;
             accel = 0.12f;
@@ -1147,6 +1149,14 @@ public class FOSUnitTypes {
 
             controller = u -> new MinerAI();
             defaultCommand = UnitCommand.mineCommand;
+
+            weapons.add(
+                // this is just an Easter egg, and nothing else.
+                new Weapon("you have incurred my wrath. prepare to die."){{
+                    noAttack = true;
+                    display = false;
+                }}
+            );
         }};
 
         //TODO
