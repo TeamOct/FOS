@@ -1,10 +1,14 @@
 package fos.core;
 
 import arc.*;
+import arc.audio.Music;
+import arc.backend.sdl.SdlApplication;
 import arc.backend.sdl.jni.SDL;
-import arc.backend.sdl.jni.SDLGL;
 import arc.func.Prov;
+import arc.graphics.Pixmap;
+import arc.graphics.Texture;
 import arc.graphics.g2d.*;
+import arc.graphics.gl.Shader;
 import arc.math.Mathf;
 import arc.scene.*;
 import arc.scene.ui.ImageButton;
@@ -28,6 +32,8 @@ import mindustry.mod.Mods.LoadedMod;
 import mindustry.ui.*;
 import mindustry.ui.dialogs.PlanetDialog;
 import mma.annotations.ModAnnotations;
+
+import java.util.Calendar;
 
 import static arc.Core.settings;
 import static mindustry.Vars.headless;
@@ -184,24 +190,69 @@ public class FOSMod extends Mod {
     }
 
     public void clientLoaded() {
-        if (false) {
-            long window = Reflect.get(Core.app, "window");
-            int[] data = new int[64];
+        long time = System.currentTimeMillis();
+        if (!Vars.mobile) {
+            boolean isAprilFools = FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
+            if (isAprilFools || Core.settings.getBool("haha-funny", false)) {
+                Log.level = Log.LogLevel.debug;
+                if (FOSVars.debug) Log.level = Log.LogLevel.debug;
+                Log.debug("april fool");
+                Seq<ApplicationListener> listeners = Reflect.invoke(Core.app, "getListeners");
+                listeners.each(ApplicationListener::dispose);
+                listeners.clear();
+                Log.debug("listeners cleared");
 
-            long t = System.currentTimeMillis();
-            while (true) {
-                Core.graphics.setBorderless(true);
+                Core.input.getInputMultiplexer().clear();
+                Log.debug("input cleared");
+
                 Core.graphics.setFullscreen();
+                Core.graphics.setBorderless(true);
+                Core.graphics.setResizable(false);
+                Log.debug("window prepared");
 
-                SDL.SDL_PollEvent(data);
+                Music mistake = Core.audio.newMusic(FOSVars.internalTree.child("music/mistake.mp3"));
+                mistake.setVolume(1f);
+                mistake.setLooping(true);
+                mistake.play();
+                Log.debug("music started");
 
-                Draw.rect(Core.atlas.find("fos-pain"), Core.graphics.getWidth(), Core.graphics.getHeight());
-                Draw.flush();
+                SDL.SDL_SetCursor(SDL.SDL_CreateColorCursor(SDL.SDL_CreateRGBSurfaceFrom(
+                        new Pixmap(FOSVars.internalTree.child("alpha.png")).getPixels(), 32, 32), 0, 0));
+                Log.debug("cursor created");
 
-                SDL.SDL_GL_SwapWindow(window);
+                Core.app.addListener(new ApplicationListener() {
+                    {
+                        Log.debug("listener created");
+                    }
+                    Texture texture = new Texture(FOSVars.internalTree.child("pain.png"));
+                    Shader shader = new Shader(
+                            "attribute vec4 a_position;\n" +
+                                    "attribute vec2 a_texCoord0;\n" +
+                                    "varying vec2 v_texCoords;\n" +
+                                    "void main(){\n" +
+                                    "   a_texCoord0.y = 1.0 - a_texCoord0.y;\n" +
+                                    "   v_texCoords = a_texCoord0;\n" +
+                                    "   gl_Position = a_position;\n" +
+                                    "}",
+                            "uniform sampler2D u_texture;\n" +
+                                    "varying vec2 v_texCoords;\n" +
+                                    "void main(){\n" +
+                                    "  gl_FragColor = texture2D(u_texture, v_texCoords);\n" +
+                                    "}"
+                    );
+                    ScreenQuad quad = new ScreenQuad();
 
-                if (System.currentTimeMillis() - t > 10000)
-                    System.exit(-9);
+                    @Override
+                    public void update() {
+                        texture.bind();
+                        shader.bind();
+                        quad.render(shader);
+                        SDL.SDL_RestoreWindow(Reflect.get(SdlApplication.class, Core.app, "window"));
+                        Reflect.set(SdlApplication.class, Core.app, "running", true);
+                        if (System.currentTimeMillis() - time > 10000)
+                            System.exit(0);
+                    }
+                });
             }
         }
 
