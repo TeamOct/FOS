@@ -5,8 +5,7 @@ import arc.audio.Music;
 import arc.backend.sdl.SdlApplication;
 import arc.backend.sdl.jni.SDL;
 import arc.func.Prov;
-import arc.graphics.Pixmap;
-import arc.graphics.Texture;
+import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.graphics.gl.Shader;
 import arc.math.Mathf;
@@ -17,8 +16,7 @@ import arc.struct.Seq;
 import arc.util.*;
 import fos.content.*;
 import fos.controllers.CapsulesController;
-import fos.gen.FOSCall;
-import fos.gen.FOSEntityMapping;
+import fos.gen.*;
 import fos.graphics.*;
 import fos.net.FOSPackets;
 import fos.ui.*;
@@ -224,23 +222,27 @@ public class FOSMod extends Mod {
                     {
                         Log.debug("listener created");
                     }
-                    Texture texture = new Texture(FOSVars.internalTree.child("pain.png"));
-                    Shader shader = new Shader(
-                            "attribute vec4 a_position;\n" +
-                                    "attribute vec2 a_texCoord0;\n" +
-                                    "varying vec2 v_texCoords;\n" +
-                                    "void main(){\n" +
-                                    "   a_texCoord0.y = 1.0 - a_texCoord0.y;\n" +
-                                    "   v_texCoords = a_texCoord0;\n" +
-                                    "   gl_Position = a_position;\n" +
-                                    "}",
-                            "uniform sampler2D u_texture;\n" +
-                                    "varying vec2 v_texCoords;\n" +
-                                    "void main(){\n" +
-                                    "  gl_FragColor = texture2D(u_texture, v_texCoords);\n" +
-                                    "}"
+                    final Texture texture = new Texture(FOSVars.internalTree.child("pain.png"));
+                    final Shader shader = new Shader(
+                            """
+                            attribute vec4 a_position;
+                            attribute vec2 a_texCoord0;
+                            varying vec2 v_texCoords;
+                            void main(){
+                               v_texCoords = a_texCoord0;
+                               v_texCoords.y = 1.0 - v_texCoords.y;
+                               gl_Position = a_position;
+                            }
+                            """,
+                        """
+                            uniform sampler2D u_texture;
+                            varying vec2 v_texCoords;
+                            void main(){
+                              gl_FragColor = texture2D(u_texture, v_texCoords);
+                            }
+                            """
                     );
-                    ScreenQuad quad = new ScreenQuad();
+                    final ScreenQuad quad = new ScreenQuad();
 
                     @Override
                     public void update() {
