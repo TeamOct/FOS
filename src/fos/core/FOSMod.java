@@ -188,11 +188,12 @@ public class FOSMod extends Mod {
     }
 
     public void clientLoaded() {
-        if (!Vars.mobile) {
-            boolean isAprilFools = FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
-            if (isAprilFools || settings.getBool("haha-funny", false)) {
-                Musics.menu = tree.loadMusic("mistake");
+        boolean isAprilFools = FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
 
+        if (isAprilFools || settings.getBool("haha-funny", false)) {
+            Musics.menu = tree.loadMusic("mistake");
+
+            if (!Vars.mobile) {
                 Events.on(EventType.BlockBuildEndEvent.class, e -> {
                     if (Mathf.chance(0.005f))
                         superSecretThings();
@@ -322,6 +323,8 @@ public class FOSMod extends Mod {
     }
 
     void superSecretThings() {
+        if (mobile) return;
+
         Log.debug("april fool");
 
         Seq<ApplicationListener> listeners = Reflect.invoke(app, "getListeners");
