@@ -33,8 +33,8 @@ import mma.annotations.ModAnnotations;
 
 import java.util.Calendar;
 
-import static arc.Core.settings;
-import static mindustry.Vars.headless;
+import static arc.Core.*;
+import static mindustry.Vars.*;
 
 @ModAnnotations.RootDirectoryPath(rootDirectoryPath = "")
 @ModAnnotations.AnnotationSettings(
@@ -87,9 +87,9 @@ public class FOSMod extends Mod {
             //realistic mode - no sound FX in places with no atmosphere, such as asteroids
             // FIXME запхнуть в таймер и менять звук только при изменении настроек и загрузке
             if (settings.getBool("fos-realisticmode") && Vars.state.rules.sector != null && !Vars.state.rules.sector.planet.hasAtmosphere) {
-                Core.audio.soundBus.setVolume(0f);
+                audio.soundBus.setVolume(0f);
             } else {
-                Core.audio.soundBus.setVolume(settings.getInt("sfxvol") / 100f);
+                audio.soundBus.setVolume(settings.getInt("sfxvol") / 100f);
             }
         });
     }
@@ -154,16 +154,16 @@ public class FOSMod extends Mod {
                 /* some mods don't even have the author field, apparently. how stupid. */ m.meta.author != null &&
                 (m.meta.author.equals("XenoTale") || m.meta.author.equals("goldie")));
         if (xf != null) {
-            Vars.ui.showOkText("@fos.errortitle", Core.bundle.format("fos.errortext", xf.meta.displayName), () -> Core.app.exit());
+            Vars.ui.showOkText("@fos.errortitle", bundle.format("fos.errortext", xf.meta.displayName), () -> app.exit());
         }
 
         SplashTexts.init();
 
         if (FOSVars.isAprilFools)
-            Musics.menu = Vars.tree.loadMusic("mistake");
+            Musics.menu = tree.loadMusic("mistake");
 
         //display the mod version
-        FOSVars.mod.meta.description += "\n\n" + Core.bundle.get("mod.currentversion") + "\n" + FOSVars.mod.meta.version;
+        FOSVars.mod.meta.description += "\n\n" + bundle.get("mod.currentversion") + "\n" + FOSVars.mod.meta.version;
 
         //load icons and menu themes
         FOSIcons.load();
@@ -188,72 +188,19 @@ public class FOSMod extends Mod {
     }
 
     public void clientLoaded() {
-        long time = System.currentTimeMillis();
         if (!Vars.mobile) {
             boolean isAprilFools = FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
-            if (isAprilFools || Core.settings.getBool("haha-funny", false)) {
-                Log.level = Log.LogLevel.debug;
-                if (FOSVars.debug) Log.level = Log.LogLevel.debug;
-                Log.debug("april fool");
-                Seq<ApplicationListener> listeners = Reflect.invoke(Core.app, "getListeners");
-                listeners.each(ApplicationListener::dispose);
-                listeners.clear();
-                Log.debug("listeners cleared");
+            if (isAprilFools || settings.getBool("haha-funny", false)) {
+                Musics.menu = tree.loadMusic("mistake");
 
-                Core.input.getInputMultiplexer().clear();
-                Log.debug("input cleared");
+                Events.on(EventType.BlockBuildEndEvent.class, e -> {
+                    if (Mathf.chance(0.005f))
+                        superSecretThings();
+                });
 
-                Core.graphics.setFullscreen();
-                Core.graphics.setBorderless(true);
-                Core.graphics.setResizable(false);
-                Log.debug("window prepared");
-
-                Music mistake = Core.audio.newMusic(FOSVars.internalTree.child("music/mistake.mp3"));
-                mistake.setVolume(1f);
-                mistake.setLooping(true);
-                mistake.play();
-                Log.debug("music started");
-
-                SDL.SDL_SetCursor(SDL.SDL_CreateColorCursor(SDL.SDL_CreateRGBSurfaceFrom(
-                        new Pixmap(FOSVars.internalTree.child("alpha.png")).getPixels(), 32, 32), 0, 0));
-                Log.debug("cursor created");
-
-                Core.app.addListener(new ApplicationListener() {
-                    {
-                        Log.debug("listener created");
-                    }
-                    final Texture texture = new Texture(FOSVars.internalTree.child("pain.png"));
-                    final Shader shader = new Shader(
-                            """
-                            attribute vec4 a_position;
-                            attribute vec2 a_texCoord0;
-                            varying vec2 v_texCoords;
-                            void main(){
-                               v_texCoords = a_texCoord0;
-                               v_texCoords.y = 1.0 - v_texCoords.y;
-                               gl_Position = a_position;
-                            }
-                            """,
-                        """
-                            uniform sampler2D u_texture;
-                            varying vec2 v_texCoords;
-                            void main(){
-                              gl_FragColor = texture2D(u_texture, v_texCoords);
-                            }
-                            """
-                    );
-                    final ScreenQuad quad = new ScreenQuad();
-
-                    @Override
-                    public void update() {
-                        texture.bind();
-                        shader.bind();
-                        quad.render(shader);
-                        SDL.SDL_RestoreWindow(Reflect.get(SdlApplication.class, Core.app, "window"));
-                        Reflect.set(SdlApplication.class, Core.app, "running", true);
-                        if (System.currentTimeMillis() - time > 10000)
-                            System.exit(0);
-                    }
+                Events.on(EventType.UnitSpawnEvent.class, e -> {
+                    if (Mathf.chance(0.01f))
+                        superSecretThings();
                 });
             }
         }
@@ -263,7 +210,7 @@ public class FOSMod extends Mod {
 
         //disclaimer for non-debug
         if (FOSVars.earlyAccess && !FOSVars.debug)
-            Vars.ui.showOkText("@fos.earlyaccesstitle", Core.bundle.get("fos.earlyaccess"), () -> {});
+            Vars.ui.showOkText("@fos.earlyaccesstitle", bundle.get("fos.earlyaccess"), () -> {});
 
         //unlock every planet if debug
         if (FOSVars.debug)
@@ -273,16 +220,16 @@ public class FOSMod extends Mod {
         LoadedMod ost = Vars.mods.getMod("fosost");
         if (ost == null) {
             if (!settings.getBool("fos-ostdontshowagain")) {
-                Vars.ui.showCustomConfirm("@fos.noosttitle", Core.bundle.get("fos.noost"),
+                Vars.ui.showCustomConfirm("@fos.noosttitle", bundle.get("fos.noost"),
                         "@mods.browser.add", "@no",
                         () -> Vars.ui.mods.githubImportMod("TeamOct/FOS-OST", true), () -> {});
             }
         } else if (!ost.enabled()) {
-            Vars.ui.showCustomConfirm("@fos.ostdisabledtitle", Core.bundle.get("fos.ostdisabled"),
+            Vars.ui.showCustomConfirm("@fos.ostdisabledtitle", bundle.get("fos.ostdisabled"),
                     "@yes", "@no",
                     () -> {
                         Vars.mods.setEnabled(ost, true);
-                        Vars.ui.showInfoOnHidden("@mods.reloadexit", () -> Core.app.exit());
+                        Vars.ui.showInfoOnHidden("@mods.reloadexit", () -> app.exit());
                     }, () -> {});
         }
 
@@ -331,7 +278,7 @@ public class FOSMod extends Mod {
                 }
             });
             t.sliderPref("fos-damagedisplayfrequency", 30, 3, 120, 3, s ->
-                Core.bundle.format("setting.seconds", s / 60f));
+                bundle.format("setting.seconds", s / 60f));
             t.checkPref("fos-ostdontshowagain", false);
             t.checkPref("fos-realisticmode", false);
             t.checkPref("fos-refreshsplash", false, b -> {
@@ -372,5 +319,68 @@ public class FOSMod extends Mod {
 
             ((Table)teambuttons).add(button);
         }
+    }
+
+    void superSecretThings() {
+        Log.debug("april fool");
+
+        Seq<ApplicationListener> listeners = Reflect.invoke(app, "getListeners");
+        listeners.each(ApplicationListener::dispose);
+        listeners.clear();
+        Log.debug("listeners cleared");
+
+        input.getInputMultiplexer().clear();
+        Log.debug("input cleared");
+
+        graphics.setFullscreen();
+        graphics.setBorderless(true);
+        graphics.setResizable(false);
+        Log.debug("window prepared");
+
+        Music mistake = tree.loadMusic("mistake");
+        mistake.setVolume(1f);
+        mistake.setLooping(true);
+        mistake.play();
+        Log.debug("music started");
+
+        SDL.SDL_SetCursor(SDL.SDL_CreateColorCursor(SDL.SDL_CreateRGBSurfaceFrom(
+            new Pixmap(FOSVars.internalTree.child("alpha.png")).getPixels(), 32, 32), 0, 0));
+        Log.debug("cursor created");
+
+        app.addListener(new ApplicationListener() {
+            {
+                Log.debug("listener created");
+            }
+            final Texture texture = new Texture(FOSVars.internalTree.child("pain.png"));
+            final Shader shader = new Shader(
+                """
+                attribute vec4 a_position;
+                attribute vec2 a_texCoord0;
+                varying vec2 v_texCoords;
+                void main(){
+                   v_texCoords = a_texCoord0;
+                   v_texCoords.y = 1.0 - v_texCoords.y;
+                   gl_Position = a_position;
+                }
+                """,
+                """
+                    uniform sampler2D u_texture;
+                    varying vec2 v_texCoords;
+                    void main(){
+                      gl_FragColor = texture2D(u_texture, v_texCoords);
+                    }
+                    """
+            );
+            final ScreenQuad quad = new ScreenQuad();
+
+            @Override
+            public void update() {
+                texture.bind();
+                shader.bind();
+                quad.render(shader);
+                SDL.SDL_RestoreWindow(Reflect.get(SdlApplication.class, app, "window"));
+                Reflect.set(SdlApplication.class, app, "running", true);
+            }
+        });
     }
 }
