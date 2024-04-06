@@ -437,7 +437,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
     /**
      * This method ensures that the given ores generate in a limited square area, no matter how many tries it takes.
-     * This probably hurts sector generation time quite a bit, but I dunno what else to try.
+     * This probably hurts sector generation time quite a bit, but I don't know what else to try.
      * @param ores List of ores to generate.
      * @param cx Center X coordinate.
      * @param cy Center Y coordinate.

@@ -245,7 +245,7 @@ public class LumoniTechTree {
         });
     }
     
-    public static TechNode soontm() {
-        return node(soontm, Seq.with(new FOSObjectives.TBDObjective()), () -> {});
+    public static void soontm() {
+        node(soontm, Seq.with(new FOSObjectives.TBDObjective()), () -> {});
     }
 }

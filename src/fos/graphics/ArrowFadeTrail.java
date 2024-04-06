@@ -1,24 +1,27 @@
 package fos.graphics;
 
-import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.graphics.gl.Shader;
+import arc.graphics.*;
+import arc.graphics.g2d.*;
 import arc.math.*;
-import mindustry.graphics.Trail;
+import arc.util.Tmp;
+import mindustry.graphics.*;
 
-public class ShaderTrail extends Trail {
-    public Shader shader;
-
-    public ShaderTrail(int length, Shader shader) {
+public class ArrowFadeTrail extends Trail {
+    public ArrowFadeTrail(int length) {
         super(length);
-        this.shader = shader;
     }
 
     @Override
     public void draw(Color color, float width) {
+        Draw.color(color);
+        Draw.z(Layer.light);
+
         float[] items = points.items;
         float lastAngle = this.lastAngle;
         float size = width / ((float) points.size / 3);
+        var a0 = Tmp.c1.set(color).a(0).toFloatBits();
+
+        Tmp.c2.set(color);
 
         for(int i = 0; i < points.size; i += 3){
             float x1 = items[i], y1 = items[i + 1], w1 = items[i + 2];
@@ -46,16 +49,26 @@ public class ShaderTrail extends Trail {
                 nx = Mathf.sin(z2) * (i/3f + 1) * size * w2,
                 ny = Mathf.cos(z2) * (i/3f + 1) * size * w2;
 
-/*
-            DrawUtils.quad(
-                x1 - cx, y1 - cy,
-                x1 + cx, y1 + cy,
-                x2 + nx, y2 + ny,
-                x2 - nx, y2 - ny
-            ).bind(0);
-*/
+            var fcolor = i % 2 == 0 ? Tmp.c2.a((float)i / points.size).toFloatBits() : a0;
 
-            Draw.blit(shader);
+            Draw.blend(Blending.additive);
+
+            Fill.quad(
+                x1 - cx, y1 - cy, fcolor,
+                x1 - cy, y1 + cx, fcolor,
+                x2 - ny, y2 + nx, fcolor,
+                x2 - nx, y2 - ny, fcolor
+            );
+            Fill.quad(
+                x1 - cy, y1 + cx, fcolor,
+                x1 + cx, y1 + cy, fcolor,
+                x2 + nx, y2 + ny, fcolor,
+                x2 - ny, y2 + nx, fcolor
+            );
+
+            Drawf.light(x1, y1, width * ((float)i / points.size) * 2, color, (float)i / points.size / 2);
+
+            Draw.blend();
 
             lastAngle = z2;
         }

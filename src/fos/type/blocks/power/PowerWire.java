@@ -95,7 +95,7 @@ public class PowerWire extends PowerNode {
     public void handlePlacementLine(Seq<BuildPlan> plans) {
         if (bridgeReplacement == null) return;
 
-        calculateBridges(plans, (BridgeBeamNode) bridgeReplacement);
+        calculateBridges(plans, (PowerWireNode) bridgeReplacement);
     }
 
     @Override
@@ -109,7 +109,7 @@ public class PowerWire extends PowerNode {
     }
 
     //stolen from Placement class
-    void calculateBridges(Seq<BuildPlan> plans, BridgeBeamNode bridge) {
+    void calculateBridges(Seq<BuildPlan> plans, PowerWireNode bridge) {
         //if(isSidePlace(plans)) return;
 
         //check for orthogonal placement + unlocked state

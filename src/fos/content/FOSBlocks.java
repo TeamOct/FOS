@@ -1226,7 +1226,7 @@ public class FOSBlocks {
             //does not consume any power
             requirements(Category.power, with(brass, 1));
         }};
-        tinWirePole = new BridgeBeamNode("tin-wire-pole"){{
+        tinWirePole = new PowerWireNode("tin-wire-pole"){{
             health = 30;
             consumesPower = true;
             consumePower(4f / 60f);
@@ -1237,7 +1237,7 @@ public class FOSBlocks {
 
             ((PowerWire)tinWire).bridgeReplacement = this;
         }};
-        copperWirePole = new BridgeBeamNode("copper-wire-pole"){{
+        copperWirePole = new PowerWireNode("copper-wire-pole"){{
             health = 50;
             consumesPower = true;
             consumePower(1f / 60f);
@@ -1249,7 +1249,7 @@ public class FOSBlocks {
 
             ((PowerWire)copperWire).bridgeReplacement = this;
         }};
-        brassWirePole = new BridgeBeamNode("brass-wire-pole"){{
+        brassWirePole = new PowerWireNode("brass-wire-pole"){{
             health = 80;
             //no power consumption
             range = 10;
@@ -1326,7 +1326,7 @@ public class FOSBlocks {
         //region environment & ores
         tokiciteFloor = new Floor("tokicite-floor"){{
             drownTime = 360f;
-            status = StatusEffects.slow;
+            status = FOSStatuses.tokiciteSlowed;
             speedMultiplier = 0.15f;
             variants = 0;
             liquidDrop = tokicite;

@@ -16,16 +16,28 @@ public interface InjectorBulletType {
     float maxHP();
     boolean attacksGuardians();
 
-    default float chance(Entityc entity) {
+    default float chance(Entityc owner, Entityc entity) {
         float health = ((Unit) entity).health;
+        float chance;
+
         if (health <= minHP()){
-            return maxChance();
+            chance = maxChance();
         } else if (health >= maxHP()) {
-            return minChance();
+            chance = minChance();
         } else {
             //this formula is really complicated, does it even make sense??
-            return 1 - ((health - minHP()) / (maxHP() - minHP()));
+            chance = 1 - ((health - minHP()) / (maxHP() - minHP()));
         }
+
+        if (owner instanceof Unit u && u.hasEffect(FOSStatuses.injected)) {
+            chance *= 1.25f;
+        }
+
+        if (entity instanceof Unit u && u.hasEffect(FOSStatuses.injected)) {
+            chance *= 1.25f;
+        }
+
+        return chance;
     }
 
     default void onHit(Bullet b, Hitboxc entity) {
@@ -39,7 +51,7 @@ public interface InjectorBulletType {
             //do not take over players
             if (u.isPlayer()) return;
 
-            float chance = chance(entity);
+            float chance = chance(b.owner, entity);
             if (Mathf.random() < chance) {
                 u.apply(FOSStatuses.hacked);
                 u.team = b.team;

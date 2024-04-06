@@ -20,8 +20,8 @@ public class BugUnitType extends UnitType {
         createScorch = false;
         createWreck = false;
         deathExplosionEffect = Fx.none;
-        deathSound = Sounds.noammo;
-        immunities.addAll(FOSStatuses.hacked, StatusEffects.disarmed, StatusEffects.sapped);
+        deathSound = Sounds.plantBreak;
+        immunities.addAll(FOSStatuses.hacked, FOSStatuses.injected, StatusEffects.disarmed, StatusEffects.sapped);
         omniMovement = flying;
         this.flying = flying;
         targetAir = flying;

@@ -6,7 +6,7 @@ import arc.math.geom.Rect;
 import arc.struct.Seq;
 import fos.ai.*;
 import fos.gen.*;
-import fos.graphics.FOSPal;
+import fos.graphics.*;
 import fos.type.abilities.*;
 import fos.type.bullets.*;
 import fos.type.units.types.*;
@@ -25,7 +25,7 @@ import mindustry.type.*;
 import mindustry.type.weapons.*;
 
 import static fos.content.FOSItems.tin;
-import static fos.content.FOSStatuses.hacked;
+import static fos.content.FOSStatuses.*;
 
 public class FOSUnitTypes {
     public static @Annotations.EntityDef({Mechc.class}) UnitType
@@ -430,7 +430,7 @@ public class FOSUnitTypes {
                     damage = 50f;
                     length = 200f;
                     hitColor = Color.valueOf("ff7665");
-                    hitEffect = endEffect = Fx.dynamicSpikes.wrap(Liquids.neoplasm.color, 15f);
+                    endEffect = Fx.dynamicSpikes.wrap(Liquids.neoplasm.color, 15f);
                     shootEffect = Fx.shootBig2;
                     smokeEffect = Fx.colorSpark;
                     lineEffect = Fx.chainLightning;
@@ -572,16 +572,21 @@ public class FOSUnitTypes {
             weapons.add(FOSWeaponModules.standard2.weapons);
         }};
 
-        sergeant = new FOSUnitType("sergeant"){{
+        sergeant = new TrailUnitType("sergeant"){{
             health = 75;
             hitSize = 12;
-            speed = 1.2f;
+            speed = 2f;
             hovering = true;
-            omniMovement = true;
+            omniMovement = false;
             immunities.add(hacked);
-            circleTarget = true;
+            circleTarget = false;
+            engineColorInner = FOSPal.hacked;
+            engineColor = FOSPal.hackedBack;
+            engineLayer = Layer.groundUnit - 0.1f;
             trailColor = FOSPal.hackedBack;
-            trailLength = 12;
+            trailLength = 32;
+            trailType = ArrowFadeTrail.class;
+            useEngineElevation = false;
             aiController = InjectorAI::new;
             weapons.add(
                 new InjectorWeapon("fos-injector"){{
@@ -601,36 +606,53 @@ public class FOSUnitTypes {
                 }}
             );
         }};
-        lieutenant = new FOSUnitType("lieutenant"){{
+        lieutenant = new TrailUnitType("lieutenant"){{
             health = 360;
             hitSize = 16;
             speed = 2.4f;
             hovering = true;
-            omniMovement = true;
+            omniMovement = false;
             aiController = InjectorAI::new;
+            engineColorInner = FOSPal.hacked;
+            engineColor = FOSPal.hackedBack;
+            engineLayer = Layer.groundUnit - 0.1f;
             trailColor = FOSPal.hackedBack;
-            trailLength = 24;
-            immunities.add(hacked);
+            trailLength = 32;
+            trailType = ArrowFadeTrail.class;
+            lightRadius = 16f;
+            useEngineElevation = false;
+            immunities.addAll(hacked, injected);
             weapons.add(
                 new InjectorWeapon(){{
                     x = y = 0;
+                    shootY = 4f;
                     mirror = false;
                     rotate = true;
-                    reload = 120f;
-                    bullet = new InjectorBlastBulletType(0.1f, false){{
-                        splashDamage = 10f;
-                        splashDamageRadius = 16f;
+                    reload = 40f;
+                    shootSound = Sounds.spark;
+                    bullet = new LightningBulletType(){{
+                        lightningColor = FOSPal.hacked;
+                        damage = 20f;
+                        lightningLength = 15;
+                        lightningLengthRand = 4;
+                        status = injected;
+                        statusDuration = 180f;
                     }};
                 }}
             );
         }};
-        captain = new FOSUnitType("captain"){{
+        captain = new TrailUnitType("captain"){{
             health = 900;
             hitSize = 20;
             speed = 1.1f;
             hovering = true;
+            engineColorInner = FOSPal.hacked;
+            engineColor = FOSPal.hackedBack;
+            engineLayer = Layer.groundUnit - 0.1f;
             trailColor = FOSPal.hackedBack;
-            trailLength = 8;
+            trailLength = 48;
+            trailType = ArrowFadeTrail.class;
+            useEngineElevation = false;
             aiController = InjectorAI::new;
             immunities.add(hacked);
             weapons.add(
@@ -834,7 +856,7 @@ public class FOSUnitTypes {
                             //buildingDamageMultiplier = 0.75f;
                             length = 100f;
                             hitColor = Pal.surge;
-                            hitEffect = endEffect = Fx.dynamicSpikes.wrap(Pal.surge, 16f);
+                            endEffect = Fx.dynamicSpikes.wrap(Pal.surge, 16f);
                             shootEffect = Fx.shootBig2;
                             smokeEffect = Fx.colorSpark;
                             lineEffect = Fx.chainLightning;

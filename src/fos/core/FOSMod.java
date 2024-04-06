@@ -173,6 +173,7 @@ public class FOSMod extends Mod {
         Vars.ui.editor.shown(this::addEditorTeams);
 
         //damage display
+        //noinspection InstantiationOfUtilityClass
         new ClassicDamageDisplay();
         new DamageDisplay();
 

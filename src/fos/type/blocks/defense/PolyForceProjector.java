@@ -17,7 +17,7 @@ import mindustry.world.blocks.defense.ForceProjector;
 
 import static mindustry.Vars.*;
 
-// I already know this code's gonna be yoinked.
+// I already know this code's going to be yoinked.
 // If you do yoink this, PLEASE consider giving me a credit
 public class PolyForceProjector extends ForceProjector {
     public float[] polygon = new float[]{0, 0};

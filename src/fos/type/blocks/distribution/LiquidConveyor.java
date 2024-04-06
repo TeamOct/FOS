@@ -31,17 +31,6 @@ public class LiquidConveyor extends Conveyor {
         allowConfigInventory = false;
     }
 
-    @Override
-    public void init() {
-        super.init();
-    }
-
-    @Override
-    public void setBars() {
-        super.setBars();
-        //removeBar("liquid");
-    }
-
     public class LiquidConveyorBuild extends ConveyorBuild {
         boolean output = false;
 

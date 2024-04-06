@@ -9,8 +9,9 @@ import mindustry.world.blocks.power.BeamNode;
 
 import static mindustry.Vars.tilesize;
 
-public class BridgeBeamNode extends BeamNode {
-    public BridgeBeamNode(String name) {
+public class PowerWireNode extends BeamNode {
+
+    public PowerWireNode(String name) {
         super(name);
         pulseMag = 0;
         laserWidth = 2f / 3f;
@@ -41,12 +42,11 @@ public class BridgeBeamNode extends BeamNode {
 
             if(Mathf.zero(Renderer.laserOpacity)) return;
 
-            Draw.z(Layer.power);
-            Draw.color(laserColor1, laserColor2, (1f - power.graph.getSatisfaction()) * 0.86f + Mathf.absin(3f, 0.1f));
+            Draw.z(Layer.blockOver + 0.1f);
+            //Draw.color(laserColor1, laserColor2, (1f - power.graph.getSatisfaction()) * 0.86f + Mathf.absin(3f, 0.1f));
             Draw.alpha(Renderer.laserOpacity);
-            float w = laserWidth + Mathf.absin(pulseScl, pulseMag);
 
-            for(int i = 0; i < 4; i ++){
+            for(int i = 3; i >= 0; i--){
                 if(dests[i] != null && links[i].wasVisible && (!(links[i].block instanceof BeamNode node) ||
                     (links[i].tileX() != tileX() && links[i].tileY() != tileY()) ||
                     (links[i].id > id && range >= node.range) || range > node.range)){
@@ -54,11 +54,15 @@ public class BridgeBeamNode extends BeamNode {
                     int dst = Math.max(Math.abs(dests[i].x - tile.x), Math.abs(dests[i].y - tile.y));
                     //don't draw lasers for adjacent blocks
                     if(dst > 1 + size/2){
+                        float w = laserWidth + Mathf.absin(pulseScl, pulseMag);
                         var point = Geometry.d4[i];
                         var vert = (tile.x == dests[i].x);
-                        float poff = vert ? tilesize/1.5f : tilesize/3f;
-                        //invert vertical wires
-                        if (vert) w = -w;
+
+                        //invert left/down wires for shading purposes
+                        boolean invert = i >= 2;
+                        if (invert) w = -w;
+
+                        float poff = invert ? tilesize/1.5f : tilesize/3f;
                         Drawf.laser(laser, laserEnd, x + poff*size*point.x, y + poff*size*point.y, dests[i].worldx() - poff*point.x, dests[i].worldy() - poff*point.y, w);
                     }
                 }

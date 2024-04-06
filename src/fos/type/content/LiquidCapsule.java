@@ -32,11 +32,6 @@ public class LiquidCapsule extends Item {
     }
 
     @Override
-    public void load() {
-        super.load();
-    }
-
-    @Override
     public void createIcons(MultiPacker packer) {
         super.createIcons(packer);
 
