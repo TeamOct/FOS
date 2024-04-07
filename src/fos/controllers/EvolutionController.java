@@ -30,10 +30,13 @@ public class EvolutionController {
     }
 
     public float getSectorEvo() {
-        return FOSPlanets.lumoni.sectors.count(Sector::isCaptured) * sectorCoefficient;
+        return !Vars.state.isCampaign() ? 0 :
+            FOSPlanets.lumoni.sectors.count(Sector::isCaptured) * sectorCoefficient;
     }
 
     public float getResearchEvo() {
+        if (!Vars.state.isCampaign()) return 0;
+
         // JAVA SUCKS.
         final int[] counter = {0};
         Vars.content.each(c -> {

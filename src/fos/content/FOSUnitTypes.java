@@ -71,7 +71,7 @@ public class FOSUnitTypes {
         // PLAYER UNITS
         lord, king;
 
-    public static @Annotations.EntityDef({Bugc.class, Crawlc.class}) UnitType
+    public static @Annotations.EntityDef({Bugc.class, FOSCrawlc.class}) UnitType
         // CRAWLING INSECTS
         bugSmall, bugMedium;
 
