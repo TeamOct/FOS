@@ -51,8 +51,6 @@ public class ArrowFadeTrail extends Trail {
 
             var fcolor = i % 2 == 0 ? Tmp.c2.a((float)i / points.size).toFloatBits() : a0;
 
-            Draw.blend(Blending.additive);
-
             Fill.quad(
                 x1 - cx, y1 - cy, fcolor,
                 x1 - cy, y1 + cx, fcolor,
@@ -66,8 +64,8 @@ public class ArrowFadeTrail extends Trail {
                 x2 - ny, y2 + nx, fcolor
             );
 
+            Draw.blend(Blending.additive);
             Drawf.light(x1, y1, width * ((float)i / points.size) * 2, color, (float)i / points.size / 2);
-
             Draw.blend();
 
             lastAngle = z2;
