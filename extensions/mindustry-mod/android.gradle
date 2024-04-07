@@ -1,4 +1,0 @@
-project.dependencies {
-    implementation project.parent.project("core")
-    compileOnly project.parent.ext.mindustryDependence
-}

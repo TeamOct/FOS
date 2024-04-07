@@ -1,6 +1,0 @@
-project.ext {
-    mindustryVersion = project.ext.settings?.dependencies?.mindustryVersion ?: "v146"
-    useJitpackForMindustryDependency = project.ext.settings?.dependencies?.useJitpackForMindustryDependency ?: ""
-
-    mindustryDependence = "com.github.Anuken.Mindustry${project.ext.useJitpackForMindustryDependency ? "Jitpack" : ""}:core:$project.ext.mindustryVersion"
-}

@@ -1,268 +1,245 @@
-// configure all projects includes current
-(subprojects + project).each { Project project ->
-    // attach repositories
-    project.repositories {
-        mavenCentral()
-        mavenLocal()
-        maven { url "https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository" }
-        maven { url "https://www.jitpack.io" }
-    }
-
-    // apply plugins
-    project.plugins.apply("java")
-    project.plugins.apply("idea")
-    project.plugins.apply("maven-publish")
+project.repositories {
+    mavenCentral()
+    mavenLocal()
+    maven { url "https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository" }
+    maven { url "https://www.jitpack.io" }
 }
 
-wrapper { Wrapper wrapper ->
-    wrapper.gradleVersion "8.1.1"
-}
-
-// deletes build dirs in the subprojects
-project.tasks.create("cleanBuilds") { Task task -> // TODO sucks where files locked
-    task.onlyIf { false }
-
-    task.doLast {
-        project.subprojects.each { Project p ->
-            if (p.buildDir.exists()) {
-                p.delete(p.buildDir)
-            }
-        }
-    }
-}
+project.plugins.apply("java")
+project.plugins.apply("idea")
+project.plugins.apply("maven-publish")
 
 ext {
-    // load settings
     var localFile = file("settings/local.json")
-    if (localFile.exists())
-        local = new groovy.json.JsonSlurper().parseText(localFile.text)
-    else
-        local = null
+    local = localFile.exists() ? new groovy.json.JsonSlurper().parseText(localFile.text) : null
 
     var settingsFile = file("settings/settings.json")
-    if (settingsFile.exists())
-        settings = new groovy.json.JsonSlurper().parseText(settingsFile.text)
-    else
-        settings = null
+    settings = settingsFile.exists() ? new groovy.json.JsonSlurper().parseText(settingsFile.text) : null
 
-    // setup group and version
     project.group = project.ext.settings?.projectSettings?.group ?: "group"
     project.version = project.ext.settings?.projectSettings?.version ?: "nil"
 
-    // parse dependencies
-    buildScriptExtensions = [:]
+    buildScriptExtensions = []
     settings?.extensions?.each { String ext ->
         project.file("extensions/$ext").listFiles()?.each { File file ->
-            var name = file.name.substring(0, file.name.indexOf('.'))
-
-            if (buildScriptExtensions[name] == null)
-                buildScriptExtensions[name] = []
-
-            buildScriptExtensions[name] += file
+            buildScriptExtensions += file
         }
     }
 
-    // executes command
     doExec = { String cmd ->
         cmd.execute(null, rootProject.projectDir).waitForProcessOutput(System.out, System.err)
     }
 
-    // returns output jar name for specified project
     getOutputJar = { Project p ->
-        return "${rootProject.name}-${p.name}-${p.version}.jar"
+        return "${p.group.replaceAll("/|\\\\", "-")}-${p.version}.jar"
     }
 
-    // returns child of the file
     child = { File p, String c ->
         return new File(p, c)
     }
 
-}
-
-// builds jar with android and desktop sources
-project.tasks.create("buildRelease", Jar)
-
-// for github actions
-project.tasks.create("workflowBuild") { Task task ->
-    task.dependsOn project.tasks.buildRelease
-}
-
-// apply extensions
-project.ext.buildScriptExtensions.rootProject?.each { File file ->
-    project.apply(from: file)
-}
-
-// configure subprojects
-subprojects.each { Project project ->
-    // setup group and version
-    project.group = project.parent.ext.settings?.projectSettings?.group ?: "group"
-    project.version = project.parent.ext.settings?.projectSettings?.version ?: "nil"
-
-    // setup source sets
-    // src - java sources
-    // gen - generated java sources
-    // res - resources (e.g. assets)
-    project.sourceSets.main.java.srcDirs = [
-            "src", "gen"
-    ]
-    project.sourceSets.main.resources.srcDirs = [
-            "res"
-    ]
-
-    project.ext {
-        // parse annotation processors properties
-        APArgs = []
-        var APArgsConfig = project.parent.ext.settings?.APArgs
-        if (APArgsConfig != null) {
-            var global = APArgsConfig.global
-            var local = APArgsConfig.local
-            var full = (global ?: []) + (local?.get(project.name) ?: [])
-            full.each { String arg ->
-                if (!arg.contains("-A"))
-                    APArgs += "-A" + arg
+    // parse dependencies
+    deps = [:]
+    var depsConf = project.ext.settings?.dependencies
+    var depsList = [:]
+    depsConf?.list?.each { dep ->
+        var k = dep.keySet()[0]
+        var v = dep[k]
+        depsList[k] = v
+    }
+    depsConf?.deps?.each { depType ->
+        k = depType.key
+        depType.value.each { String v ->
+            var dep = null
+            if (v.startsWith("project:")) {
+                dep = project.project(v.substring(8))
+            } else if (v.startsWith("list:")) {
+                dep = depsList[v.substring(5)]
+            } else if (v.startsWith("direct:")) {
+                dep = v.substring(7)
             }
-        }
 
-        // parse dependencies
-        deps = [:]
-
-        var depsConf = project.parent.ext.settings?.dependencies
-        var depsList = [:]
-        depsConf?.list?.each { dep ->
-            var k = dep.keySet()[0]
-            var v = dep[k]
-            depsList[k] = v
-        }
-        depsConf?.projects?.get(project.name)?.each { depType ->
-            k = depType.key
-            depType.value.each { String v ->
-                var dep = null
-                if (v.startsWith("project:")) {
-                    dep = project.parent.project(v.substring(8))
-                } else if (v.startsWith("list:")) {
-                    dep = depsList[v.substring(5)]
-                } else if (v.startsWith("direct:")) {
-                    dep = v.substring(7)
+            if (dep == null)
+                project.logger.log(LogLevel.ERROR, "Uncknown depedency type $v")
+            else {
+                if (!project.ext.deps.containsKey(k)) {
+                    project.ext.deps[k] = []
                 }
-
-                if (dep == null)
-                    project.logger.log(LogLevel.ERROR, "Uncknown depedency type $v")
-                else
-                    project.ext.deps[k] = dep
+                project.ext.deps[k] += dep
             }
         }
     }
 
-    project.tasks.withType(JavaCompile) { JavaCompile task ->
-        task.options.compilerArgs.addAll(project.ext.APArgs)
+    // find sdkRoot in configs
+    var root = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT") ?: project.ext.local?.jvm?.home
+    sdkRoot = (root == null ? null : new File(root))
 
-        // setup compile options
-        task.options.encoding = "UTF-8"
-        task.options.compilerArgs += "-Xlint:none"
-        task.options.generatedSourceOutputDirectory.set(project.file("gen"))
+    dexFile = project.ext.child(project.buildDir, "dex.jar")
+    var ua = project.ext.local?.build?.buildAndroid
+    useandroid = ((ua == null) || ua)
+}
 
-        // if you want to specify jvm path
-        var home = project.parent.local?.jvm?.home
-        if (home != null)
-            options.forkOptions.executable = home
-
-        // project should be complied in 64 bytecode version
-        task.options.compilerArgs += ['--release', '8']
-        task.targetCompatibility = 8
-        task.sourceCompatibility = JavaVersion.VERSION_16
-
-        // specially for jabel
-        task.options.forkOptions.jvmArgs += [
-                "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
-                "--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
-                "--add-opens=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED",
-                "--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED",
-                "--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
-                "--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
-                "--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
-                "--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
-                "--add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED",
-                "--add-opens=jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED",
-                "--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED",
-                "--add-opens=java.base/sun.reflect.annotation=ALL-UNNAMED"
-        ]
-
-        doFirst {
-            // clear previously generated sources
-            delete options.generatedSourceOutputDirectory.get().asFile.listFiles()
-        }
-    }
-
-    project.dependencies {
-        if (project.ext.deps.implementation != null)
-            implementation project.ext.deps.implementation
-
-        if (project.ext.deps.api != null)
-            api project.ext.deps.api
-
-        if (project.ext.deps.compileOnly != null)
-            compileOnly project.ext.deps.compileOnly
-
-        if (project.ext.deps.annotationProcessor != null)
-            annotationProcessor project.ext.deps.annotationProcessor
-
-        // needs for translate mod to 64 bytecode
-        annotationProcessor "com.github.Anuken:jabel:93fde537c7"
-    }
-
-    // copy output jar to specified dirs
-    project.tasks.create("copyJar") { Task task ->
-        project.parent.ext.local?.copy?.get(project.name)?.each { p ->
-            project.copy {
-                from project.tasks.jar
-                into p
+project.tasks.create("fixNames") {
+    doLast {
+        project.sourceSets.main.resources.srcDirs.each { File dir ->
+            if (dir.exists()) {
+                dir.eachFileRecurse(groovy.io.FileType.FILES) { File file ->
+                    if (file.name.endsWith(".hjson") || file.name.endsWith(".properties"))
+                        file.write file.text.replaceAll("mm-", "mdvlm-")
+                }
             }
         }
-    }
-
-    project.tasks.jar { Jar jar ->
-        jar.archiveFileName = project.parent.ext.getOutputJar(project)
-
-        jar.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        // collect runtime classpath
-        jar.from {
-            project.configurations.runtimeClasspath.collect { File file ->
-                file.isDirectory() ? file : zipTree(file)
-            }
-        }
-
-        // copy jars
-        jar.finalizedBy project.tasks.copyJar
-    }
-
-    // apply extensions
-    project.parent.ext.buildScriptExtensions.get(project.name)?.each { File file ->
-        project.apply(from: file)
     }
 }
 
-project.tasks.buildRelease { Jar jar ->
-    jar.dependsOn project.subprojects*.tasks*.jar
+project.group = project.ext.settings?.projectSettings?.group ?: "group"
+project.version = project.ext.settings?.projectSettings?.version ?: "nil"
 
-    jar.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+// src - java sources
+// gen - generated java sources
+// res - resources (e.g. assets)
+project.sourceSets.main.java.srcDirs = [
+        "src", "gen"
+]
+project.sourceSets.main.resources.srcDirs = [
+        "res"
+]
+
+project.tasks.create("dex")
+project.tasks.create("buildRelease", Jar)
+project.tasks.create("copyBuildRelease")
+
+project.tasks.compileJava { JavaCompile task ->
+    task.options.encoding = "UTF-8"
+    task.options.compilerArgs += "-Xlint:none"
+    task.options.generatedSourceOutputDirectory.set(project.file("gen"))
+
+    task.options.compilerArgs += ['--release', '8']
+    task.targetCompatibility = JavaVersion.VERSION_1_8
+    task.sourceCompatibility = JavaVersion.VERSION_20
+
+    task.options.forkOptions.jvmArgs += [
+            "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
+            "--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
+            "--add-opens=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED",
+            "--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED",
+            "--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
+            "--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
+            "--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
+            "--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
+            "--add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED",
+            "--add-opens=jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED",
+            "--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED",
+            "--add-opens=java.base/sun.reflect.annotation=ALL-UNNAMED"
+    ]
+
+    doFirst {
+        delete options.generatedSourceOutputDirectory.get().asFile.listFiles()
+    }
+}
+
+project.dependencies {
+    annotationProcessor "com.github.Anuken:jabel:93fde537c7"
+
+    if (project.ext.deps.implementation != null)
+        implementation project.ext.deps.implementation
+
+    if (project.ext.deps.api != null)
+        api project.ext.deps.api
+
+    if (project.ext.deps.compileOnly != null)
+        compileOnly project.ext.deps.compileOnly
+
+    if (project.ext.deps.annotationProcessor != null)
+        annotationProcessor project.ext.deps.annotationProcessor
+}
+
+
+project.tasks.copyBuildRelease { Task task ->
+    task.dependsOn project.tasks.buildRelease
+
+    task.doLast {
+        project.ext.local?.copy?.each { p ->
+            project.copy { CopySpec spec ->
+                spec.from project.tasks.buildRelease.archiveFile.get()
+                spec.into p
+            }
+        }
+    }
+}
+
+project.tasks.jar { Jar jar ->
+    jar.archiveFileName.set "classes.jar"
+
+    jar.duplicatesStrategy DuplicatesStrategy.EXCLUDE
+    jar.from {
+        project.configurations.runtimeClasspath.collect { File file ->
+            file.isDirectory() ? file : zipTree(file)
+        }
+    }
+}
+
+// collect classes and dex jars
+project.tasks.buildRelease { Jar jar ->
+    jar.dependsOn project.tasks.dex
+    jar.dependsOn project.tasks.jar
+
+    jar.archiveFileName = project.ext.getOutputJar(project)
 
     jar.from {
-        [project.zipTree(project("android").tasks.collectJars.archiveFile.get()),
-         project.zipTree(project("desktop").tasks.jar.archiveFile.get())]
+        project.ext.useandroid ? [project.zipTree(project.tasks.jar.archiveFile.get()), project.zipTree(dexFile)] :
+                [project.zipTree(project.tasks.jar.archiveFile.get())]
     }
 
-    jar.doLast {
-        project.ext.local?.copy?.release?.each { String path ->
-            project.copy {
-                from { project.tasks.jar.archiveFile.get() }
-                into path
+    jar.destinationDirectory.set project.file("artifacts")
+}
+
+// create dex jar
+project.tasks.dex { Task task ->
+    task.dependsOn project.tasks.jar
+
+    // create dex jar
+    task.doLast {
+        // delete previous dex jar
+        if (project.ext.dexFile.exists())
+            project.delete project.ext.dexFile
+
+        println project.ext.useandroid ? "Building dex jar" : "Dex jar building skipped"
+
+        if (project.ext.useandroid) {
+            // find d8 and android.jar locations
+            if (project.ext.sdkRoot == null || !project.ext.sdkRoot.exists())
+                throw new GradleException("No Android SDK found.")
+            var platformRoot = project.ext.child(project.ext.sdkRoot, "platforms").listFiles().find { File file ->
+                project.ext.child(file, "android.jar").exists()
             }
-        }
-        project.copy {
-            from { project.tasks.jar.archiveFile.get() }
-            into project.file("artifacts")
+            String d8Name = System.getenv("OS") == "Windows_NT" ? "d8.bat" : "d8"
+            var buildToolsRoot = project.ext.child(project.ext.sdkRoot, "build-tools").listFiles().find { File file ->
+                project.ext.child(file, d8Name).exists()
+            }
+
+            if (!platformRoot || !buildToolsRoot)
+                throw new GradleException("" +
+                        (!platformRoot ? "No android.jar found. Ensure that you have an Android platform installed." : "") +
+                        (!buildToolsRoot ? "No $d8Name found. Ensure that you have an Android build tools installed." : ""))
+
+            // collect all classpath
+            var classpath = (configurations.compileClasspath.asList()
+                    + configurations.runtimeClasspath.asList()
+                    + project.ext.child(platformRoot, "android.jar"))
+            var dependencies = ""
+            for (path in classpath) {
+                dependencies += "--classpath $path.absolutePath "
+            }
+
+            // run d8
+            project.ext.doExec(
+                    "$buildToolsRoot/$d8Name $dependencies ${project.tasks.jar.archiveFile.get()}" +
+                            " --min-api 14 --output $dexFile.absolutePath")
         }
     }
+}
 
-    jar.finalizedBy project.tasks.cleanBuilds
+project.ext.buildScriptExtensions?.each { File file ->
+    project.apply(from: file)
 }

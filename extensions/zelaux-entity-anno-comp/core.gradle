@@ -1,0 +1,16 @@
+project.tasks.compileJava { JavaCompile task ->
+    task.doFirst {
+        project.copy { CopySpec spec ->
+            spec.from project.file("mod.json")
+            spec.into project.sourceSets.main.resources.srcDirs.first()
+        }
+    }
+
+    task.doLast {
+        project.sourceSets.main.resources.srcDirs.each { File dir ->
+            var file = project.ext.child(dir, "mod.json")
+            if (file.exists())
+                project.delete file
+        }
+    }
+}
