@@ -42,7 +42,7 @@ public class BugAI extends AIController implements TargetableAI {
         Tile tile = unit.tileOn();
         Tile targetTile = tile;
 
-        if (bug.invading() && evo() >= 0.1f) {
+        if (bug.invading() && evo() >= 0.05f) {
             target = findTarget(unit.x, unit.y, 1600f, false, true);
 
             if (target != null) {
