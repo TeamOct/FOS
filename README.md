@@ -15,10 +15,10 @@ This mod brings you to the brand-new star system to explore as a standalone camp
 ---
 
 ## How to build
-Run `buildRelease` task:
+Run `copyBuildRelease` task:
 
 ```shell
-./gradlew buildRelease
+./gradlew copyBuildRelease
 ```
 
 Mod file will be in artifacts.
@@ -27,7 +27,7 @@ Mod file will be in artifacts.
 ## Credits
 - Team founder: [@Polar4ik](https://github.com/Polar4ik) (polar4ik)
 - Programmers: [@Slotterleet](https://github.com/Slotterleet) (sl0tterleet), [@nekit508](https://github.com/nekit508) (nekit508)
-- Artists: [@NotTheGrawx](https://github.com/NotTheGrawx) (_motyaka), [@DoSh1K883](https://github.com/DoSh1K883) (captain_doshik)
+- Artists: [@NotTheGrawx](https://github.com/NotTheGrawx) (_motyaka), [@DoSh1K883](https://github.com/DoSh1K883) (captain_doshik), [@Krita-Burstflakes](https://github.com/Krita-Burstflakes) (krita47)
 - Composer: [@SaigoN0Nozomi](https://github.com/SaigoN0Nozomi) (saigononozomi)
 - Translator: [@Slotterleet](https://github.com/Slotterleet) (sl0tterleet)
 
