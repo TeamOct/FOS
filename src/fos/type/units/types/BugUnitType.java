@@ -5,7 +5,7 @@ import arc.graphics.g2d.*;
 import arc.math.*;
 import fos.ai.*;
 import fos.content.FOSStatuses;
-import fos.gen.FOSCrawlc;
+import fos.gen.*;
 import mindustry.content.*;
 import mindustry.gen.*;
 import mindustry.type.UnitType;
@@ -29,7 +29,7 @@ public class BugUnitType extends UnitType {
         this.flying = flying;
         targetAir = flying;
         targetGround = true;
-        targetFlags = new BlockFlag[]{BlockFlag.drill, BlockFlag.factory, BlockFlag.core, null};
+        targetFlags = new BlockFlag[]{BlockFlag.turret, BlockFlag.drill, BlockFlag.factory, BlockFlag.core, null};
         controller = u -> flying ? new FlyingBugAI() : new BugAI();
     }
     public BugUnitType(String name, boolean flying, boolean melee) {
@@ -64,6 +64,22 @@ public class BugUnitType extends UnitType {
             applyColor(unit);
 
             Draw.rect(regions[i], unit.x + tx, unit.y + ty, rot - 90);
+        }
+    }
+
+    @Override
+    public void update(Unit unit) {
+        super.update(unit);
+
+        if (!(unit instanceof Bugc b)) return;
+
+        // aggro immediately after being attacked.
+        if (b.health() < b.maxHealth()) {
+            if (b.isFollowed()) {
+                b.invading(true);
+            } else if (b.following() instanceof Bugc other) {
+                other.invading(true);
+            }
         }
     }
 }

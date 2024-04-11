@@ -3,6 +3,7 @@ package fos.type.blocks.units;
 import arc.Events;
 import arc.graphics.g2d.Draw;
 import arc.math.Mathf;
+import arc.util.Time;
 import fos.content.FOSUnitTypes;
 import fos.core.FOSVars;
 import mindustry.game.EventType;
@@ -38,7 +39,10 @@ public class BugSpawn extends UnitBlock {
 
             progress += delta() * (1 + Math.max(0, evo() - 0.25f));
 
-            if (progress >= interval) {
+            float minInterval = interval - 300f;
+            float maxInterval = interval + 300f;
+
+            if (Mathf.chance((progress - minInterval) / (maxInterval - minInterval) * (Time.delta / 60f))) {
                 Unit unit = getBug().create(team);
                 payload = new UnitPayload(unit);
                 payVector.setZero();
@@ -64,7 +68,6 @@ public class BugSpawn extends UnitBlock {
         @SuppressWarnings("ConstantConditions")
         private UnitType getBug() {
             UnitType[][] units = {
-                //I actually made ACTUAL bugs spawn, yay!
                 {FOSUnitTypes.bugSmall, FOSUnitTypes.bugMedium}
             };
 

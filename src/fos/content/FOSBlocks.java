@@ -608,10 +608,11 @@ public class FOSBlocks {
             consumePower(2f);
             drawer = new DrawTurret("lumoni-");
             shootType = new RailBulletType(){{
-                damage = 8f;
+                damage = 4f;
                 length = 225f;
                 lifetime = 10f;
-                pierceDamageFactor = 0.75f;
+                pierceDamageFactor = 1f;
+                pierceArmor = true;
 
                 lineEffect = FOSFx.dotLaserLine;
                 endEffect = FOSFx.dotLaserEnd;
@@ -660,7 +661,7 @@ public class FOSBlocks {
                     buildingDamageMultiplier = 0.3f;
                     fragBullets = 6;
                     fragBullet = new BasicBulletType(0.8f, 5){{
-                        lifetime = 60f * 30; //frags will stay for pretty long
+                        lifetime = 60f * 5; //frags will stay for pretty long
                         drag = 0.024f;
                         width = height = 6f;
                         backColor = FOSPal.silverBack;
@@ -693,7 +694,7 @@ public class FOSBlocks {
                     buildingDamageMultiplier = 0.3f;
                     fragBullets = 7;
                     fragBullet = new BasicBulletType(0.8f, 8){{
-                        lifetime = 60f * 30; //frags will stay for pretty long
+                        lifetime = 60f * 5; //frags will stay for pretty long
                         drag = 0.024f;
                         width = height = 6f;
                         backColor = vanadium.color.cpy().mul(0.8f);

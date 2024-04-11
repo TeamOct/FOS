@@ -1,5 +1,6 @@
 package fos.type.units.comp;
 
+import arc.Core;
 import arc.util.io.*;
 import mindustry.Vars;
 import mindustry.annotations.Annotations;
@@ -27,7 +28,8 @@ public abstract class BugComp implements Unitc {
     @Override
     @Annotations.Replace
     public EntityCollisions.SolidPred solidity() {
-        return this::legsSolidOrWall;
+        // TODO: experimental feature!!!
+        return Core.settings.getBool("fos-experiments", false) ? this::legsSolidOrWall : EntityCollisions::legsSolid;
     }
 
     @Override

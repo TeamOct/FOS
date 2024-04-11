@@ -7,7 +7,7 @@ import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.entities.Units;
 import mindustry.entities.units.AIController;
-import mindustry.gen.*;
+import mindustry.gen.Teamc;
 import mindustry.world.Tile;
 import mindustry.world.meta.BlockFlag;
 
@@ -16,19 +16,19 @@ public class BugAI extends AIController implements TargetableAI {
 
     @Override
     public void updateUnit() {
-        bug = (Bugc) unit;
+        if (bug == null) {
+            bug = (Bugc) unit;
+        }
 
         if (bug.isFollowed()) {
-            int followers = Units.count(unit.x, unit.y, 240f, u -> u instanceof Bugc);
+            int followers = Units.count(unit.x, unit.y, 240f, u -> u instanceof Bugc b && b.following() == bug);
 
             if (followers >= 5 + evo() * 30) {
                 bug.invading(true);
             }
         } else {
             //check for bug swarms nearby
-            bug.following(Units.closest(unit.team, unit.x, unit.y, u ->
-                    (u instanceof Bugc b && b.isFollowed() && !(b.invading()))
-            ));
+            bug.following(Units.closest(unit.team, unit.x, unit.y, 400f, u -> u instanceof Bugc b && b.isFollowed()));
 
             //become a swarm leader if none exist, or if this bug is a boss
             if (bug.following() == null || bug.isBoss()) bug.isFollowed(true);
@@ -49,7 +49,7 @@ public class BugAI extends AIController implements TargetableAI {
                 if (unit.within(target, 32f)) {
                     vec.set(target).sub(unit);
                     vec.setLength(unit.speed());
-                    faceMovement();
+                    unit.lookAt(vec);
                     unit.moveAt(vec);
                     return;
                 } else {
@@ -57,20 +57,20 @@ public class BugAI extends AIController implements TargetableAI {
                 }
             }
         } else if (bug.following() != null) {
-            bug.invading(bug.following() instanceof Bugc bf && bf.invading());
+            var f = bug.following();
+            bug.invading(f instanceof Bugc bf && bf.invading());
 
-            //if already close enough to another bug when idle, stand still
-            Unit nearest = Units.closest(unit.team, unit.x, unit.y, u -> (u instanceof Bugc) && u != this.unit);
-            if (nearest != null && Mathf.within(unit.x, unit.y, nearest.x, nearest.y, 12f) && !bug.invading()) return;
+            moveTo(f, 12f + f.type.hitSize, 7, true, null);
+            return;
+        }
 
-            targetTile = pathfindTarget(bug.following(), unit);
-        } else if (!bug.idle()) {
+        if (!bug.idle()) {
             //find a random point to walk at
             boolean foundTile = false;
             while (!foundTile) {
-                int x = Mathf.random(-5, 5);
-                int y = Mathf.random(-5, 5);
-                Tile t = Vars.world.tile(unit.tileX() + x, unit.tileY() + y);
+                int x = Mathf.random(-40, 40);
+                int y = Mathf.random(-40, 40);
+                Tile t = Vars.world.tileWorld(unit.x + x, unit.y + y);
                 if (t != null && t.block() == Blocks.air) {
                     targetTile = pathfindTarget(vec.set(unit).add(x*8, y*8), unit);
                     foundTile = true;
