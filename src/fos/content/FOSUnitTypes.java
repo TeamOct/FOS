@@ -985,7 +985,7 @@ public class FOSUnitTypes {
                     mirror = false;
                     reload = 240f;
                     shoot.shots = 5;
-                    inaccuracy = 22.5f;
+                    inaccuracy = 11.25f;
                     shootSound = Sounds.artillery;
                     bullet = new ArtilleryBulletType(){{
                         width = height = 12;
@@ -1002,11 +1002,11 @@ public class FOSUnitTypes {
                         fragRandomSpread = 0;
                         fragBullet = new BasicBulletType(){{
                             width = height = 12;
-                            shrinkX = shrinkY = -2;
+                            shrinkX = shrinkY = -1;
                             sprite = "shell";
                             speed = 1f;
                             drag = 0.0083f;
-                            lifetime = 120f;
+                            lifetime = 60f;
                             splashDamage = 200;
                             splashDamageRadius = 16f;
                             buildingDamageMultiplier = 0.3f;

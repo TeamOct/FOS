@@ -35,7 +35,7 @@ import mindustry.world.blocks.liquid.Conduit;
 import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.storage.Unloader;
-import mindustry.world.blocks.units.UnitFactory;
+import mindustry.world.blocks.units.*;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 import multicraft.*;
@@ -86,7 +86,7 @@ public class FOSBlocks {
     softbush,
 
     // UNITS
-    upgradeCenter, destroyerFactory, eliminatorFactory, injectorFactory, droidConstructor, draugFactory,
+    upgradeCenter, destroyerFactory, eliminatorFactory, injectorFactory, simpleReconstructor, droidConstructor, draugFactory,
 
     // STORAGE & CORES
     coreColony, coreFortress, coreCity, coreMetropolis, lightUnloader,
@@ -1546,6 +1546,19 @@ public class FOSBlocks {
             plans.add(
                 new UnitPlan(FOSUnitTypes.sergeant, 20f * 60, with(silicon, 15, tin, 20))
             );
+        }};
+        simpleReconstructor = new Reconstructor("simple-reconstructor"){{
+            scaledHealth = 160;
+            size = 3;
+            consumePower(8f);
+            consumeItems(with(silicon, 50, diamond, 35));
+            upgrades.addAll(
+                new UnitType[]{assault, abrupt},
+                new UnitType[]{radix, foetus},
+                new UnitType[]{sergeant, lieutenant}
+            );
+            constructTime = 60f * 25;
+            requirements(Category.units, with(silver, 150, silicon, 150, vanadium, 100));
         }};
         droidConstructor = new OverdriveDroneCenter("droid-constructor"){{
             scaledHealth = 120;
