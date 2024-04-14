@@ -229,8 +229,8 @@ public class LumoniTechTree {
             });
 
             // SECTORS
-            node(crashLanding, () -> {
-                node(ruins, Seq.with(new Objectives.SectorComplete(crashLanding)), () -> {
+            node(awakening, () -> {
+                node(ruins, Seq.with(new Objectives.SectorComplete(awakening)), () -> {
                     node(intruders, Seq.with(new Objectives.SectorComplete(ruins)), () -> {
                         soontm();
                     });

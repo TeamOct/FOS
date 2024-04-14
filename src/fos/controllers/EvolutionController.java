@@ -1,28 +1,40 @@
 package fos.controllers;
 
-import fos.content.FOSPlanets;
+import arc.Events;
+import arc.struct.ObjectFloatMap;
+import fos.content.*;
 import fos.core.FOSVars;
-import mindustry.Vars;
 import mindustry.ctype.UnlockableContent;
+import mindustry.game.EventType;
 import mindustry.gen.Groups;
-import mindustry.type.Sector;
+import mindustry.type.*;
 import mindustry.world.blocks.production.Drill.DrillBuild;
 import mindustry.world.blocks.production.GenericCrafter.GenericCrafterBuild;
+
+import static mindustry.Vars.*;
 
 public class EvolutionController {
     // TODO: balance (probably)
     /** Internal evolution factor: waves. */
-    public float waveCoefficient = 0.01f;
+    protected float waveCoefficient = 0.01f;
     /** Internal evolution factor: factories and drills. */
-    public float factoryCoefficient = 0.001f;
+    protected float factoryCoefficient = 0.001f;
 
     /** External evolution factor: captured sectors. */
-    public float sectorCoefficient = 0.01f;
+    protected float sectorCoefficient = 0.01f;
     /** External evolution factor: researched content. */
-    public float researchCoefficient = 0.005f;
+    protected float researchCoefficient = 0.005f;
+
+    protected ObjectFloatMap<SectorPreset> sectorBonuses = new ObjectFloatMap<>();
+
+    public EvolutionController() {
+        Events.on(EventType.ContentInitEvent.class, e -> {
+            sectorBonuses.put(FOSSectors.awakening, 0.05f); // to ensure that insects always attack
+        });
+    }
 
     public float getWaveEvo() {
-        return Vars.state.wave * waveCoefficient;
+        return state.wave * waveCoefficient;
     }
 
     public float getFactoryEvo() {
@@ -30,16 +42,16 @@ public class EvolutionController {
     }
 
     public float getSectorEvo() {
-        return !Vars.state.isCampaign() ? 0 :
+        return !state.isCampaign() ? 0 :
             FOSPlanets.lumoni.sectors.count(Sector::isCaptured) * sectorCoefficient;
     }
 
     public float getResearchEvo() {
-        if (!Vars.state.isCampaign()) return 0;
+        if (!state.isCampaign()) return 0;
 
         // JAVA SUCKS.
         final int[] counter = {0};
-        Vars.content.each(c -> {
+        content.each(c -> {
             if (c.isVanilla() || c.minfo.mod != FOSVars.mod) return;
 
             if (c instanceof UnlockableContent u && u.unlockedNow())
@@ -50,6 +62,7 @@ public class EvolutionController {
     }
 
     public float getTotalEvo() {
-        return getWaveEvo() + getFactoryEvo() + getSectorEvo() + getResearchEvo();
+        return getWaveEvo() + getFactoryEvo() + getSectorEvo() + getResearchEvo() +
+            (state.isCampaign() ? sectorBonuses.get(state.rules.sector.preset, 0) : 0);
     }
 }
