@@ -66,20 +66,28 @@ public class LumoniTechTree {
             // UNIT FACTORIES. TODO
             node(destroyerFactory, Seq.with(new Objectives.SectorComplete(intruders)), () -> {
                 node(assault, ItemStack.with(), Seq.with(new Objectives.Research(destroyerFactory)), () -> {
-                    soontm();
+                    node(abrupt, Seq.with(new Objectives.Research(simpleReconstructor)), () -> {
+                        soontm();
+                    });
                 });
             });
             node(eliminatorFactory, ItemStack.with(), Seq.with(new Objectives.Research(destroyerFactory)), () -> {
                 node(radix, ItemStack.with(), Seq.with(new Objectives.Research(eliminatorFactory)), () -> {
-                    soontm();
+                    node(foetus, Seq.with(new Objectives.Research(simpleReconstructor)), () -> {
+                        soontm();
+                    });
                 });
             });
             node(injectorFactory, ItemStack.with(), Seq.with(new Objectives.Research(destroyerFactory)), () -> {
                 node(sergeant, ItemStack.with(), Seq.with(new Objectives.Research(injectorFactory)), () -> {
-                    soontm();
+                    node(lieutenant, Seq.with(new Objectives.Research(simpleReconstructor)), () -> {
+                        soontm();
+                    });
                 });
             });
-            soontm(); // reconstructor, maybe?
+            node(simpleReconstructor, Seq.with(new Objectives.OnSector(conflict)), () -> {
+                soontm();
+            });
 
             // DRILLS
             node(crudeDrill, () -> {
@@ -106,11 +114,10 @@ public class LumoniTechTree {
             // TURRETS
             node(helix, Seq.with(new Objectives.OnSector(ruins)), () -> {
                 node(sticker, () -> {
-                    soontm();
-/*
-                    node(particulator, () ->
-                        node(cluster));
-*/
+                    node(particulator, () -> {
+                        soontm();
+                        //node(cluster)
+                    });
                 });
                 node(dot, () -> {
                     soontm();
@@ -232,7 +239,9 @@ public class LumoniTechTree {
             node(awakening, () -> {
                 node(ruins, Seq.with(new Objectives.SectorComplete(awakening)), () -> {
                     node(intruders, Seq.with(new Objectives.SectorComplete(ruins)), () -> {
-                        soontm();
+                        node(conflict, Seq.with(new Objectives.SectorComplete(intruders)), () -> {
+                            soontm();
+                        });
                     });
                     node(FOSSectors.citadel, Seq.with(new Objectives.SectorComplete(ruins)), () -> {
                         soontm();

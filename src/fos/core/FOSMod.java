@@ -21,7 +21,6 @@ import fos.graphics.*;
 import fos.net.FOSPackets;
 import fos.ui.*;
 import fos.ui.menus.*;
-import mindustry.Vars;
 import mindustry.ai.Pathfinder;
 import mindustry.game.*;
 import mindustry.gen.*;
@@ -34,6 +33,7 @@ import mma.annotations.ModAnnotations;
 import java.util.Calendar;
 
 import static arc.Core.*;
+import static arc.discord.DiscordRPC.*;
 import static mindustry.Vars.*;
 
 @ModAnnotations.RootDirectoryPath(rootDirectoryPath = "")
@@ -64,32 +64,41 @@ public class FOSMod extends Mod {
         });
 
         Events.run(EventType.Trigger.update, () -> {
-            /* not sure if it will ever be useful now?
             if (!mobile) {
                 boolean useDiscord = !OS.hasProp("nodiscord");
                 if (useDiscord) {
-                    if (!state.isCampaign()) return;
-                    if (state.rules.sector.planet == FOSPlanets.uxerd) {
+                    var planet = state.rules.planet;
+
+                    if (planet != null && !planet.isVanilla() && planet.minfo.mod == FOSVars.mod) {
                         RichPresence presence = new RichPresence();
 
-                        Building a = indexer.findTile(Team.sharded, 350 * 8, 350 * 8, 4000, b -> b instanceof OrbitalAcceleratorBuild);
+                        String gameMapWithWave, gameMode = "", gamePlayersSuffix = "";
 
-                        presence.details = "Uxerd (FOS)";
-                        presence.state = "Orbital Accelerator Progress: " + (a != null ? Mathf.round((float) a.items().total() / (float) a.block().itemCapacity * 100) : "0") + "%";
+                        gameMapWithWave = Strings.capitalize(Strings.stripColors(state.map.name()));
+
+                        if(state.rules.waves){
+                            gameMapWithWave += " | Wave " + state.wave;
+                        }
+                        gameMode = state.rules.pvp ? "PvP" : state.rules.attackMode ? "Attack" : state.rules.infiniteResources ? "Sandbox" : "Survival";
+                        if(net.active() && Groups.player.size() > 1){
+                            gamePlayersSuffix = " | " + Groups.player.size() + " Players";
+                        }
+
+                        presence.details = "[FOS] " + gameMapWithWave;
+                        presence.state = gameMode + gamePlayersSuffix;
 
                         presence.largeImageKey = "logo";
 
                         try {
-                            DiscordRPC.send(presence);
+                            send(presence);
                         } catch (Exception ignored) {}
                     }
                 }
             }
-            */
 
             //realistic mode - no sound FX in places with no atmosphere, such as asteroids
             // FIXME запхнуть в таймер и менять звук только при изменении настроек и загрузке
-            if (settings.getBool("fos-realisticmode") && Vars.state.rules.sector != null && !Vars.state.rules.sector.planet.hasAtmosphere) {
+            if (settings.getBool("fos-realisticmode") && state.rules.sector != null && !state.rules.sector.planet.hasAtmosphere) {
                 audio.soundBus.setVolume(0f);
             } else {
                 audio.soundBus.setVolume(settings.getInt("sfxvol") / 100f);
@@ -100,7 +109,7 @@ public class FOSMod extends Mod {
     @Override
     public void loadContent() {
         Log.debug("[FOS] loading content");
-        FOSVars.mod = Vars.mods.getMod(getClass());
+        FOSVars.mod = mods.getMod(getClass());
 
         if (!headless) {
             ConveyorSpritesPacker.pack(); // generate conveyor regions
@@ -141,11 +150,11 @@ public class FOSMod extends Mod {
 
         //this flowfield is required for modded AIs
         Pathfinder.Flowfield pt = FOSVars.fpos;
-        Reflect.<Seq<Prov<Pathfinder.Flowfield>>>get(Vars.pathfinder, "fieldTypes").add(() -> pt);
+        Reflect.<Seq<Prov<Pathfinder.Flowfield>>>get(pathfinder, "fieldTypes").add(() -> pt);
         Events.on(EventType.WorldLoadEvent.class, e -> {
-            if (!Vars.net.client()) {
+            if (!net.client()) {
                 // FIXME: sometimes breaks for unknown reason
-                Reflect.invoke(Vars.pathfinder, "preloadPath", new Object[]{pt}, Pathfinder.Flowfield.class);
+                Reflect.invoke(pathfinder, "preloadPath", new Object[]{pt}, Pathfinder.Flowfield.class);
             }
         });
 
@@ -153,11 +162,11 @@ public class FOSMod extends Mod {
         if (headless) return;
 
         //an anti-cheat system from long ago, is it really necessary now?
-        LoadedMod xf = Vars.mods.list().find(m ->
+        LoadedMod xf = mods.list().find(m ->
                 /* some mods don't even have the author field, apparently. how stupid. */ m.meta.author != null &&
                 (m.meta.author.equals("XenoTale") || m.meta.author.equals("goldie")));
         if (xf != null) {
-            Vars.ui.showOkText("@fos.errortitle", bundle.format("fos.errortext", xf.meta.displayName), () -> app.exit());
+            ui.showOkText("@fos.errortitle", bundle.format("fos.errortext", xf.meta.displayName), () -> app.exit());
         }
 
         SplashTexts.init();
@@ -173,7 +182,7 @@ public class FOSMod extends Mod {
         FOSMenus.load();
 
         //add a couple of buttons to in-game editor
-        Vars.ui.editor.shown(this::addEditorTeams);
+        ui.editor.shown(this::addEditorTeams);
 
         //damage display
         //noinspection InstantiationOfUtilityClass
@@ -197,7 +206,7 @@ public class FOSMod extends Mod {
         if (isAprilFools || settings.getBool("haha-funny", false)) {
             Musics.menu = tree.loadMusic("mistake");
 
-            if (!Vars.mobile) {
+            if (!mobile) {
                 Events.on(EventType.BlockBuildEndEvent.class, e -> {
                     if (Mathf.chance(0.005f))
                         superSecretThings();
@@ -215,30 +224,30 @@ public class FOSMod extends Mod {
 
         //disclaimer for non-debug
         if (FOSVars.earlyAccess && !FOSVars.debug)
-            Vars.ui.showOkText("@fos.earlyaccesstitle", bundle.get("fos.earlyaccess"), () -> {});
+            ui.showOkText("@fos.earlyaccesstitle", bundle.get("fos.earlyaccess"), () -> {});
 
         //unlock every planet if debug
         if (FOSVars.debug)
             PlanetDialog.debugSelect = true;
 
         //check for "Fictional Octo System OST" mod. if it doesn't exist, prompt to download from GitHub
-        LoadedMod ost = Vars.mods.getMod("fosost");
+        LoadedMod ost = mods.getMod("fosost");
         if (ost == null) {
             if (!settings.getBool("fos-ostdontshowagain")) {
-                Vars.ui.showCustomConfirm("@fos.noosttitle", bundle.get("fos.noost"),
+                ui.showCustomConfirm("@fos.noosttitle", bundle.get("fos.noost"),
                         "@mods.browser.add", "@no",
-                        () -> Vars.ui.mods.githubImportMod("TeamOct/FOS-OST", true), () -> {});
+                        () -> ui.mods.githubImportMod("TeamOct/FOS-OST", true), () -> {});
             }
         } else if (!ost.enabled()) {
-            Vars.ui.showCustomConfirm("@fos.ostdisabledtitle", bundle.get("fos.ostdisabled"),
+            ui.showCustomConfirm("@fos.ostdisabledtitle", bundle.get("fos.ostdisabled"),
                     "@yes", "@no",
                     () -> {
-                        Vars.mods.setEnabled(ost, true);
-                        Vars.ui.showInfoOnHidden("@mods.reloadexit", () -> app.exit());
+                        mods.setEnabled(ost, true);
+                        ui.showInfoOnHidden("@mods.reloadexit", () -> app.exit());
                     }, () -> {});
         }
 
-        Element menu = ((Element) Reflect.get(Vars.ui.menufrag, "container")).parent.parent;
+        Element menu = ((Element) Reflect.get(ui.menufrag, "container")).parent.parent;
         Group menuCont = menu.parent;
         menuCont.addChildBefore(menu, new Element(){
             @Override
@@ -261,7 +270,7 @@ public class FOSMod extends Mod {
     }
 
     public void constructSettings() {
-        Vars.ui.settings.addCategory("@setting.fos-title", "fos-settings-icon", t -> {
+        ui.settings.addCategory("@setting.fos-title", "fos-settings-icon", t -> {
             t.sliderPref("fos-menutheme", 2, 1, 7, s ->
                 s == 2 ? "@setting.fos-menutheme.uxerdspace" :
                 s == 3 ? "@setting.fos-menutheme.lumonispace" :
@@ -291,11 +300,11 @@ public class FOSMod extends Mod {
                         settings.put("fos-refreshsplash", false)
                 );
                 int n = Mathf.floor((float) Math.random() * SplashTexts.splashes.size);
-                Vars.mods.locateMod("fos").meta.subtitle = SplashTexts.splashes.get(n);
+                mods.locateMod("fos").meta.subtitle = SplashTexts.splashes.get(n);
             });
             t.checkPref("fos-debugmode", false, b -> {
                 if (b) {
-                    Vars.ui.showConfirm("@warning", "@fos-dangerzone", () -> {
+                    ui.showConfirm("@warning", "@fos-dangerzone", () -> {
                         settings.put("fos-debugmode", true);
                     });
                 } else
@@ -306,7 +315,7 @@ public class FOSMod extends Mod {
 
     public void addEditorTeams() {
         //java sucks
-        WidgetGroup teambuttons = (WidgetGroup)Vars.ui.editor.getChildren().get(0);
+        WidgetGroup teambuttons = (WidgetGroup) ui.editor.getChildren().get(0);
         teambuttons = (WidgetGroup)teambuttons.getChildren().get(0);
         teambuttons = (WidgetGroup)teambuttons.getChildren().get(0);
 
@@ -319,8 +328,8 @@ public class FOSMod extends Mod {
             button.margin(4f);
             button.getImageCell().grow();
             button.getStyle().imageUpColor = team.color;
-            button.clicked(() -> Vars.editor.drawTeam = team);
-            button.update(() -> button.setChecked(Vars.editor.drawTeam == team));
+            button.clicked(() -> editor.drawTeam = team);
+            button.update(() -> button.setChecked(editor.drawTeam == team));
 
             ((Table)teambuttons).add(button);
         }

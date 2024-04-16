@@ -11,6 +11,8 @@ import mindustry.gen.Teamc;
 import mindustry.world.Tile;
 import mindustry.world.meta.BlockFlag;
 
+import static mindustry.Vars.tilesize;
+
 public class BugAI extends AIController implements TargetableAI {
     private Bugc bug;
 
@@ -21,14 +23,14 @@ public class BugAI extends AIController implements TargetableAI {
         }
 
         if (bug.isFollowed()) {
-            int followers = Units.count(unit.x, unit.y, 240f, u -> u instanceof Bugc b && b.following() == bug);
+            int followers = Units.count(unit.x, unit.y, 15f * tilesize, u -> u instanceof Bugc b && b.following() == bug);
 
             if (followers >= 5 + evo() * 30) {
                 bug.invading(true);
             }
         } else {
             //check for bug swarms nearby
-            bug.following(Units.closest(unit.team, unit.x, unit.y, 400f, u -> u instanceof Bugc b && b.isFollowed()));
+            bug.following(Units.closest(unit.team, unit.x, unit.y, 15f * tilesize, u -> u instanceof Bugc b && b.isFollowed()));
 
             //become a swarm leader if none exist, or if this bug is a boss
             if (bug.following() == null || bug.isBoss()) bug.isFollowed(true);
@@ -39,14 +41,15 @@ public class BugAI extends AIController implements TargetableAI {
 
     @Override
     public void updateMovement() {
+        // FIXME: bugs spinning around for no reason
         Tile tile = unit.tileOn();
         Tile targetTile = tile;
 
         if (bug.invading() && evo() >= 0.05f) {
-            target = findTarget(unit.x, unit.y, 1600f, false, true);
+            target = target(unit.x, unit.y, 25f * tilesize, false, true);
 
             if (target != null) {
-                if (unit.within(target, 32f)) {
+                if (unit.within(target, bug.hitSize() * 1.5f)) {
                     vec.set(target).sub(unit);
                     vec.setLength(unit.speed());
                     unit.lookAt(vec);
@@ -64,7 +67,7 @@ public class BugAI extends AIController implements TargetableAI {
             return;
         }
 
-        if (!bug.idle()) {
+        if (!bug.invading() && !bug.idle()) {
             //find a random point to walk at
             boolean foundTile = false;
             while (!foundTile) {
@@ -86,14 +89,7 @@ public class BugAI extends AIController implements TargetableAI {
     }
 
     @Override
-    public Teamc findTarget(float x, float y, float range, boolean air, boolean ground) {
-        Teamc result = findMainTarget(x, y, range, air, ground);
-
-        return checkTarget(result, x, y, range) ? bug.closestEnemyCore() : result;
-    }
-
-    @Override
-    public Teamc findMainTarget(float x, float y, float range, boolean air, boolean ground) {
+    public Teamc target(float x, float y, float range, boolean air, boolean ground) {
         for(BlockFlag flag : unit.type.targetFlags) {
             Teamc target;
             if (flag != null) {
@@ -105,7 +101,14 @@ public class BugAI extends AIController implements TargetableAI {
             if (target != null) return target;
         }
 
-        return Units.closestTarget(unit.team, x, y, range, u -> false, b -> true);
+        Teamc result = Units.closestTarget(unit.team, x, y, range, u -> false, b -> true);
+
+        return checkTarget(result, x, y, range) ? bug.closestEnemyCore() : result;
+    }
+
+    @Override
+    public boolean keepState() {
+        return true;
     }
 
     private float evo() {

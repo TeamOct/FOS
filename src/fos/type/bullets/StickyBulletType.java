@@ -2,12 +2,12 @@ package fos.type.bullets;
 
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
-import mindustry.entities.bullet.BasicBulletType;
+import mindustry.content.Fx;
+import mindustry.entities.bullet.ArtilleryBulletType;
 import mindustry.gen.*;
 import mindustry.graphics.Layer;
-import mindustry.type.unit.MissileUnitType;
 
-public class StickyBulletType extends BasicBulletType {
+public class StickyBulletType extends ArtilleryBulletType {
     /** An interval between the contact with an enemy and the explosion. */
     public int explosionDelay;
 
@@ -19,13 +19,14 @@ public class StickyBulletType extends BasicBulletType {
         layer = Layer.flyingUnit + 1f;
         despawnHit = true;
         pierce = true;
+        collides = true;
+        collidesGround = true;
+        hitEffect = Fx.blastExplosion;
+        hitSound = Sounds.explosion;
     }
 
     @Override
     public void hitEntity(Bullet b, Hitboxc entity, float health) {
-        //do not target missiles.
-        if (((Unit) entity).type instanceof MissileUnitType) return;
-
         super.hitEntity(b, entity, health);
 
         b.hit(true);
@@ -51,6 +52,12 @@ public class StickyBulletType extends BasicBulletType {
         super.update(b);
 
         StickyBulletData data = (StickyBulletData) b.data;
+
+        if (data != null && data.target == null) {
+            b.vel.set(Vec2.ZERO);
+            return;
+        }
+
         if (data != null && data.target instanceof Unit u && !u.dead()) {
             float bx = b.x(), by = b.y();
             float ox = data.target.x(), oy = data.target.y();
@@ -74,13 +81,16 @@ public class StickyBulletType extends BasicBulletType {
     @Override
     public void removed(Bullet b) {
         super.removed(b);
-        createSplashDamage(b, b.x, b.y);
-    }
 
-    @Override
-    public void despawned(Bullet b) {
-        super.despawned(b);
-        createSplashDamage(b, b.x, b.y);
+        if (b.data == null) {
+            // this bullet was already despawned; create a new one that stays on ground
+            Bullet nb = create(b.owner, b.team, b.x, b.y, b.rotation());
+            nb.hit(true);
+            nb.lifetime = explosionDelay;
+            nb.data = new StickyBulletData();
+        } else {
+            hit(b);
+        }
     }
 
     public static class StickyBulletData {

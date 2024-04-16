@@ -2,7 +2,7 @@ package fos.maps.generators;
 
 import arc.graphics.Color;
 import arc.math.geom.Vec3;
-import fos.content.FOSTeam;
+import fos.content.*;
 import mindustry.content.Blocks;
 import mindustry.maps.generators.PlanetGenerator;
 import mindustry.type.Sector;
@@ -29,7 +29,7 @@ public class CaldemoltStarGenerator extends PlanetGenerator {
                 Tile t = tiles.get(500 + x, 500 + y);
                 t.setFloor(Blocks.metalFloor.asFloor());
                 if (t.x == 500 && t.y == 500) {
-                    t.setBlock(Blocks.coreCitadel, FOSTeam.corru);
+                    t.setBlock(FOSBlocks.coreCity, FOSTeam.corru);
                 }
             }
         }

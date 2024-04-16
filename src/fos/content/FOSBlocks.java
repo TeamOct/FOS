@@ -544,9 +544,9 @@ public class FOSBlocks {
         sticker = new ItemTurret("sticker"){{
             scaledHealth = 480;
             size = 2;
-            range = 150;
-            targetAir = true;
-            targetGround = false;
+            range = 360;
+            targetAir = false;
+            targetGround = true;
             recoil = 0f;
             reload = 45f;
             inaccuracy = 4f;
@@ -554,28 +554,26 @@ public class FOSBlocks {
             shootSound = Sounds.mud;
             consumeLiquid(tokicite, 0.1f);
             ammo(
-                tin, new StickyBulletType(3f, 10, 60){{
-                    lifetime = 50f;
+                tin, new StickyBulletType(8f, 10, 90){{
+                    lifetime = 45f;
                     width = height = 10f;
                     trailColor = FOSPal.tinBack;
                     backColor = FOSPal.tin;
                     frontColor = FOSPal.tokicite;
-                    trailWidth = 2f;
-                    trailLength = 8;
                     ammoMultiplier = 2f;
+                    scaleLife = true;
                     splashDamage = 40;
                     splashDamageRadius = 12f;
                     buildingDamageMultiplier = 0.3f;
                 }},
-                diamond, new StickyBulletType(3f, 30, 60){{
-                    lifetime = 50f;
+                diamond, new StickyBulletType(8f, 30, 90){{
+                    lifetime = 45f;
                     width = height = 10f;
                     trailColor = FOSPal.diamondBack;
                     backColor = FOSPal.diamond;
                     frontColor = FOSPal.tokicite;
-                    trailWidth = 2f;
-                    trailLength = 8;
                     ammoMultiplier = 3f;
+                    scaleLife = true;
                     splashDamage = 50;
                     splashDamageRadius = 16f;
                     buildingDamageMultiplier = 0.3f;
@@ -1166,14 +1164,22 @@ public class FOSBlocks {
             requirements(Category.distribution, with(aluminium, 120, lithium, 75, silver, 100, titanium, 125));
             envRequired = envEnabled = Env.space;
         }};
-        tinRouter = new Router("tin-router"){{
-            researchCost = with(tin, 90);
-            requirements(Category.distribution, with(tin, 3));
+        tinBelt = new PipeConveyor("tin-belt"){{
+            health = 10;
+            speed = 0.05f;
+            displayedSpeed = 6.9f;
+            researchCost = with(tin, 30);
+            requirements(Category.distribution, with(tin, 1));
         }};
         tinJunction = new Junction("tin-junction"){{
             speed = 16f;
             researchCost = with(tin, 60);
+            ((Conveyor)tinBelt).junctionReplacement = this;
             requirements(Category.distribution, with(tin, 2));
+        }};
+        tinRouter = new Router("tin-router"){{
+            researchCost = with(tin, 90);
+            requirements(Category.distribution, with(tin, 3));
         }};
         tinBridge = new BufferedItemBridge("tin-bridge"){{
             fadeIn = moveArrows = false;
@@ -1182,16 +1188,8 @@ public class FOSBlocks {
             arrowSpacing = 6f;
             bufferCapacity = 14;
             researchCost = with(tin, 150);
+            ((Conveyor)tinBelt).bridgeReplacement = this;
             requirements(Category.distribution, with(tin, 10));
-        }};
-        tinBelt = new PipeConveyor("tin-belt"){{
-            health = 10;
-            speed = 0.05f;
-            displayedSpeed = 6.9f;
-            researchCost = with(tin, 30);
-            junctionReplacement = tinJunction;
-            bridgeReplacement = tinBridge;
-            requirements(Category.distribution, with(tin, 1));
         }};
         //endregion
         //region liquids
@@ -1549,7 +1547,7 @@ public class FOSBlocks {
         }};
         simpleReconstructor = new Reconstructor("simple-reconstructor"){{
             scaledHealth = 160;
-            size = 3;
+            size = 4;
             consumePower(8f);
             consumeItems(with(silicon, 50, diamond, 35));
             upgrades.addAll(

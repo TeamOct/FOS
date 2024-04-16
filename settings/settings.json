@@ -11,7 +11,8 @@
         "list": [
             { "multi-crafter-lib": "com.github.liplum:MultiCrafterLib:v1.7" },
             { "zelaux-mod-core-anno": "com.github.Zelaux.ZelauxModCore:annotations:74a5591c36b" },
-            { "arc-sdl-binds": "com.github.Anuken.Arc:backend-sdl:v146" }
+            { "arc-sdl-binds": "com.github.Anuken.Arc:backend-sdl:v146" },
+            { "arc-discord": "com.github.Anuken.Arc:discord:v146" }
         ],
 
         "deps": {
@@ -20,7 +21,8 @@
             ],
             "compileOnly": [
                 "list:zelaux-mod-core-anno",
-                "list:arc-sdl-binds"
+                "list:arc-sdl-binds",
+                "list:arc-discord"
             ],
             "annotationProcessor": [
                 "list:zelaux-mod-core-anno"

@@ -2,6 +2,7 @@ package fos.controllers;
 
 import arc.Events;
 import arc.struct.ObjectFloatMap;
+import arc.util.Time;
 import fos.content.*;
 import fos.core.FOSVars;
 import mindustry.ctype.UnlockableContent;
@@ -34,7 +35,7 @@ public class EvolutionController {
     }
 
     public float getWaveEvo() {
-        return state.wave * waveCoefficient;
+        return state.rules.waves ? state.wave * waveCoefficient : (float)state.tick / 2 / Time.toMinutes * waveCoefficient;
     }
 
     public float getFactoryEvo() {

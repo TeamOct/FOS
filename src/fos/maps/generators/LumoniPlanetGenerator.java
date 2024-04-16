@@ -104,7 +104,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         if (Simplex.noise3d(seed, 5, 0.6f, 1f / scl, position.x, position.y, position.z) > 0.4f) {
             b = getAlt(b);
         }
-        if (isWater(position, 0.2f)) {
+        if (isWater(position, 0.2f) || (b == purpur && isWater(position, 0.18f))) {
             b = getFlooded(b);
         }
 
@@ -311,17 +311,11 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         oreAround(alienMoss, blubluWall, 2, 1f, 0f);
 
         pass((x, y) -> {
-            //trees on purpur biome
-            if (floor == purpur && block == air) {
+            //bushes on blublu biome
+            //TODO: add trees
+            if (floor == blublu && block == air) {
                 if (rand.chance(0.01)){
-                    for (Point2 p : Geometry.d8) {
-                        Tile other = tiles.get(x + p.x, y + p.y);
-                        //if there's already a tree nearby, do nothing
-                        if (other.block() == whiteTree) return;
-                    }
-                    if (rand.chance(0.1)) {
-                        block = whiteTree;
-                    }
+                    block = softbush;
                 }
             }
 
