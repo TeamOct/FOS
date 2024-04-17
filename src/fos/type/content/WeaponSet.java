@@ -1,11 +1,13 @@
 package fos.type.content;
 
 import arc.struct.Seq;
+import fos.content.FOSUnitTypes;
 import fos.gen.LumoniPlayerUnitc;
 import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.Unit;
 import mindustry.type.*;
+import mindustry.world.meta.*;
 
 //YES, this looks very cursed lmao
 /**
@@ -58,6 +60,14 @@ public class WeaponSet extends StatusEffect {
             weapon.load();
 
         fullIcon = uiIcon = weapons.first().region;
+    }
+
+    @Override
+    public void setStats() {
+        super.setStats();
+
+        //TODO: abilities
+        stats.add(Stat.weapons, StatValues.weapons(FOSUnitTypes.lord, weapons));
     }
 
     @Override

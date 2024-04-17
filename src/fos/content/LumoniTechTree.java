@@ -85,7 +85,7 @@ public class LumoniTechTree {
                     });
                 });
             });
-            node(simpleReconstructor, Seq.with(new Objectives.OnSector(conflict)), () -> {
+            node(simpleReconstructor, () -> {
                 soontm();
             });
 
@@ -242,11 +242,11 @@ public class LumoniTechTree {
                         node(conflict, Seq.with(new Objectives.SectorComplete(intruders)), () -> {
                             soontm();
                         });
+                        node(tinMiningSite, Seq.with(new Objectives.SectorComplete(intruders)), () -> {
+                            soontm();
+                        });
                     });
                     node(FOSSectors.citadel, Seq.with(new Objectives.SectorComplete(ruins)), () -> {
-                        soontm();
-                    });
-                    node(tinMiningSite, Seq.with(new Objectives.SectorComplete(ruins)), () -> {
                         soontm();
                     });
                 });
