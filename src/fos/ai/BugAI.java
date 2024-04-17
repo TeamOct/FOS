@@ -25,7 +25,7 @@ public class BugAI extends AIController implements TargetableAI {
         if (bug.isFollowed()) {
             int followers = Units.count(unit.x, unit.y, 15f * tilesize, u -> u instanceof Bugc b && b.following() == bug);
 
-            if (followers >= 5 + evo() * 30) {
+            if (followers >= Math.max(Mathf.floor(4 + evo() * 30), 49)) {
                 bug.invading(true);
             }
         } else {

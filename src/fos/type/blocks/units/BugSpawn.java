@@ -22,6 +22,7 @@ public class BugSpawn extends UnitBlock {
         solid = false;
         canOverdrive = false;
         rotate = false;
+        noUpdateDisabled = true;
         buildVisibility = BuildVisibility.editorOnly;
     }
 
