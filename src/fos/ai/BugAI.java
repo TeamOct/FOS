@@ -91,11 +91,9 @@ public class BugAI extends AIController implements TargetableAI {
     @Override
     public Teamc target(float x, float y, float range, boolean air, boolean ground) {
         for(BlockFlag flag : unit.type.targetFlags) {
-            Teamc target;
+            Teamc target = null;
             if (flag != null) {
                 target = targetFlag(x, y, flag, true);
-            } else {
-                target = target(x, y, range, air, ground);
             }
 
             if (target != null) return target;
