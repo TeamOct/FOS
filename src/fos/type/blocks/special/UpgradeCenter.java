@@ -1,4 +1,4 @@
-package fos.type.blocks.units;
+package fos.type.blocks.special;
 
 import arc.Core;
 import arc.graphics.Color;
@@ -222,7 +222,7 @@ public class UpgradeCenter extends Block {
         public void write(Writes write) {
             super.write(write);
 
-            write.i(weaponSet.id);
+            write.i(weaponSet != null ? weaponSet.id : -1);
             write.f(progress);
         }
 
@@ -230,7 +230,10 @@ public class UpgradeCenter extends Block {
         public void read(Reads read, byte revision) {
             super.read(read, revision);
 
-            weaponSet = WeaponSet.sets.get(read.i());
+            int id = read.i();
+            if (id != -1) {
+                weaponSet = WeaponSet.sets.get(id);
+            }
             progress = read.f();
         }
     }
