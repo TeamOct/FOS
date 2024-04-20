@@ -3,11 +3,12 @@ package fos.ai;
 import arc.math.Mathf;
 import fos.core.FOSVars;
 import fos.gen.Bugc;
+import fos.type.blocks.units.BugSpawn;
 import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.entities.Units;
 import mindustry.entities.units.AIController;
-import mindustry.gen.Teamc;
+import mindustry.gen.*;
 import mindustry.world.Tile;
 import mindustry.world.meta.BlockFlag;
 
@@ -45,7 +46,7 @@ public class BugAI extends AIController implements TargetableAI {
         Tile tile = unit.tileOn();
         Tile targetTile = tile;
 
-        if (bug.invading() && evo() >= 0.05f) {
+        if ((bug.invading() && evo() >= 0.05f) || !hasNests()) {
             target = target(unit.x, unit.y, 25f * tilesize, false, true);
 
             if (target != null) {
@@ -111,5 +112,9 @@ public class BugAI extends AIController implements TargetableAI {
 
     private float evo() {
         return FOSVars.evoController.getTotalEvo();
+    }
+
+    private boolean hasNests() {
+        return Groups.build.contains(b -> b instanceof BugSpawn.BugSpawnBuild && b.enabled());
     }
 }
