@@ -32,7 +32,8 @@ Mod file will be in artifacts.
 - Translator: [@Slotterleet](https://github.com/Slotterleet) (sl0tterleet)
 
 ## Special Thanks
-- [@kapzduke](https://github.com/kapzduke) - Contributor & Pre-alpha Tester
-- [@RouterXdd](https://github.com/RouterXdd) - Contributor & Pre-alpha Tester
+- Pre-alpha Testers: [@kapzduke](https://github.com/kapzduke), [@RouterXdd](https://github.com/RouterXdd), [@Sh1penfire](https://github.com/Sh1penfire), [@DoSh1K883](https://github.com/DoSh1K883)
+- Contributors: [@kapzduke](https://github.com/kapzduke), [@RouterXdd](https://github.com/RouterXdd)
+- The Mindustry modding community.
 
 
