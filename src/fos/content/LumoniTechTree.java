@@ -106,6 +106,7 @@ public class LumoniTechTree {
             node(tinDrill, () ->
                 node(silverDrill, () -> {
                     node(diamondDrill, Seq.with(new Objectives.OnSector(intruders)), () -> {
+                        node(surfaceDetonator);
                         soontm();
                     });
                 })

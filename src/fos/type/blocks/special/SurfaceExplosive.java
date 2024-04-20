@@ -28,7 +28,7 @@ public class SurfaceExplosive extends Block {
     public Color explosionColor = Pal.redSpark;
     public Sound explosionSound = Sounds.explosionbig;
     public float explosionShake = 10f;
-    public float damage = 750f;
+    public float damage = 2000f;
 
     public SurfaceExplosive(String name) {
         super(name);
