@@ -79,7 +79,7 @@ public class FOSBlocks {
     tokiciteFloor,
     cyaniumWater, crimsonStoneWater, anniteWater, blubluWater, purpurWater,
     alienMoss,
-    oreTin, oreTinSurface, oreSilver, oreLithium, oreDiamond, oreVanadium, oreIridium, oreLuminium,
+    oreTin, oreTinSurface, oreTinDeep, oreSilver, oreSilverDeep, oreLithium, oreDiamond, oreVanadium, oreVanadiumDeep, oreIridium, oreLuminium,
     hiveFloor, bugSpawn,
 
     // PROPS
@@ -279,6 +279,11 @@ public class FOSBlocks {
             drillTime = 360f;
             squareSprite = false;
             drawSpinSprite = false;
+
+            drillMultipliers.put(tin, 2f);
+            drillMultipliers.put(silver, 2f);
+            drillMultipliers.put(vanadium, 2f);
+
             consumeLiquid(water, 0.08f).boost();
             requirements(Category.production, with(tin, 10));
             researchCost = with(tin, 25);
@@ -290,6 +295,11 @@ public class FOSBlocks {
             tier = 4;
             drillTime = 200f;
             squareSprite = false;
+
+            drillMultipliers.put(tin, 2f);
+            drillMultipliers.put(silver, 2f);
+            drillMultipliers.put(vanadium, 2f);
+
             consumePower(1f);
             consumeLiquid(water, 0.24f).boost();
             requirements(Category.production, with(tin, 45, silver, 30));
@@ -300,6 +310,11 @@ public class FOSBlocks {
             tier = 7;
             drillTime = 150f;
             squareSprite = false;
+
+            drillMultipliers.put(tin, 2f);
+            drillMultipliers.put(silver, 2f);
+            drillMultipliers.put(vanadium, 2f);
+
             consumePower(6f);
             consumeLiquid(tokicite, 0.5f).boost();
             requirements(Category.production, with(tin, 50, brass, 25, silicon, 75, vanadium, 50, nickel, 45));
@@ -1452,14 +1467,18 @@ public class FOSBlocks {
         alienMoss = new OverlayFloor("alien-moss");
         oreTin = new UndergroundOreBlock("ore-tin"){{
             drop = tin;
-            variants = 3;
         }};
         oreTinSurface = new OreBlock("ore-tin-surface"){{
             itemDrop = tin;
         }};
+        oreTinDeep = new OreBlock("ore-tin-deep"){{
+            itemDrop = tin;
+        }};
         oreSilver = new UndergroundOreBlock("ore-silver"){{
             drop = silver;
-            variants = 3;
+        }};
+        oreSilverDeep = new OreBlock("ore-silver-deep"){{
+            itemDrop = silver;
         }};
         oreLithium = new OreBlock("ore-lithium"){{
             itemDrop = lithium;
@@ -1469,7 +1488,9 @@ public class FOSBlocks {
         }};
         oreVanadium = new UndergroundOreBlock("ore-vanadium"){{
             drop = vanadium;
-            variants = 3;
+        }};
+        oreVanadiumDeep = new OreBlock("ore-vanadium-deep"){{
+            itemDrop = vanadium;
         }};
         oreIridium = new UndergroundOreBlock("ore-iridium"){{
             drop = nickel;

@@ -204,9 +204,8 @@ public class DetectorCoreBlock extends CoreBlock {
             });
 
             for (var ore : detectedOres) {
-                if (ore.block() != air) continue;
+                if (ore.block() != air || !(ore.overlay() instanceof UndergroundOreBlock u)) continue;
 
-                UndergroundOreBlock u = (UndergroundOreBlock)ore.overlay();
                 u.shouldDrawBase = true;
                 u.drawBase(ore);
                 u.shouldDrawBase = false;

@@ -33,6 +33,9 @@ public class OreDetector extends Block {
     public Color effectColor = Color.valueOf("4b95ff");
     /** Efficiency of drills powered by this detector. */
     public float drillEfficiencyMultiplier = 1f;
+    /** Max depth this can work with. */
+    public int tier = 1;
+
     /** Drawer. You know the drill by this point. */
     public DrawBlock drawer = new DrawMulti(
         new DrawDefault(),
@@ -131,7 +134,7 @@ public class OreDetector extends Block {
 
         @Override
         public void updateTile() {
-            if (canConsume()) {
+            if (canConsume() && drillEfficiencyMultiplier > 1) {
                 indexer.eachBlock(this, range(), other -> other.block instanceof UndergroundDrill && other.block.canOverdrive,
                     other -> other.applyBoost(efficiency * drillEfficiencyMultiplier, 10f));
             }
@@ -194,9 +197,8 @@ public class OreDetector extends Block {
             });
 
             for (var ore : detectedOres) {
-                if (ore.block() != air) continue;
+                if (ore.block() != air || !(ore.overlay() instanceof UndergroundOreBlock u) || tier < u.depth) continue;
 
-                UndergroundOreBlock u = (UndergroundOreBlock)ore.overlay();
                 u.shouldDrawBase = true;
                 u.drawBase(ore);
                 u.shouldDrawBase = false;
