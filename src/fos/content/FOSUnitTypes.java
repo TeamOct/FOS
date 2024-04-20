@@ -275,11 +275,14 @@ public class FOSUnitTypes {
             speed = 0.2f;
             rotateSpeed = 0.75f;
             omniMovement = false;
+            hidden = true; // TODO: unused
+
             treadPullOffset = 1;
             treadRects = new Rect[]{
                 new Rect(36f, 24f - 73f, 24f, 73f),
                 new Rect(30f, 80f - 37f, 18f, 37f)
             };
+
             weapons.add(new Weapon[]{
                 new Weapon("fos-warden-artillery"){{
                     x = 16; y = -8;
@@ -409,6 +412,7 @@ public class FOSUnitTypes {
             omniMovement = false;
             crushDamage = 30f / 5f;
             rotateSpeed = 0.7f;
+            hidden = true; // TODO: unused
 
             float xo = 231f/2f, yo = 231f/2f;
             treadRects = new Rect[]{new Rect(27 - xo, 152 - yo, 56, 73), new Rect(24 - xo, 51 - 9 - yo, 29, 17), new Rect(59 - xo, 18 - 9 - yo, 39, 19)};
@@ -903,6 +907,7 @@ public class FOSUnitTypes {
             rotateSpeed = 10f;
             flying = true;
             speed = 1.2f;
+            hidden = true; // TODO: unused
         }};
 
         assault = new FOSUnitType("assault"){{
@@ -1060,6 +1065,7 @@ public class FOSUnitTypes {
             flying = true;
             omniMovement = true;
             lowAltitude = true;
+            hidden = true; // TODO: unused
             controller = u -> new CarrierAI();
         }};
 
@@ -1099,6 +1105,7 @@ public class FOSUnitTypes {
             rotateSpeed = 6f;
             range = 10f;
             circleTarget = true;
+            hidden = true; // TODO: unused
             weapons.add(
                 new Weapon(){{
                     x = 0f; y = 5f;
@@ -1114,9 +1121,8 @@ public class FOSUnitTypes {
                             layer = Layer.legUnit + 0.01f;
                         }}
                     );
-                    bullet = new BasicBulletType(0f, 75f){{
-                        instantDisappear = true;
-                        width = height = 1f;
+                    bullet = new ExplosionBulletType(75, 2){{
+                        killShooter = false;
                         collidesAir = collidesGround = true;
                         hitSound = Sounds.none;
                         despawnSound = Sounds.none;
@@ -1130,6 +1136,7 @@ public class FOSUnitTypes {
             hitSize = 12f;
             speed = 0.8f;
             rotateSpeed = 2f;
+            hidden = true; // TODO: unused
             weapons.add(
                 new Weapon(){{
                     x = 0f; y = 6f;
@@ -1186,6 +1193,7 @@ public class FOSUnitTypes {
             health = 250;
             speed = 0.7f;
             hitSize = 12f;
+            hidden = true; // TODO: unused
             weapons.add(new Weapon("fos-sub-missile-launcher"){{
                 reload = 22f;
                 x = 0f;

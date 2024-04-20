@@ -1639,7 +1639,7 @@ public class FOSBlocks {
             itemCapacity = 8000;
             unitType = FOSUnitTypes.king; //TODO: replace
             squareSprite = false;
-            requirements(Category.effect, with(tin, 4500, silver, 3500, diamond, 3000));
+            requirements(Category.effect, with(tin, 150000));
         }};
         lightUnloader = new Unloader("light-unloader"){{
             health = 60;
@@ -1660,7 +1660,7 @@ public class FOSBlocks {
             configurable = true;
             consumePower(15);
             consumeItems(with(lead, 500, graphite, 500, silicon, 500, thorium, 500, surgeAlloy, 500));
-            requirements(Category.effect, BuildVisibility.campaignOnly, with(lead, 5000, silicon, 5000, titanium, 3500, thorium, 2500, phaseFabric, 1500, surgeAlloy, 1500));
+            requirements(Category.effect, BuildVisibility.debugOnly, with(lead, 5000, silicon, 5000, titanium, 3500, thorium, 2500, phaseFabric, 1500, surgeAlloy, 1500));
         }};
         bigBoy = new GiantNukeLauncher("big-boy"){{
             health = 20000;
@@ -1684,7 +1684,7 @@ public class FOSBlocks {
         surfaceDetonator = new SurfaceExplosive("surface-detonator"){{
             health = 160;
             size = 3;
-            requirements(Category.effect, with(copper, 50));
+            requirements(Category.effect, with(diamond, 100, brass, 75, vanadium, 100)); // TODO: temporary recipe
         }};
         orbitalAccelerator = new OrbitalAccelerator("orbital-accelerator"){{
             health = 5000;
@@ -1706,11 +1706,11 @@ public class FOSBlocks {
             acceptsPayload = true;
             outputsPayload = false;
             consumePower(3f);
-            requirements(Category.effect, with(tin, 250, silver, 300, silicon, 150));
+            requirements(Category.effect, BuildVisibility.debugOnly, with(tin, 250, silver, 300, silicon, 150));
         }};
 
         liquidConveyor = new LiquidConveyor("l-c"){{
-            requirements(Category.distribution, with(Items.copper, 1));
+            requirements(Category.distribution, BuildVisibility.debugOnly, with(Items.copper, 1));
             health = 45;
             speed = 0.03f;
             displayedSpeed = 4.2f;
@@ -1724,6 +1724,7 @@ public class FOSBlocks {
             wave = 20;
             spawnDelay = 300f;
             customShadow = true;
+            buildVisibility = BuildVisibility.editorOnly;
             animationEffects = new Effect[]{FOSFx.citadelSteam, Fx.smokeCloud};
             drawer = new DrawMulti(
                 new DrawDefault(),
