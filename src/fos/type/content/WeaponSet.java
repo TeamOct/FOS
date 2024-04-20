@@ -47,17 +47,13 @@ public class WeaponSet extends StatusEffect {
     @Override
     public void init() {
         super.init();
-
-        for (Weapon weapon : weapons)
-            weapon.init();
+        weapons.each(Weapon::init);
     }
 
     @Override
     public void load() {
         super.load();
-
-        for (Weapon weapon : weapons)
-            weapon.load();
+        weapons.each(Weapon::load);
 
         fullIcon = uiIcon = weapons.first().region;
     }
