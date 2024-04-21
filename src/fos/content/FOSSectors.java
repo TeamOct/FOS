@@ -30,7 +30,7 @@ public class FOSSectors {
 
         intruders = new SectorPreset("intruders", lumoni, 67){{
             difficulty = 5;
-            captureWave = 11;
+            captureWave = 31;
         }};
 
         citadel = new SectorPreset("citadel", lumoni, 44){{
@@ -44,6 +44,7 @@ public class FOSSectors {
 
         conflict = new SectorPreset("conflict", lumoni, 18){{
             difficulty = 6;
+            rules = r -> r.waves = false;
         }};
     }
 }

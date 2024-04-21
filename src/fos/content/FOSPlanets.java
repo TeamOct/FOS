@@ -45,7 +45,7 @@ public class FOSPlanets {
                 sectors.add(new Sector(this, PlanetGrid.Ptile.empty));
                 ruleSetter = r -> {
                     r.loadout = ItemStack.list();
-                    r.defaultTeam = FOSTeam.corru;
+                    r.defaultTeam = FOSTeams.corru;
                 };
                 defaultEnv = Env.space | Env.scorching;
             }
@@ -85,7 +85,7 @@ public class FOSPlanets {
                 r.dragMultiplier = 0.2f;
                 r.borderDarkness = false;
                 r.waves = false;
-                r.defaultTeam = FOSTeam.corru;
+                r.defaultTeam = FOSTeams.corru;
                 r.waveTeam = Team.sharded;
                 r.bannedBlocks.addAll(container, injectorFactory);
                 r.hideBannedBlocks = true;
@@ -162,9 +162,8 @@ public class FOSPlanets {
             ruleSetter = r -> {
                 r.loadout = ItemStack.list();
                 r.fog = true;
-                r.defaultTeam = FOSTeam.corru;
-                r.waveTeam = r.attackMode ? Team.sharded : FOSTeam.bessin;
-                r.waves = true;
+                r.defaultTeam = FOSTeams.corru;
+                r.waveTeam = r.attackMode ? Team.sharded : FOSTeams.bessin;
                 r.enemyCoreBuildRadius = 300;
                 r.coreCapture = false;
                 WeatherEntry weather = new WeatherEntry(FOSWeathers.wind);

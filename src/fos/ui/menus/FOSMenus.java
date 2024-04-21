@@ -4,7 +4,7 @@ import arc.math.Mathf;
 import arc.math.geom.Vec3;
 import arc.struct.Seq;
 import arc.util.noise.Simplex;
-import fos.content.FOSTeam;
+import fos.content.FOSTeams;
 import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.graphics.g3d.PlanetParams;
@@ -117,7 +117,7 @@ public class FOSMenus {
                 }
 
                 var center = tiles.get(tiles.width / 2, tiles.height / 2);
-                center.setBlock(coreFortress, FOSTeam.corru);
+                center.setBlock(coreFortress, FOSTeams.corru);
             }
         };
     }

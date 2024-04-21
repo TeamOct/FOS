@@ -9,7 +9,7 @@ import arc.util.*;
 import mindustry.game.Team;
 import mindustry.ui.Fonts;
 
-public class FOSTeam {
+public class FOSTeams {
     public static Team corru, bessin;
 
     public static void load() {

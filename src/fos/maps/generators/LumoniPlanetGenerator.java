@@ -6,7 +6,7 @@ import arc.math.geom.*;
 import arc.struct.*;
 import arc.util.Tmp;
 import arc.util.noise.*;
-import fos.content.FOSTeam;
+import fos.content.FOSTeams;
 import fos.maps.generators.bases.LumoniBaseGenerator;
 import mindustry.ai.Astar;
 import mindustry.content.Blocks;
@@ -393,7 +393,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
         if (!sector.hasEnemyBase())
             enemies.each(espawn -> {
-                tiles.getn(espawn.x, espawn.y).setBlock(bugSpawn, FOSTeam.bessin);
+                tiles.getn(espawn.x, espawn.y).setBlock(bugSpawn, FOSTeams.bessin);
                 tiles.getn(espawn.x, espawn.y).circle(7, t -> t.setFloor(hiveFloor.asFloor()));
                 tiles.getn(espawn.x, espawn.y).circle(11, t -> {
                     if (rand.chance(0.35f)) t.setFloor(hiveFloor.asFloor());

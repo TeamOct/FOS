@@ -292,7 +292,7 @@ public class FOSBlocks {
         }};
         improvedDrill = new Drill("improved-drill"){{
             size = 3;
-            tier = 4;
+            tier = 5;
             drillTime = 200f;
             squareSprite = false;
 

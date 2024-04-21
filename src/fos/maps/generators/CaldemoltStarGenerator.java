@@ -29,7 +29,7 @@ public class CaldemoltStarGenerator extends PlanetGenerator {
                 Tile t = tiles.get(500 + x, 500 + y);
                 t.setFloor(Blocks.metalFloor.asFloor());
                 if (t.x == 500 && t.y == 500) {
-                    t.setBlock(FOSBlocks.coreCity, FOSTeam.corru);
+                    t.setBlock(FOSBlocks.coreCity, FOSTeams.corru);
                 }
             }
         }

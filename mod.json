@@ -6,9 +6,8 @@
     "repo": "TeamOct/fictional-octo-system",
     "subtitle": "See you later!",
     "description": "A mod focused on space exploration.",
-    "version": "1.1 pre-alpha",
+    "version": "1.1 beta build-1",
     "minGameVersion": 146,
     "java": true,
-    "hidden": false,
-    "hideBrowser": true
+    "hidden": false
 }

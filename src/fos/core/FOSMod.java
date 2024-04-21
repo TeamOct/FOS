@@ -197,7 +197,7 @@ public class FOSMod extends Mod {
         });
 
         //init modded teams
-        FOSTeam.load();
+        FOSTeams.load();
     }
 
     public void clientLoaded() {

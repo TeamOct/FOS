@@ -6,7 +6,7 @@ import arc.graphics.g2d.*;
 import arc.graphics.gl.FrameBuffer;
 import arc.math.*;
 import arc.scene.ui.layout.Scl;
-import fos.content.FOSTeam;
+import fos.content.FOSTeams;
 import mindustry.content.Blocks;
 import mindustry.world.*;
 
@@ -76,7 +76,7 @@ public class TerrainMenuBackground extends MenuBackground {
         batch.beginCache();
         for (Tile tile : world.tiles) {
             if (tile.block().hasBuilding()) {
-                tile.build.init(tile.build.tile(), FOSTeam.corru, true, 0).draw();
+                tile.build.init(tile.build.tile(), FOSTeams.corru, true, 0).draw();
             }
         }
         cacheBuild = batch.endCache();
