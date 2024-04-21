@@ -217,6 +217,7 @@ public class FOSWeaponModules {
                 }};
             }}
         ){{
+            customIcon = true;
             Events.on(EventType.ContentInitEvent.class, e -> {
                 abilities = Seq.with(
                     new UnitResistanceAbility(FOSUnitTypes.legionnaireReplica, 0.05f),

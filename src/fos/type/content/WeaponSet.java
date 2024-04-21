@@ -25,6 +25,8 @@ public class WeaponSet extends StatusEffect {
     public ItemStack[] reqs;
     /** Production time of this set, in ticks. */
     public float produceTime = 300f;
+    /** Whether replace it with a custom sprite. */
+    public boolean customIcon = false;
 
 
     public WeaponSet(String name, Weapon... weapons) {
@@ -55,7 +57,8 @@ public class WeaponSet extends StatusEffect {
         super.load();
         weapons.each(Weapon::load);
 
-        fullIcon = uiIcon = weapons.first().region;
+        if (weapons.any() && !weapons.first().name.isEmpty() && !customIcon)
+            fullIcon = uiIcon = weapons.first().region;
     }
 
     @Override
