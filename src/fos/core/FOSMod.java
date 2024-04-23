@@ -267,6 +267,9 @@ public class FOSMod extends Mod {
         if (bg != null) {
             FOSVars.menuRenderer.changeBackground(bg);
         }
+
+        // add modded hints
+        FOSVars.hints.load();
     }
 
     public void constructSettings() {

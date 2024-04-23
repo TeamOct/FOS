@@ -6,7 +6,7 @@
 
     "dependencies": {
         "useJitpackForMindustryDependency": false,
-        "mindustryVersion": "v146",
+        "mindustryVersion": "v145",
 
         "list": [
             { "multi-crafter-lib": "com.github.liplum:MultiCrafterLib:v1.7" },

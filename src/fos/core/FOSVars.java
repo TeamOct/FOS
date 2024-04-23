@@ -7,7 +7,7 @@ import fos.content.FOSFluids;
 import fos.controllers.*;
 import fos.files.InternalFileTree;
 import fos.graphics.FOSOreRenderer;
-import fos.ui.ResearchCoreDialog;
+import fos.ui.*;
 import fos.ui.menus.FOSMenuRenderer;
 import mindustry.ai.Pathfinder;
 import mindustry.content.TechTree;
@@ -71,6 +71,9 @@ public class FOSVars {
 
     /** Insect evolution controller. */
     public static EvolutionController evoController = new EvolutionController();
+
+    /** Hint handler. */
+    public static FOSHints hints = new FOSHints();
 
     public static void load() {
         if (!headless) researchCoreDialog = new ResearchCoreDialog();
