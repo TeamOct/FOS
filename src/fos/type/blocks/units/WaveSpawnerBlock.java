@@ -1,9 +1,11 @@
 package fos.type.blocks.units;
 
 import arc.Events;
+import arc.func.Cons;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
 import arc.util.*;
+import arc.util.io.Writes;
 import mindustry.Vars;
 import mindustry.content.StatusEffects;
 import mindustry.entities.Effect;
@@ -57,6 +59,21 @@ public class WaveSpawnerBlock extends Block {
 
     @SuppressWarnings("unused")
     public class WaveSpawnerBuild extends Building {
+        public Cons<EventType.WaveEvent> listener = e -> {
+            // mindustry's wave counter is a mess, so add 1
+            if (isValid() && Vars.state.wave == wave + 1) {
+                Time.run(spawnDelay, () -> {
+                    Unit u = unitType.spawn(team, this);
+                    u.rotation(90f);
+                    if (boss) u.apply(StatusEffects.boss);
+
+                    // consider this unit spawned from a wave.
+                    Events.fire(new EventType.UnitSpawnEvent(u));
+
+                    tileOn().remove();
+                });
+            }
+        };
         public float progress;
 
         @Override
@@ -77,21 +94,13 @@ public class WaveSpawnerBlock extends Block {
 
         @Override
         public void created() {
-            Events.on(EventType.WaveEvent.class, e -> {
-                // mindustry's wave counter is a mess, so add 1
-                if (isValid() && Vars.state.wave == wave + 1) {
-                    Time.run(spawnDelay, () -> {
-                        Unit u = unitType.spawn(team, this);
-                        u.rotation(90f);
-                        if (boss) u.apply(StatusEffects.boss);
+            Events.on(EventType.WaveEvent.class, listener);
+        }
 
-                        // consider this unit spawned from a wave.
-                        Events.fire(new EventType.UnitSpawnEvent(u));
-
-                        tileOn().remove();
-                    });
-                }
-            });
+        @Override
+        public void onRemoved() {
+            super.onRemoved();
+            Events.remove(EventType.WaveEvent.class, listener);
         }
 
         @Override
@@ -109,6 +118,13 @@ public class WaveSpawnerBlock extends Block {
         @Override
         public float totalProgress() {
             return progress;
+        }
+
+        @Override
+        public void write(Writes write) {
+            // this actually does nothing IO-related, I just want to remove the event listener after world exit.
+            Events.remove(EventType.WaveEvent.class, listener);
+            Log.info("Removed listener?: @", listener);
         }
     }
 }
