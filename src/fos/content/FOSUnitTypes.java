@@ -1055,7 +1055,7 @@ public class FOSUnitTypes {
                         killShooter = true;
                         instantDisappear = true;
                         hitEffect = Fx.reactorExplosion;
-                        buildingDamageMultiplier = 0.3f;
+                        buildingDamageMultiplier = 0.1f;
                     }};
                 }}
             );
