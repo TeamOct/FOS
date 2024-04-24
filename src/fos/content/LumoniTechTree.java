@@ -236,6 +236,9 @@ public class LumoniTechTree {
                 });
             });
 
+            // MISC
+            node(matrixShieldProj);
+
             // SECTORS
             node(awakening, () -> {
                 node(ruins, Seq.with(new SectorComplete(awakening)), () -> {
