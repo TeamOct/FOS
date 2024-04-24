@@ -112,7 +112,7 @@ public class LumoniTechTree {
                 })
             );
 
-            // TURRETS
+            // DEFENCE
             node(helix, Seq.with(new OnSector(ruins)), () -> {
                 node(sticker, () -> {
                     node(particulator, () -> {
@@ -122,6 +122,9 @@ public class LumoniTechTree {
                 });
                 node(dot, () -> {
                     soontm();
+                    node(landMine, () -> {
+                        node(matrixShieldProj);
+                    });
 /*
                     node(pulse);
                     node(thunder, () -> {
@@ -235,9 +238,6 @@ public class LumoniTechTree {
                     //nodeProduce(oil, () -> {});
                 });
             });
-
-            // MISC
-            node(matrixShieldProj);
 
             // SECTORS
             node(awakening, () -> {
