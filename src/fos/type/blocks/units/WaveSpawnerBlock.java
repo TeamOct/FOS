@@ -124,7 +124,6 @@ public class WaveSpawnerBlock extends Block {
         public void write(Writes write) {
             // this actually does nothing IO-related, I just want to remove the event listener after world exit.
             Events.remove(EventType.WaveEvent.class, listener);
-            Log.info("Removed listener?: @", listener);
         }
     }
 }
