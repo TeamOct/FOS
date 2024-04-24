@@ -9,6 +9,7 @@ import fos.gen.*;
 import fos.graphics.*;
 import fos.type.abilities.*;
 import fos.type.bullets.*;
+import fos.type.content.WeaponSet;
 import fos.type.units.types.*;
 import fos.type.units.weapons.InjectorWeapon;
 import mindustry.ai.UnitCommand;
@@ -82,6 +83,10 @@ public class FOSUnitTypes {
     public static @Annotations.EntityDef({Unitc.class, Minerc.class, BuildingTetherc.class}) UnitType
         // MINER UNITS
         draug;
+
+    public static @Annotations.EntityDef({Unitc.class}) UnitType
+        // INTERNAL, USED FOR INITIALIZING WEAPON SETS
+        weaponSetInit;
 
     public static void load(){
         //DestroyersUnits.load();
@@ -1186,6 +1191,14 @@ public class FOSUnitTypes {
                     display = false;
                 }}
             );
+        }};
+
+        weaponSetInit = new UnitType("weapon-set-init"){{
+            hidden = true;
+            internal = true;
+            for (var s : WeaponSet.sets) {
+                weapons.add(s.weapons);
+            }
         }};
 
         //TODO
