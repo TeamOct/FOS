@@ -1,8 +1,10 @@
 package fos.type.content;
 
+import arc.math.Mathf;
 import arc.struct.Seq;
 import fos.content.FOSUnitTypes;
 import fos.gen.LumoniPlayerUnitc;
+import mindustry.core.UI;
 import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.Unit;
@@ -27,6 +29,8 @@ public class WeaponSet extends StatusEffect {
     public float produceTime = 300f;
     /** Whether replace it with a custom sprite. */
     public boolean customIcon = false;
+    /** Custom research cost. */
+    public ItemStack[] researchCost;
 
 
     public WeaponSet(String name, Weapon... weapons) {
@@ -72,6 +76,19 @@ public class WeaponSet extends StatusEffect {
     @Override
     public void applied(Unit unit, float time, boolean extend) {
         unit.unapply(this);
+    }
+
+    @Override
+    public ItemStack[] researchRequirements() {
+        if (researchCost != null) return researchCost;
+        ItemStack[] out = new ItemStack[reqs.length];
+        for(int i = 0; i < out.length; i++){
+            int quantity = Mathf.round(60 + Mathf.pow(reqs[i].amount, 1.11f) * 20, 10);
+
+            out[i] = new ItemStack(reqs[i].item, UI.roundAmount(quantity));
+        }
+
+        return out;
     }
 
     public void applyToUnit(LumoniPlayerUnitc lpc) {

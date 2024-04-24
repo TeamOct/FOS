@@ -159,15 +159,15 @@ public class LumoniTechTree {
             node(upgradeCenter, () -> {
                 //RIFLES
                 node(standard1, () ->
-                    node(standard2, ItemStack.with(tin, 750, silver, 600), () ->
-                        node(standard3, ItemStack.with(tin, 1250, silicon, 1000, vanadium, 500), () ->
+                    node(standard2, () ->
+                        node(standard3, () ->
                             soontm())
                     )
                 );
 /*
                             node(standard4, TODO: sector handicap,
-                                ItemStack.with(tin, 3000, silver, 2500, silicon, 4000, nickel, 2500), () ->
-                                node(standard5, ItemStack.with(tin, 5000, silver, 5000, diamond, 2500, silicon, 5000, nickel, 3500, luminium, 2500), () -> {}
+                                () ->
+                                node(standard5, () -> {}
                                 )
                             )
                         )
@@ -177,15 +177,15 @@ public class LumoniTechTree {
 
                 //SHOTGUNS
                 node(shotgun1, Seq.with(new Objectives.SectorComplete(FOSSectors.citadel)), () ->
-                    node(shotgun2, ItemStack.with(tin, 750, silver, 600), () ->
-                        node(shotgun3, ItemStack.with(tin, 1000, silver, 250, silicon, 1000, vanadium, 500), () ->
+                    node(shotgun2, () ->
+                        node(shotgun3, () ->
                             soontm()
                         )
                     )
                 );
 /*
-                            node(shotgun4, *//* TODO: sector handicap *//* ItemStack.with(tin, 3000, silver, 2500, silicon, 4000, nickel, 2500), () ->
-                                node(shotgun5, ItemStack.with(tin, 5000, silver, 5000, diamond, 2500, silicon, 5000, nickel, 3500, luminium, 2500), () -> {}
+                            node(shotgun4, *//* TODO: sector handicap *//* () ->
+                                node(shotgun5, () -> {}
                                 )
                             )
                         )

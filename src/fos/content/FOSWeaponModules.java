@@ -46,6 +46,7 @@ public class FOSWeaponModules {
                 lifetime = 60f;
             }};
         }}).reqs(empty);
+        standard1.researchCost = with();
         standard2 = new WeaponSet("standard2", new Weapon("fos-standard-weapon2"){{
             x = 0; y = 0;
             alternate = mirror = false;
@@ -70,6 +71,7 @@ public class FOSWeaponModules {
                 }};
             }};
         }}).reqs(with(tin, 75, silver, 75));
+        standard2.researchCost = with();
         standard3 = new WeaponSet("standard3", new Weapon("fos-standard-weapon3"){{
             x = 0; y = 0;
             alternate = mirror = false;

@@ -21,11 +21,12 @@ public class FOSHints {
     public void load() {
         ui.hints.hints.addAll(FOSHint.values());
         for (var h : FOSHint.values()) {
+            // remove already finished hints
             if (h.finished()) ui.hints.hints.remove(h);
         }
 
         Events.on(EventType.BlockBuildEndEvent.class, e -> {
-            if(!e.breaking && e.unit == player.unit()){
+            if (!e.breaking && e.unit == player.unit()) {
                 placedBlocks.add(e.tile.block());
             }
         });
