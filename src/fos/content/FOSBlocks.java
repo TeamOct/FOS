@@ -351,6 +351,7 @@ public class FOSBlocks {
             size = 3;
             tier = 5;
             drillTime = 210f;
+            squareSprite = false;
             consumePower(2f);
             requirements(Category.production, with(silver, 45, silicon, 75, diamond, 40));
             consumeLiquid(tokicite, 0.2f).boost();
@@ -461,6 +462,7 @@ public class FOSBlocks {
             inaccuracy = 0f;
             shootY = 4f;
             shootSound = Sounds.pew;
+            squareSprite = false;
             shoot = new ShootHelix(){{
                 shots = 2;
                 mag = 2.5f;
@@ -567,6 +569,7 @@ public class FOSBlocks {
             inaccuracy = 4f;
             outlineColor = Color.valueOf("302326");
             shootSound = Sounds.mud;
+            squareSprite = false;
             consumeLiquid(tokicite, 0.1f);
             ammo(
                 tin, new StickyBulletType(8f, 10, 90){{
