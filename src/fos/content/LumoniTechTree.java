@@ -1,7 +1,6 @@
 package fos.content;
 
 import arc.struct.Seq;
-import mindustry.game.Objectives;
 import mindustry.type.ItemStack;
 
 import static fos.content.FOSBlocks.*;
@@ -13,6 +12,7 @@ import static fos.content.FOSWeaponModules.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.Liquids.*;
 import static mindustry.content.TechTree.*;
+import static mindustry.game.Objectives.*;
 
 public class LumoniTechTree {
     public static void load() {
@@ -64,36 +64,36 @@ public class LumoniTechTree {
             });
 
             // UNIT FACTORIES. TODO
-            node(destroyerFactory, Seq.with(new Objectives.SectorComplete(intruders)), () -> {
-                node(assault, ItemStack.with(), Seq.with(new Objectives.Research(destroyerFactory)), () -> {
-                    node(abrupt, Seq.with(new Objectives.Research(simpleReconstructor)), () -> {
+            node(destroyerFactory, Seq.with(new SectorComplete(intruders)), () -> {
+                node(assault, ItemStack.with(), Seq.with(new Research(destroyerFactory)), () -> {
+                    node(abrupt, Seq.with(new Research(simpleReconstructor)), () -> {
                         soontm();
                     });
                 });
             });
-            node(eliminatorFactory, ItemStack.with(), Seq.with(new Objectives.Research(destroyerFactory)), () -> {
-                node(radix, ItemStack.with(), Seq.with(new Objectives.Research(eliminatorFactory)), () -> {
-                    node(foetus, Seq.with(new Objectives.Research(simpleReconstructor)), () -> {
+            node(eliminatorFactory, ItemStack.with(), Seq.with(new Research(destroyerFactory)), () -> {
+                node(radix, ItemStack.with(), Seq.with(new Research(eliminatorFactory)), () -> {
+                    node(foetus, Seq.with(new Research(simpleReconstructor)), () -> {
                         soontm();
                     });
                 });
             });
-            node(injectorFactory, ItemStack.with(), Seq.with(new Objectives.Research(destroyerFactory)), () -> {
-                node(sergeant, ItemStack.with(), Seq.with(new Objectives.Research(injectorFactory)), () -> {
-                    node(lieutenant, Seq.with(new Objectives.Research(simpleReconstructor)), () -> {
+            node(injectorFactory, ItemStack.with(), Seq.with(new Research(destroyerFactory)), () -> {
+                node(sergeant, ItemStack.with(), Seq.with(new Research(injectorFactory)), () -> {
+                    node(lieutenant, Seq.with(new Research(simpleReconstructor)), () -> {
                         soontm();
                     });
                 });
             });
-            node(simpleReconstructor, () -> {
+            node(simpleReconstructor, Seq.with(new OnSector(conflict)), () -> {
                 soontm();
             });
 
             // DRILLS
             node(crudeDrill, () -> {
-                node(improvedDrill, Seq.with(new Objectives.OnSector(ruins)), () -> {
-                    node(draugFactory, Seq.with(new Objectives.SectorComplete(tinMiningSite)), () ->
-                        node(draug, ItemStack.with(), Seq.with(new Objectives.Research(draugFactory)), () -> {})
+                node(improvedDrill, Seq.with(new OnSector(ruins)), () -> {
+                    node(draugFactory, Seq.with(new SectorComplete(tinMiningSite)), () ->
+                        node(draug, ItemStack.with(), Seq.with(new Research(draugFactory)), () -> {})
                     );
                     soontm();
 /*
@@ -105,7 +105,7 @@ public class LumoniTechTree {
             // UNDERGROUND DRILLS
             node(tinDrill, () ->
                 node(silverDrill, () -> {
-                    node(diamondDrill, Seq.with(new Objectives.OnSector(intruders)), () -> {
+                    node(diamondDrill, Seq.with(new OnSector(intruders)), () -> {
                         node(surfaceDetonator);
                         soontm();
                     });
@@ -113,7 +113,7 @@ public class LumoniTechTree {
             );
 
             // TURRETS
-            node(helix, Seq.with(new Objectives.OnSector(ruins)), () -> {
+            node(helix, Seq.with(new OnSector(ruins)), () -> {
                 node(sticker, () -> {
                     node(particulator, () -> {
                         soontm();
@@ -143,7 +143,7 @@ public class LumoniTechTree {
             });
 
             // FACTORIES. TODO
-            node(siliconSynthesizer, Seq.with(new Objectives.OnSector(ruins)), () -> {
+            node(siliconSynthesizer, Seq.with(new OnSector(ruins)), () -> {
                 node(brassSmelter, () -> {
                     soontm();
 /*
@@ -176,7 +176,7 @@ public class LumoniTechTree {
 */
 
                 //SHOTGUNS
-                node(shotgun1, Seq.with(new Objectives.SectorComplete(FOSSectors.citadel)), () ->
+                node(shotgun1, Seq.with(new SectorComplete(FOSSectors.citadel)), () ->
                     node(shotgun2, () ->
                         node(shotgun3, () ->
                             soontm()
@@ -238,16 +238,16 @@ public class LumoniTechTree {
 
             // SECTORS
             node(awakening, () -> {
-                node(ruins, Seq.with(new Objectives.SectorComplete(awakening)), () -> {
-                    node(intruders, Seq.with(new Objectives.SectorComplete(ruins)), () -> {
-                        node(conflict, Seq.with(new Objectives.SectorComplete(intruders)), () -> {
+                node(ruins, Seq.with(new SectorComplete(awakening)), () -> {
+                    node(intruders, Seq.with(new SectorComplete(ruins)), () -> {
+                        node(conflict, Seq.with(new SectorComplete(intruders)), () -> {
                             soontm();
                         });
-                        node(tinMiningSite, Seq.with(new Objectives.SectorComplete(intruders)), () -> {
+                        node(tinMiningSite, Seq.with(new SectorComplete(intruders)), () -> {
                             soontm();
                         });
                     });
-                    node(FOSSectors.citadel, Seq.with(new Objectives.SectorComplete(ruins)), () -> {
+                    node(FOSSectors.citadel, Seq.with(new SectorComplete(ruins)), () -> {
                         soontm();
                     });
                 });
