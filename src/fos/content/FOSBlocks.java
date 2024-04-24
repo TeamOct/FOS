@@ -1527,6 +1527,7 @@ public class FOSBlocks {
             health = 1500;
             size = 3;
             solid = true;
+            squareSprite = false;
             consumePower(3f);
             researchCost = with(tin, 125, silver, 100);
             requirements(Category.units, with(tin, 250, silver, 200));
