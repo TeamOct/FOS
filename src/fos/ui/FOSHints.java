@@ -20,6 +20,9 @@ public class FOSHints {
 
     public void load() {
         ui.hints.hints.addAll(FOSHint.values());
+        for (var h : FOSHint.values()) {
+            if (h.finished()) ui.hints.hints.remove(h);
+        }
 
         Events.on(EventType.BlockBuildEndEvent.class, e -> {
             if(!e.breaking && e.unit == player.unit()){
@@ -29,14 +32,18 @@ public class FOSHints {
     }
 
     public enum FOSHint implements HintsFragment.Hint {
-    sandUnderground(
-        () -> control.input.block == siliconSynthesizer || placedBlocks.contains(siliconSynthesizer),
-        () -> Groups.build.contains(b -> b.team == Vars.player.team() && b instanceof UndergroundDrill.UndergroundDrillBuild ud && ud.dominantItem == sand)
-    ),
-    detonatorIntro(
-        () -> surfaceDetonator.unlocked(),
-        () -> placedBlocks.contains(surfaceDetonator)
-    );
+        drillsPoweredByDetector(
+            () -> placedBlocks.contains(tinDrill) && placedBlocks.contains(oreDetector),
+            () -> false
+        ),
+        sandUnderground(
+            () -> control.input.block == siliconSynthesizer || placedBlocks.contains(siliconSynthesizer),
+            () -> Groups.build.contains(b -> b.team == Vars.player.team() && b instanceof UndergroundDrill.UndergroundDrillBuild ud && ud.dominantItem == sand)
+        ),
+        detonatorIntro(
+            () -> surfaceDetonator.unlocked(),
+            () -> placedBlocks.contains(surfaceDetonator)
+        );
 
         @Nullable
         String text;
