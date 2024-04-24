@@ -11,7 +11,6 @@ import mindustry.graphics.CacheLayer;
 public class AnimatedOreCacheLayer extends CacheLayer.ShaderLayer {
     public AnimatedOreCacheLayer(Shader shader) {
         super(shader);
-        CacheLayer.add(this);
         FOSOreRenderer.oreCacheLayers.add(this);
         id = FOSOreRenderer.oreCacheLayers.size-1;
     }

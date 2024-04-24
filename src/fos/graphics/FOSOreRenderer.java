@@ -29,7 +29,8 @@ import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
 
 public class FOSOreRenderer {
-    public static Seq<AnimatedOreCacheLayer> oreCacheLayers = new Seq<>(); // do not change after world load
+    /** Do not rearange after world load!!! */
+    public static Seq<AnimatedOreCacheLayer> oreCacheLayers = new Seq<>();
 
     private static final VertexAttribute[] attributes = {VertexAttribute.position, VertexAttribute.color, VertexAttribute.texCoords};
     private static final int
