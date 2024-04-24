@@ -29,7 +29,8 @@ import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
 
 public class FOSOreRenderer {
-    public static Seq<AnimatedOreCacheLayer> oreCacheLayers = new Seq<>(); // do not change after world load
+    /** Do not rearange after world load!!! */
+    public static Seq<AnimatedOreCacheLayer> oreCacheLayers = new Seq<>();
 
     private static final VertexAttribute[] attributes = {VertexAttribute.position, VertexAttribute.color, VertexAttribute.texCoords};
     private static final int
@@ -38,7 +39,7 @@ public class FOSOreRenderer {
             vertexSize = 2 + 1 + 2,
             spriteSize = vertexSize * 4,
             maxSprites = chunkSize * chunkSize * 9;
-    private static final float pad = tilesize/2f;
+    private static final float pad = tilesize / 2f;
     private static final boolean dynamic = false;
 
     private float[] vertices = new float[maxSprites * vertexSize * 4];
@@ -99,14 +100,12 @@ public class FOSOreRenderer {
 
     /** Queues up a cache change for a tile. Only runs in render loop. */
     public void recacheTile(Tile tile){
-        //recaching all layers may not be necessary
         recacheSet.add(Point2.pack(tile.x / chunkSize, tile.y / chunkSize));
     }
 
     public void drawOre(){
-        if(cache == null){
+        if(cache == null)
             return;
-        }
 
         Camera camera = Core.camera;
 
@@ -144,9 +143,8 @@ public class FOSOreRenderer {
         }
 
         IntSet.IntSetIterator it = drawnLayerSet.iterator();
-        while(it.hasNext){
+        while(it.hasNext)
             drawnLayers.add(it.next());
-        }
 
         drawnLayers.sort();
 
@@ -204,9 +202,8 @@ public class FOSOreRenderer {
     }
 
     public void beginDraw(){
-        if(cache == null){
+        if(cache == null)
             return;
-        }
 
         Draw.flush();
 
@@ -216,17 +213,15 @@ public class FOSOreRenderer {
     }
 
     public void endDraw(){
-        if(cache == null){
+        if(cache == null)
             return;
-        }
 
         endc();
     }
 
     public void drawLayer(CacheLayer layer){
-        if(cache == null){
+        if(cache == null)
             return;
-        }
 
         Camera camera = Core.camera;
 
