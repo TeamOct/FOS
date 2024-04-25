@@ -69,8 +69,20 @@ public class WeaponSet extends StatusEffect {
     public void setStats() {
         super.setStats();
 
-        //TODO: abilities
+        stats.add(Stat.buildCost, StatValues.items(reqs));
         stats.add(Stat.weapons, StatValues.weapons(FOSUnitTypes.lord, weapons));
+        // stolen from UnitType. TODO: this sucks.
+/*
+        if (abilities.any()) {
+            var unique = new ObjectSet<String>();
+
+            for(Ability a : abilities){
+                if(a.display && unique.add(a.localized())){
+                    stats.add(Stat.abilities, a.localized());
+                }
+            }
+        }
+*/
     }
 
     @Override

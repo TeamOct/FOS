@@ -49,6 +49,7 @@ public class LumoniTechTree {
                 node(copperBattery, () ->
                     node(brassBattery)
                 );
+                soontm();
             });
 
             // WALLS

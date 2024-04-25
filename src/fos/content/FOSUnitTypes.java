@@ -1193,7 +1193,7 @@ public class FOSUnitTypes {
             );
         }};
 
-        weaponSetInit = new UnitType("weapon-set-init"){{
+        weaponSetInit = new FOSUnitType("weapon-set-init"){{
             hidden = true;
             internal = true;
             for (var s : WeaponSet.sets) {
