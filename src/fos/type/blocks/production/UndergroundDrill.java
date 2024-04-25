@@ -1,9 +1,12 @@
 package fos.type.blocks.production;
 
 import arc.Core;
+import arc.func.Boolf;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.math.Mathf;
+import arc.struct.ObjectFloatMap;
+import arc.util.*;
 import fos.type.blocks.environment.UndergroundOreBlock;
 import fos.type.blocks.storage.DetectorCoreBlock;
 import mindustry.content.Items;
@@ -12,6 +15,7 @@ import mindustry.gen.Building;
 import mindustry.graphics.Drawf;
 import mindustry.logic.Ranged;
 import mindustry.type.Item;
+import mindustry.ui.Styles;
 import mindustry.world.*;
 import mindustry.world.blocks.production.Drill;
 import mindustry.world.meta.*;
@@ -82,7 +86,7 @@ public class UndergroundDrill extends Drill {
     public void setStats() {
         super.setStats();
         stats.remove(Stat.drillTier);
-        stats.add(Stat.drillTier, StatValues.blocks(b -> (b instanceof UndergroundOreBlock) &&
+        stats.add(Stat.drillTier, drillables(drillTime, hardnessDrillMultiplier, size * size, drillMultipliers, b -> b instanceof UndergroundOreBlock &&
             getUnderDrop(b) != null && getUnderDrop(b).hardness <= tier && getUnderDrop(b) != blockedItem && (indexer.isBlockPresent(b) || state.isMenu())));
     }
 
@@ -141,6 +145,32 @@ public class UndergroundDrill extends Drill {
     protected Ranged nearestDetector(Team team, float wx, float wy) {
         return (Ranged)indexer.findTile(team, wx, wy, 999f, b -> (b.block instanceof OreDetector || b.block instanceof DetectorCoreBlock)
             && Mathf.within(wx, wy, b.x, b.y, ((Ranged)b).range()));
+    }
+
+    protected static StatValue drillables(float drillTime, float drillMultiplier, float size, ObjectFloatMap<Item> multipliers, Boolf<Block> filter) {
+        return table -> {
+            table.row();
+            table.table(c -> {
+                int i = 0;
+                for(Block block : content.blocks()){
+                    if(!(block instanceof UndergroundOreBlock uo) || !filter.get(block)) continue;
+
+                    c.table(Styles.grayPanel, b -> {
+                        b.image(uo.uiIcon).size(40).pad(10f).left().scaling(Scaling.fit);
+                        b.table(info -> {
+                            info.left();
+                            info.add(uo.localizedName).left().row();
+                            //info.add(block.itemDrop.emoji()).left(); there's no emoji for modded items.
+                        }).grow();
+                        if(multipliers != null){
+                            b.add(Strings.autoFixed(60f / (Math.max(drillTime + drillMultiplier * uo.drop.hardness, drillTime) / multipliers.get(uo.itemDrop, 1f)) * size, 2) + StatUnit.perSecond.localized())
+                                .right().pad(10f).padRight(15f).color(Color.lightGray);
+                        }
+                    }).growX().pad(5);
+                    if(++i % 2 == 0) c.row();
+                }
+            }).growX().colspan(table.getColumns());
+        };
     }
 
     @SuppressWarnings("unused")
