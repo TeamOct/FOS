@@ -22,6 +22,7 @@ public class UndergroundDrill extends Drill {
     public UndergroundDrill(String name){
         super(name);
         drillTime = 360f;
+        schematicPriority = -5; // build last to ensure ore detectors are built beforehand
     }
 
     //placeable on drill bases or replaceable by other underground drills
