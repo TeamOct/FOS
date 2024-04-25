@@ -284,12 +284,12 @@ public class FOSMod extends Mod {
                 "@setting.fos-menutheme.default");
             t.checkPref("fos-rotatemenucamera", true);
             t.checkPref("fos-animatedore", true);
-            t.checkPref("fos-classicdamagedisplay", false, b -> {
+            t.checkPref("fos-classicdamagedisplay", true, b -> {
                 if (b) {
                     settings.put("fos-damagedisplay", false);
                 }
             });
-            t.checkPref("fos-damagedisplay", true, b -> {
+            t.checkPref("fos-damagedisplay", false, b -> {
                 if (b) {
                     settings.put("fos-classicdamagedisplay", false);
                 }
