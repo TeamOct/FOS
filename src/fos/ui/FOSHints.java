@@ -16,6 +16,7 @@ import static mindustry.Vars.*;
 import static mindustry.content.Items.sand;
 
 public class FOSHints {
+    static ObjectSet<String> events = new ObjectSet<>();
     static ObjectSet<Block> placedBlocks = new ObjectSet<>();
 
     public void load() {
@@ -30,9 +31,17 @@ public class FOSHints {
                 placedBlocks.add(e.tile.block());
             }
         });
+
+        Events.on(FOSEventTypes.InsectInvasionEvent.class, e -> {
+            events.add("insects");
+        });
     }
 
     public enum FOSHint implements HintsFragment.Hint {
+        insectInvasion(
+            () -> events.contains("insects"),
+            () -> false
+        ),
         drillsPoweredByDetector(
             () -> placedBlocks.contains(tinDrill) && placedBlocks.contains(oreDetector),
             () -> false

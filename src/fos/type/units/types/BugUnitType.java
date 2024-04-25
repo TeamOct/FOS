@@ -1,11 +1,13 @@
 package fos.type.units.types;
 
+import arc.Events;
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import fos.ai.*;
 import fos.content.FOSStatuses;
 import fos.gen.*;
+import fos.ui.FOSEventTypes;
 import mindustry.content.*;
 import mindustry.gen.*;
 import mindustry.type.UnitType;
@@ -80,6 +82,7 @@ public class BugUnitType extends UnitType {
             } else if (b.following() instanceof Bugc other) {
                 other.invading(true);
             }
+            Events.fire(new FOSEventTypes.InsectInvasionEvent());
         }
     }
 }

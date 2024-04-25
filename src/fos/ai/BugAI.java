@@ -1,9 +1,11 @@
 package fos.ai;
 
+import arc.Events;
 import arc.math.Mathf;
 import fos.core.FOSVars;
 import fos.gen.Bugc;
 import fos.type.blocks.units.BugSpawn;
+import fos.ui.FOSEventTypes;
 import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.entities.Units;
@@ -28,6 +30,7 @@ public class BugAI extends AIController implements TargetableAI {
 
             if (followers >= Math.min(Mathf.floor(4 + evo() * 30), 49)) {
                 bug.invading(true);
+                Events.fire(new FOSEventTypes.InsectInvasionEvent());
             }
         } else {
             //check for bug swarms nearby
