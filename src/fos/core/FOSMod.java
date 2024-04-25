@@ -124,11 +124,11 @@ public class FOSMod extends Mod {
         FOSCommands.init();
 
         FOSAttributes.load();
-        FOSWeathers.load();
+        FOSStatuses.load();
         FOSItems.load();
         FOSFluids.load();
+        FOSWeathers.load();
         FOSWeaponModules.load();
-        FOSStatuses.load();
         FOSUnitTypes.load();
         FOSBlocks.load();
         FOSSchematics.load();
