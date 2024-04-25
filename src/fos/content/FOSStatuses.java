@@ -7,7 +7,7 @@ import mindustry.type.StatusEffect;
 import mindustry.world.meta.StatUnit;
 
 public class FOSStatuses {
-    public static StatusEffect hacked, injected, tokiciteSlowed;
+    public static StatusEffect hacked, injected, tokiciteSlowed, buildBoost;
 
     public static void load() {
         hacked = new HackedEffect("hacked"){{
@@ -22,6 +22,9 @@ public class FOSStatuses {
         };
         tokiciteSlowed = new StatusEffect("tokicite-slowed"){{
             speedMultiplier = 0.4f;
+        }};
+        buildBoost = new StatusEffect("build-boost"){{
+            buildSpeedMultiplier = 1.25f;
         }};
     }
 }

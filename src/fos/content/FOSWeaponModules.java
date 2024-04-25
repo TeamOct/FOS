@@ -6,14 +6,14 @@ import fos.type.abilities.UnitResistanceAbility;
 import fos.type.bullets.SmartBulletType;
 import fos.type.content.WeaponSet;
 import mindustry.content.Fx;
-import mindustry.entities.abilities.UnitSpawnAbility;
+import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.pattern.ShootAlternate;
 import mindustry.game.EventType;
 import mindustry.gen.Sounds;
 import mindustry.graphics.Pal;
 import mindustry.type.Weapon;
-import mindustry.type.weapons.RepairBeamWeapon;
+import mindustry.type.weapons.*;
 
 import static fos.content.FOSItems.*;
 import static mindustry.content.Items.*;
@@ -25,6 +25,7 @@ public class FOSWeaponModules {
     public static WeaponSet
         standard1, standard2, standard3, standard4, standard5,
         shotgun1, shotgun2, shotgun3, shotgun4, shotgun5,
+        support1, support2, support3, support4, support5,
         legionFabricator;
 
     // THIS IS VERY IMPORTANT!
@@ -206,6 +207,17 @@ public class FOSWeaponModules {
         }}).reqs(with(tin, 200, silver, 50, silicon, 200, vanadium, 100));
         shotgun4 = new WeaponSet("shotgun4", new Weapon()).reqs(with(lead, 1));
         shotgun5 = new WeaponSet("shotgun5", new Weapon()).reqs(with(lead, 1));
+
+        // SUPPORT MODULES
+        support1 = new WeaponSet("support1", new BuildWeapon("fos-support-module1")){{
+            Events.on(EventType.ContentInitEvent.class, e -> {
+                abilities = Seq.with(
+                    new StatusFieldAbility(FOSStatuses.buildBoost, 60, 30, 1){{
+                        activeEffect = Fx.none;
+                    }}
+                );
+            });
+        }}.reqs(empty);
 
         // BOSS WEAPONS
         legionFabricator = new WeaponSet("legion-fabricator",
