@@ -26,13 +26,17 @@ public class LumoniTechTree {
             );
 
             // TRANSPORT. TODO
-            node(tinBelt, () -> {
-                node(tinJunction, () -> {
+            node(tinBelt, () ->
+                node(tinJunction, () ->
                     node(tinRouter, () -> {
+                        node(tinDistributor);
+                        node(tinSorter, () ->
+                            node(flowGate)
+                        );
                         node(tinBridge);
-                    });
-                });
-            });
+                    })
+                )
+            );
 
             // POWER. TODO
             node(windTurbine, () -> {

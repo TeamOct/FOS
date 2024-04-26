@@ -58,7 +58,7 @@ public class FOSBlocks {
     oreDetectorSmall, oreDetector, oreDetectorReinforced, oreDetectorOverclocked,
 
     // DISTRIBUTION
-    spaceDuct, spaceRouter, spaceBridge, itemCatapult, tinRouter, tinJunction, tinBridge, tinBelt, liquidConveyor,
+    spaceDuct, spaceRouter, spaceBridge, itemCatapult, tinRouter, tinDistributor, tinJunction, tinBridge, tinBelt, tinSorter, flowGate, liquidConveyor,
 
     // FLUIDS
     fluidPipe, pumpjack,
@@ -1198,6 +1198,19 @@ public class FOSBlocks {
         tinRouter = new Router("tin-router"){{
             researchCost = with(tin, 90);
             requirements(Category.distribution, with(tin, 3));
+        }};
+        tinDistributor = new Router("tin-distributor"){{
+            size = 2;
+            researchCost = with(tin, 120);
+            requirements(Category.distribution, with(tin, 4));
+        }};
+        tinSorter = new Sorter("tin-sorter"){{
+            researchCost = with(tin, 60, silver, 60);
+            requirements(Category.distribution, with(tin, 2, silver, 2));
+        }};
+        flowGate = new FlowGate("flow-gate"){{
+            researchCost = with(tin, 60, silver, 60);
+            requirements(Category.distribution, with(tin, 2, silver, 2));
         }};
         tinBridge = new BufferedItemBridge("tin-bridge"){{
             fadeIn = moveArrows = false;
