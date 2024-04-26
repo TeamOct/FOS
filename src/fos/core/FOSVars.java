@@ -3,7 +3,6 @@ package fos.core;
 import arc.Core;
 import arc.math.geom.Vec2;
 import arc.struct.Seq;
-import fos.content.FOSFluids;
 import fos.controllers.*;
 import fos.files.InternalFileTree;
 import fos.graphics.FOSOreRenderer;
@@ -12,16 +11,9 @@ import fos.ui.menus.FOSMenuRenderer;
 import mindustry.ai.Pathfinder;
 import mindustry.content.TechTree;
 import mindustry.entities.units.BuildPlan;
-import mindustry.game.Objectives;
 import mindustry.mod.Mods;
 
 import java.util.*;
-
-import static fos.content.FOSBlocks.*;
-import static mindustry.Vars.headless;
-import static mindustry.content.Items.scrap;
-import static mindustry.content.TechTree.node;
-import static mindustry.type.ItemStack.with;
 
 public class FOSVars {
     /** A research dialog that shows one of the two tech trees declared below. */
@@ -76,6 +68,8 @@ public class FOSVars {
     public static FOSHints hints = new FOSHints();
 
     public static void load() {
+/*
+        TODO: probably scrapped.
         if (!headless) researchCoreDialog = new ResearchCoreDialog();
 
         mechTree = TechTree.nodeRoot("", mechResearchCore, true, () -> {
@@ -91,5 +85,6 @@ public class FOSVars {
         });
 
         TechTree.roots.remove(mechTree);
+*/
     }
 }
