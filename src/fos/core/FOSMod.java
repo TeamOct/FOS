@@ -22,6 +22,7 @@ import fos.net.FOSPackets;
 import fos.ui.*;
 import fos.ui.menus.*;
 import mindustry.ai.Pathfinder;
+import mindustry.core.GameState;
 import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.mod.Mod;
@@ -156,6 +157,10 @@ public class FOSMod extends Mod {
                 // FIXME: sometimes breaks for unknown reason
                 Reflect.invoke(pathfinder, "preloadPath", new Object[]{pt}, Pathfinder.Flowfield.class);
             }
+        });
+        Events.on(EventType.StateChangeEvent.class, e -> {
+            // reset the flowfield's vector on exit.
+            if (e.to == GameState.State.menu) FOSVars.fposVector.setZero();
         });
 
         //anything after this should not be initialized on dedicated servers.

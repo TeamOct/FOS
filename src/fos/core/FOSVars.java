@@ -32,8 +32,10 @@ public class FOSVars {
     /** Capsules creator **/
     public static CapsulesController capsulesController;
 
+    /** Internal. */
+    public static Vec2 fposVector = new Vec2();
     /** A flowfield used in certain custom AIs. */
-    public static Pathfinder.Flowfield fpos = new Pathfinder.PositionTarget(new Vec2());
+    public static Pathfinder.Flowfield fpos = new Pathfinder.PositionTarget(fposVector);
 
     /** Enabling debug mode debug **/
     public static final boolean debug = Core.settings.getBool("fos-debugmode");
