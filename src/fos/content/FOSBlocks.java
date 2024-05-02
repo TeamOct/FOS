@@ -20,6 +20,7 @@ import fos.type.draw.DrawOutputLiquids;
 import mindustry.content.*;
 import mindustry.entities.Effect;
 import mindustry.entities.bullet.*;
+import mindustry.entities.effect.MultiEffect;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
 import mindustry.gen.Sounds;
@@ -36,6 +37,7 @@ import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.storage.Unloader;
 import mindustry.world.blocks.units.*;
+import mindustry.world.consumers.ConsumeLiquidFlammable;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 import multicraft.*;
@@ -64,12 +66,12 @@ public class FOSBlocks {
     fluidPipe, pumpjack,
 
     // POWER
-    tinWire, copperWire, brassWire, tinWirePole, copperWirePole, brassWirePole, windTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
+    tinWire, copperWire, brassWire, tinWirePole, copperWirePole, brassWirePole, windTurbine, burnerGenerator, heatGenerator, plasmaLauncher, solarPanelMedium,
     copperBattery, brassBattery,
 
     // DEFENSE
     tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
-    helix, sticker, dot, particulator, pulse, breakdown, rupture, thunder, cluster, judge, newJudge,
+    helix, sticker, dot, particulator, firefly, pulse, breakdown, rupture, thunder, cluster, judge, newJudge,
     matrixShieldProj,
     landMine,
 
@@ -732,6 +734,91 @@ public class FOSBlocks {
             coolantMultiplier = 2f;
             requirements(Category.turret, with(tin, 200, silver, 125, silicon, 175, vanadium, 150));
         }};
+        firefly = new LiquidTurret("firefly"){{
+            health = 2400;
+            size = 3;
+            range = 200;
+            reload = 1f;
+            inaccuracy = 5f;
+            shootCone = 30f;
+            targetAir = false;
+            targetGround = true;
+            extinguish = false;
+            minWarmup = 0.99f;
+            shootSound = Sounds.flame2;
+
+            var fire = new MultiEffect(Fx.fire, Fx.fireSmoke);
+
+            ammo(
+                arkycite, new LiquidBulletType(arkycite){{
+                    lifetime = 50f;
+                    speed = 4f;
+                    //incendAmount = 5;
+                    damage = 15f;
+                    pierce = true;
+                    pierceCap = 2;
+                    despawnHit = true;
+                    fragOnHit = true;
+                    hitEffect = fire;
+                    //scaleLife = true;
+
+                    puddleSize = 10f;
+                    puddleAmount = 10f;
+                    puddles = 3;
+                    orbSize = 4f;
+
+                    trailEffect = fire;
+                    //trailColor = arkycite.color;
+                    trailParam = 6f;
+                    trailChance = 0.25f;
+
+                    status = StatusEffects.burning;
+                    statusDuration = 180f;
+                }},
+                oil, new LiquidBulletType(oil){{
+                    lifetime = 50f;
+                    speed = 4f;
+                    incendAmount = 10;
+                    incendChance = 1f;
+                    damage = 20f;
+                    pierce = true;
+                    pierceCap = 2;
+                    despawnHit = true;
+                    fragOnHit = true;
+                    hitEffect = fire;
+                    //scaleLife = true;
+
+                    puddleSize = 10f;
+                    puddleAmount = 10f;
+                    puddles = 3;
+                    orbSize = 4f;
+
+                    trailEffect = fire;
+                    //trailColor = oil.color;
+                    trailParam = 6f;
+                    trailChance = 0.25f;
+
+                    status = StatusEffects.melting;
+                    statusDuration = 180f;
+                }}
+            );
+            drawer = new DrawTurret("lumoni-"){{
+                parts.add(
+                    new RegionPart("-blades"){{
+                        progress = PartProgress.warmup;
+                        minWarmup = 0.5f;
+                        moveY = 2f;
+                    }},
+                    new RegionPart("-side"){{
+                        mirror = true;
+                        progress = PartProgress.warmup;
+                        minWarmup = 0.5f;
+                        moveX = moveY = 1.25f;
+                    }}
+                );
+            }};
+            requirements(Category.turret, with(tin, 100, copper, 75, vanadium, 100));
+        }};
         pulse = new TractorBeamTurret("pulse"){{
             health = 2400;
             size = 3;
@@ -1302,6 +1389,16 @@ public class FOSBlocks {
                 new DrawDefault(),
                 new DrawRegion("-rotator", 15f, true)
             );
+        }};
+        burnerGenerator = new ConsumeGenerator("burner-generator"){{
+            health = 900;
+            size = 3;
+            liquidCapacity = 60f;
+            powerProduction = 15f;
+            consume(new ConsumeLiquidFlammable(0.4f, 0.5f){{
+                filter = l -> l.flammability >= minFlammability && !l.gas;
+            }});
+            requirements(Category.power, with(tin, 75, brass, 150, vanadium, 100));
         }};
         heatGenerator = new HeatGenerator("heat-generator"){{
             health = 480;

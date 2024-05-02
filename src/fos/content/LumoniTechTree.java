@@ -120,6 +120,7 @@ public class LumoniTechTree {
             // DEFENCE
             node(helix, Seq.with(new OnSector(ruins)), () -> {
                 node(sticker, () -> {
+                    //node(firefly, /* TODO: sector handicap */ () -> {});
                     node(particulator, () -> {
                         soontm();
                         //node(cluster)
