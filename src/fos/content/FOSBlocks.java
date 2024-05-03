@@ -748,6 +748,7 @@ public class FOSBlocks {
             shootSound = Sounds.flame2;
 
             var fire = new MultiEffect(Fx.fire, Fx.fireSmoke);
+            var fireLong = new MultiEffect(FOSFx.fireLong, FOSFx.fireSmokeLong);
 
             ammo(
                 arkycite, new LiquidBulletType(arkycite){{
@@ -758,11 +759,10 @@ public class FOSBlocks {
                     pierce = true;
                     pierceCap = 2;
                     despawnHit = true;
-                    fragOnHit = true;
-                    hitEffect = fire;
+                    hitEffect = fireLong;
                     //scaleLife = true;
 
-                    puddleSize = 10f;
+                    puddleSize = 5f;
                     puddleAmount = 10f;
                     puddles = 3;
                     orbSize = 4f;
@@ -784,11 +784,10 @@ public class FOSBlocks {
                     pierce = true;
                     pierceCap = 2;
                     despawnHit = true;
-                    fragOnHit = true;
-                    hitEffect = fire;
+                    hitEffect = fireLong;
                     //scaleLife = true;
 
-                    puddleSize = 10f;
+                    puddleSize = 5f;
                     puddleAmount = 10f;
                     puddles = 3;
                     orbSize = 4f;
@@ -1395,9 +1394,17 @@ public class FOSBlocks {
             size = 3;
             liquidCapacity = 60f;
             powerProduction = 15f;
+            generateEffect = FOSFx.generatorSmoke;
+            effectChance = 0.05f;
             consume(new ConsumeLiquidFlammable(0.4f, 0.5f){{
                 filter = l -> l.flammability >= minFlammability && !l.gas;
             }});
+            drawer = new DrawMulti(
+                new DrawRegion("-bottom"),
+                new DrawLiquidTile(arkycite, 8f),
+                new DrawLiquidTile(oil, 8f),
+                new DrawDefault()
+            );
             requirements(Category.power, with(tin, 75, brass, 150, vanadium, 100));
         }};
         heatGenerator = new HeatGenerator("heat-generator"){{

@@ -88,7 +88,7 @@ public class FOSFx {
         Lines.poly(polyLines, e.x, e.y, 1f);
     }).followParent(true).layer(Layer.shields),
 
-    tokiciteBoil = new Effect(240f, e -> {
+    windSmoke = new Effect(240f, e -> {
         if (Groups.weather.contains(we -> we.weather instanceof ParticleWeather p && p.useWindVector)) {
             WeatherState w = Groups.weather.find(ws -> ws.weather instanceof ParticleWeather p && p.useWindVector);
             e.x += w.windVector.x * 24f * w.intensity * e.fin();
@@ -99,17 +99,26 @@ public class FOSFx {
             e.y += v.y * 12f * e.fin();
         }
 
-        Draw.color(e.color, 0.4f * e.fout());
+        Draw.color(e.color, 0.6f * e.fout());
         Fill.circle(e.x, e.y, 4f * (1 + e.fin()));
     }),
 
     brassSmelterCraft = new Effect(1f, e -> {
         var c = FOSFluids.tokicite.color;
         //copypasta time
-        tokiciteBoil.at(e.x - 8f, e.y - 8f, c);
-        tokiciteBoil.at(e.x + 8f, e.y - 8f, c);
-        tokiciteBoil.at(e.x - 8f, e.y + 8f, c);
-        tokiciteBoil.at(e.x + 8f, e.y + 8f, c);
+        windSmoke.at(e.x - 8f, e.y - 8f, c);
+        windSmoke.at(e.x + 8f, e.y - 8f, c);
+        windSmoke.at(e.x - 8f, e.y + 8f, c);
+        windSmoke.at(e.x + 8f, e.y + 8f, c);
+    }),
+
+    generatorSmoke = new Effect(1f, e -> {
+        var c = Pal.gray;
+        //copypasta time
+        windSmoke.at(e.x - 8f, e.y - 8f, c);
+        windSmoke.at(e.x + 8f, e.y - 8f, c);
+        windSmoke.at(e.x - 8f, e.y + 8f, c);
+        windSmoke.at(e.x + 8f, e.y + 8f, c);
     }),
 
     deathrayDespawn = new Effect(60f, 720f, e -> {
@@ -121,7 +130,7 @@ public class FOSFx {
 
     refinerySmoke = new Effect(1f, e -> {
         //RECYCLED ASSET TIME
-        tokiciteBoil.at(e.x, e.y, Pal.gray);
+        windSmoke.at(e.x, e.y, Pal.gray);
     }),
 
     dotLaserLine = new Effect(10f, e -> {
@@ -148,5 +157,24 @@ public class FOSFx {
             alpha((0.5f - Math.abs(e.fin() - 0.5f)) * 2f);
             Fill.circle(e.x + (x * e.finpow()), e.y + (y * e.finpow()), 0.5f + e.fout() * 4f);
         }));
+    }),
+
+    fireLong = new Effect(300f, e -> {
+        color(Pal.lightFlame, Pal.darkFlame, e.fin());
+
+        randLenVectors(e.id, 2, 2f + e.fin() * 9f, (x, y) -> {
+            Fill.circle(e.x + x, e.y + y, 0.2f + e.fslope() * 1.5f);
+        });
+
+        color();
+
+        Drawf.light(e.x, e.y, 20f * e.fslope(), Pal.lightFlame, 0.5f);
+    }),
+    fireSmokeLong = new Effect(300f, e -> {
+        color(Color.gray);
+
+        randLenVectors(e.id, 1, 2f + e.fin() * 7f, (x, y) -> {
+            Fill.circle(e.x + x, e.y + y, 0.2f + e.fslope() * 1.5f);
+        });
     });
 }
