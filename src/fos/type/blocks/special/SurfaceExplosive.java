@@ -94,6 +94,8 @@ public class SurfaceExplosive extends Block {
         public void detonate() {
             // pre-detonation init
             tileOn().circle(range, t -> {
+                if (t == null) return;
+
                 tiles.add(t);
                 if (t.floor() != deepFloor())
                     t.setBlock(stoneWall);
@@ -136,7 +138,7 @@ public class SurfaceExplosive extends Block {
                 } else {
                     for (int i = 0; i < 8; i++) {
                         Tile other = world.tiles.get(tile.x + Geometry.d8[i].x, tile.y + Geometry.d8[i].y);
-                        if (other.block() == cliff) {
+                        if (other != null && other.block() == cliff) {
                             tile.data -= (byte) (1 << i);
                         }
                     }
@@ -145,7 +147,7 @@ public class SurfaceExplosive extends Block {
                 // liquid nearby? well then, more liquid, my friend
                 for (Point2 p : Geometry.d4) {
                     Tile other = world.tiles.get(tile.x + p.x, tile.y + p.y);
-                    if (other.floor().liquidDrop != null) {
+                    if (other != null && other.floor().liquidDrop != null) {
                         l = other.floor().liquidDrop;
                         break;
                     }
@@ -161,7 +163,7 @@ public class SurfaceExplosive extends Block {
                 boolean valid = false;
                 for (Point2 p : Geometry.d4) {
                     Tile other = world.tiles.get(tile.x + p.x, tile.y + p.y);
-                    if (other.floor() != deepFloor()) valid = true;
+                    if (other != null && other.floor() != deepFloor()) valid = true;
                 }
                 if (!valid && tile.block() == cliff) {
                     tile.setBlock(air);
