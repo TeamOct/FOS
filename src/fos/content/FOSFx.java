@@ -4,6 +4,7 @@ import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.math.geom.*;
+import arc.util.Tmp;
 import fos.type.bullets.OhioBeamBulletType;
 import mindustry.entities.Effect;
 import mindustry.gen.*;
@@ -88,28 +89,43 @@ public class FOSFx {
         Lines.poly(polyLines, e.x, e.y, 1f);
     }).followParent(true).layer(Layer.shields),
 
+    tokiciteBoil = new Effect(240f, e -> {
+        if (Groups.weather.contains(we -> we.weather instanceof ParticleWeather p && p.useWindVector)) {
+            WeatherState w = Groups.weather.find(ws -> ws.weather instanceof ParticleWeather p && p.useWindVector);
+            e.x += w.windVector.x * 24f * w.intensity * e.fin();
+            e.y += w.windVector.y * 24f * w.intensity * e.fin();
+        } else {
+            Vec2 v = Tmp.v4.set(1, 1);
+            e.x += v.x * 12f * e.fin();
+            e.y += v.y * 12f * e.fin();
+        }
+
+        Draw.color(e.color, 0.4f * e.fout());
+        Fill.circle(e.x, e.y, 4f * (1 + e.fin()));
+    }),
+
     windSmoke = new Effect(240f, e -> {
         if (Groups.weather.contains(we -> we.weather instanceof ParticleWeather p && p.useWindVector)) {
             WeatherState w = Groups.weather.find(ws -> ws.weather instanceof ParticleWeather p && p.useWindVector);
             e.x += w.windVector.x * 24f * w.intensity * e.fin();
             e.y += w.windVector.y * 24f * w.intensity * e.fin();
         } else {
-            Vec2 v = new Vec2(1, 1);
+            Vec2 v = Tmp.v4.set(1, 1);
             e.x += v.x * 12f * e.fin();
             e.y += v.y * 12f * e.fin();
         }
 
-        Draw.color(e.color, 0.6f * e.fout());
+        Draw.color(e.color, e.fout());
         Fill.circle(e.x, e.y, 4f * (1 + e.fin()));
     }),
 
     brassSmelterCraft = new Effect(1f, e -> {
         var c = FOSFluids.tokicite.color;
         //copypasta time
-        windSmoke.at(e.x - 8f, e.y - 8f, c);
-        windSmoke.at(e.x + 8f, e.y - 8f, c);
-        windSmoke.at(e.x - 8f, e.y + 8f, c);
-        windSmoke.at(e.x + 8f, e.y + 8f, c);
+        tokiciteBoil.at(e.x - 8f, e.y - 8f, c);
+        tokiciteBoil.at(e.x + 8f, e.y - 8f, c);
+        tokiciteBoil.at(e.x - 8f, e.y + 8f, c);
+        tokiciteBoil.at(e.x + 8f, e.y + 8f, c);
     }),
 
     generatorSmoke = new Effect(1f, e -> {
