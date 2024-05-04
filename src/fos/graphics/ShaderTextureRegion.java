@@ -28,7 +28,7 @@ public class ShaderTextureRegion extends TextureRegion {
     public Object[] shaderPrepareParams;
 
     static {
-        Events.run(EventType.Trigger.preDraw, () -> regions.each(ShaderTextureRegion::updateShader));
+        Events.run(EventType.Trigger.update, () -> regions.each(ShaderTextureRegion::updateShader));
     }
 
     public ShaderTextureRegion(Shader shader, Texture original, Cons2<Shader, Object[]> shaderPrepare,
