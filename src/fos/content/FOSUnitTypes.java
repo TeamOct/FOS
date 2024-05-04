@@ -1183,14 +1183,9 @@ public class FOSUnitTypes {
 
             controller = u -> new MinerAI();
             defaultCommand = UnitCommand.mineCommand;
+            playerControllable = false;
 
-            weapons.add(
-                // this is just an Easter egg, and nothing else.
-                new Weapon("you have incurred my wrath. prepare to die."){{
-                    noAttack = true;
-                    display = false;
-                }}
-            );
+            // you have incurred my wrath. prepare to die.
         }};
 
         weaponSetInit = new FOSUnitType("weapon-set-init"){{
