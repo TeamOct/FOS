@@ -1166,7 +1166,7 @@ public class FOSUnitTypes {
             );
         }};
 
-        draug = new UnitType("draug"){{
+        draug = new FOSUnitType("draug"){{
             health = 110;
             armor = 2;
             hitSize = 10f;
