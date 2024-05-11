@@ -5,7 +5,7 @@ import mindustry.entities.Units;
 import mindustry.entities.units.*;
 import mindustry.gen.*;
 
-public class GroundBossAI extends AIController implements TargetableAI {
+public class GroundBossAI extends AIController implements FOSPathfindAI {
     @Override
     public void updateMovement() {
         Building core = unit.closestEnemyCore();
@@ -25,7 +25,7 @@ public class GroundBossAI extends AIController implements TargetableAI {
             if (player == null) {
                 pathfind(Pathfinder.fieldCore);
             } else {
-                pathfindTarget(curTarget, unit);
+                pathfind(unit);
             }
         }
 

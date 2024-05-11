@@ -8,6 +8,7 @@ import arc.math.geom.Vec2;
 import arc.util.Tmp;
 import fos.ai.*;
 import fos.content.FOSStatuses;
+import fos.core.FOSVars;
 import fos.gen.*;
 import fos.ui.FOSEventTypes;
 import mindustry.Vars;
@@ -43,7 +44,7 @@ public class BugUnitType extends UnitType {
         this.flying = flying;
         targetAir = flying;
         targetGround = true;
-        targetFlags = new BlockFlag[]{BlockFlag.turret, BlockFlag.drill, BlockFlag.factory, BlockFlag.core, null};
+        targetFlags = new BlockFlag[]{BlockFlag.drill, BlockFlag.factory, BlockFlag.core, null};
         controller = u -> flying ? new FlyingBugAI() : new BugAI();
     }
     public BugUnitType(String name, boolean flying, boolean melee) {
@@ -194,5 +195,20 @@ public class BugUnitType extends UnitType {
             }
             Events.fire(new FOSEventTypes.InsectInvasionEvent());
         }
+    }
+
+    @Override
+    public void killed(Unit unit) {
+        super.killed(unit);
+
+        int ti = unit.tileOn().array();
+        FOSVars.deathMap[ti] += 125;
+
+        unit.tileOn().circle(3, (tile) -> {
+            if (tile == null) return;
+            FOSVars.deathMap[tile.array()] += 125;
+        });
+
+        Events.fire(new FOSEventTypes.InsectDeathEvent(unit.tileOn()));
     }
 }

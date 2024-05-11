@@ -1077,7 +1077,7 @@ public class FOSUnitTypes {
         bugSmall = new BugUnitType("bug-small", false){{
             health = 80;
             armor = 8;
-            hitSize = 12f;
+            hitSize = 16f;
             speed = 0.3f;
             segments = 3;
             crushDamage = 0.2f;
@@ -1091,7 +1091,7 @@ public class FOSUnitTypes {
         bugMedium = new BugUnitType("bug-medium", false){{
             health = 240;
             armor = 20;
-            hitSize = 15f;
+            hitSize = 18f;
             speed = 0.4f;
             segments = 4;
             crushDamage = 0.6f;

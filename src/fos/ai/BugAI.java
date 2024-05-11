@@ -16,7 +16,7 @@ import mindustry.world.meta.BlockFlag;
 
 import static mindustry.Vars.tilesize;
 
-public class BugAI extends AIController implements TargetableAI {
+public class BugAI extends AIController implements FOSPathfindAI {
     private Bugc bug;
 
     @Override
@@ -45,7 +45,6 @@ public class BugAI extends AIController implements TargetableAI {
 
     @Override
     public void updateMovement() {
-        // FIXME: bugs spinning around for no reason
         Tile tile = unit.tileOn();
         Tile targetTile = tile;
 
@@ -60,7 +59,7 @@ public class BugAI extends AIController implements TargetableAI {
                     unit.moveAt(vec);
                     return;
                 } else {
-                    targetTile = pathfindTarget(target, unit);
+                    targetTile = pathfind(unit);
                 }
             }
         } else if (bug.following() != null) {
@@ -79,7 +78,7 @@ public class BugAI extends AIController implements TargetableAI {
                 int y = Mathf.random(-40, 40);
                 Tile t = Vars.world.tileWorld(unit.x + x, unit.y + y);
                 if (t != null && t.block() == Blocks.air) {
-                    targetTile = pathfindTarget(vec.set(unit).add(x*8, y*8), unit);
+                    targetTile = pathfind(unit);
                     foundTile = true;
                     bug.idle(true);
                 }

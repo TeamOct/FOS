@@ -1,8 +1,8 @@
 package fos.core;
 
 import arc.Core;
-import arc.math.geom.Vec2;
 import arc.struct.Seq;
+import fos.ai.FOSPathfinder;
 import fos.controllers.*;
 import fos.files.InternalFileTree;
 import fos.graphics.FOSOreRenderer;
@@ -32,10 +32,10 @@ public class FOSVars {
     /** Capsules creator **/
     public static CapsulesController capsulesController;
 
-    /** Internal. */
-    public static Vec2 fposVector = new Vec2();
-    /** A flowfield used in certain custom AIs. */
-    public static Pathfinder.Flowfield fpos = new Pathfinder.PositionTarget(fposVector);
+    /** Map for recent unit deaths. Used in insect AI. Reset after map load. */
+    public static int[] deathMap;
+    /** An additional modded pathfinder for insect AI. Should not affect vanilla {@link Pathfinder}. */
+    public static FOSPathfinder pathfinder = new FOSPathfinder();
 
     /** Enabling debug mode debug **/
     public static final boolean debug = Core.settings.getBool("fos-debugmode");

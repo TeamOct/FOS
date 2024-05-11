@@ -3,8 +3,8 @@ package fos.type.units.comp;
 import arc.math.*;
 import arc.math.geom.Vec2;
 import arc.util.Time;
+import fos.ai.FOSPathfinder;
 import mindustry.Vars;
-import mindustry.ai.Pathfinder;
 import mindustry.annotations.Annotations.*;
 import mindustry.content.*;
 import mindustry.game.Team;
@@ -40,7 +40,7 @@ public abstract class FOSCrawlComp implements Posc, Rotc, Hitboxc, Unitc {
     @Override
     @Replace
     public int pathType(){
-        return Pathfinder.costLegs;
+        return FOSPathfinder.costBugLegs;
     }
 
     @Override

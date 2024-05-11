@@ -4,7 +4,6 @@ import arc.*;
 import arc.audio.Music;
 import arc.backend.sdl.SdlApplication;
 import arc.backend.sdl.jni.SDL;
-import arc.func.Prov;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.graphics.gl.Shader;
@@ -21,9 +20,9 @@ import fos.graphics.*;
 import fos.net.FOSPackets;
 import fos.ui.*;
 import fos.ui.menus.*;
-import mindustry.ai.Pathfinder;
 import mindustry.game.*;
 import mindustry.gen.*;
+import mindustry.graphics.Layer;
 import mindustry.mod.Mod;
 import mindustry.mod.Mods.LoadedMod;
 import mindustry.ui.*;
@@ -148,16 +147,22 @@ public class FOSMod extends Mod {
         //initialize mod variables
         FOSVars.load();
 
-        //this flowfield is required for modded AIs
-        Pathfinder.Flowfield pt = FOSVars.fpos;
-        Reflect.<Seq<Prov<Pathfinder.Flowfield>>>get(pathfinder, "fieldTypes").add(() -> pt);
-        Events.on(EventType.WorldLoadEvent.class, e -> {
-            if (!net.client()) {
-                FOSVars.fposVector.setZero();
-                // FIXME: sometimes breaks for unknown reason
-                Reflect.invoke(pathfinder, "preloadPath", new Object[]{pt}, Pathfinder.Flowfield.class);
-            }
-        });
+        //debug-only insect pathfinder test
+        if (settings.getBool("fos-pathfinder-debug", false)) {
+            Events.run(EventType.Trigger.draw, () -> {
+                for (int i = 0; i < FOSVars.deathMap.length; i++) {
+                    if (FOSVars.deathMap[i] == 0) continue;
+
+                    Draw.z(Layer.light);
+                    Draw.color(Color.red);
+                    Draw.alpha(FOSVars.deathMap[i] / 1000f);
+
+                    Draw.rect("empty", world.tiles.geti(i).worldx(), world.tiles.geti(i).worldy());
+
+                    Draw.reset();
+                }
+            });
+        }
 
         //anything after this should not be initialized on dedicated servers.
         if (headless) return;
