@@ -8,16 +8,15 @@ import arc.struct.Seq;
 import arc.util.*;
 import fos.content.FOSBlocks;
 import mindustry.Vars;
-import mindustry.content.*;
+import mindustry.content.Fx;
 import mindustry.entities.*;
 import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.graphics.*;
-import mindustry.type.Liquid;
 import mindustry.ui.Fonts;
 import mindustry.world.*;
-import mindustry.world.blocks.environment.Floor;
 
+import static fos.content.FOSBlocks.tokiciteFloor;
 import static mindustry.Vars.*;
 import static mindustry.content.Blocks.*;
 
@@ -29,6 +28,7 @@ public class SurfaceExplosive extends Block {
     public Sound explosionSound = Sounds.explosionbig;
     public float explosionShake = 10f;
     public float damage = 2000f;
+    public Seq<Block> bannedFloors = Seq.with(arkyicStone, arkyciteFloor, tokiciteFloor, deepwater);
 
     public SurfaceExplosive(String name) {
         super(name);
@@ -44,6 +44,11 @@ public class SurfaceExplosive extends Block {
 
     @Override
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {
+        // no blowing up the core.
+        for (var core : team.data().cores) {
+            if (tile.within(core, range * tilesize * 2)) return false;
+        }
+
         int cliffs = 0;
         for (var e : getEdges()) {
             Tile other = world.tileWorld(tile.worldx() + e.x, tile.worldy() + e.y);
@@ -94,7 +99,8 @@ public class SurfaceExplosive extends Block {
         public void detonate() {
             // pre-detonation init
             tileOn().circle(range, t -> {
-                if (t == null) return;
+                if (t == null || bannedFloors.contains(t.floor()) ||
+                    (t.block() != air && t.block() != this.block && t.block() != cliff)) return;
 
                 tiles.add(t);
                 if (t.floor() != deepFloor())
@@ -127,9 +133,6 @@ public class SurfaceExplosive extends Block {
             }
 
             // post-detonation
-            // a detonator could possibly be deployed near a liquid - for now, fill everything with it
-            Liquid l = null;
-
             for (Tile tile : tiles) {
                 if (tile.block() != cliff) {
                     if (tile.block().isStatic()) {
@@ -143,22 +146,14 @@ public class SurfaceExplosive extends Block {
                         }
                     }
                 }
+                // save for later cuz setFloorNet() resets overlay
+                var overlay = deepTile(tile.overlay());
+                tile.setFloorNet(deepFloor().asFloor());
+                tile.setOverlayNet(overlay);
+            }
 
-                // liquid nearby? well then, more liquid, my friend
-                for (Point2 p : Geometry.d4) {
-                    Tile other = world.tiles.get(tile.x + p.x, tile.y + p.y);
-                    if (other != null && other.floor().liquidDrop != null) {
-                        l = other.floor().liquidDrop;
-                        break;
-                    }
-                }
-                if (l == null) {
-                    // save for later cuz setFloorNet() resets overlay
-                    var overlay = deepTile(tile.overlay());
-                    tile.setFloorNet(deepFloor().asFloor());
-                    tile.setOverlayNet(overlay);
-                }
-
+            // post-post-detonation
+            for (Tile tile : tiles) {
                 // clean up middle cliffs cuz they are ugly
                 boolean valid = false;
                 for (Point2 p : Geometry.d4) {
@@ -170,28 +165,11 @@ public class SurfaceExplosive extends Block {
                 }
             }
 
-            // now, fill the entire crater with liquid if it's present
-            if (l != null) {
-                for (Tile tile : tiles) {
-                    // java sucks
-                    Liquid finalL = l;
-                    Floor fallback = content.blocks().find(b -> b instanceof Floor f && f.liquidDrop == finalL).asFloor();
-                    if (tile.block() == cliff && l == Liquids.water) {
-                        Block shallow = content.block(tile.floor().name + "-water");
-                        tile.setFloorNet(shallow != null ? shallow : fallback);
-                    } else {
-                        tile.setFloorNet(fallback);
-                    }
-
-                    tile.setBlock(air);
-                }
-            }
-
             explosionSound.at(this);
             explosionEffect.at(x, y, explosionColor);
             smokeEffect.at(x, y, explosionColor);
             renderer.shake(explosionShake, 60f);
-            Damage.damage(x, y, range * tilesize, damage); // damage nearby units
+            Damage.damage(x, y, range * tilesize * 2, damage); // damage nearby units
             tile.remove();
         }
     }
