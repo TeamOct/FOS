@@ -404,50 +404,50 @@ public class FOSBlocks {
         //endregion
         //region defense
         tinWall = new Wall("tin-wall"){{
-            scaledHealth = 400;
+            scaledHealth = 800;
             size = 1;
             buildCostMultiplier = 3f;
             requirements(Category.defense, with(tin, 6));
         }};
         tinWallLarge = new Wall("tin-wall-large"){{
-            scaledHealth = 400;
+            scaledHealth = 800;
             size = 2;
             buildCostMultiplier = 3f;
             requirements(Category.defense, with(tin, 24));
         }};
         diamondWall = new Wall("diamond-wall"){{
-            scaledHealth = 625;
+            scaledHealth = 1250;
             size = 1;
             buildCostMultiplier = 3f;
             requirements(Category.defense, with(diamond, 6));
         }};
         diamondWallLarge = new Wall("diamond-wall-large"){{
-            scaledHealth = 625;
+            scaledHealth = 1250;
             size = 2;
             buildCostMultiplier = 3f;
             requirements(Category.defense, with(diamond, 24));
         }};
         vanadiumWall = new Wall("vanadium-wall"){{
-            scaledHealth = 800;
+            scaledHealth = 1600;
             size = 1;
             buildCostMultiplier = 3f;
             requirements(Category.defense, with(vanadium, 6));
         }};
         vanadiumWallLarge = new Wall("vanadium-wall-large"){{
-            scaledHealth = 800;
+            scaledHealth = 1600;
             size = 2;
             buildCostMultiplier = 3f;
             requirements(Category.defense, with(vanadium, 24));
         }};
         cuberiumWall = new Wall("cuberium-wall"){{
-            scaledHealth = 600;
+            scaledHealth = 1200;
             size = 1;
             absorbLasers = true;
             buildCostMultiplier = 3f;
             requirements(Category.defense, with(cuberium, 6));
         }};
         cuberiumWallLarge = new Wall("cuberium-wall-large"){{
-            scaledHealth = 600;
+            scaledHealth = 1200;
             size = 2;
             absorbLasers = true;
             buildCostMultiplier = 3f;
@@ -481,7 +481,7 @@ public class FOSBlocks {
                 );
             }};
             ammo(
-                tin, new BasicBulletType(3f, 10){{
+                tin, new BasicBulletType(3f, 20){{
                     width = 3f; height = 6f;
                     lifetime = 44f;
                     trailColor = frontColor = FOSPal.tin;
@@ -491,7 +491,7 @@ public class FOSBlocks {
                     ammoMultiplier = 2f;
                     buildingDamageMultiplier = 0.3f;
                 }},
-                diamond, new BasicBulletType(3f, 18){{
+                diamond, new BasicBulletType(3f, 36){{
                     width = 3f; height = 6f;
                     lifetime = 44f;
                     trailColor = frontColor = FOSPal.diamond;
@@ -503,7 +503,7 @@ public class FOSBlocks {
                     pierceCap = 2;
                     buildingDamageMultiplier = 0.3f;
                 }},
-                silicon, new BasicBulletType(3f, 14){{
+                silicon, new BasicBulletType(3f, 28){{
                     width = 3f; height = 6f;
                     lifetime = 44f;
                     trailColor = frontColor = Pal.unitFront;
@@ -515,7 +515,7 @@ public class FOSBlocks {
                     homingPower = 0.1f;
                     buildingDamageMultiplier = 0.3f;
                 }},
-                vanadium, new BasicBulletType(4f, 20){{
+                vanadium, new BasicBulletType(4f, 40){{
                     width = 3f; height = 6f;
                     lifetime = 44f;
                     rangeChange = 44f;
@@ -526,7 +526,7 @@ public class FOSBlocks {
                     ammoMultiplier = 3f;
                     buildingDamageMultiplier = 0.3f;
                 }},
-                nickel, new BasicBulletType(4f, 22){{
+                nickel, new BasicBulletType(4f, 44){{
                     width = 4f; height = 8f;
                     lifetime = 44f;
                     rangeChange = 44f;
@@ -541,7 +541,7 @@ public class FOSBlocks {
                 luminium, new BasicBulletType(){{
                     width = 4f; height = 8f;
                     speed = 4.5f;
-                    damage = 26.25f;
+                    damage = 52.5f;
                     lifetime = 44f;
                     rangeChange = 66f;
                     trailColor = frontColor = FOSPal.luminium1;
@@ -574,7 +574,7 @@ public class FOSBlocks {
             squareSprite = false;
             consumeLiquid(tokicite, 0.1f);
             ammo(
-                tin, new StickyBulletType(8f, 10, 90){{
+                tin, new StickyBulletType(8f, 20, 90){{
                     lifetime = 45f;
                     width = height = 10f;
                     trailColor = FOSPal.tinBack;
@@ -582,11 +582,11 @@ public class FOSBlocks {
                     frontColor = FOSPal.tokicite;
                     ammoMultiplier = 2f;
                     scaleLife = true;
-                    splashDamage = 40;
+                    splashDamage = 80;
                     splashDamageRadius = 12f;
                     buildingDamageMultiplier = 0.3f;
                 }},
-                diamond, new StickyBulletType(8f, 30, 90){{
+                diamond, new StickyBulletType(8f, 60, 90){{
                     lifetime = 45f;
                     width = height = 10f;
                     trailColor = FOSPal.diamondBack;
@@ -594,7 +594,7 @@ public class FOSBlocks {
                     frontColor = FOSPal.tokicite;
                     ammoMultiplier = 3f;
                     scaleLife = true;
-                    splashDamage = 50;
+                    splashDamage = 100;
                     splashDamageRadius = 16f;
                     buildingDamageMultiplier = 0.3f;
                 }}
@@ -626,7 +626,7 @@ public class FOSBlocks {
             consumePower(2f);
             drawer = new DrawTurret("lumoni-");
             shootType = new RailBulletType(){{
-                damage = 4f;
+                damage = 16f;
                 length = 225f;
                 lifetime = 10f;
                 pierceDamageFactor = 1f;
@@ -653,7 +653,7 @@ public class FOSBlocks {
         particulator = new ItemTurret("particulator"){{
             health = 2400;
             size = 3;
-            range = 120;
+            range = 240;
             targetAir = targetGround = true;
             recoil = 2;
             reload = 40;
@@ -662,7 +662,7 @@ public class FOSBlocks {
             shootSound = Sounds.shootBig;
             squareSprite = false;
             ammo(
-                silver, new BasicBulletType(2f, 40){{
+                silver, new BasicBulletType(4f, 80){{
                     lifetime = 60f;
                     width = 16f; height = 24f;
                     backColor = FOSPal.silverBack;
@@ -678,7 +678,7 @@ public class FOSBlocks {
                     hitEffect = despawnEffect = Fx.explosion;
                     buildingDamageMultiplier = 0.3f;
                     fragBullets = 6;
-                    fragBullet = new BasicBulletType(0.8f, 5){{
+                    fragBullet = new BasicBulletType(0.8f, 10){{
                         lifetime = 60f * 5; //frags will stay for pretty long
                         drag = 0.024f;
                         width = height = 6f;
@@ -695,8 +695,8 @@ public class FOSBlocks {
                         buildingDamageMultiplier = 0.3f;
                     }};
                 }},
-                vanadium, new BasicBulletType(2f, 60){{
-                    lifetime = 60f;
+                vanadium, new BasicBulletType(6f, 120){{
+                    lifetime = 40f;
                     width = 16f; height = 24f;
                     backColor = vanadium.color.cpy().mul(0.8f);
                     frontColor = trailColor = lightColor = vanadium.color;
@@ -711,7 +711,7 @@ public class FOSBlocks {
                     hitEffect = despawnEffect = Fx.explosion;
                     buildingDamageMultiplier = 0.3f;
                     fragBullets = 7;
-                    fragBullet = new BasicBulletType(0.8f, 8){{
+                    fragBullet = new BasicBulletType(0.8f, 16){{
                         lifetime = 60f * 5; //frags will stay for pretty long
                         drag = 0.024f;
                         width = height = 6f;
