@@ -28,10 +28,6 @@ public class FOSWeaponModules {
         support1, support2, support3, support4, support5,
         legionFabricator;
 
-    // THIS IS VERY IMPORTANT!
-    // NOTE: PLEASE SET RELOAD AND RECOILTIME AT ONCE, OTHERWISE WEAPONS WILL FLY LIKE CRAZY
-    // WE DON'T KNOW HOW THIS HAPPENS. SO HERE'S THIS BAND-AID SOLUTION FOR THIS ISSUE. -S
-
     public static void load() {
         // BASIC / ASSAULT RIFLES
         standard1 = new WeaponSet("standard1", new Weapon("fos-standard-weapon1"){{
@@ -41,7 +37,7 @@ public class FOSWeaponModules {
             top = true;
             recoil = 0.4f;
             reload = recoilTime = 20f;
-            bullet = new BasicBulletType(2.5f, 36){{
+            bullet = new BasicBulletType(2.5f, 72){{
                 width = 7f; height = 9f;
                 trailLength = 8;
                 lifetime = 60f;
@@ -54,7 +50,7 @@ public class FOSWeaponModules {
             rotate = true;
             recoil = 0.3f;
             reload = recoilTime = 40f;
-            bullet = new BasicBulletType(2f, 90){{
+            bullet = new BasicBulletType(2f, 180){{
                 width = 8f; height = 10f;
                 lifetime = 40f;
                 shootEffect = Fx.shootSmallSmoke;
@@ -63,7 +59,7 @@ public class FOSWeaponModules {
                 fragBullets = 2;
                 fragVelocityMin = 1f;
                 collidesTiles = false;
-                fragBullet = new SmartBulletType(7f, 30){{
+                fragBullet = new SmartBulletType(7f, 60){{
                     width = 4f; height = 5f;
                     lifetime = 20f;
                     trailLength = 15;
@@ -81,7 +77,7 @@ public class FOSWeaponModules {
             reload = recoilTime = 15f;
             inaccuracy = 8f;
             cooldownTime = 30f;
-            bullet = new BasicBulletType(3.5f, 60f){{
+            bullet = new BasicBulletType(3.5f, 120){{
                 width = 7f; height = 9f;
                 trailLength = 12;
                 lifetime = 60f;
@@ -147,7 +143,7 @@ public class FOSWeaponModules {
                 length = 48f;
                 fromColor = Pal.accentBack;
                 toColor = Pal.accent;
-                damage = 60f;
+                damage = 120;
                 lifetime = 20f;
                 hitEffect = Fx.hitBulletSmall;
                 knockback = 4f;
@@ -159,7 +155,7 @@ public class FOSWeaponModules {
             alternate = mirror = false;
             rotate = true;
             rotateSpeed = 5f;
-            inaccuracy = 20f;
+            inaccuracy = 10f;
             shoot.shots = 4;
             shoot.shotDelay = 0f;
             reload = recoilTime = 90f;
@@ -170,7 +166,7 @@ public class FOSWeaponModules {
                 length = 80f;
                 fromColor = Pal.accentBack;
                 toColor = Pal.accent;
-                damage = 60f;
+                damage = 120;
                 lifetime = 20f;
                 hitEffect = Fx.hitBulletSmall;
                 knockback = 3f;
@@ -190,7 +186,7 @@ public class FOSWeaponModules {
             ejectEffect = Fx.casing3;
             bullet = new BasicBulletType(){{
                 speed = 4f; lifetime = 20f;
-                damage = 40f;
+                damage = 80;
                 hitEffect = Fx.hitBulletSmall;
                 trailLength = 4;
                 trailEffect = Fx.trailFade;
@@ -198,7 +194,7 @@ public class FOSWeaponModules {
                 fragOnHit = true;
                 fragBullets = 1;
                 fragBullet = new ExplosionBulletType(){{
-                    splashDamage = 60;
+                    splashDamage = 120;
                     splashDamageRadius = 16;
                     killShooter = false;
                     knockback = 4f;
@@ -209,7 +205,7 @@ public class FOSWeaponModules {
         shotgun5 = new WeaponSet("shotgun5", new Weapon()).reqs(with(lead, 1));
 
         // SUPPORT MODULES
-        support1 = new WeaponSet("support1", new BuildWeapon("fos-support-module1")){{
+        support1 = new WeaponSet("support1", new BuildWeapon("fos-support-mount1")){{
             Events.on(EventType.ContentInitEvent.class, e -> {
                 abilities = Seq.with(
                     new StatusFieldAbility(FOSStatuses.buildBoost, 60, 30, 1){{

@@ -92,7 +92,7 @@ public class FOSUnitTypes {
         //DestroyersUnits.load();
 
         legionnaire = new FOSUnitType("legionnaire"){{
-            health = 100;
+            health = 200;
             hitSize = 12;
             rotateSpeed = 12f;
             speed = 2.5f;
@@ -111,10 +111,10 @@ public class FOSUnitTypes {
                     rotate = false;
                     reload = 30f;
                     shootCone = 15f;
-                    bullet = new BasicBulletType(2.5f, 22.75f){{
+                    bullet = new BasicBulletType(2.5f, 45f){{
                         width = 7f;
                         height = 9f;
-                        lifetime = 45f;
+                        lifetime = 75f;
                         shootEffect = Fx.shootSmall;
                         smokeEffect = Fx.shootSmallSmoke;
                         ammoMultiplier = 2;
@@ -127,7 +127,7 @@ public class FOSUnitTypes {
             controller = u -> new ProtectorAI();
         }};
         legionnaireReplica = new FOSUnitType("legionnaire-replica"){{
-            health = 75;
+            health = 150;
             hitSize = 12;
             rotateSpeed = 12f;
             speed = 2f;
@@ -145,10 +145,10 @@ public class FOSUnitTypes {
                     rotate = false;
                     reload = 30f;
                     shootCone = 15f;
-                    bullet = new BasicBulletType(2.5f, 22.75f){{
+                    bullet = new BasicBulletType(2.5f, 45f){{
                         width = 7f;
                         height = 9f;
-                        lifetime = 45f;
+                        lifetime = 75f;
                         shootEffect = Fx.shootSmall;
                         smokeEffect = Fx.shootSmallSmoke;
                         ammoMultiplier = 2;
@@ -161,7 +161,7 @@ public class FOSUnitTypes {
             controller = u -> new ProtectorAI();
         }};
         legion = new BossUnitType("legion"){{
-            health = 2250;
+            health = 4500;
             armor = 10;
             hitSize = 25;
             speed = 0.3f;
@@ -193,7 +193,7 @@ public class FOSUnitTypes {
                     }};
                     bullet = new SapBulletType(){{
                         length = 80f;
-                        damage = 30;
+                        damage = 60;
                         hitColor = color = Color.valueOf("bf92f9");
                         sapStrength = 0.6f;
                         despawnEffect = Fx.none;
@@ -582,7 +582,7 @@ public class FOSUnitTypes {
         }};
 
         sergeant = new TrailUnitType("sergeant"){{
-            health = 220;
+            health = 720;
             armor = 4;
             hitSize = 12;
             speed = 2f;
@@ -681,7 +681,7 @@ public class FOSUnitTypes {
                         trailWidth = 4;
                         trailColor = FOSPal.hackedBack;
 
-                        intervalBullets = 2;
+                        intervalBullets = 8;
                         bulletInterval = 4f;
                         intervalBullet = new LightningBulletType(){{
                             lightningLength = 4;
@@ -689,7 +689,7 @@ public class FOSUnitTypes {
                             lightningColor = FOSPal.hacked;
                             status = injected;
                             statusDuration = 300f;
-                            damage = 20;
+                            damage = 2;
                         }};
 
                         fragBullets = 2;
@@ -917,7 +917,7 @@ public class FOSUnitTypes {
                         rotationLimit = 30f;
                         layerOffset = -0.0001f;
                         mirror = true;
-                        reload = 66f;
+                        reload = 40f;
                         shootSound = Sounds.shootSmite;
 
                         bullet = new RailBulletType(){{
