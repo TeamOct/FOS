@@ -1625,6 +1625,7 @@ public class FOSBlocks {
         hiveFloor = new Floor("hive"){{
             variants = 5;
             walkSound = Sounds.plantBreak;
+            placeableOn = false;
         }};
         bugSpawn = new BugSpawn("bug-spawn"){{
             scaledHealth = 400;
