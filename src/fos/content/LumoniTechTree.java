@@ -142,8 +142,20 @@ public class LumoniTechTree {
                 });
             });
 
-            // FLUID PUMP(S?)
-            node(pumpjack);
+            // FLUIDS
+            node(pumpjack, () ->
+                node(copperPipe, () -> {
+                    node(brassPipe);
+                    node(fluidRouter, () -> {
+                        node(fluidBarrel, () -> {
+                            node(fluidTank);
+                        });
+                    });
+                    node(fluidJunction, () ->
+                        node(fluidBridge)
+                    );
+                })
+            );
 
             // ORE DETECTORS
             node(oreDetector, () -> {

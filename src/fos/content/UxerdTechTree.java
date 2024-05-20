@@ -48,7 +48,7 @@ public class UxerdTechTree {
                 node(solarPanelMedium);
                 node(resourceExtractor, () -> {
                     node(cliffDetonator);
-                    node(sublimator, () -> node(fluidPipe));
+                    node(sublimator, () -> node(copperPipe));
                     node(cuberiumSynthesizer, () -> {
                         /* TODO: move to Lumoni */ node(orbitalAccelerator, Seq.with(new Research(coreFortress)), () -> {});
                         node(bigBoy);

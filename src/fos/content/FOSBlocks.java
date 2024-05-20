@@ -32,7 +32,7 @@ import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.environment.*;
-import mindustry.world.blocks.liquid.Conduit;
+import mindustry.world.blocks.liquid.*;
 import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.storage.Unloader;
@@ -63,7 +63,7 @@ public class FOSBlocks {
     spaceDuct, spaceRouter, spaceBridge, itemCatapult, tinRouter, tinDistributor, tinJunction, tinBridge, tinBelt, tinSorter, flowGate, liquidConveyor,
 
     // FLUIDS
-    fluidPipe, pumpjack,
+    copperPipe, brassPipe, fluidJunction, fluidBridge, pumpjack, fluidRouter, fluidBarrel, fluidTank,
 
     // POWER
     tinWire, copperWire, brassWire, tinWirePole, copperWirePole, brassWirePole, windTurbine, burnerGenerator, heatGenerator, plasmaLauncher, solarPanelMedium,
@@ -1310,11 +1310,30 @@ public class FOSBlocks {
         }};
         //endregion
         //region liquids
-        fluidPipe = new Conduit("fluid-pipe"){{
-            health = 5;
-            size = 1;
+        copperPipe = new Conduit("copper-pipe"){{
+            health = 50;
             liquidCapacity = 20f;
-            requirements(Category.liquid, with(tin, 1, silver, 1));
+            requirements(Category.liquid, with(copper, 2));
+        }};
+        brassPipe = new ArmoredConduit("brass-pipe"){{
+            health = 100;
+            liquidCapacity = 20f;
+            requirements(Category.liquid, with(brass, 1));
+        }};
+        fluidJunction = new LiquidJunction("fluid-junction"){{
+            health = 50;
+            solid = false;
+            requirements(Category.liquid, with(tin, 5, copper, 5));
+            ((Conduit)copperPipe).junctionReplacement = this;
+            ((Conduit)brassPipe).junctionReplacement = this;
+        }};
+        fluidBridge = new LiquidBridge("fluid-bridge"){{
+            health = 100;
+            range = 4;
+            liquidCapacity = 20f;
+            requirements(Category.liquid, with(tin, 5, copper, 10));
+            ((Conduit)copperPipe).bridgeReplacement = this;
+            ((Conduit)brassPipe).bridgeReplacement = this;
         }};
         pumpjack = new Pump("pumpjack"){{
             scaledHealth = 60;
@@ -1322,6 +1341,23 @@ public class FOSBlocks {
             pumpAmount = 0.25f;
             liquidCapacity = 45f;
             requirements(Category.liquid, with(tin, 150, silicon, 50, copper, 100, vanadium, 75));
+        }};
+        fluidRouter = new LiquidRouter("fluid-router"){{
+            scaledHealth = 75;
+            liquidCapacity = 30f;
+            requirements(Category.liquid, with(copper, 3));
+        }};
+        fluidBarrel = new LiquidRouter("fluid-barrel"){{
+            scaledHealth = 75;
+            size = 2;
+            liquidCapacity = 300f;
+            requirements(Category.liquid, with(copper, 15, brass, 10));
+        }};
+        fluidTank = new LiquidRouter("fluid-tank"){{
+            scaledHealth = 75;
+            size = 3;
+            liquidCapacity = 1000f;
+            requirements(Category.liquid, with(copper, 50, brass, 50, vanadium, 50));
         }};
         //endregion
         //region power
