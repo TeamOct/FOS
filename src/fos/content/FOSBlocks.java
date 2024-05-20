@@ -1629,7 +1629,7 @@ public class FOSBlocks {
         bugSpawn = new BugSpawn("bug-spawn"){{
             scaledHealth = 400;
             size = 3;
-            interval = 20 * 60;
+            interval = 30 * 60;
             drawTeamOverlay = false;
             customShadow = true;
             createRubble = false;

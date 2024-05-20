@@ -24,7 +24,7 @@ public class EvolutionController {
     /** External evolution factor: captured sectors. */
     protected float sectorCoefficient = 0.01f;
     /** External evolution factor: researched content. */
-    protected float researchCoefficient = 0.005f;
+    protected float researchCoefficient = 0.0025f;
 
     protected ObjectFloatMap<SectorPreset> sectorBonuses = new ObjectFloatMap<>();
 
