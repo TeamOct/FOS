@@ -784,7 +784,8 @@ public class FOSUnitTypes {
             );
         }};
 
-        radix = new FOSUnitType("radix"){{
+        radix = new AliothUnitType("radix"){{
+            constructor = LegsUnit::create;
             health = 1000;
             armor = 5;
             speed = 0.6f;
@@ -800,13 +801,13 @@ public class FOSUnitTypes {
             legExtension = -3.0F;
             legBaseOffset = 4.0F;
             legMaxLength = 1.1F;
-            legMinLength = 0.2F;
+            legMinLength = 0.16F;
             legLengthScl = 0.925F;
             legForwardScl = 0.9075F;
             legMoveSpace = 2F;
 
             weapons.add(
-                    new Weapon("fos-e-weapon"){{
+                    new Weapon("cp-e-weapon"){{
                         x = 0; y = 3;
                         recoil = 1f;
                         mirror = false;
@@ -838,7 +839,8 @@ public class FOSUnitTypes {
                     }}
             );
         }};
-        foetus = new FOSUnitType("foetus"){{
+        foetus = new AliothUnitType("foetus"){{
+            constructor = LegsUnit::create;
             health = 1950;
             armor = 5;
             speed = 0.4f;
@@ -859,16 +861,18 @@ public class FOSUnitTypes {
             legForwardScl = 0.9075F;
             legMoveSpace = 1.085F;
 
-            abilities.add(new EnergyFieldAbility(20f, 30f, 90f){{
+            abilities.add(new EnergyFieldAbility(20f, 90f, 90f){{
                 x = 0; y = -2;
                 statusDuration = 120f;
                 maxTargets = 10;
                 color = Pal.surge;
+                effectRadius = 3f;
                 healPercent = 2f;
+                healEffect = Fx.blastExplosion; hitEffect = Fx.blastExplosion; damageEffect = Fx.chainLightning;
                 //buildingDamageMultiplier = 1.25f;
             }});
 
-            weapons.add(new PointDefenseWeapon("fos-e-point-defense-small"){{
+            weapons.add(new PointDefenseWeapon("cp-e-point-defense-small"){{
                 x = 9; y = -3;
                 mirror = true;
                 rotate = true;
@@ -884,11 +888,12 @@ public class FOSUnitTypes {
                     shootEffect = Fx.sparkShoot;
                     hitEffect = Fx.pointHit;
                     maxRange = 175f;
-                    damage = 50f;
+                    damage = 10f;
                 }};
             }});
         }};
-        vitarus = new FOSUnitType("vitarus"){{
+        vitarus = new AliothUnitType("vitarus"){{
+            constructor = LegsUnit::create;
             health = 3100;
             armor = 7;
             speed = 0.35f;
@@ -909,9 +914,9 @@ public class FOSUnitTypes {
             legMoveSpace = 1.085F;
 
             weapons.add(
-                    new Weapon("fos-e-railgun"){{
-                        x = 12; y = 4;
-                        recoil = 5f;
+                    new Weapon("cp-e-railgun"){{
+                        x = 9.5f; y = 4f;
+                        recoil = 3f;
                         rotate = true;
                         rotateSpeed = 1.25f;
                         rotationLimit = 30f;
@@ -928,7 +933,7 @@ public class FOSUnitTypes {
                             //buildingDamageMultiplier = 0.75f;
                             length = 100f;
                             hitColor = Pal.surge;
-                            endEffect = Fx.dynamicSpikes.wrap(Pal.surge, 16f);
+                            hitEffect = endEffect = Fx.dynamicSpikes.wrap(Pal.surge, 16f);
                             shootEffect = Fx.shootBig2;
                             smokeEffect = Fx.colorSpark;
                             lineEffect = Fx.chainLightning;
@@ -947,9 +952,9 @@ public class FOSUnitTypes {
                             }};
                         }};
                     }},
-                    new PointDefenseWeapon("fos-e-point-defense-medium"){{
-                        x = 0; y = 1;
-                        mirror = false;
+                    new PointDefenseWeapon("cp-e-point-defense-small"){{
+                        x = 30f/4f; y = -25f/4f;
+                        mirror = true;
                         rotate = true;
                         rotateSpeed = 10f;
                         reload = 9f;
@@ -962,8 +967,8 @@ public class FOSUnitTypes {
                             shootSound = Sounds.lasershoot;
                             shootEffect = Fx.sparkShoot;
                             hitEffect = Fx.pointHit;
-                            maxRange = 200f;
-                            damage = 45f;
+                            maxRange = 160f;
+                            damage = 25f;
                         }};
                     }}
             );
