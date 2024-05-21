@@ -784,7 +784,7 @@ public class FOSUnitTypes {
             );
         }};
 
-        radix = new AliothUnitType("radix"){{
+        radix = new FOSUnitType("radix"){{
             constructor = LegsUnit::create;
             health = 1000;
             armor = 5;
@@ -839,7 +839,7 @@ public class FOSUnitTypes {
                     }}
             );
         }};
-        foetus = new AliothUnitType("foetus"){{
+        foetus = new FOSUnitType("foetus"){{
             constructor = LegsUnit::create;
             health = 1950;
             armor = 5;
@@ -892,7 +892,7 @@ public class FOSUnitTypes {
                 }};
             }});
         }};
-        vitarus = new AliothUnitType("vitarus"){{
+        vitarus = new FOSUnitType("vitarus"){{
             constructor = LegsUnit::create;
             health = 3100;
             armor = 7;
