@@ -26,7 +26,7 @@ import mindustry.entities.pattern.*;
 import mindustry.gen.Sounds;
 import mindustry.graphics.*;
 import mindustry.type.*;
-import mindustry.ui.Styles;
+import mindustry.ui.*;
 import mindustry.world.Block;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.*;
@@ -66,7 +66,7 @@ public class FOSBlocks {
     copperPipe, brassPipe, fluidJunction, fluidBridge, pumpjack, fluidRouter, fluidBarrel, fluidTank,
 
     // POWER
-    tinWire, copperWire, brassWire, tinWirePole, copperWirePole, brassWirePole, windTurbine, burnerGenerator, heatGenerator, plasmaLauncher, solarPanelMedium,
+    tinWire, copperWire, brassWire, tinWirePole, copperWirePole, brassWirePole, windTurbine, steamTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
     copperBattery, brassBattery,
 
     // DEFENSE
@@ -246,10 +246,10 @@ public class FOSBlocks {
             itemCapacity = 5;
             liquidCapacity = 60f;
             consumePower(5f);
-            consumeLiquid(arkycite, 20f/60f);
+            consumeLiquid(arkycite, 0.5f);
             craftTime = 60f;
             outputItem = new ItemStack(sulphur, 1);
-            outputLiquids = LiquidStack.with(oil, 14f/60f, water, 4f/60f);
+            outputLiquids = LiquidStack.with(oil, 18f/60f, nitrogen, 6f/60f);
             liquidOutputDirections = new int[]{0, 2};
             craftEffect = FOSFx.refinerySmoke;
             lightRadius = 32f;
@@ -1425,24 +1425,40 @@ public class FOSBlocks {
                 new DrawRegion("-rotator", 15f, true)
             );
         }};
-        burnerGenerator = new ConsumeGenerator("burner-generator"){{
-            health = 900;
-            size = 3;
-            liquidCapacity = 60f;
-            powerProduction = 15f;
-            generateEffect = FOSFx.generatorSmoke;
-            effectChance = 0.05f;
-            consume(new ConsumeLiquidFlammable(0.4f, 0.5f){{
-                filter = l -> l.flammability >= minFlammability && !l.gas;
-            }});
-            drawer = new DrawMulti(
-                new DrawRegion("-bottom"),
-                new DrawLiquidTile(arkycite, 8f),
-                new DrawLiquidTile(oil, 8f),
-                new DrawDefault()
-            );
-            requirements(Category.power, with(tin, 75, brass, 150, vanadium, 100));
-        }};
+        steamTurbine = new ConsumeGenerator("steam-turbine"){
+            {
+                health = 900;
+                size = 3;
+                liquidCapacity = 60f;
+                powerProduction = 15f;
+                generateEffect = FOSFx.generatorSmoke;
+                effectChance = 0.05f;
+                consume(new ConsumeLiquidFlammable(0.4f, 0.2f){{
+                    filter = l -> l.flammability >= minFlammability && !l.gas;
+                }});
+                consumeLiquid(water, 0.5f);
+                drawer = new DrawMulti(
+                    new DrawRegion("-bottom"),
+                    new DrawLiquidTile(arkycite, 8f),
+                    new DrawLiquidTile(oil, 8f),
+                    new DrawDefault()
+                );
+                requirements(Category.power, with(tin, 75, brass, 150, vanadium, 100));
+            }
+
+            // ugh
+            @Override
+            public void setBars() {
+                super.setBars();
+                removeBar("power");
+                addLiquidBar(build -> build.liquids.get(oil) > 0 ? oil : arkycite);
+                addBar("power", (GeneratorBuild entity) -> new Bar(() ->
+                    Core.bundle.format("bar.poweroutput",
+                        Strings.fixed(entity.getPowerProduction() * 60 * entity.timeScale(), 1)),
+                    () -> Pal.powerBar,
+                    () -> entity.productionEfficiency));
+            }
+        };
         heatGenerator = new HeatGenerator("heat-generator"){{
             health = 480;
             size = 2;
