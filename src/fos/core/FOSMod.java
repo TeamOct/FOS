@@ -150,12 +150,12 @@ public class FOSMod extends Mod {
         //debug-only insect pathfinder test
         if (settings.getBool("fos-pathfinder-debug", false)) {
             Events.run(EventType.Trigger.draw, () -> {
-                for (int i = 0; i < FOSVars.deathMap.length; i++) {
-                    if (FOSVars.deathMap[i] == 0) continue;
+                for (int i = 0; i < FOSVars.deathMapControl.deathMap.length; i++) {
+                    if (FOSVars.deathMapControl.deathMap[i] == 0) continue;
 
                     Draw.z(Layer.light);
                     Draw.color(Color.red);
-                    Draw.alpha(FOSVars.deathMap[i] / 1000f);
+                    Draw.alpha(FOSVars.deathMapControl.deathMap[i] / 100f);
 
                     Draw.rect("empty", world.tiles.geti(i).worldx(), world.tiles.geti(i).worldy());
 

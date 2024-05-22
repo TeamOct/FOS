@@ -48,7 +48,7 @@ public class FOSPathfinder implements Runnable{
             if (PathTile.legSolid(data)) return -1;
             return 1 + (PathTile.deep(data) ? 6000 : 0) + //leg units can now drown
                 (PathTile.solid(data) ? 5 : 0) +
-                FOSVars.deathMap[tile]; //take into account recent unit deaths
+                FOSVars.deathMapControl.deathMap[tile]; //take into account recent unit deaths
         }
     );
 
@@ -75,7 +75,7 @@ public class FOSPathfinder implements Runnable{
             threadList = new Seq<>();
             mainList = new Seq<>();
             //TODO: death map save
-            FOSVars.deathMap = new int[world.width() * world.height()];
+            //FOSVars.deathMap = new short[world.width() * world.height()];
             clearCache();
 
             for(int i = 0; i < tiles.length; i++){
