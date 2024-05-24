@@ -62,6 +62,13 @@ public class FOSMod extends Mod {
             clientLoaded();
         });
 
+        Events.run(EventType.Trigger.newGame, () -> {
+            // remove landing cutscene on Awakening
+            if (state.rules.sector != null && state.rules.sector == FOSSectors.awakening.sector) {
+                Reflect.set(renderer, "landTime", 0f);
+            }
+        });
+
         Events.run(EventType.Trigger.update, () -> {
             if (!mobile) {
                 boolean useDiscord = !OS.hasProp("nodiscord");

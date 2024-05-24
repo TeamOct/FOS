@@ -10,6 +10,7 @@ import arc.struct.Seq;
 import arc.util.Time;
 import arc.util.io.*;
 import fos.audio.FOSLoopsCore;
+import fos.core.FOSVars;
 import fos.type.blocks.environment.UndergroundOreBlock;
 import mindustry.Vars;
 import mindustry.game.Team;
@@ -135,7 +136,7 @@ public class DetectorCoreBlock extends CoreBlock {
         @Override
         public void draw() {
             super.draw();
-            if (canConsume() && team == player.team()) {
+            if (canConsume() && team == player.team() && FOSVars.mapStarted()) {
                 Draw.z(Layer.light);
                 Draw.alpha(0.6f);
                 Lines.stroke(2.5f, effectColor);
@@ -174,7 +175,7 @@ public class DetectorCoreBlock extends CoreBlock {
 
         @Override
         public boolean shouldActiveSound() {
-            return canConsume() && showOres;
+            return canConsume() && showOres && FOSVars.mapStarted();
         }
 
         public float radarRot() {

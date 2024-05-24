@@ -12,6 +12,7 @@ import static mindustry.Vars.world;
 
 public class DeathMapControl implements SaveFileReader.CustomChunk {
     public volatile short[] deathMap;
+    public boolean shouldSave;
 
     public DeathMapControl() {
         Events.on(EventType.ResetEvent.class, e ->
@@ -34,6 +35,8 @@ public class DeathMapControl implements SaveFileReader.CustomChunk {
                 if (deathMap[tile.array()] < 0) {
                     deathMap[tile.array()] = Short.MAX_VALUE;
                 }
+
+                shouldSave = true;
             });
         });
 
@@ -65,10 +68,6 @@ public class DeathMapControl implements SaveFileReader.CustomChunk {
 
     @Override
     public boolean shouldWrite() {
-        if (deathMap == null) return false;
-        for (int i : deathMap) {
-            if (i != 0) return true;
-        }
-        return false;
+        return deathMap != null && shouldSave;
     }
 }

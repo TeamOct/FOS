@@ -3,6 +3,7 @@ package fos.core;
 import arc.Core;
 import arc.struct.Seq;
 import fos.ai.FOSPathfinder;
+import fos.content.FOSSectors;
 import fos.controllers.*;
 import fos.files.InternalFileTree;
 import fos.graphics.FOSOreRenderer;
@@ -15,6 +16,8 @@ import mindustry.entities.units.BuildPlan;
 import mindustry.mod.Mods;
 
 import java.util.*;
+
+import static mindustry.Vars.*;
 
 public class FOSVars {
     /** A research dialog that shows one of the two tech trees declared below. */
@@ -89,5 +92,11 @@ public class FOSVars {
 
         TechTree.roots.remove(mechTree);
 */
+    }
+
+    public static boolean mapStarted() {
+        return state.rules.sector != null && state.rules.sector == FOSSectors.awakening.sector ?
+            state.tick >= 160 :
+            renderer.getLandTime() <= 0;
     }
 }
