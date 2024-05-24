@@ -1,6 +1,7 @@
 package fos.files;
 
 import arc.files.*;
+import arc.util.OS;
 
 /**
  * Use for JAR internal navigation
@@ -19,7 +20,7 @@ public class InternalFileTree {
 
         String classPath = owner.getResource("").getFile().replaceAll("%20", " ");
         classPath = classPath.substring(classPath.indexOf(":")+2);
-        String jarPath = classPath.substring(0, classPath.indexOf("!"));
+        String jarPath = (OS.isLinux ? "/" : "") + classPath.substring(0, classPath.indexOf("!"));
 
         root = new ZipFi(new Fi(jarPath));
     }
