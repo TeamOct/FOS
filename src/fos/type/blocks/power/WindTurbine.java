@@ -16,7 +16,6 @@ import mindustry.world.meta.*;
 
 public class WindTurbine extends PowerGenerator {
     public float displayEfficiencyScale = 1f;
-    public float rotateSpeed = 1f;
     public Attribute attr = FOSAttributes.windPower;
 
     public WindTurbine(String name) {
@@ -36,7 +35,7 @@ public class WindTurbine extends PowerGenerator {
             if (t != null && t.solid()) {
                 a += 1 / (size * 2f);
                 Draw.z(Layer.blockOver);
-                Drawf.square((x + edge.x) * 8, (y + edge.y) * 8, 4f, Mathf.degRad * 45, Color.valueOf("ff0000"));
+                Drawf.square((x + edge.x) * 8, (y + edge.y) * 8, 4f, Mathf.PI / 8, Color.valueOf("ff0000"));
             }
         }
 

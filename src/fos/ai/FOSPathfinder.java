@@ -74,8 +74,6 @@ public class FOSPathfinder implements Runnable{
             wheight = world.height();
             threadList = new Seq<>();
             mainList = new Seq<>();
-            //TODO: death map save
-            //FOSVars.deathMap = new short[world.width() * world.height()];
             clearCache();
 
             for(int i = 0; i < tiles.length; i++){

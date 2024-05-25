@@ -5,6 +5,7 @@ import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.math.geom.*;
 import arc.util.Tmp;
+import fos.graphics.FOSPal;
 import fos.type.bullets.OhioBeamBulletType;
 import mindustry.entities.Effect;
 import mindustry.gen.*;
@@ -186,11 +187,21 @@ public class FOSFx {
 
         Drawf.light(e.x, e.y, 20f * e.fslope(), Pal.lightFlame, 0.5f);
     }),
+
     fireSmokeLong = new Effect(300f, e -> {
         color(Color.gray);
 
         randLenVectors(e.id, 1, 2f + e.fin() * 7f, (x, y) -> {
             Fill.circle(e.x + x, e.y + y, 0.2f + e.fslope() * 1.5f);
         });
+    }),
+
+    corruLogo = new Effect(50f, e -> {
+        Draw.color(FOSPal.hacked);
+        Draw.alpha(e.fout());
+
+        Draw.rect(Core.atlas.find("fos-team-corru-upscale"), e.x, e.y, 64 * (1 + e.fin()), 64 * (1 + e.fin()));
+
+        Draw.reset();
     });
 }

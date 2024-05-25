@@ -1418,11 +1418,10 @@ public class FOSBlocks {
             powerProduction = 0.8f;
             requirements(Category.power, with(tin, 40));
             researchCost = with(tin, 160);
-            rotateSpeed = 1.8f;
             squareSprite = false;
             drawer = new DrawMulti(
                 new DrawDefault(),
-                new DrawRegion("-rotator", 15f, true)
+                new DrawRegion("-rotator", 4f, true)
             );
         }};
         steamTurbine = new ConsumeGenerator("steam-turbine"){

@@ -66,6 +66,8 @@ public class FOSMod extends Mod {
             // remove landing cutscene on Awakening
             if (state.rules.sector != null && state.rules.sector == FOSSectors.awakening.sector) {
                 Reflect.set(renderer, "landTime", 0f);
+                var core = FOSTeams.corru.core();
+                Time.run(160f, () -> FOSFx.corruLogo.at(core.x, core.y));
             }
         });
 
