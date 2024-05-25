@@ -8,7 +8,7 @@ import arc.util.*;
 import arc.util.io.Writes;
 import mindustry.Vars;
 import mindustry.content.StatusEffects;
-import mindustry.entities.Effect;
+import mindustry.entities.*;
 import mindustry.entities.units.BuildPlan;
 import mindustry.game.EventType;
 import mindustry.gen.*;
@@ -59,21 +59,7 @@ public class WaveSpawnerBlock extends Block {
 
     @SuppressWarnings("unused")
     public class WaveSpawnerBuild extends Building {
-        public Cons<EventType.WaveEvent> listener = e -> {
-            // mindustry's wave counter is a mess, so add 1
-            if (isValid() && Vars.state.wave == wave + 1) {
-                Time.run(spawnDelay, () -> {
-                    Unit u = unitType.spawn(team, this);
-                    u.rotation(90f);
-                    if (boss) u.apply(StatusEffects.boss);
-
-                    // consider this unit spawned from a wave.
-                    Events.fire(new EventType.UnitSpawnEvent(u));
-
-                    tileOn().remove();
-                });
-            }
-        };
+        public Cons<EventType.WaveEvent> listener;
         public float progress;
 
         @Override
@@ -94,6 +80,26 @@ public class WaveSpawnerBlock extends Block {
 
         @Override
         public void created() {
+            listener = e -> {
+                // mindustry's wave counter is a mess, so add 1
+                if (isValid() && Vars.state.wave == wave + 1) {
+                    Time.run(spawnDelay - 5, () -> {
+                        // LEAVE THE SPAWN AREA IMMEDIATELY
+                        // annihilation imminent
+                        Damage.damage(null, x, y, 80f, 9999999f, true);
+                    });
+                    Time.run(spawnDelay, () -> {
+                        Unit u = unitType.spawn(team, this);
+                        u.rotation(90f);
+                        if (boss) u.apply(StatusEffects.boss);
+
+                        // consider this unit spawned from a wave.
+                        Events.fire(new EventType.UnitSpawnEvent(u));
+
+                        tileOn().remove();
+                    });
+                }
+            };
             Events.on(EventType.WaveEvent.class, listener);
         }
 
