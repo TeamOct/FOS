@@ -868,7 +868,8 @@ public class FOSUnitTypes {
                 color = Pal.surge;
                 effectRadius = 3f;
                 healPercent = 2f;
-                healEffect = Fx.blastExplosion; hitEffect = Fx.blastExplosion; damageEffect = Fx.chainLightning;
+                healEffect = hitEffect = Fx.blastExplosion;
+                damageEffect = Fx.chainLightning;
                 //buildingDamageMultiplier = 1.25f;
             }});
 
@@ -1065,7 +1066,7 @@ public class FOSUnitTypes {
                     shoot.shots = 5;
                     inaccuracy = 11.25f;
                     shootSound = Sounds.artillery;
-                    bullet = new ArtilleryBulletType(){{
+                    bullet = new BasicBulletType(){{
                         width = height = 12;
                         speed = 3f;
                         lifetime = 60f;

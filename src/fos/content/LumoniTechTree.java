@@ -6,6 +6,7 @@ import mindustry.type.ItemStack;
 import static fos.content.FOSBlocks.*;
 import static fos.content.FOSFluids.tokicite;
 import static fos.content.FOSItems.*;
+import static fos.content.FOSObjectives.*;
 import static fos.content.FOSSectors.*;
 import static fos.content.FOSUnitTypes.*;
 import static fos.content.FOSWeaponModules.*;
@@ -215,10 +216,16 @@ public class LumoniTechTree {
 */
                 //TODO: artillery
                 soontm();
-                //TODO: support
-                soontm();
+                // SUPPORT
+                node(support1, Seq.with(new SectorComplete(ruins)), () ->
+                    node(support2, () ->
+                        node(support3, () ->
+                            soontm()
+                        )
+                    )
+                );
                 // BOSS-SPECIFIC WEAPONS
-                node(legionFabricator, Seq.with(new FOSObjectives.DefeatBoss(legion)), () -> {
+                node(legionFabricator, Seq.with(new DefeatBoss(legion)), () -> {
                     //TODO: citadel shotgun? or stickybomb launcher?
                     soontm();
                 });
@@ -277,6 +284,6 @@ public class LumoniTechTree {
     }
     
     public static void soontm() {
-        node(soontm, Seq.with(new FOSObjectives.TBDObjective()), () -> {});
+        node(soontm, Seq.with(new TBDObjective()), () -> {});
     }
 }

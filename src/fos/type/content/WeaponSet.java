@@ -1,5 +1,6 @@
 package fos.type.content;
 
+import arc.Core;
 import arc.math.Mathf;
 import arc.struct.Seq;
 import fos.content.FOSUnitTypes;
@@ -9,18 +10,19 @@ import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.Unit;
 import mindustry.type.*;
+import mindustry.ui.Styles;
 import mindustry.world.meta.*;
 
 //YES, this looks very cursed lmao
 /**
- * FOR MODDERS: applying this "status effect" will have no effect whatsoever
+ * FOR MODDERS... AND SCHEME SIZE HACKERS, APPARENTLY: applying this "status effect" will have no effect whatsoever
  */
 public class WeaponSet extends StatusEffect {
     public static Seq<WeaponSet> sets = new Seq<>();
 
     public int id;
     /** Weapons this set contains. */
-    public Seq<Weapon> weapons;
+    public Seq<Weapon> weapons = new Seq<>();
     /** Abilities this set contains, if any. */
     public Seq<Ability> abilities = new Seq<>();
     /** Items required to produce the set. */
@@ -32,13 +34,16 @@ public class WeaponSet extends StatusEffect {
     /** Custom research cost. */
     public ItemStack[] researchCost;
 
-
-    public WeaponSet(String name, Weapon... weapons) {
+    public WeaponSet(String name) {
         super(name);
         id = sets.size;
         sets.add(this);
         permanent = false;
-        this.weapons = new Seq<>(weapons);
+    }
+
+    public WeaponSet(String name, Weapon... weapons) {
+        this(name);
+        this.weapons.addAll(weapons);
     }
 
     public WeaponSet(String name, Seq<Ability> abilities, Weapon... weapons) {
@@ -69,20 +74,11 @@ public class WeaponSet extends StatusEffect {
     public void setStats() {
         super.setStats();
 
-        stats.add(Stat.buildCost, StatValues.items(reqs));
-        stats.add(Stat.weapons, StatValues.weapons(FOSUnitTypes.lord, weapons));
-        // stolen from UnitType. TODO: this sucks.
-/*
+        stats.add(Stat.buildCost, reqs.length == 0 ? StatValues.string("[gray]" + Core.bundle.get("none") + "[]") : StatValues.items(reqs));
+        stats.add(Stat.weapons, StatValues.weapons(FOSUnitTypes.weaponSetInit, weapons));
         if (abilities.any()) {
-            var unique = new ObjectSet<String>();
-
-            for(Ability a : abilities){
-                if(a.display && unique.add(a.localized())){
-                    stats.add(Stat.abilities, a.localized());
-                }
-            }
+            stats.add(Stat.abilities, abilities(this.abilities));
         }
-*/
     }
 
     @Override
@@ -148,6 +144,34 @@ public class WeaponSet extends StatusEffect {
         this.produceTime = ticks;
 
         return this;
+    }
+
+    // Stolen from Mindustry v146 because this mod's annotation processor is outdated as fuck.
+    // @nekit508 pls fix
+    public static StatValue abilities(Seq<Ability> abilities) {
+        return table -> {
+            table.row();
+            table.table(t -> {
+                int count = 0;
+                for(Ability ability : abilities){
+                    if(ability.display){
+                        t.table(Styles.grayPanel, a -> {
+                            a.add("[accent]" + ability.localized()).padBottom(4).center().top().expandX();
+                            a.row();
+                            a.left().top().defaults().left();
+                            if(Core.bundle.has(ability.localized() + ".description")){
+                                a.add(Core.bundle.get(ability.localized() + ".description")).wrap().width(350f);
+                                a.row();
+                            }
+                        }).pad(5).margin(10).growX().top().uniformX();
+                        if((++count) == 2){
+                            count = 0;
+                            t.row();
+                        }
+                    }
+                }
+            });
+        };
     }
 }
 
