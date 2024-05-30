@@ -25,7 +25,7 @@ import mindustry.gen.*;
 import mindustry.graphics.Layer;
 import mindustry.mod.Mod;
 import mindustry.mod.Mods.LoadedMod;
-import mindustry.ui.*;
+import mindustry.ui.Styles;
 import mindustry.ui.dialogs.PlanetDialog;
 import mma.annotations.ModAnnotations;
 
@@ -156,6 +156,9 @@ public class FOSMod extends Mod {
         //initialize mod variables
         FOSVars.load();
 
+        //anything after this is client-side only.
+        if (headless) return;
+
         //debug-only insect pathfinder test
         if (settings.getBool("fos-pathfinder-debug", false)) {
             Events.run(EventType.Trigger.draw, () -> {
@@ -172,9 +175,6 @@ public class FOSMod extends Mod {
                 }
             });
         }
-
-        //anything after this should not be initialized on dedicated servers.
-        if (headless) return;
 
         //an anti-cheat system from long ago, is it really necessary now?
         LoadedMod xf = mods.list().find(m ->
@@ -205,11 +205,14 @@ public class FOSMod extends Mod {
         new DamageDisplay();
 
         //add a new font page for... reasons
+        //FIXME
+/*
         Seq<Font> fonts = Seq.with(Fonts.def, Fonts.outline);
         fonts.each(f -> {
             var regions = f.getRegions();
             regions.add(new TextureRegion());
         });
+*/
 
         //init modded teams
         FOSTeams.load();
@@ -240,6 +243,10 @@ public class FOSMod extends Mod {
         //disclaimer for non-debug
         if (FOSVars.earlyAccess && !FOSVars.debug)
             ui.showOkText("@fos.earlyaccesstitle", bundle.get("fos.earlyaccess"), () -> {});
+
+        //unsupported on bleeding-edge notice
+        if (becontrol.active())
+            ui.showOkText("@fos.beunsupportedtitle", bundle.get("fos.beunsupported"), () -> {});
 
         //unlock every planet if debug
         if (FOSVars.debug)
@@ -398,12 +405,12 @@ public class FOSMod extends Mod {
                 }
                 """,
                 """
-                    uniform sampler2D u_texture;
-                    varying vec2 v_texCoords;
-                    void main(){
-                      gl_FragColor = texture2D(u_texture, v_texCoords);
-                    }
-                    """
+                uniform sampler2D u_texture;
+                varying vec2 v_texCoords;
+                void main(){
+                  gl_FragColor = texture2D(u_texture, v_texCoords);
+                }
+                """
             );
             final ScreenQuad quad = new ScreenQuad();
 
