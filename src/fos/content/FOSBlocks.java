@@ -1803,6 +1803,7 @@ public class FOSBlocks {
             itemCapacity = 5000;
             unitType = FOSUnitTypes.king;
             squareSprite = false;
+            researchCostMultiplier = 0.1f;
             requirements(Category.effect, with(tin, 2500, silver, 2000, diamond, 750, silicon, 2500, vanadium, 1500));
         }};
         coreMetropolis = new DetectorCoreBlock("core-metropolis"){{
