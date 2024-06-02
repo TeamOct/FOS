@@ -14,6 +14,8 @@ import mindustry.world.blocks.payloads.UnitPayload;
 import mindustry.world.blocks.units.UnitBlock;
 import mindustry.world.meta.BuildVisibility;
 
+import static mindustry.Vars.net;
+
 public class BugSpawn extends UnitBlock {
     public float interval;
 
@@ -36,6 +38,8 @@ public class BugSpawn extends UnitBlock {
 
         @Override
         public void updateTile() {
+            if (net.client()) return;
+
             if (evo() < 0.05f) return;
 
             progress += delta() * (1 + Math.max(0, evo() - 0.25f));
@@ -58,6 +62,8 @@ public class BugSpawn extends UnitBlock {
         @Override
         public void onDestroyed() {
             super.onDestroyed();
+
+            if (net.client()) return;
 
             //spawn a bunch of bugs on nest destruction
             for (int i = 0; i < Mathf.random(3, 6); i++) {
