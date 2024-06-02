@@ -49,11 +49,13 @@ public class LumoniTechTree {
                             node(brassWirePole);
                         });
                     });
-                }
-                );
+                });
                 node(copperBattery, () ->
                     node(brassBattery)
                 );
+                node(beamMender, () -> {
+                    soontm();
+                });
                 soontm();
             });
 

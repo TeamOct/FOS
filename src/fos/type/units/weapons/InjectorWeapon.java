@@ -20,14 +20,14 @@ public class InjectorWeapon extends Weapon {
 
         if (bullet instanceof InjectorBulletType b) {
             t.row();
-            t.add("[lightgray]" + Core.bundle.get("stat.hackchance") + ": [][white]" + (b.minChance() == b.maxChance() ? (Mathf.round(b.minChance() * 100) + "%")
+            t.add("[lightgray]" + Core.bundle.get("stat.fos-hackchance") + ": [][white]" + (b.minChance() == b.maxChance() ? (Mathf.round(b.minChance() * 100) + "%")
                 : (Mathf.round(b.minChance() * 100) + "~" + Mathf.round(b.maxChance() * 100) + "%")));
             t.row();
-            t.add("[lightgray]" + Core.bundle.get("stat.hackhpthreshold") + ": [][white]" + Mathf.round(b.maxHP()) + "~" + Mathf.round(b.minHP()));
+            t.add("[lightgray]" + Core.bundle.get("stat.fos-hackhpthreshold") + ": [][white]" + Mathf.round(b.maxHP()) + "~" + Mathf.round(b.minHP()));
 
             if (b.attacksGuardians()) {
                 t.row();
-                t.add("@stat.attacksbosses");
+                t.add("@stat.fos-attacksbosses");
             }
         }
     }

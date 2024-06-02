@@ -1,10 +1,13 @@
 package fos.type.draw;
 
-import mindustry.world.meta.Stat;
+import mindustry.world.meta.*;
 
 public class FOSStats {
     public static final Stat
-    lifetime = new Stat("lifetime"),
-    unitDamageRes = new Stat("unitdamageres"),
-    hackChanceMultiplier = new Stat("hackchancemultiplier");
+    lifetime = new Stat("fos-lifetime"),
+    hackChanceMultiplier = new Stat("fos-hackchancemultiplier"),
+
+    unitDamageRes = new Stat("fos-unitdamageres"),
+
+    maxBeams = new Stat("fos-maxbeams", StatCat.power);
 }

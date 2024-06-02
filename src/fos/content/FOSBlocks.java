@@ -27,7 +27,7 @@ import mindustry.gen.Sounds;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.ui.*;
-import mindustry.world.Block;
+import mindustry.world.*;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
@@ -72,7 +72,7 @@ public class FOSBlocks {
     // DEFENSE
     tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
     helix, sticker, dot, particulator, firefly, pulse, breakdown, rupture, thunder, cluster, judge, newJudge,
-    matrixShieldProj,
+    matrixShieldProj, beamMender, beamMendProjector,
     landMine,
 
     // ENVIRONMENT & ORES
@@ -1223,6 +1223,23 @@ public class FOSBlocks {
             };
             consumePower(4f);
             requirements(Category.effect, with(diamond, 150, silicon, 200, vanadium, 125));
+        }};
+        beamMender = new MendBeamProjector("beam-mender"){{
+            scaledHealth = 180;
+            size = 2;
+            range = 7;
+            healPercent = 2.5f;
+            reload = 60f;
+            consumePowerDynamic((MendBeamBuild b) -> {
+                int beams = 0;
+                for (Tile[] arr : b.facing) {
+                    for (Tile other : arr) {
+                        if (other != null) beams++;
+                    }
+                }
+                return beamPowerConsumption * beams;
+            });
+            requirements(Category.effect, with(tin, 50, silicon, 75, vanadium, 50));
         }};
 
         landMine = new CamoMine("land-mine"){{
