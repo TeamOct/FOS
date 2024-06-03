@@ -1,16 +1,21 @@
 package fos.content;
 
+import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.util.Time;
 import fos.graphics.FOSPal;
 import fos.type.draw.FOSStats;
 import fos.type.statuses.HackedEffect;
+import mindustry.entities.Effect;
 import mindustry.gen.Unit;
 import mindustry.type.StatusEffect;
 import mindustry.world.meta.StatUnit;
 
+import static arc.graphics.g2d.Draw.color;
+import static arc.math.Angles.randLenVectors;
+
 public class FOSStatuses {
-    public static StatusEffect hacked, injected, tokiciteSlowed, buildBoost;
+    public static StatusEffect hacked, injected, tokiciteSlowed, buildBoost, dissolving;
 
     public static void load() {
         hacked = new HackedEffect("hacked"){{
@@ -37,6 +42,17 @@ public class FOSStatuses {
         }};
         buildBoost = new StatusEffect("build-boost"){{
             buildSpeedMultiplier = 1.25f;
+        }};
+        dissolving = new StatusEffect("dissolving"){{
+            healthMultiplier = 0.8f;
+            damage = 1.5f;
+            effect = new Effect(42f, e -> {
+                color(Color.valueOf(""));
+
+                randLenVectors(e.id, 2, 1f + e.fin() * 2f, (x, y) -> {
+                    Fill.circle(e.x + x, e.y + y, e.fout());
+                });
+            });
         }};
     }
 }

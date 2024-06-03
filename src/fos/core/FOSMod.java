@@ -257,8 +257,11 @@ public class FOSMod extends Mod {
         if (ost == null) {
             if (!settings.getBool("fos-ostdontshowagain")) {
                 ui.showCustomConfirm("@fos.noosttitle", bundle.get("fos.noost"),
-                        "@mods.browser.add", "@no",
-                        () -> ui.mods.githubImportMod("TeamOct/FOS-OST", true), () -> {});
+                    "@mods.browser.add", "@no",
+                    () -> {
+                        ui.mods.githubImportMod("TeamOct/FOS-OST", true);
+                    },
+                    () -> {});
             }
         } else if (!ost.enabled()) {
             ui.showCustomConfirm("@fos.ostdisabledtitle", bundle.get("fos.ostdisabled"),

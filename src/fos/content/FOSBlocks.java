@@ -4,6 +4,7 @@ import arc.Core;
 import arc.graphics.Color;
 import arc.struct.Seq;
 import arc.util.*;
+import fos.audio.FOSSounds;
 import fos.graphics.*;
 import fos.type.blocks.campaign.*;
 import fos.type.blocks.crafting.ResourceExtractor;
@@ -27,7 +28,7 @@ import mindustry.gen.Sounds;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.ui.*;
-import mindustry.world.*;
+import mindustry.world.Block;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
@@ -71,7 +72,7 @@ public class FOSBlocks {
 
     // DEFENSE
     tinWall, tinWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
-    helix, sticker, dot, particulator, firefly, pulse, breakdown, rupture, thunder, cluster, judge, newJudge,
+    helix, sticker, dot, particulator, firefly, pulse, breakdown, rupture, thunder, cluster, judge, newJudge, bugSentry,
     matrixShieldProj, beamMender, beamMendProjector,
     landMine,
 
@@ -1207,6 +1208,38 @@ public class FOSBlocks {
             );
             requirements(Category.turret, with(tin, 3000, silver, 3000, diamond, 2500, silicon, 3000, vanadium, 1500, nickel, 1500, luminium, 1500));
         }};
+        bugSentry = new PowerTurret("bug-sentry"){{
+            scaledHealth = 480;
+            size = 2;
+            rotate = false;
+            rotateSpeed = 0;
+            shootCone = 360;
+            inaccuracy = 360;
+            shootY = 0f;
+            reload = 5;
+            range = 360;
+            shootEffect = smokeEffect = Fx.none;
+            shootSound = Sounds.none;
+            loopSound = FOSSounds.buzz;
+            shootType = new BasicBulletType(){{
+                width = 6; height = 12;
+                speed = 3; lifetime = 120;
+
+                rotateSpeed = 3f;
+                homingPower = 0.2f;
+                homingDelay = 30f;
+
+                damage = 10f;
+                pierceArmor = true;
+
+                backColor = trailColor = Color.valueOf("975c43");
+                frontColor = Color.valueOf("c89258");
+                layer = Layer.flyingUnitLow;
+                trailLength = 4;
+                trailWidth = 1;
+            }};
+            buildVisibility = BuildVisibility.editorOnly;
+        }};
 
         matrixShieldProj = new PolyForceProjector("matrix-shield-projector"){{
             health = 480;
@@ -1230,15 +1263,6 @@ public class FOSBlocks {
             range = 7;
             healPercent = 2.5f;
             reload = 60f;
-            consumePowerDynamic((MendBeamBuild b) -> {
-                int beams = 0;
-                for (Tile[] arr : b.facing) {
-                    for (Tile other : arr) {
-                        if (other != null) beams++;
-                    }
-                }
-                return beamPowerConsumption * beams;
-            });
             requirements(Category.effect, with(tin, 50, silicon, 75, vanadium, 50));
         }};
 

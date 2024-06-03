@@ -33,6 +33,15 @@ public class MendBeamProjector extends Block {
         hasPower = true;
         update = true;
         conductivePower = true;
+        consumePowerDynamic((MendBeamBuild b) -> {
+            int beams = 0;
+            for (Tile[] arr : b.facing) {
+                for (Tile other : arr) {
+                    if (other != null) beams++;
+                }
+            }
+            return beamPowerConsumption * beams;
+        });
     }
 
     @Override

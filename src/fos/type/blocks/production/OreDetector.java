@@ -9,7 +9,7 @@ import arc.scene.ui.layout.Table;
 import arc.struct.Seq;
 import arc.util.Time;
 import arc.util.io.*;
-import fos.audio.FOSLoopsCore;
+import fos.audio.FOSSounds;
 import fos.type.blocks.environment.UndergroundOreBlock;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -55,7 +55,7 @@ public class OreDetector extends Block {
         canOverdrive = false;
         fogRadius = (int)range / 8;
         clipSize = range * 2f;
-        loopSound = FOSLoopsCore.radar;
+        loopSound = FOSSounds.radar;
 
         config(Boolean.class, (r, b) -> ((OreDetectorBuild) r).showOres = b);
     }
