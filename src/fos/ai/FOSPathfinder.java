@@ -455,9 +455,18 @@ public class FOSPathfinder implements Runnable{
         @Override
         protected void getPositions(IntSeq out) {
             for (var f : flags) {
-                Groups.build.each(b -> f == null || b.block.flags.contains(f), b -> {
+                Seq<Building> seq = new Seq<>();
+                Groups.build.each(
+                    b -> b.team != this.team && b.team != Team.derelict && (f == null || b.block.flags.contains(f)),
+                    seq::add
+                );
+
+                if (seq.isEmpty()) continue;
+
+                for (var b : seq) {
                     out.add(b.tile.array());
-                });
+                }
+                break;
             }
         }
     }

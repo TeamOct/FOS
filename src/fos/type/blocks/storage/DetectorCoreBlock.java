@@ -12,7 +12,6 @@ import arc.util.io.*;
 import fos.audio.FOSSounds;
 import fos.core.FOSVars;
 import fos.type.blocks.environment.UndergroundOreBlock;
-import mindustry.Vars;
 import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -104,12 +103,13 @@ public class DetectorCoreBlock extends CoreBlock {
 
             //spawn cooldown
             if (!requested) {
-                boolean immediate = Vars.state.isEditor() || Vars.state.rules.infiniteResources;
+                boolean immediate = state.isEditor() || state.rules.infiniteResources;
                 timer = immediate ? 0f : spawnCooldown;
                 requested = true;
                 Time.run(timer, () -> {
                     if (player.dead()) {
                         super.requestSpawn(player);
+                        Call.soundAt(Sounds.respawn, x, y, 1, 1);
                     }
                     requested = false;
                 });
@@ -158,7 +158,7 @@ public class DetectorCoreBlock extends CoreBlock {
             }
 
             if (timer > 0) {
-                Vars.ui.showLabel(String.valueOf(Mathf.ceil(timer / 60f)), 1f / 60f, x, y + 16f);
+                ui.showLabel(String.valueOf(Mathf.ceil(timer / 60f)), 1f / 60f, x, y + 16f);
 
                 Draw.z(Layer.overlayUI);
                 Draw.color(Pal.gray);
