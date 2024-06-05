@@ -1,10 +1,12 @@
 # Fictional Octo System
 ### FOS IS IN A PRE-RELEASE STATE RIGHT NOW - BROKEN, UNFINISHED OR UNBALANCED CONTENT MAY BE PRESENT!
 
-[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/TeamOct/fictional-octo-system/workflow-build.yml)](https://github.com/TeamOct/fictional-octo-system/actions)
-[![GitHub Repo stars](https://img.shields.io/github/stars/TeamOct/fictional-octo-system)](https://github.com/TeamOct/fictional-octo-system/stargazers)
-[![Discord](https://img.shields.io/discord/833695554767683656?label=Team%20Oct%20Discord)](https://discord.gg/F9j8WvU4Bv)
-[![](https://jitpack.io/v/TeamOct/fictional-octo-system.svg)](https://jitpack.io/#TeamOct/fictional-octo-system)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/TeamOct/fos/workflow-build.yml?style=for-the-badge)](https://github.com/TeamOct/fictional-octo-system/actions)
+[![GitHub Repo stars](https://img.shields.io/github/stars/TeamOct/fos?style=for-the-badge)](https://github.com/TeamOct/fictional-octo-system/stargazers)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/teamoct/fos/total?style=for-the-badge)
+[![Discord](https://img.shields.io/discord/833695554767683656?label=Team%20Oct%20Discord&style=for-the-badge)](https://discord.gg/F9j8WvU4Bv)
+[![GitHub Release](https://img.shields.io/github/v/release/teamoct/fos?style=for-the-badge)](https://github.com/teamoct/fos/releases/latest)
+
 
 
 This mod brings you to the brand-new star system to explore as a standalone campaign. No prerequisites needed to meet - no matter your progress with Mindustry, you can start playing anytime!
