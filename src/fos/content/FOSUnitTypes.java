@@ -1,9 +1,11 @@
 package fos.content;
 
 import arc.graphics.Color;
-import arc.math.Mathf;
-import arc.math.geom.Rect;
+import arc.graphics.g2d.Lines;
+import arc.math.*;
+import arc.math.geom.*;
 import arc.struct.Seq;
+import arc.util.*;
 import fos.ai.*;
 import fos.gen.*;
 import fos.graphics.*;
@@ -15,18 +17,24 @@ import fos.type.units.weapons.InjectorWeapon;
 import mindustry.ai.UnitCommand;
 import mindustry.ai.types.*;
 import mindustry.annotations.Annotations;
+import mindustry.audio.SoundLoop;
 import mindustry.content.*;
+import mindustry.entities.*;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
+import mindustry.entities.units.WeaponMount;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.weapons.*;
 
+import static arc.graphics.g2d.Draw.color;
+import static arc.graphics.g2d.Lines.stroke;
 import static fos.content.FOSItems.tin;
 import static fos.content.FOSStatuses.*;
+import static mindustry.Vars.*;
 
 public class FOSUnitTypes {
     public static @Annotations.EntityDef({Mechc.class}) UnitType
@@ -215,63 +223,252 @@ public class FOSUnitTypes {
 
             //aiController = GroundBossAI::new;
         }};
-        citadel = new BossUnitType("citadel"){{
-            health = 9000;
-            armor = 20;
-            hitSize = 40;
-            rotateSpeed = 2f;
-            speed = 0.2f;
-            flying = false;
-            canBoost = false;
-            weapons.add(
-                new Weapon("fos-citadel-shotgun"){{
-                    x = 18; y = 0;
-                    rotate = true;
-                    rotationLimit = 10f;
-                    mirror = true;
-                    alternate = true;
-                    //layerOffset = -0.15f;
-                    recoil = 4f;
-                    recoilTime = 60f;
-                    reload = 30f;
-                    inaccuracy = 10f;
-                    shoot.shots = 8;
-                    bullet = new BasicBulletType(4f, 60f){{
-                        lifetime = 40f;
-                        width = 4f; height = 8f;
-                        trailWidth = 2f;
-                        trailLength = 12;
-                        velocityRnd = 0.1f;
-                    }};
-                }},
-                new Weapon("fos-citadel-stickybomb-launcher"){{
-                    x = 8; y = -10;
-                    rotate = true;
-                    rotateSpeed = 1f;
-                    mirror = true;
-                    alternate = true;
-                    recoil = 2f;
-                    reload = 60f;
-                    inaccuracy = 3f;
-                    bullet = new StickyBulletType(2f, 20f, 180){{
-                        lifetime = 120f;
-                        width = height = 16f;
-                        trailWidth = 3f;
-                        trailLength = 12;
-                        trailColor = Pal.plastaniumBack;
-                        backColor = Pal.plastaniumBack;
-                        frontColor = Pal.plastaniumFront;
-                        ejectEffect = Fx.smokeCloud;
-                        hitSound = Sounds.mud;
-                        despawnEffect = Fx.explosion;
-                        splashDamage = 60f;
-                        splashDamageRadius = 16f;
-                        collidesGround = collidesAir = true;
-                        collidesTiles = true;
-                    }};
-                }}
-            );
-        }};
+        citadel = new BossUnitType("citadel"){
+            {
+                health = 9000;
+                armor = 20;
+                hitSize = 40;
+                rotateSpeed = 2f;
+                speed = 0.2f;
+                flying = false;
+                canBoost = false;
+
+                parts.add(
+                    new RegionPart("-front"){{
+                        growX = growY = -1;
+                        //layer = Layer.groundUnit - 0.01f;
+                        growProgress = p -> {
+                            var unit = Groups.unit.find(u -> u.type.name.equals("fos-citadel"));
+                            return unit == null || unit.health / unit.maxHealth > 0.5 ? 0 : 1;
+                        };
+                    }}
+                );
+
+                weapons.add(
+                    new Weapon("fos-citadel-shotgun"){{
+                        x = 18; y = 0;
+                        rotate = true;
+                        rotationLimit = 10f;
+                        mirror = true;
+                        alternate = true;
+                        //layerOffset = -0.15f;
+                        recoil = 4f;
+                        recoilTime = 60f;
+                        shake = 1f;
+                        reload = 30f;
+                        inaccuracy = 10f;
+                        shoot.shots = 8;
+                        bullet = new BasicBulletType(4f, 60f){{
+                            lifetime = 40f;
+                            width = 4f; height = 8f;
+                            trailWidth = 2f;
+                            trailLength = 12;
+                            velocityRnd = 0.1f;
+                        }};
+                    }},
+                    new Weapon("fos-citadel-stickybomb-launcher"){{
+                        x = 8; y = -10;
+                        rotate = true;
+                        rotateSpeed = 1f;
+                        mirror = true;
+                        alternate = true;
+                        recoil = 2f;
+                        reload = 60f;
+                        inaccuracy = 3f;
+                        bullet = new StickyBulletType(4f, 20f, 180){{
+                            lifetime = 60f;
+                            width = height = 16f;
+                            trailWidth = 3f;
+                            trailLength = 12;
+                            trailColor = Pal.plastaniumBack;
+                            backColor = Pal.plastaniumBack;
+                            frontColor = Pal.plastaniumFront;
+                            ejectEffect = Fx.smokeCloud;
+                            hitSound = Sounds.mud;
+                            despawnEffect = Fx.explosion;
+                            splashDamage = 60f;
+                            splashDamageRadius = 16f;
+                            collidesGround = collidesAir = true;
+                            collidesTiles = true;
+                        }};
+                    }},
+
+                    new Weapon(){
+                        {
+                            x = 0; y = 5;
+                            rotate = false;
+                            continuous = true;
+                            shoot.firstShotDelay = 40f;
+                            shootCone = 90f;
+                            reload = 600f;
+                            shake = 2f;
+
+                            chargeSound = Sounds.lasercharge2;
+                            shootSound = Sounds.laserbig;
+
+                            bullet = new ContinuousLaserBulletType(60){{
+                                length = 120;
+                                width = 8f;
+                                lifetime = 230f;
+                                status = StatusEffects.melting;
+
+                                incendChance = 0.2f;
+                                incendSpread = 5f;
+                                incendAmount = 1;
+
+                                chargeEffect = new Effect(40f, 100f, e -> {
+                                    color(Pal.lightFlame);
+                                    stroke(e.fin() * 2f);
+                                    Lines.circle(e.x, e.y, e.fout() * 50f);
+                                }).followParent(true).rotWithParent(true);
+                            }};
+                        }
+
+                        @Override
+                        public void update(Unit unit, WeaponMount mount) {
+                            // TODO: this copy of the super method is WAY too long
+                            boolean can = unit.canShoot() && unit.health / unit.maxHealth < 0.5f;
+                            float lastReload = mount.reload;
+                            mount.reload = Math.max(mount.reload - Time.delta * unit.reloadMultiplier, 0);
+                            mount.recoil = Mathf.approachDelta(mount.recoil, 0, unit.reloadMultiplier / recoilTime);
+                            if(recoils > 0){
+                                if(mount.recoils == null) mount.recoils = new float[recoils];
+                                for(int i = 0; i < recoils; i++){
+                                    mount.recoils[i] = Mathf.approachDelta(mount.recoils[i], 0, unit.reloadMultiplier / recoilTime);
+                                }
+                            }
+                            mount.smoothReload = Mathf.lerpDelta(mount.smoothReload, mount.reload / reload, smoothReloadSpeed);
+                            mount.charge = mount.charging && shoot.firstShotDelay > 0 ? Mathf.approachDelta(mount.charge, 1, 1 / shoot.firstShotDelay) : 0;
+
+                            float warmupTarget = (can && mount.shoot) || (continuous && mount.bullet != null) || mount.charging ? 1f : 0f;
+                            if(linearWarmup){
+                                mount.warmup = Mathf.approachDelta(mount.warmup, warmupTarget, shootWarmupSpeed);
+                            }else{
+                                mount.warmup = Mathf.lerpDelta(mount.warmup, warmupTarget, shootWarmupSpeed);
+                            }
+
+                            //rotate if applicable
+                            if(rotate && (mount.rotate || mount.shoot) && can){
+                                float axisX = unit.x + Angles.trnsx(unit.rotation - 90,  x, y),
+                                    axisY = unit.y + Angles.trnsy(unit.rotation - 90,  x, y);
+
+                                mount.targetRotation = Angles.angle(axisX, axisY, mount.aimX, mount.aimY) - unit.rotation;
+                                mount.rotation = Angles.moveToward(mount.rotation, mount.targetRotation, rotateSpeed * Time.delta);
+                                if(rotationLimit < 360){
+                                    float dst = Angles.angleDist(mount.rotation, baseRotation);
+                                    if(dst > rotationLimit/2f){
+                                        mount.rotation = Angles.moveToward(mount.rotation, baseRotation, dst - rotationLimit/2f);
+                                    }
+                                }
+                            }else if(!rotate){
+                                mount.rotation = baseRotation;
+                                mount.targetRotation = unit.angleTo(mount.aimX, mount.aimY);
+                            }
+
+                            float
+                                weaponRotation = unit.rotation - 90 + (rotate ? mount.rotation : baseRotation),
+                                mountX = unit.x + Angles.trnsx(unit.rotation - 90, x, y),
+                                mountY = unit.y + Angles.trnsy(unit.rotation - 90, x, y),
+                                bulletX = mountX + Angles.trnsx(weaponRotation, this.shootX, this.shootY),
+                                bulletY = mountY + Angles.trnsy(weaponRotation, this.shootX, this.shootY),
+                                shootAngle = bulletRotation(unit, mount, bulletX, bulletY);
+
+                            //find a new target
+                            if(!controllable && autoTarget){
+                                if((mount.retarget -= Time.delta) <= 0f){
+                                    mount.target = findTarget(unit, mountX, mountY, bullet.range, bullet.collidesAir, bullet.collidesGround);
+                                    mount.retarget = mount.target == null ? targetInterval : targetSwitchInterval;
+                                }
+
+                                if(mount.target != null && checkTarget(unit, mount.target, mountX, mountY, bullet.range)){
+                                    mount.target = null;
+                                }
+
+                                boolean shoot = false;
+
+                                if(mount.target != null){
+                                    shoot = mount.target.within(mountX, mountY, bullet.range + Math.abs(shootY) + (mount.target instanceof Sized s ? s.hitSize()/2f : 0f)) && can;
+
+                                    if(predictTarget){
+                                        Vec2 to = Predict.intercept(unit, mount.target, bullet.speed);
+                                        mount.aimX = to.x;
+                                        mount.aimY = to.y;
+                                    }else{
+                                        mount.aimX = mount.target.x();
+                                        mount.aimY = mount.target.y();
+                                    }
+                                }
+
+                                mount.shoot = mount.rotate = shoot;
+
+                                //note that shooting state is not affected, as these cannot be controlled
+                                //logic will return shooting as false even if these return true, which is fine
+                            }
+
+                            if(alwaysShooting) mount.shoot = true;
+
+                            //update continuous state
+                            if(continuous && mount.bullet != null){
+                                if(!mount.bullet.isAdded() || mount.bullet.time >= mount.bullet.lifetime || mount.bullet.type != bullet){
+                                    mount.bullet = null;
+                                }else{
+                                    mount.bullet.rotation(weaponRotation + 90);
+                                    mount.bullet.set(bulletX, bulletY);
+                                    mount.reload = reload;
+                                    mount.recoil = 1f;
+                                    unit.vel.add(Tmp.v1.trns(unit.rotation + 180f, mount.bullet.type.recoil * Time.delta));
+                                    if(shootSound != Sounds.none && !headless){
+                                        if(mount.sound == null) mount.sound = new SoundLoop(shootSound, 1f);
+                                        mount.sound.update(bulletX, bulletY, true);
+                                    }
+
+                                    if(alwaysContinuous && mount.shoot){
+                                        mount.bullet.time = mount.bullet.lifetime * mount.bullet.type.optimalLifeFract * mount.warmup;
+                                        mount.bullet.keepAlive = true;
+
+                                        unit.apply(shootStatus, shootStatusDuration);
+                                    }
+                                }
+                            }else{
+                                //heat decreases when not firing
+                                mount.heat = Math.max(mount.heat - Time.delta * unit.reloadMultiplier / cooldownTime, 0);
+
+                                if(mount.sound != null){
+                                    mount.sound.update(bulletX, bulletY, false);
+                                }
+                            }
+
+                            //flip weapon shoot side for alternating weapons
+                            boolean wasFlipped = mount.side;
+                            if(otherSide != -1 && alternate && mount.side == flipSprite && mount.reload <= reload / 2f && lastReload > reload / 2f){
+                                unit.mounts[otherSide].side = !unit.mounts[otherSide].side;
+                                mount.side = !mount.side;
+                            }
+
+                            //shoot if applicable
+                            if(mount.shoot && //must be shooting
+                                can && //must be able to shoot
+                                (!useAmmo || unit.ammo > 0 || !state.rules.unitAmmo || unit.team.rules().infiniteAmmo) && //check ammo
+                                (!alternate || wasFlipped == flipSprite) &&
+                                mount.warmup >= minWarmup && //must be warmed up
+                                unit.vel.len() >= minShootVelocity && //check velocity requirements
+                                (mount.reload <= 0.0001f || (alwaysContinuous && mount.bullet == null)) && //reload has to be 0, or it has to be an always-continuous weapon
+                                (alwaysShooting || Angles.within(rotate ? mount.rotation : unit.rotation + baseRotation, mount.targetRotation, shootCone)) //has to be within the cone
+                            ){
+                                shoot(unit, mount, bulletX, bulletY, shootAngle);
+
+                                mount.reload = reload;
+
+                                if(useAmmo){
+                                    unit.ammo--;
+                                    if(unit.ammo < 0) unit.ammo = 0;
+                                }
+                            }
+                        }
+                    }
+                );
+            }
+        };
         //TODO: campaign boss
         warden = new BossUnitType("warden"){{
             health = 4500;

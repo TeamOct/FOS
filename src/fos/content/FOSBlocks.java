@@ -1212,12 +1212,12 @@ public class FOSBlocks {
             scaledHealth = 480;
             size = 2;
             rotate = false;
-            rotateSpeed = 0;
+            rotateSpeed = 0f;
             shootCone = 360;
             inaccuracy = 360;
             shootY = 0f;
             reload = 5;
-            range = 360;
+            range = 320;
             shootEffect = smokeEffect = Fx.none;
             shootSound = Sounds.none;
             loopSound = FOSSounds.buzz;
@@ -1225,11 +1225,10 @@ public class FOSBlocks {
                 width = 6; height = 12;
                 speed = 3; lifetime = 120;
 
-                rotateSpeed = 3f;
-                homingPower = 0.2f;
+                homingPower = 0.4f;
                 homingDelay = 30f;
 
-                damage = 10f;
+                damage = 15f;
                 pierceArmor = true;
 
                 backColor = trailColor = Color.valueOf("975c43");
@@ -1936,7 +1935,7 @@ public class FOSBlocks {
         citadelSpawner = new WaveSpawnerBlock("citadel-spawner"){{
             size = 4;
             unitType = citadel;
-            wave = 20;
+            wave = 10;
             spawnDelay = 300f;
             customShadow = true;
             buildVisibility = BuildVisibility.editorOnly;
