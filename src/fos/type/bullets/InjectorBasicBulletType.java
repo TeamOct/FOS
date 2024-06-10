@@ -15,7 +15,7 @@ public class InjectorBasicBulletType extends BasicBulletType implements Injector
         width = 6; height = 12;
         hittable = false;
         absorbable = true;
-        collidesTiles = false;
+        //collidesTiles = false;
         frontColor = FOSPal.hacked;
         backColor = FOSPal.hackedBack;
 
