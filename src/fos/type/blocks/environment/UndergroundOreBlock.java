@@ -17,6 +17,9 @@ public class UndergroundOreBlock extends OverlayFloor {
 
     public UndergroundOreBlock(String name) {
         super(name);
+        // can't place ores on shallow water without this.
+        needsSurface = false;
+
         //hide an ore from the minimap
         useColor = false;
         playerUnmineable = true;

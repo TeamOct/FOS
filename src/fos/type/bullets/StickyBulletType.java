@@ -13,23 +13,26 @@ public class StickyBulletType extends ArtilleryBulletType {
 
     public StickyBulletType(float speed, float damage, int explosionDelay) {
         super(speed, damage);
+        this.explosionDelay = explosionDelay;
+
         sprite = "fos-sticky-bullet";
         backSprite = "bullet-back";
-        this.explosionDelay = explosionDelay;
         layer = Layer.flyingUnit + 1f;
-        despawnHit = true;
+        hitEffect = Fx.blastExplosion;
+        hitSound = Sounds.explosion;
+
+        setDefaults = false;
+        despawnHit = false;
         pierce = true;
         collides = true;
         collidesGround = true;
-        hitEffect = Fx.blastExplosion;
-        hitSound = Sounds.explosion;
     }
 
     @Override
     public void hitEntity(Bullet b, Hitboxc entity, float health) {
         super.hitEntity(b, entity, health);
 
-        b.hit(true);
+        //b.hit(true);
 
         StickyBulletData data = new StickyBulletData();
         data.target = (Teamc) entity;
@@ -45,6 +48,13 @@ public class StickyBulletType extends ArtilleryBulletType {
         //the bullet just stops.
         b.vel.set(Vec2.ZERO);
         b.lifetime = explosionDelay;
+    }
+
+    @Override
+    public void hit(Bullet b, float x, float y) {
+        // apply splash damage only when a sticky is already triggered.
+        if (b.data instanceof StickyBulletData)
+            super.hit(b, x, y);
     }
 
     @Override
@@ -85,7 +95,7 @@ public class StickyBulletType extends ArtilleryBulletType {
         if (b.data == null) {
             // this bullet was already despawned; create a new one that stays on ground
             Bullet nb = create(b.owner, b.team, b.x, b.y, b.rotation());
-            nb.hit(true);
+            //nb.hit(true);
             nb.lifetime = explosionDelay;
             nb.data = new StickyBulletData();
         } else {

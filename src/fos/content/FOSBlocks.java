@@ -573,7 +573,7 @@ public class FOSBlocks {
             outlineColor = Color.valueOf("302326");
             shootSound = Sounds.mud;
             squareSprite = false;
-            consumeLiquid(tokicite, 0.1f);
+            consumeLiquid(tokicite, 0.2f);
             ammo(
                 tin, new StickyBulletType(8f, 20, 90){{
                     lifetime = 45f;
@@ -583,7 +583,7 @@ public class FOSBlocks {
                     frontColor = FOSPal.tokicite;
                     ammoMultiplier = 2f;
                     scaleLife = true;
-                    splashDamage = 80;
+                    splashDamage = 60;
                     splashDamageRadius = 12f;
                     buildingDamageMultiplier = 0.3f;
                 }},
@@ -595,8 +595,8 @@ public class FOSBlocks {
                     frontColor = FOSPal.tokicite;
                     ammoMultiplier = 3f;
                     scaleLife = true;
-                    splashDamage = 100;
-                    splashDamageRadius = 16f;
+                    splashDamage = 75;
+                    splashDamageRadius = 8f;
                     buildingDamageMultiplier = 0.3f;
                 }}
             );
@@ -1218,9 +1218,28 @@ public class FOSBlocks {
             shootY = 0f;
             reload = 5;
             range = 320;
+            recoil = 0f;
             shootEffect = smokeEffect = Fx.none;
             shootSound = Sounds.none;
             loopSound = FOSSounds.buzz;
+
+            shoot = new ShootBarrel(){{
+                barrels = new float[]{
+                    //there's a lot of holes scattered across the whole nest.
+                    -3f, 3f, 0,
+                    2f, 4f, 0,
+                    -5.5f, 3.75f, 0,
+                    5.5f, 3.5f, 0,
+                    -5.25f, 1f, 0,
+                    3f, 1f, 0,
+                    -2.5f, -1.75f, 0,
+                    5.5f, -3f, 0,
+                    3.25f, -3.5f, 0,
+                    -3.5f, -3.5f, 0,
+                    -1.5f, -3.75f, 0f
+                };
+            }};
+
             shootType = new BasicBulletType(){{
                 width = 6; height = 12;
                 speed = 3; lifetime = 120;
@@ -1237,6 +1256,11 @@ public class FOSBlocks {
                 trailLength = 4;
                 trailWidth = 1;
             }};
+
+            drawer = new DrawTurret("clear-");
+            drawTeamOverlay = false;
+            outlineColor = Color.clear;
+
             buildVisibility = BuildVisibility.editorOnly;
         }};
 
@@ -1681,9 +1705,12 @@ public class FOSBlocks {
         }};
         oreTinSurface = new OreBlock("ore-tin-surface"){{
             itemDrop = tin;
+            // this is stupid - can't place this on shallow water without it.
+            needsSurface = false;
         }};
         oreTinDeep = new OreBlock("ore-tin-deep"){{
             itemDrop = tin;
+
         }};
         oreSilver = new UndergroundOreBlock("ore-silver"){{
             drop = silver;
@@ -1696,6 +1723,8 @@ public class FOSBlocks {
         }};
         oreDiamond = new OreBlock("ore-diamond"){{
             itemDrop = diamond;
+            // this is stupid x2
+            needsSurface = false;
         }};
         oreVanadium = new UndergroundOreBlock("ore-vanadium"){{
             drop = vanadium;
