@@ -308,6 +308,7 @@ public class FOSWeaponModules {
                         bullet = new StickyBulletType(4f, 20f){{
                             lifetime = 40f;
                             width = height = 16f;
+                            velocityRnd = 0.2f;
 
                             trailWidth = 3f;
                             trailLength = 12;
