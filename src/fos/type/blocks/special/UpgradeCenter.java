@@ -21,6 +21,8 @@ import mindustry.world.blocks.ItemSelection;
 import mindustry.world.consumers.ConsumeItemDynamic;
 import mindustry.world.draw.*;
 
+import static mindustry.Vars.state;
+
 public class UpgradeCenter extends Block {
     /** Called when player upgrades their weapon
      * @param player player that upgraded weapon
@@ -184,10 +186,10 @@ public class UpgradeCenter extends Block {
         @Override
         public void buildConfiguration(Table table) {
             if (WeaponSet.sets.size > 0) {
-                ItemSelection.buildTable(UpgradeCenter.this, table, WeaponSet.sets,
+                ItemSelection.buildTable(UpgradeCenter.this, table, WeaponSet.sets.select(ws -> !isSetBanned(ws)),
                         () -> weaponSet == null ? null : weaponSet,
                         ws -> {
-                            configure(ws == null ? -1 : ws.id);
+                            configure(ws == null || isSetBanned(ws) ? -1 : ws.id);
                             progress = 0;
                         },
                         selectionRows, selectionColumns
@@ -197,7 +199,7 @@ public class UpgradeCenter extends Block {
                     if (weaponSet == null || Vars.player == null) return;
                     FOSCall.upgrade(Vars.player, tile());
                     deselect();
-                }).visible(() -> fraction() >= 1f);
+                }).visible(() -> !isSetBanned(weaponSet) && fraction() >= 1f);
             } else {
                 deselect();
             }
@@ -216,6 +218,11 @@ public class UpgradeCenter extends Block {
         public boolean acceptItem(Building source, Item item) {
             return weaponSet != null && items.get(item) < getMaximumAccepted(item) &&
                 Structs.contains(weaponSet.reqs, stack -> stack.item == item);
+        }
+
+        protected boolean isSetBanned(WeaponSet set) {
+            Seq<String> banned = new Seq<>(state.rules.tags.get("fos-bannedMountUpgrades", "").split(";"));
+            return set != null && banned.contains(set.name);
         }
 
         @Override

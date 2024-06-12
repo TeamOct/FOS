@@ -7,6 +7,7 @@ import arc.backend.sdl.jni.SDL;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.graphics.gl.Shader;
+import arc.input.*;
 import arc.math.Mathf;
 import arc.scene.*;
 import arc.scene.ui.ImageButton;
@@ -33,6 +34,7 @@ import java.util.Calendar;
 
 import static arc.Core.*;
 import static arc.discord.DiscordRPC.*;
+import static arc.input.GestureDetector.GestureListener;
 import static mindustry.Vars.*;
 
 @ModAnnotations.RootDirectoryPath(rootDirectoryPath = "")
@@ -295,6 +297,29 @@ public class FOSMod extends Mod {
 
         // add modded hints
         FOSVars.hints.load();
+
+        input.addProcessor(new GestureDetector(new GestureListener() {
+            @Override
+            public boolean tap(float x, float y, int count, KeyCode button) {
+                if (((mobile && count == 2) || button == KeyCode.mouseMiddle) && !(
+                    state.isMenu() ||
+                    scene.hasMouse() ||
+                    control.input.isPlacing() ||
+                    control.input.isBreaking() ||
+                    control.input.selectedUnit() != null
+                ) && player.unit() instanceof LumoniPlayerUnitc) {
+                    FOSCall.detonate();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            @Override
+            public boolean touchDown(float x, float y, int pointer, KeyCode button) {
+                return GestureListener.super.touchDown(x, y, pointer, button);
+            }
+        }));
     }
 
     public void constructSettings() {

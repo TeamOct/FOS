@@ -228,8 +228,9 @@ public class LumoniTechTree {
                 );
                 // BOSS-SPECIFIC WEAPONS
                 node(legionFabricator, Seq.with(new DefeatBoss(legion)), () -> {
-                    //TODO: citadel shotgun? or stickybomb launcher?
-                    soontm();
+                    node(citadelStickyLauncher, Seq.with(new DefeatBoss(FOSUnitTypes.citadel)), () -> {
+                        soontm();
+                    });
                 });
             });
 

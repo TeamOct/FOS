@@ -1,10 +1,11 @@
 package fos.content;
 
-import arc.Events;
+import arc.*;
 import arc.graphics.Color;
 import fos.type.abilities.UnitResistanceAbility;
-import fos.type.bullets.SmartBulletType;
+import fos.type.bullets.*;
 import fos.type.content.WeaponSet;
+import mindustry.Vars;
 import mindustry.content.Fx;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
@@ -26,7 +27,7 @@ public class FOSWeaponModules {
         standard1, standard2, standard3, standard4, standard5,
         shotgun1, shotgun2, shotgun3, shotgun4, shotgun5,
         support1, support2, support3, support4, support5,
-        legionFabricator;
+        legionFabricator, citadelStickyLauncher;
 
     public static void load() {
         // BASIC / ASSAULT RIFLES
@@ -291,5 +292,37 @@ public class FOSWeaponModules {
                 );
             });
         }}.reqs(with(tin, 200, silver, 125, silicon, 150)).produceTime(60 * 20);
+        citadelStickyLauncher = new WeaponSet("citadel-stickybomb-launcher"){
+            {
+                description = Core.bundle.getOrNull(getContentType() + "." + this.name + ".description" + (Vars.mobile ? "-mobile" : ""));
+
+                weapons.add(
+                    new Weapon("fos-citadel-stickybomb-launcher"){{
+                        x = 0; y = -2;
+                        mirror = false;
+                        rotate = false;
+                        recoil = 2f;
+                        reload = 60f;
+                        inaccuracy = 6f;
+                        shootSound = Sounds.mud;
+                        bullet = new StickyBulletType(4f, 20f){{
+                            lifetime = 40f;
+                            width = height = 16f;
+
+                            trailWidth = 3f;
+                            trailLength = 12;
+                            trailColor = Pal.plastaniumBack;
+                            backColor = Pal.plastaniumBack;
+                            frontColor = Pal.plastaniumFront;
+                            ejectEffect = Fx.smokeCloud;
+
+                            splashDamage = 120f;
+                            splashDamageRadius = 28f;
+                        }};
+                    }}
+                );
+                reqs = with(tin, 150, diamond, 75, silicon, 150);
+            }
+        };
     }
 }
