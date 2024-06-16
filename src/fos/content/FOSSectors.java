@@ -1,5 +1,6 @@
 package fos.content;
 
+import fos.type.content.ChallengeSectorPreset;
 import mindustry.type.SectorPreset;
 
 import static fos.content.FOSPlanets.lumoni;
@@ -7,7 +8,7 @@ import static fos.content.FOSPlanets.lumoni;
 public class FOSSectors {
     public static SectorPreset
     /* Serpulo */ siloTerminal,
-    /* Lumoni */ awakening, ruins, intruders, citadel, tinMiningSite, conflict;
+    /* Lumoni */ awakening, ruins, intruders, intrudersChallenge, citadel, tinMiningSite, conflict;
 
     public static void load() {
 /*
@@ -31,6 +32,11 @@ public class FOSSectors {
         intruders = new SectorPreset("intruders", lumoni, 67){{
             difficulty = 5;
             captureWave = 31;
+        }};
+
+        intrudersChallenge = new ChallengeSectorPreset("intruders-challenge", lumoni, 68){{
+            difficulty = 8;
+            captureWave = 16;
         }};
 
         citadel = new SectorPreset("citadel", lumoni, 44){{
