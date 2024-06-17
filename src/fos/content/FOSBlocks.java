@@ -1334,8 +1334,8 @@ public class FOSBlocks {
         }};
         zincBelt = new PipeConveyor("zinc-belt"){{
             health = 10;
-            speed = 0.05f;
-            displayedSpeed = 6.9f;
+            speed = 0.058f;
+            displayedSpeed = 8.1f;
             researchCost = with(zinc, 30);
             requirements(Category.distribution, with(zinc, 1));
         }};

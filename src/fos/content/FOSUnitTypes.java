@@ -762,7 +762,7 @@ public class FOSUnitTypes {
             health = 1200;
             armor = 3;
             hitSize = 10;
-            speed = 0.8f;
+            speed = 1f;
             flying = false;
             canBoost = false;
             mineTier = 2;
