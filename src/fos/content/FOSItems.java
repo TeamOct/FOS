@@ -9,7 +9,7 @@ import mindustry.type.Item;
 import static mindustry.content.Items.*;
 
 public class FOSItems {
-    public static Item rawNethratium, rawElbium, rawElithite, aluminium, tin, silver, lithium, brass, sulphur, cuberium, diamond, vanadium, nickel, luminium;
+    public static Item rawNethratium, rawElbium, rawElithite, aluminium, zinc, silver, lithium, brass, sulphur, cuberium, diamond, vanadium, nickel, luminium;
 
     public static Seq<Item> uxerdItems = new Seq<>(), lumoniItems = new Seq<>();
 
@@ -27,7 +27,7 @@ public class FOSItems {
         aluminium = new Item("aluminium", Color.valueOf("de8900")){{
             radioactivity = 0.1f;
         }};
-        tin = new Item("tin", Color.valueOf("85b374")){{
+        zinc = new Item("zinc", Color.valueOf("85b374")){{
             hardness = 2;
             cost = 1.2f;
         }};
@@ -74,7 +74,7 @@ public class FOSItems {
             }
         };
 
-        uxerdItems.addAll(rawNethratium, rawElbium, rawElithite, aluminium, tin, silver, lithium, titanium, cuberium);
-        lumoniItems.addAll(copper, tin, silver, diamond, sand, silicon, brass, vanadium, nickel, luminium);
+        uxerdItems.addAll(rawNethratium, rawElbium, rawElithite, aluminium, zinc, silver, lithium, titanium, cuberium);
+        lumoniItems.addAll(copper, zinc, silver, diamond, sand, silicon, brass, vanadium, nickel, luminium);
     }
 }

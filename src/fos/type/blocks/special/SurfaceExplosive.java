@@ -85,7 +85,7 @@ public class SurfaceExplosive extends Block {
         // hard-coded for now
         // TODO: come up with a better solution?
         public Block deepTile(Block ore) {
-            return ore == FOSBlocks.oreTin ? FOSBlocks.oreTinDeep :
+            return ore == FOSBlocks.oreZinc ? FOSBlocks.oreZincDeep :
                 ore == FOSBlocks.oreSilver ? FOSBlocks.oreSilverDeep :
                 ore == FOSBlocks.oreVanadium ? FOSBlocks.oreVanadiumDeep :
                     air;

@@ -8,7 +8,7 @@ import static fos.content.FOSPlanets.lumoni;
 public class FOSSectors {
     public static SectorPreset
     /* Serpulo */ siloTerminal,
-    /* Lumoni */ awakening, ruins, intruders, intrudersChallenge, citadel, tinMiningSite, conflict;
+    /* Lumoni */ awakening, ruins, intruders, intrudersChallenge, citadel, zincMiningSite, conflict;
 
     public static void load() {
 /*
@@ -44,7 +44,7 @@ public class FOSSectors {
             captureWave = 21;
         }};
 
-        tinMiningSite = new SectorPreset("tin-mining-site", lumoni, 71){{
+        zincMiningSite = new SectorPreset("zinc-mining-site", lumoni, 71){{
             difficulty = 5;
         }};
 

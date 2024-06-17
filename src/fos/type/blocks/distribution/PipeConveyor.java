@@ -21,7 +21,7 @@ public class PipeConveyor extends Conveyor {
     public void load() {
         if (!headless) {
             String prefix = ConveyorSpritesPacker.getPrefix();
-            ConveyorSpritesPacker.generateRegions(Core.atlas.find(prefix + "-tin-belt"), prefix);
+            ConveyorSpritesPacker.generateRegions(Core.atlas.find(prefix + "-" + name.replaceFirst("fos-", "")), prefix);
         }
 
         pipeRegions = new TextureRegion[5];

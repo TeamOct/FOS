@@ -138,7 +138,7 @@ public class UxerdAsteroidGenerator extends BlankPlanetGenerator {
         });
 
         //generate tin and lithium on elbium
-        ore(oreTin, elbium, 4f, 0.6f * tinScl);
+        ore(oreZinc, elbium, 4f, 0.6f * tinScl);
         ore(oreLithium, elbium, 4f, 0.8f * lithiumScl);
 
         //generate silver and titanium on elithite

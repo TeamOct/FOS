@@ -76,7 +76,7 @@ public class FOSWeaponModules {
                     }};
                 }}
             );
-            reqs = with(tin, 75, silver, 75);
+            reqs = with(zinc, 75, silver, 75);
             researchCost = empty;
         }};
         standard3 = new WeaponSet("standard3", new Weapon("fos-standard-weapon3"){{
@@ -93,7 +93,7 @@ public class FOSWeaponModules {
                 lifetime = 60f;
                 homingPower = 0.8f;
             }};
-        }}).reqs(with(tin, 250, silicon, 200, vanadium, 100));
+        }}).reqs(with(zinc, 250, silicon, 200, vanadium, 100));
         //TODO: placeholders
         standard4 = new WeaponSet("standard4", new Weapon("fos-standard-weapon4")).reqs(with(lead, 1));
         standard5 = new WeaponSet("standard5", new Weapon("fos-standard-weapon5"){{
@@ -134,7 +134,7 @@ public class FOSWeaponModules {
                     splashDamageRadius = 10f;
                 }};
             }};
-        }}).reqs(with(tin, 500, silver, 500, vanadium, 300, nickel, 250, luminium, 200));
+        }}).reqs(with(zinc, 500, silver, 500, vanadium, 300, nickel, 250, luminium, 200));
 
         // SHOTGUNS
         shotgun1 = new WeaponSet("shotgun1"){{
@@ -185,7 +185,7 @@ public class FOSWeaponModules {
                 hitEffect = Fx.hitBulletSmall;
                 knockback = 3f;
             }};
-        }}).reqs(with(tin, 60, silver, 90));
+        }}).reqs(with(zinc, 60, silver, 90));
         shotgun3 = new WeaponSet("shotgun3", new Weapon("fos-shotgun-mount3"){{
             x = y = 0;
             alternate = mirror = false;
@@ -214,7 +214,7 @@ public class FOSWeaponModules {
                     knockback = 4f;
                 }};
             }};
-        }}).reqs(with(tin, 200, silver, 50, silicon, 200, vanadium, 100));
+        }}).reqs(with(zinc, 200, silver, 50, silicon, 200, vanadium, 100));
         //TODO: placeholders
         shotgun4 = new WeaponSet("shotgun4", new Weapon()).reqs(with(lead, 1));
         shotgun5 = new WeaponSet("shotgun5", new Weapon()).reqs(with(lead, 1));
@@ -254,7 +254,7 @@ public class FOSWeaponModules {
                 collidesGround = true;
                 healPercent = 5;
             }};
-        }}).reqs(with(tin, 50, silver, 100));
+        }}).reqs(with(zinc, 50, silver, 100));
         support3 = new WeaponSet("support3"){{
             abilities.add(
                 new EnergyFieldAbility(80f, 40f, 64f){{
@@ -268,7 +268,7 @@ public class FOSWeaponModules {
                     damageEffect = Fx.chainLightning;
                 }}
             );
-            reqs = with(tin, 75, silver, 150, vanadium, 150);
+            reqs = with(zinc, 75, silver, 150, vanadium, 150);
         }};
 
         // BOSS WEAPONS
@@ -291,7 +291,7 @@ public class FOSWeaponModules {
                     new UnitSpawnAbility(FOSUnitTypes.legionnaireReplica, 600, 16, 0)
                 );
             });
-        }}.reqs(with(tin, 200, silver, 125, silicon, 150)).produceTime(60 * 20);
+        }}.reqs(with(zinc, 200, silver, 125, silicon, 150)).produceTime(60 * 20);
         citadelStickyLauncher = new WeaponSet("citadel-stickybomb-launcher"){
             {
                 description = Core.bundle.getOrNull(getContentType() + "." + this.name + ".description" + (Vars.mobile ? "-mobile" : ""));
@@ -322,7 +322,7 @@ public class FOSWeaponModules {
                         }};
                     }}
                 );
-                reqs = with(tin, 150, diamond, 75, silicon, 150);
+                reqs = with(zinc, 150, diamond, 75, silicon, 150);
             }
         };
     }

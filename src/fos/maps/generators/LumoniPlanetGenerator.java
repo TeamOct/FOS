@@ -272,7 +272,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
         inverseFloodFill(tiles.getn(spawn.x, spawn.y));
 
-        Seq<Block> ores = Seq.with(oreTin, oreTinSurface, oreSilver);
+        Seq<Block> ores = Seq.with(oreZinc, oreZincSurface, oreSilver);
         if (sector.id != 91) {
             ores.add(oreDiamond);
             ores.add(oreCopper);
@@ -302,7 +302,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         //map ores
         ores(ores);
         //early-game ores next to player's core
-        ores(Seq.with(oreTinSurface, oreTin, oreSilver), spawn.x, spawn.y, 20);
+        ores(Seq.with(oreZincSurface, oreZinc, oreSilver), spawn.x, spawn.y, 20);
 
         trimDark();
         median(2);

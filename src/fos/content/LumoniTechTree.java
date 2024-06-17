@@ -27,22 +27,22 @@ public class LumoniTechTree {
             );
 
             // TRANSPORT. TODO
-            node(tinBelt, () ->
-                node(tinJunction, () ->
-                    node(tinRouter, () -> {
-                        node(tinDistributor);
-                        node(tinSorter, () ->
+            node(zincBelt, () ->
+                node(zincJunction, () ->
+                    node(zincRouter, () -> {
+                        node(zincDistributor);
+                        node(zincSorter, () ->
                             node(flowGate)
                         );
-                        node(tinBridge);
+                        node(zincBridge);
                     })
                 )
             );
 
             // POWER. TODO
             node(windTurbine, () -> {
-                node(tinWire, () -> {
-                    node(tinWirePole);
+                node(zincWire, () -> {
+                    node(zincWirePole);
                     node(copperWire, () -> {
                         node(copperWirePole);
                         node(brassWire, () -> {
@@ -60,8 +60,8 @@ public class LumoniTechTree {
             });
 
             // WALLS
-            node(tinWall, () -> {
-                node(tinWallLarge);
+            node(zincWall, () -> {
+                node(zincWallLarge);
                 node(diamondWall, () -> {
                     node(diamondWallLarge);
                     node(vanadiumWall, () -> {
@@ -100,7 +100,7 @@ public class LumoniTechTree {
             // DRILLS
             node(crudeDrill, () -> {
                 node(improvedDrill, Seq.with(new OnSector(ruins)), () -> {
-                    node(draugFactory, Seq.with(new SectorComplete(tinMiningSite)), () ->
+                    node(draugFactory, Seq.with(new SectorComplete(zincMiningSite)), () ->
                         node(draug, ItemStack.with(), Seq.with(new Research(draugFactory)), () -> {})
                     );
                     soontm();
@@ -111,7 +111,7 @@ public class LumoniTechTree {
             });
 
             // UNDERGROUND DRILLS
-            node(tinDrill, () ->
+            node(zincDrill, () ->
                 node(silverDrill, () -> {
                     node(diamondDrill, Seq.with(new OnSector(intruders)), () -> {
                         node(surfaceDetonator);
@@ -235,7 +235,7 @@ public class LumoniTechTree {
             });
 
             // ITEMS
-            nodeProduce(tin, () -> {
+            nodeProduce(zinc, () -> {
                 nodeProduce(silver, () ->
                     nodeProduce(diamond, () -> {
                         nodeProduce(silicon, () -> {});
@@ -274,7 +274,7 @@ public class LumoniTechTree {
                         node(conflict, Seq.with(new SectorComplete(intruders)), () -> {
                             soontm();
                         });
-                        node(tinMiningSite, Seq.with(new SectorComplete(intruders)), () -> {
+                        node(zincMiningSite, Seq.with(new SectorComplete(intruders)), () -> {
                             soontm();
                         });
                         node(intrudersChallenge, Seq.with(new SectorComplete(intruders)), () -> {});

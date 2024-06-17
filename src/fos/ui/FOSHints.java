@@ -43,7 +43,7 @@ public class FOSHints {
             () -> false
         ),
         drillsPoweredByDetector(
-            () -> placedBlocks.contains(tinDrill) && placedBlocks.contains(oreDetector),
+            () -> placedBlocks.contains(zincDrill) && placedBlocks.contains(oreDetector),
             () -> false
         ),
         sandUnderground(

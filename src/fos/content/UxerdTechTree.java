@@ -17,7 +17,7 @@ public class UxerdTechTree {
     public static void load() {
         costs.put(aluminium, 0.05f);
         costs.put(lithium, 0.08f);
-        costs.put(tin, 0.06f);
+        costs.put(zinc, 0.06f);
         costs.put(silver, 0.06f);
         costs.put(cuberium, 0.03f);
         costs.put(titanium, 0.08f);
@@ -37,12 +37,12 @@ public class UxerdTechTree {
                     nodeProduce(FOSFluids.oxygen, () -> {});
             }));
             nodeProduce(rawElbium, () -> {
-                nodeProduce(tin, () -> {});
+                nodeProduce(zinc, () -> {});
                 nodeProduce(lithium, () -> {});
             });
             nodeProduce(rawElithite, () -> {
                 nodeProduce(titanium, () -> {});
-                nodeProduce(silver, () -> nodeProduce(cuberium, Seq.with(new Research(tin), new Research(titanium), new Research(FOSFluids.oxygen)), () -> {}));
+                nodeProduce(silver, () -> nodeProduce(cuberium, Seq.with(new Research(zinc), new Research(titanium), new Research(FOSFluids.oxygen)), () -> {}));
             });
             node(rockCrusher, Seq.with(new OnPlanet(FOSPlanets.uxerd)), () -> node(heatGenerator, () -> {
                 node(solarPanelMedium);
@@ -56,7 +56,7 @@ public class UxerdTechTree {
                 });
                 //node(plasmaLauncher);
                 node(oreDetectorSmall, () ->
-                    node(tinDrill)
+                    node(zincDrill)
                 );
             }));
         });

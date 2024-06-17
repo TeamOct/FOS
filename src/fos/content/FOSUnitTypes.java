@@ -37,7 +37,7 @@ import mindustry.type.weapons.*;
 import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.stroke;
 import static ent.anno.Annotations.EntityDef;
-import static fos.content.FOSItems.tin;
+import static fos.content.FOSItems.zinc;
 import static fos.content.FOSStatuses.*;
 import static mindustry.Vars.*;
 
@@ -1449,7 +1449,7 @@ public class FOSUnitTypes {
             isEnemy = false;
             useUnitCap = false;
 
-            mineItems = Seq.with(tin);
+            mineItems = Seq.with(zinc);
             mineTier = 2;
             mineSpeed = 1.2f;
 

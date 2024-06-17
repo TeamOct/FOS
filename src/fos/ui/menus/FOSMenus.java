@@ -53,7 +53,7 @@ public class FOSMenus {
         lumoniTerrain = new TerrainMenuBackground(){
             @Override
             public void generate(Tiles tiles) {
-                Seq<Block> ores = Seq.with(oreTinSurface, Blocks.oreCopper, oreDiamond, oreLuminium);
+                Seq<Block> ores = Seq.with(oreZincSurface, Blocks.oreCopper, oreDiamond, oreLuminium);
                 int offset = Mathf.floor((float) (Math.random() * 100000));
                 int s2 = offset + 1, s3 = offset + 2;
                 Block[][] blocks = new Block[][]{
