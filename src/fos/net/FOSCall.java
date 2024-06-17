@@ -42,6 +42,7 @@ public class FOSCall {
         StickyBulletType.detonate(player);
         if (net.client()) {
             DetonatePacket packet = new DetonatePacket();
+            packet.player = player;
             net.send(packet, false);
         }
     }
