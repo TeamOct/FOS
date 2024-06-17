@@ -7,10 +7,10 @@ import mindustry.entities.Damage;
 import mindustry.gen.Unitc;
 import mindustry.type.UnitType;
 
-import static mindustry.annotations.Annotations.*;
+import static ent.anno.Annotations.*;
 
-@Component
-public abstract class DamageAbsorbComp implements Unitc {
+@EntityComponent
+abstract class DamageAbsorbComp implements Unitc {
     @Import float armor, healthMultiplier;
     @Import UnitType type;
 

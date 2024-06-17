@@ -1,13 +1,12 @@
 {
-    "main": "fos.core.FOSMod",
-    "name": "fos",
     "displayName": "Fictional Octo System",
-    "author": "Team Oct",
-    "repo": "TeamOct/FOS",
-    "subtitle": "See you later!",
     "description": "FOS is a large-scale mod with a campaign that contains a brand-new solar system and unique mechanics.",
-    "version": "1.1 beta build-2.2",
-    "minGameVersion": 145,
+    "author": "Team Oct",
+    "subtitle": "See you later!",
+    "repo": "TeamOct/FOS",
+    "version": "1.1 beta build-3-dev",
+    "minGameVersion": 146,
     "java": true,
+    "main": "fos.core.FOSMod",
     "hidden": false
 }

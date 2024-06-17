@@ -1,245 +1,214 @@
-project.repositories {
-    mavenCentral()
-    mavenLocal()
-    maven { url "https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository" }
-    maven { url "https://www.jitpack.io" }
+import arc.files.Fi
+import arc.util.OS
+import arc.util.serialization.Jval
+
+buildscript{
+    dependencies{
+        classpath "com.github.Anuken.Arc:arc-core:$arcVersion"
+    }
+
+    repositories{
+        mavenCentral()
+        maven{url 'https://oss.sonatype.org/content/repositories/snapshots/'}
+        maven{url 'https://oss.sonatype.org/content/repositories/releases/'}
+        maven{url 'https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository'}
+        maven{url 'https://jitpack.io'}
+    }
 }
 
-project.plugins.apply("java")
-project.plugins.apply("idea")
-project.plugins.apply("maven-publish")
+plugins{
+    // Register `EntityAnno` plugin, but only apply on `rootProject`.
+    id 'java'
+    id 'com.github.GlennFolker.EntityAnno' version "$entVersion" apply false
+}
 
-ext {
-    var localFile = file("settings/local.json")
-    local = localFile.exists() ? new groovy.json.JsonSlurper().parseText(localFile.text) : null
+configure(allprojects){
+    sourceSets.main.java.srcDirs = [layout.projectDirectory.dir('src')]
 
-    var settingsFile = file("settings/settings.json")
-    settings = settingsFile.exists() ? new groovy.json.JsonSlurper().parseText(settingsFile.text) : null
+    ext{
+        compilerVersion = JavaVersion.current().ordinal() - JavaVersion.VERSION_17.ordinal() + 17
+        useJitpack = Boolean.valueOf(mindustryBE)
 
-    project.group = project.ext.settings?.projectSettings?.group ?: "group"
-    project.version = project.ext.settings?.projectSettings?.version ?: "nil"
+        arc = {String module ->
+            "com.github.Anuken.Arc$module:$arcVersion"
+        }
 
-    buildScriptExtensions = []
-    settings?.extensions?.each { String ext ->
-        project.file("extensions/$ext").listFiles()?.each { File file ->
-            buildScriptExtensions += file
+        mindustry = {String module ->
+            "com.github.Anuken.Mindustry$module:$mindustryVersion"
         }
     }
 
-    doExec = { String cmd ->
-        cmd.execute(null, rootProject.projectDir).waitForProcessOutput(System.out, System.err)
-    }
-
-    getOutputJar = { Project p ->
-        return "${p.group.replaceAll("/|\\\\", "-")}-${p.version}.jar"
-    }
-
-    child = { File p, String c ->
-        return new File(p, c)
-    }
-
-    // parse dependencies
-    deps = [:]
-    var depsConf = project.ext.settings?.dependencies
-    var depsList = [:]
-    depsConf?.list?.each { dep ->
-        var k = dep.keySet()[0]
-        var v = dep[k]
-        depsList[k] = v
-    }
-    depsConf?.deps?.each { depType ->
-        k = depType.key
-        depType.value.each { String v ->
-            var dep = null
-            if (v.startsWith("project:")) {
-                dep = project.project(v.substring(8))
-            } else if (v.startsWith("list:")) {
-                dep = depsList[v.substring(5)]
-            } else if (v.startsWith("direct:")) {
-                dep = v.substring(7)
+    configurations.configureEach{
+        // Resolve the correct Mindustry dependency, and force Arc version.
+        resolutionStrategy.eachDependency{
+            if(useJitpack && requested.group == 'com.github.Anuken.Mindustry'){
+                useTarget "com.github.Anuken.MindustryJitpack:$it.requested.name:$mindustryBEVersion"
             }
 
-            if (dep == null)
-                project.logger.log(LogLevel.ERROR, "Uncknown depedency type $v")
-            else {
-                if (!project.ext.deps.containsKey(k)) {
-                    project.ext.deps[k] = []
-                }
-                project.ext.deps[k] += dep
+            if(requested.group == 'com.github.Anuken.Arc'){
+                useVersion arcVersion
             }
         }
     }
 
-    // find sdkRoot in configs
-    var root = System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT") ?: project.ext.local?.jvm?.home
-    sdkRoot = (root == null ? null : new File(root))
+    dependencies{
+        // Downgrade Java 9+ syntax into being available in Java 8.
+        annotationProcessor "com.github.GlennFolker.EntityAnno:downgrader:$entVersion"
+    }
 
-    dexFile = project.ext.child(project.buildDir, "dex.jar")
-    var ua = project.ext.local?.build?.buildAndroid
-    useandroid = ((ua == null) || ua)
+    repositories{
+        // Necessary Maven repositories to pull dependencies from.
+        mavenCentral()
+        maven{url 'https://oss.sonatype.org/content/repositories/snapshots/'}
+        maven{url 'https://oss.sonatype.org/content/repositories/releases/'}
+
+        // Use Zelaux's non-buggy repository for release Mindustry and Arc builds.
+        if(!useJitpack) maven{url 'https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository'}
+        maven{url 'https://jitpack.io'}
+    }
+
+    tasks.withType(JavaCompile).configureEach{
+        // Use Java 17+ syntax, but target Java 8 bytecode version.
+        sourceCompatibility = compilerVersion
+        options.release.set 8
+        options.compilerArgs << '-Xlint:-options'
+
+        options.incremental = true
+        options.encoding = 'UTF-8'
+    }
 }
 
-project.tasks.create("fixNames") {
-    doLast {
-        project.sourceSets.main.resources.srcDirs.each { File dir ->
-            if (dir.exists()) {
-                dir.eachFileRecurse(groovy.io.FileType.FILES) { File file ->
-                    if (file.name.endsWith(".hjson") || file.name.endsWith(".properties"))
-                        file.write file.text.replaceAll("mm-", "mdvlm-")
-                }
+configure(rootProject){
+    // Apply `EntityAnno` plugin to integrate the annotation processors.
+    apply plugin: 'com.github.GlennFolker.EntityAnno'
+
+    entityAnno{
+        modName = property('modName')
+        mindustryVersion = property(useJitpack ? 'mindustryBEVersion' : 'mindustryVersion')
+        isJitpack = useJitpack
+        revisionDir = layout.projectDirectory.dir('revisions').asFile
+        fetchPackage = modFetch
+        genSrcPackage = modGenSrc
+        genPackage = modGen
+    }
+
+    dependencies{
+        // Use the entity generation annotation processor.
+        compileOnly "com.github.GlennFolker.EntityAnno:entity:$entVersion"
+        kapt "com.github.GlennFolker.EntityAnno:entity:$entVersion"
+
+        // Depend on Mindustry/Arc classpath.
+        compileOnly "${mindustry(':core')}"
+        compileOnly "${arc(':arc-core')}"
+
+        // External dependencies begin here:
+
+        // Required for Discord RPC integration.
+        compileOnly "${arc(":discord")}"
+        // MultiCrafter Lib dependency.
+        implementation "com.github.liplum:MultiCrafterLib:v1.7"
+        // Arc's SDL binds.
+        compileOnly "${arc(":backend-sdl")}"
+    }
+
+    jar{
+        archiveFileName = "${modArtifact}Desktop.jar"
+
+        from files(sourceSets.main.output.classesDirs)
+        from files(sourceSets.main.output.resourcesDir)
+        from configurations.runtimeClasspath.collect{it.isDirectory() ? it : zipTree(it)}
+
+        from files(layout.projectDirectory.dir('res'))
+        from layout.projectDirectory.file('icon.png')
+
+        def meta = file("$temporaryDir/mod.json")
+        from meta
+
+        metaInf{
+            from layout.projectDirectory.file('LICENSE')
+        }
+
+        doFirst{
+            // Deliberately check if the mod meta is actually written in HJSON, since, well, some people actually use it.
+            // But this is also not mentioned in the `README.md`, for the mischievous reason of driving beginners into using
+            // JSON instead.
+            def metaJson = layout.projectDirectory.file('mod.json')
+            def metaHjson = layout.projectDirectory.file('mod.hjson')
+            if(metaJson.asFile.exists() && metaHjson.asFile.exists()){
+                throw new GradleException('Ambiguous mod meta: both `mod.json` and `mod.hjson` exist.')
+            }else if(!metaJson.asFile.exists() && !metaHjson.asFile.exists()){
+                throw new GradleException('Missing mod meta: neither `mod.json` nor `mod.hjson` exist.')
             }
+            def isJson = metaJson.asFile.exists()
+
+            def map = (isJson ? metaJson : metaHjson).asFile.withReader{Jval.read(it)}
+            map.put('name', modName)
+            meta.withWriter{map.writeTo(it, Jval.Jformat.formatted)}
+        }
+    }
+
+    tasks.register('dex', Jar){
+        inputs.files tasks.jar
+        archiveFileName = "${modArtifact}.jar"
+
+        final def desktopJar = tasks.jar.archiveFile
+        final def dexJar = file("$temporaryDir/Dexed.jar")
+
+        from zipTree(desktopJar), zipTree(dexJar)
+        doFirst{
+            // Find Android SDK root.
+            def sdkRoot = file(
+                System.getenv('ANDROID_SDK_ROOT') ?: System.getenv('ANDROID_HOME') ?:
+                { throw new GradleException('Neither `ANDROID_SDK_ROOT` nor `ANDROID_HOME` is set') }
+            )
+
+            // Find `d8`.
+            def d8 = file("$sdkRoot/build-tools/$androidBuildVersion/d8")
+            if(!d8.exists()){
+                throw new GradleException("Android SDK `build-tools;$androidBuildVersion` isn't installed or is corrupted")
+            }
+
+            // Initialize a release build.
+            def input = desktopJar.get().asFile
+            def command = "$d8 --release --min-api $androidMinVersion --output $dexJar $input"
+
+            // Include all compile and runtime classpath.
+            (configurations.compileClasspath.asList() + configurations.runtimeClasspath.asList()).forEach{
+                if(it.exists()) command = "$command --classpath $it"
+            }
+
+            // Include Android platform as library.
+            def androidJar = file("$sdkRoot/platforms/android-$androidSdkVersion/android.jar")
+            if(!androidJar.exists()){
+                throw new GradleException("Android SDK `platforms;android-$androidSdkVersion` isn't installed or is corrupted")
+            }
+
+            command = "$command --lib $androidJar"
+            if(OS.isWindows) command = "cmd /c $command"
+
+            // Run `d8`.
+            logger.log(LogLevel.LIFECYCLE, 'Running `d8`.')
+            command.execute(null, layout.projectDirectory.asFile).waitForProcessOutput(System.out, System.err)
         }
     }
 }
 
-project.group = project.ext.settings?.projectSettings?.group ?: "group"
-project.version = project.ext.settings?.projectSettings?.version ?: "nil"
+for(def i = 0; i < 2; i++){
+    final def isDex = i == 1
+    final def name = isDex ? 'installDex' : 'install'
+    final def input = isDex ? tasks.dex : tasks.jar
 
-// src - java sources
-// gen - generated java sources
-// res - resources (e.g. assets)
-project.sourceSets.main.java.srcDirs = [
-        "src", "gen"
-]
-project.sourceSets.main.resources.srcDirs = [
-        "res"
-]
+    tasks.register(name){
+        inputs.files input
+        doLast{
+            def folder = Fi.get(OS.getAppDataDirectoryString('Mindustry')).child('mods')
+            folder.mkdirs()
 
-project.tasks.create("dex")
-project.tasks.create("buildRelease", Jar)
-project.tasks.create("copyBuildRelease")
+            folder.child(tasks.jar.archiveFileName.get()).delete()
+            folder.child(tasks.dex.archiveFileName.get()).delete()
 
-project.tasks.compileJava { JavaCompile task ->
-    task.options.encoding = "UTF-8"
-    task.options.compilerArgs += "-Xlint:none"
-    task.options.generatedSourceOutputDirectory.set(project.file("gen"))
-
-    task.options.compilerArgs += ['--release', '8']
-    task.targetCompatibility = JavaVersion.VERSION_1_8
-    task.sourceCompatibility = JavaVersion.VERSION_20
-
-    task.options.forkOptions.jvmArgs += [
-            "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED",
-            "--add-opens=java.base/sun.reflect.annotation=ALL-UNNAMED"
-    ]
-
-    doFirst {
-        delete options.generatedSourceOutputDirectory.get().asFile.listFiles()
-    }
-}
-
-project.dependencies {
-    annotationProcessor "com.github.Anuken:jabel:93fde537c7"
-
-    if (project.ext.deps.implementation != null)
-        implementation project.ext.deps.implementation
-
-    if (project.ext.deps.api != null)
-        api project.ext.deps.api
-
-    if (project.ext.deps.compileOnly != null)
-        compileOnly project.ext.deps.compileOnly
-
-    if (project.ext.deps.annotationProcessor != null)
-        annotationProcessor project.ext.deps.annotationProcessor
-}
-
-
-project.tasks.copyBuildRelease { Task task ->
-    task.dependsOn project.tasks.buildRelease
-
-    task.doLast {
-        project.ext.local?.copy?.each { p ->
-            project.copy { CopySpec spec ->
-                spec.from project.tasks.buildRelease.archiveFile.get()
-                spec.into p
-            }
+            new Fi(input.archiveFile.get().asFile).copyTo(folder)
+            logger.log(LogLevel.LIFECYCLE, "Copied :${isDex ? 'dex' : 'jar'} output to $folder.")
         }
     }
-}
-
-project.tasks.jar { Jar jar ->
-    jar.archiveFileName.set "classes.jar"
-
-    jar.duplicatesStrategy DuplicatesStrategy.EXCLUDE
-    jar.from {
-        project.configurations.runtimeClasspath.collect { File file ->
-            file.isDirectory() ? file : zipTree(file)
-        }
-    }
-}
-
-// collect classes and dex jars
-project.tasks.buildRelease { Jar jar ->
-    jar.dependsOn project.tasks.dex
-    jar.dependsOn project.tasks.jar
-
-    jar.archiveFileName = project.ext.getOutputJar(project)
-
-    jar.from {
-        project.ext.useandroid ? [project.zipTree(project.tasks.jar.archiveFile.get()), project.zipTree(dexFile)] :
-                [project.zipTree(project.tasks.jar.archiveFile.get())]
-    }
-
-    jar.destinationDirectory.set project.file("artifacts")
-}
-
-// create dex jar
-project.tasks.dex { Task task ->
-    task.dependsOn project.tasks.jar
-
-    // create dex jar
-    task.doLast {
-        // delete previous dex jar
-        if (project.ext.dexFile.exists())
-            project.delete project.ext.dexFile
-
-        println project.ext.useandroid ? "Building dex jar" : "Dex jar building skipped"
-
-        if (project.ext.useandroid) {
-            // find d8 and android.jar locations
-            if (project.ext.sdkRoot == null || !project.ext.sdkRoot.exists())
-                throw new GradleException("No Android SDK found.")
-            var platformRoot = project.ext.child(project.ext.sdkRoot, "platforms").listFiles().find { File file ->
-                project.ext.child(file, "android.jar").exists()
-            }
-            String d8Name = System.getenv("OS") == "Windows_NT" ? "d8.bat" : "d8"
-            var buildToolsRoot = project.ext.child(project.ext.sdkRoot, "build-tools").listFiles().find { File file ->
-                project.ext.child(file, d8Name).exists()
-            }
-
-            if (!platformRoot || !buildToolsRoot)
-                throw new GradleException("" +
-                        (!platformRoot ? "No android.jar found. Ensure that you have an Android platform installed." : "") +
-                        (!buildToolsRoot ? "No $d8Name found. Ensure that you have an Android build tools installed." : ""))
-
-            // collect all classpath
-            var classpath = (configurations.compileClasspath.asList()
-                    + configurations.runtimeClasspath.asList()
-                    + project.ext.child(platformRoot, "android.jar"))
-            var dependencies = ""
-            for (path in classpath) {
-                dependencies += "--classpath $path.absolutePath "
-            }
-
-            // run d8
-            project.ext.doExec(
-                    "$buildToolsRoot/$d8Name $dependencies ${project.tasks.jar.archiveFile.get()}" +
-                            " --min-api 14 --output $dexFile.absolutePath")
-        }
-    }
-}
-
-project.ext.buildScriptExtensions?.each { File file ->
-    project.apply(from: file)
 }

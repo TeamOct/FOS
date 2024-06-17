@@ -18,7 +18,7 @@ import fos.content.*;
 import fos.controllers.CapsulesController;
 import fos.gen.*;
 import fos.graphics.*;
-import fos.net.FOSPackets;
+import fos.net.FOSCall;
 import fos.ui.*;
 import fos.ui.menus.*;
 import mindustry.game.*;
@@ -28,7 +28,6 @@ import mindustry.mod.Mod;
 import mindustry.mod.Mods.LoadedMod;
 import mindustry.ui.Styles;
 import mindustry.ui.dialogs.PlanetDialog;
-import mma.annotations.ModAnnotations;
 
 import java.util.Calendar;
 
@@ -37,13 +36,6 @@ import static arc.discord.DiscordRPC.*;
 import static arc.input.GestureDetector.GestureListener;
 import static mindustry.Vars.*;
 
-@ModAnnotations.RootDirectoryPath(rootDirectoryPath = "")
-@ModAnnotations.AnnotationSettings(
-        rootPackage = "fos",
-        modInfoPath = "res/mod.json",
-        classPrefix = "FOS",
-        revisionsPath = "revisions"
-)
 public class FOSMod extends Mod {
     /** Only for debugging! */
     public FOSVars vars = new FOSVars();
@@ -53,9 +45,7 @@ public class FOSMod extends Mod {
         if (FOSVars.debug)
             Log.level = Log.LogLevel.debug;
 
-        FOSPackets.register();
         FOSCall.registerPackets();
-        FOSEntityMapping.init();
         EntityMapping.nameMap.keys().toSeq().each(s -> {
             EntityMapping.nameMap.put("fos-" + s, EntityMapping.nameMap.get(s));
         });
@@ -118,6 +108,8 @@ public class FOSMod extends Mod {
 
     @Override
     public void loadContent() {
+        EntityRegistry.register();
+
         Log.debug("[FOS] loading content");
         FOSVars.mod = mods.getMod(getClass());
 
@@ -307,7 +299,7 @@ public class FOSMod extends Mod {
                     control.input.isPlacing() ||
                     control.input.isBreaking() ||
                     control.input.selectedUnit() != null
-                ) && player.unit() instanceof LumoniPlayerUnitc) {
+                ) && player.unit() instanceof LumoniPlayerc) {
                     FOSCall.detonate();
                     return true;
                 } else {

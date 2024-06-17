@@ -17,17 +17,16 @@ import mindustry.entities.part.DrawPart;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.*;
 import mindustry.graphics.Layer;
-import mindustry.type.UnitType;
 import mindustry.world.meta.BlockFlag;
 
 import static mindustry.Vars.player;
 
 /** Just a template for bugs. */
-public class BugUnitType extends UnitType {
+public class BugUnitType extends FOSUnitType {
     private static final Vec2 legOffset = new Vec2();
 
-    public BugUnitType(String name, boolean flying) {
-        super(name);
+    public <T extends Unit> BugUnitType(String name, Class<T> type, boolean flying) {
+        super(name, type);
         isEnemy = false;
         lightOpacity = lightRadius = 0f;
         drawCell = false;
@@ -46,8 +45,8 @@ public class BugUnitType extends UnitType {
         targetFlags = new BlockFlag[]{BlockFlag.drill, BlockFlag.factory, BlockFlag.core, null};
         controller = u -> flying ? new FlyingBugAI() : new BugAI();
     }
-    public BugUnitType(String name, boolean flying, boolean melee) {
-        this(name, flying);
+    public <T extends Unit> BugUnitType(String name, Class<T> type, boolean flying, boolean melee) {
+        this(name, type, flying);
         if (melee) this.range = 0.01f;
     }
 

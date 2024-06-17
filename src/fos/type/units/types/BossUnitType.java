@@ -8,8 +8,8 @@ import static arc.Core.settings;
 //Used for bosses that unlock certain contents upon defeat.
 public class BossUnitType extends FOSUnitType {
 
-    public BossUnitType(String name) {
-        super(name);
+    public <T extends Unit> BossUnitType(String name, Class<T> type) {
+        super(name, type);
     }
 
     @Override

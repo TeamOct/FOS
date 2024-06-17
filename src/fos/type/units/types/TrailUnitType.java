@@ -8,8 +8,8 @@ import mindustry.graphics.Trail;
 public class TrailUnitType extends FOSUnitType {
     public Class<? extends Trail> trailType = Trail.class;
 
-    public TrailUnitType(String name) {
-        super(name);
+    public <T extends Unit> TrailUnitType(String name, Class<T> type) {
+        super(name, type);
     }
 
     @Override

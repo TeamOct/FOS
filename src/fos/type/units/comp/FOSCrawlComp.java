@@ -5,7 +5,6 @@ import arc.math.geom.Vec2;
 import arc.util.Time;
 import fos.ai.FOSPathfinder;
 import mindustry.Vars;
-import mindustry.annotations.Annotations.*;
 import mindustry.content.*;
 import mindustry.game.Team;
 import mindustry.gen.*;
@@ -13,6 +12,7 @@ import mindustry.type.UnitType;
 import mindustry.world.Tile;
 import mindustry.world.blocks.environment.Floor;
 
+import static ent.anno.Annotations.*;
 import static mindustry.Vars.*;
 
 /**
@@ -20,8 +20,8 @@ import static mindustry.Vars.*;
  * to avoid conflicts with other components.
  * This is VERY cursed.
  */
-@Component
-public abstract class FOSCrawlComp implements Posc, Rotc, Hitboxc, Unitc {
+@EntityComponent
+abstract class FOSCrawlComp implements Posc, Rotc, Hitboxc, Unitc {
     @Import
     float x, y, speedMultiplier, rotation, hitSize;
     @Import

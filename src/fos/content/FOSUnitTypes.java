@@ -7,6 +7,11 @@ import arc.math.geom.*;
 import arc.struct.Seq;
 import arc.util.*;
 import fos.ai.*;
+import fos.gen.ElevationMoveUnit;
+import fos.gen.LegsUnit;
+import fos.gen.MechUnit;
+import fos.gen.TankUnit;
+import fos.gen.UnitEntity;
 import fos.gen.*;
 import fos.graphics.*;
 import fos.type.abilities.*;
@@ -16,7 +21,6 @@ import fos.type.units.types.*;
 import fos.type.units.weapons.InjectorWeapon;
 import mindustry.ai.UnitCommand;
 import mindustry.ai.types.*;
-import mindustry.annotations.Annotations;
 import mindustry.audio.SoundLoop;
 import mindustry.content.*;
 import mindustry.entities.*;
@@ -32,74 +36,75 @@ import mindustry.type.weapons.*;
 
 import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.stroke;
+import static ent.anno.Annotations.EntityDef;
 import static fos.content.FOSItems.tin;
 import static fos.content.FOSStatuses.*;
 import static mindustry.Vars.*;
 
 public class FOSUnitTypes {
-    public static @Annotations.EntityDef({Mechc.class}) UnitType
+    public static @EntityDef({Unitc.class, Mechc.class}) UnitType
         // MECH BOSSES
         legion, citadel;
 
-    public static @Annotations.EntityDef({Tankc.class}) UnitType
+    public static @EntityDef({Unitc.class, Tankc.class}) UnitType
         // TANK BOSSES
         myriad, warden;
 
-    public static @Annotations.EntityDef({ElevationMovec.class, Unitc.class}) UnitType
+    public static @EntityDef({Unitc.class, ElevationMovec.class}) UnitType
         // HOVERCRAFT (INJECTORS)
-        sergeant, lieutenant, captain,
+        sergeant, lieutenant,
 
         // HOVERCRAFT (DESTROYERS)
         assault, abrupt;
 
-    public static @Annotations.EntityDef({Unitc.class}) UnitType
+    public static @EntityDef({Unitc.class}) UnitType
         // FLYING (LEGION SUMMONS)
         legionnaire, legionnaireReplica,
 
         // FLYING (DESTROYERS)
-        brunt;
+        brunt,
 
-    public static @Annotations.EntityDef({Legsc.class}) UnitType
+        // FLYING (INJECTORS)
+        captain;
+
+    public static @EntityDef({Unitc.class, Legsc.class}) UnitType
         // LEGS (ELIMINATORS)
         radix, foetus, vitarus;
 
-    public static @Annotations.EntityDef({Payloadc.class, Unitc.class}) UnitType
-        // PAYLOAD
+    public static @EntityDef({Unitc.class, Payloadc.class}) UnitType
+        // PAYLOAD TODO
         vulture;
 
-    public static @Annotations.EntityDef({BuildingTetherc.class, Payloadc.class}) UnitType
-        // TETHER
+    public static @EntityDef({Unitc.class, Payloadc.class, BuildingTetherc.class}) UnitType
+        // TETHER TODO
         testOverdrive;
 
-    //TODO submarines
-    public static @Annotations.EntityDef({Submarinec.class}) UnitType
+    public static @EntityDef({Unitc.class, Submarinec.class}) UnitType
         // SUBMARINES TODO
         subSmall;
 
-    public static @Annotations.EntityDef({LumoniPlayerUnitc.class, Legsc.class}) UnitType
+    public static @EntityDef({Unitc.class, LumoniPlayerc.class, Legsc.class}) UnitType
         // PLAYER UNITS
         lord, king;
 
-    public static @Annotations.EntityDef({Bugc.class, FOSCrawlc.class}) UnitType
+    public static @EntityDef({Unitc.class, Crawlc.class, Bugc.class}) UnitType
         // CRAWLING INSECTS
         bugSmall, bugMedium;
 
-    public static @Annotations.EntityDef({Bugc.class}) UnitType
+    public static @EntityDef({Unitc.class, Bugc.class}) UnitType
         // FLYING INSECTS
         bugFlyingSmall, bugFlyingMedium;
 
-    public static @Annotations.EntityDef({Unitc.class, Minerc.class, BuildingTetherc.class}) UnitType
+    public static @EntityDef({Unitc.class, Minerc.class, BuildingTetherc.class}) UnitType
         // MINER UNITS
         draug;
 
-    public static @Annotations.EntityDef({Unitc.class}) UnitType
+    public static @EntityDef({Unitc.class}) UnitType
         // INTERNAL, USED FOR INITIALIZING WEAPON SETS
         weaponSetInit;
 
     public static void load(){
-        //DestroyersUnits.load();
-
-        legionnaire = new FOSUnitType("legionnaire"){{
+        legionnaire = new FOSUnitType("legionnaire", UnitEntity.class){{
             health = 200;
             hitSize = 12;
             rotateSpeed = 12f;
@@ -134,7 +139,7 @@ public class FOSUnitTypes {
             );
             controller = u -> new ProtectorAI();
         }};
-        legionnaireReplica = new FOSUnitType("legionnaire-replica"){{
+        legionnaireReplica = new FOSUnitType("legionnaire-replica", UnitEntity.class){{
             health = 150;
             hitSize = 12;
             rotateSpeed = 12f;
@@ -168,7 +173,7 @@ public class FOSUnitTypes {
             );
             controller = u -> new ProtectorAI();
         }};
-        legion = new BossUnitType("legion"){{
+        legion = new BossUnitType("legion", MechUnit.class){{
             health = 4500;
             armor = 10;
             hitSize = 25;
@@ -223,7 +228,7 @@ public class FOSUnitTypes {
 
             //aiController = GroundBossAI::new;
         }};
-        citadel = new BossUnitType("citadel"){
+        citadel = new BossUnitType("citadel", MechUnit.class){
             {
                 health = 9000;
                 armor = 20;
@@ -470,7 +475,7 @@ public class FOSUnitTypes {
             }
         };
         //TODO: campaign boss
-        warden = new BossUnitType("warden"){{
+        warden = new BossUnitType("warden", TankUnit.class){{
             health = 4500;
             armor = 15;
             hitSize = 36;
@@ -605,7 +610,7 @@ public class FOSUnitTypes {
             });
             aiController = GroundAI::new;
         }};
-        myriad = new BossUnitType("myriad"){{
+        myriad = new BossUnitType("myriad", TankUnit.class){{
             hitSize = 47f;
             treadPullOffset = 1;
             speed = 0.48f;
@@ -753,7 +758,7 @@ public class FOSUnitTypes {
             }});
         }};
 
-        lord = new LumoniPlayerUnitType("lord"){{
+        lord = new LumoniPlayerUnitType("lord", LegsLumoniPlayerUnit.class){{
             health = 1200;
             armor = 3;
             hitSize = 10;
@@ -765,7 +770,7 @@ public class FOSUnitTypes {
             buildSpeed = 1f;
             weapons.add(FOSWeaponModules.standard1.weapons);
         }};
-        king = new LumoniPlayerUnitType("king"){{
+        king = new LumoniPlayerUnitType("king", LegsLumoniPlayerUnit.class){{
             health = 2000;
             armor = 6;
             hitSize = 15;
@@ -778,7 +783,7 @@ public class FOSUnitTypes {
             weapons.add(FOSWeaponModules.standard2.weapons);
         }};
 
-        sergeant = new TrailUnitType("sergeant"){{
+        sergeant = new TrailUnitType("sergeant", ElevationMoveUnit.class){{
             health = 720;
             armor = 4;
             hitSize = 12;
@@ -825,7 +830,7 @@ public class FOSUnitTypes {
                 }}
             );
         }};
-        lieutenant = new TrailUnitType("lieutenant"){{
+        lieutenant = new TrailUnitType("lieutenant", ElevationMoveUnit.class){{
             health = 1600;
             armor = 6;
             hitSize = 16;
@@ -907,12 +912,12 @@ public class FOSUnitTypes {
                 }}
             );
         }};
-        captain = new TrailUnitType("captain"){{
+        captain = new TrailUnitType("captain", UnitEntity.class){{
             health = 4200;
             armor = 8;
             hitSize = 20;
             speed = 0.3f;
-            hovering = true;
+            flying = true;
             engineColorInner = FOSPal.hacked;
             engineColor = FOSPal.hackedBack;
             engineLayer = Layer.groundUnit - 0.1f;
@@ -981,8 +986,7 @@ public class FOSUnitTypes {
             );
         }};
 
-        radix = new FOSUnitType("radix"){{
-            constructor = LegsUnit::create;
+        radix = new FOSUnitType("radix", LegsUnit.class){{
             health = 1000;
             armor = 5;
             speed = 0.6f;
@@ -1036,8 +1040,7 @@ public class FOSUnitTypes {
                     }}
             );
         }};
-        foetus = new FOSUnitType("foetus"){{
-            constructor = LegsUnit::create;
+        foetus = new FOSUnitType("foetus", LegsUnit.class){{
             health = 1950;
             armor = 5;
             speed = 0.4f;
@@ -1090,8 +1093,7 @@ public class FOSUnitTypes {
                 }};
             }});
         }};
-        vitarus = new FOSUnitType("vitarus"){{
-            constructor = LegsUnit::create;
+        vitarus = new FOSUnitType("vitarus", LegsUnit.class){{
             health = 3100;
             armor = 7;
             speed = 0.35f;
@@ -1172,6 +1174,7 @@ public class FOSUnitTypes {
             );
         }};
 
+/*
         testOverdrive = new UnitType("test-overdrive"){{
             health = 360;
             hitSize = 12;
@@ -1180,8 +1183,9 @@ public class FOSUnitTypes {
             speed = 1.2f;
             hidden = true; // TODO: unused
         }};
+*/
 
-        assault = new FOSUnitType("assault"){{
+        assault = new FOSUnitType("assault", ElevationMoveUnit.class){{
             health = 800;
             //armor = 2f;
             hitSize = 9f;
@@ -1230,7 +1234,7 @@ public class FOSUnitTypes {
                 }}
             );
         }};
-        abrupt = new FOSUnitType("abrupt"){{
+        abrupt = new FOSUnitType("abrupt", ElevationMoveUnit.class){{
             health = 800;
             armor = 4;
             speed = 1.5f;
@@ -1295,7 +1299,7 @@ public class FOSUnitTypes {
                 }}
             );
         }};
-        brunt = new FOSUnitType("brunt"){{
+        brunt = new FOSUnitType("brunt", UnitEntity.class){{
             health = 1500;
             armor = 22.5f;
             speed = 0.8f;
@@ -1327,6 +1331,7 @@ public class FOSUnitTypes {
             );
         }};
 
+/*
         vulture = new CarrierUnitType("vulture"){{
             health = 400;
             speed = 2f;
@@ -1339,8 +1344,9 @@ public class FOSUnitTypes {
             hidden = true; // TODO: unused
             controller = u -> new CarrierAI();
         }};
+*/
 
-        bugSmall = new BugUnitType("bug-small", false){{
+        bugSmall = new BugUnitType("bug-small", BugCrawlUnit.class, false){{
             health = 160;
             armor = 8;
             hitSize = 16f;
@@ -1354,7 +1360,7 @@ public class FOSUnitTypes {
             segmentMag = 0.5f;
         }};
 
-        bugMedium = new BugUnitType("bug-medium", false){{
+        bugMedium = new BugUnitType("bug-medium", BugCrawlUnit.class, false){{
             health = 480;
             armor = 15;
             hitSize = 18f;
@@ -1368,7 +1374,7 @@ public class FOSUnitTypes {
             segmentMag = 0.5f;
         }};
 
-        bugFlyingSmall = new BugUnitType("bug-flying-small", true, true){{
+        bugFlyingSmall = new BugUnitType("bug-flying-small", BugUnit.class, true, true){{
             health = 60;
             armor = 1;
             hitSize = 6f;
@@ -1401,7 +1407,7 @@ public class FOSUnitTypes {
                 }}
             );
         }};
-        bugFlyingMedium = new BugUnitType("bug-flying-medium", true){{
+        bugFlyingMedium = new BugUnitType("bug-flying-medium", BugUnit.class, true){{
             health = 200;
             armor = 2;
             hitSize = 12f;
@@ -1432,7 +1438,7 @@ public class FOSUnitTypes {
             );
         }};
 
-        draug = new FOSUnitType("draug"){{
+        draug = new FOSUnitType("draug", BuildingTetherMinerUnit.class){{
             health = 110;
             armor = 2;
             hitSize = 10f;
@@ -1454,7 +1460,7 @@ public class FOSUnitTypes {
             // you have incurred my wrath. prepare to die.
         }};
 
-        weaponSetInit = new FOSUnitType("weapon-set-init"){{
+        weaponSetInit = new FOSUnitType("weapon-set-init", UnitEntity.class){{
             hidden = true;
             internal = true;
             for (var s : WeaponSet.sets) {
@@ -1463,6 +1469,7 @@ public class FOSUnitTypes {
         }};
 
         //TODO
+/*
         subSmall = new SubmarineUnitType("sub-small"){{
             health = 250;
             speed = 0.7f;
@@ -1483,5 +1490,6 @@ public class FOSUnitTypes {
                 }};
             }});
         }};
+*/
     }
 }

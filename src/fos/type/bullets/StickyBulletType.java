@@ -2,7 +2,6 @@ package fos.type.bullets;
 
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
-import mindustry.annotations.Annotations;
 import mindustry.content.Fx;
 import mindustry.entities.bullet.BasicBulletType;
 import mindustry.gen.*;
@@ -133,7 +132,6 @@ public class StickyBulletType extends BasicBulletType {
         }
     }
 
-    @Annotations.Remote(called = Annotations.Loc.both, targets = Annotations.Loc.client, forward = true)
     public static void detonate(Player player) {
         Groups.bullet.each(b -> {
             if (b == null || !(b.data instanceof StickyBulletData) || b.owner == null) return;

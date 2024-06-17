@@ -3,7 +3,7 @@ package fos.content;
 import arc.Core;
 import arc.graphics.Color;
 import arc.struct.Seq;
-import arc.util.*;
+import arc.util.Strings;
 import fos.audio.FOSSounds;
 import fos.graphics.*;
 import fos.type.blocks.campaign.*;
@@ -1821,6 +1821,7 @@ public class FOSBlocks {
             constructTime = 60f * 25;
             requirements(Category.units, with(silver, 150, silicon, 150, vanadium, 100));
         }};
+/*
         droidConstructor = new OverdriveDroneCenter("droid-constructor"){{
             scaledHealth = 120;
             size = 3;
@@ -1830,6 +1831,7 @@ public class FOSBlocks {
             droneType = testOverdrive;
             requirements(Category.units, BuildVisibility.debugOnly, with(brass, 275, silicon, 400, nickel, 150));
         }};
+*/
         draugFactory = new MinerUnitFactory("draug-factory"){{
             scaledHealth = 60;
             size = 4;

@@ -1,32 +1,20 @@
 package fos.graphics;
 
-import arc.Core;
-import arc.Events;
+import arc.*;
 import arc.graphics.*;
-import arc.graphics.g2d.Batch;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.TextureRegion;
-import arc.graphics.gl.IndexBufferObject;
-import arc.graphics.gl.Shader;
-import arc.graphics.gl.VertexBufferObject;
+import arc.graphics.g2d.*;
+import arc.graphics.gl.*;
 import arc.math.Mathf;
 import arc.math.geom.Point2;
-import arc.struct.IntSeq;
-import arc.struct.IntSet;
-import arc.struct.ObjectSet;
-import arc.struct.Seq;
-import arc.util.Log;
-import arc.util.Structs;
-import arc.util.Time;
+import arc.struct.*;
+import arc.util.*;
 import fos.graphics.cachelayers.AnimatedOreCacheLayer;
 import mindustry.game.EventType;
 import mindustry.graphics.CacheLayer;
 import mindustry.world.Tile;
-import mindustry.world.blocks.environment.Floor;
-import mindustry.world.blocks.environment.OreBlock;
+import mindustry.world.blocks.environment.*;
 
-import static mindustry.Vars.tilesize;
-import static mindustry.Vars.world;
+import static mindustry.Vars.*;
 
 public class FOSOreRenderer {
     /** Do not rearange after world load!!! */
@@ -42,19 +30,19 @@ public class FOSOreRenderer {
     private static final float pad = tilesize / 2f;
     private static final boolean dynamic = false;
 
-    private float[] vertices = new float[maxSprites * vertexSize * 4];
-    private short[] indices = new short[maxSprites * 6];
+    private final float[] vertices = new float[maxSprites * vertexSize * 4];
+    private final short[] indices = new short[maxSprites * 6];
     private int vidx;
-    private FOSOreRendererBatch batch = new FOSOreRendererBatch();
-    private Shader shader;
+    private final FOSOreRendererBatch batch = new FOSOreRendererBatch();
+    private final Shader shader;
     private Texture texture;
     private TextureRegion error;
 
     private Mesh[][][] cache;
-    private IntSet drawnLayerSet = new IntSet();
-    private IntSet recacheSet = new IntSet();
-    private IntSeq drawnLayers = new IntSeq();
-    private ObjectSet<CacheLayer> used = new ObjectSet<>();
+    private final IntSet drawnLayerSet = new IntSet();
+    private final IntSet recacheSet = new IntSet();
+    private final IntSeq drawnLayers = new IntSeq();
+    private final ObjectSet<CacheLayer> used = new ObjectSet<>();
 
     public FOSOreRenderer(){
         short j = 0;

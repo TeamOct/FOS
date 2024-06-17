@@ -8,10 +8,10 @@ import arc.scene.ui.layout.Table;
 import arc.struct.Seq;
 import arc.util.*;
 import arc.util.io.*;
-import fos.gen.*;
+import fos.gen.LumoniPlayerc;
+import fos.net.FOSCall;
 import fos.type.content.WeaponSet;
 import mindustry.Vars;
-import mindustry.annotations.Annotations;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
@@ -28,7 +28,6 @@ public class UpgradeCenter extends Block {
      * @param player player that upgraded weapon
      * @param tile UpgradeBuildCenter tile
      * */
-    @Annotations.Remote(called = Annotations.Loc.both, targets = Annotations.Loc.both, forward = true)
     public static void upgrade(Player player, Tile tile) {
         // check received packet integrity (other validation server-side)
         if (tile == null || tile.build == null || !(tile.build instanceof UpgradeCenterBuild ucb)) return;
@@ -130,7 +129,7 @@ public class UpgradeCenter extends Block {
             consume();
             progress = 0;
 
-            weaponSet.applyToUnit((LumoniPlayerUnitc) player.unit());
+            weaponSet.applyToUnit((LumoniPlayerc) player.unit());
         }
 
         @Override

@@ -4,7 +4,7 @@ import arc.Core;
 import arc.math.Mathf;
 import arc.struct.Seq;
 import fos.content.FOSUnitTypes;
-import fos.gen.LumoniPlayerUnitc;
+import fos.gen.LumoniPlayerc;
 import mindustry.core.UI;
 import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.WeaponMount;
@@ -99,7 +99,7 @@ public class WeaponSet extends StatusEffect {
         return out;
     }
 
-    public void applyToUnit(LumoniPlayerUnitc lpc) {
+    public void applyToUnit(LumoniPlayerc lpc) {
         lpc.isEditedWeapons(true);
         lpc.weaponSet(this);
 
