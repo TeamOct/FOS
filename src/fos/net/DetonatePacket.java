@@ -13,4 +13,9 @@ public class DetonatePacket extends Packet {
 
         StickyBulletType.detonate(player);
     }
+
+    @Override
+    public void handleClient() {
+        if (player != null) StickyBulletType.detonate(player);
+    }
 }
