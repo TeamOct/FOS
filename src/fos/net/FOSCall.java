@@ -3,14 +3,15 @@ package fos.net;
 import fos.type.blocks.special.UpgradeCenter;
 import fos.type.bullets.StickyBulletType;
 import mindustry.gen.Player;
-import mindustry.net.NetConnection;
+import mindustry.net.*;
 import mindustry.world.Tile;
 
 import static mindustry.Vars.*;
 
 public class FOSCall {
     public static void registerPackets() {
-
+        Net.registerPacket(UpgradePacket::new);
+        Net.registerPacket(DetonatePacket::new);
     }
 
     public static void upgrade(Player player, Tile tile) {
