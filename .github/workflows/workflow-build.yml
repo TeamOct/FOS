@@ -19,7 +19,7 @@ jobs:
       - name: Build mod artifact
         run: |
           chmod +x gradlew
-          ./gradlew proc:run :dex
+          ./gradlew clean dex
       - name: Upload built mod artifact
         uses: actions/upload-artifact@v4
         with:
