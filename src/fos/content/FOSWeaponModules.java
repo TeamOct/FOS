@@ -87,10 +87,15 @@ public class FOSWeaponModules {
             reload = recoilTime = 15f;
             inaccuracy = 8f;
             cooldownTime = 30f;
-            bullet = new BasicBulletType(3.5f, 120){{
+            shootSound = Sounds.pew;
+            shoot = new ShootAlternate(){{
+                spread = 4f;
+                shots = 2;
+            }};
+            bullet = new BasicBulletType(7f, 60){{
                 width = 7f; height = 9f;
                 trailLength = 12;
-                lifetime = 60f;
+                lifetime = 30f;
                 homingPower = 0.8f;
             }};
         }}).reqs(with(zinc, 250, silicon, 200, vanadium, 100));

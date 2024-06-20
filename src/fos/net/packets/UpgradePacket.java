@@ -1,6 +1,7 @@
-package fos.net;
+package fos.net.packets;
 
 import arc.util.io.*;
+import fos.net.FOSCall;
 import fos.type.blocks.special.UpgradeCenter;
 import mindustry.gen.Player;
 import mindustry.io.TypeIO;

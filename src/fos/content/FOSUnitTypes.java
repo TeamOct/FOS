@@ -939,20 +939,17 @@ public class FOSUnitTypes {
             aiController = InjectorAI::new;
             immunities.add(hacked);
             weapons.add(
-                // TODO: rework
                 new InjectorWeapon("fos-injector-missile"){{
                     x = 9; y = 0;
                     top = true;
                     mirror = true;
                     alternate = false;
                     rotate = true;
-                    reload = 300f;
-                    shoot.shots = 4;
-                    shoot.shotDelay = 10f;
+                    reload = 30f;
                     inaccuracy = 12f;
                     shootSound = Sounds.missile;
                     bullet = new InjectorBasicBulletType(0f, 0.95f, 300, 2500, false){{
-                        damage = 12.5f;
+                        damage = 25f;
                         speed = 2.4f; lifetime = 90f;
                         width = 8f; height = 16f;
                         sprite = "missile";
