@@ -52,6 +52,7 @@ public class FOSItems {
         diamond = new Item("diamond", Color.valueOf("b6cdec")){{
             cost = 2.8f;
             hardness = 4;
+            flammability = 0.1f;
         }};
         vanadium = new Item("vanadium", Color.valueOf("a3afbd")){{
             cost = 3f;
