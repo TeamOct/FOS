@@ -9,5 +9,6 @@ public class FOSStats {
 
     unitDamageRes = new Stat("fos-unitdamageres"),
 
-    maxBeams = new Stat("fos-maxbeams", StatCat.power);
+    maxBeams = new Stat("fos-maxbeams", StatCat.power),
+    damageReduction = new Stat("fos-damagereduction", StatCat.general);
 }

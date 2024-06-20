@@ -7,11 +7,6 @@ import arc.math.geom.*;
 import arc.struct.Seq;
 import arc.util.*;
 import fos.ai.*;
-import fos.gen.ElevationMoveUnit;
-import fos.gen.LegsUnit;
-import fos.gen.MechUnit;
-import fos.gen.TankUnit;
-import fos.gen.UnitEntity;
 import fos.gen.*;
 import fos.graphics.*;
 import fos.type.abilities.*;
@@ -29,6 +24,11 @@ import mindustry.entities.bullet.*;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
 import mindustry.entities.units.WeaponMount;
+import mindustry.gen.ElevationMoveUnit;
+import mindustry.gen.LegsUnit;
+import mindustry.gen.MechUnit;
+import mindustry.gen.TankUnit;
+import mindustry.gen.UnitEntity;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
@@ -44,7 +44,11 @@ import static mindustry.Vars.*;
 public class FOSUnitTypes {
     public static @EntityDef({Unitc.class, Mechc.class}) UnitType
         // MECH BOSSES
-        legion, citadel;
+        legion;
+
+    public static @EntityDef({Unitc.class, Mechc.class, DamageAbsorbc.class}) UnitType
+        // MECH BOSSES W/ DR
+        citadel;
 
     public static @EntityDef({Unitc.class, Tankc.class}) UnitType
         // TANK BOSSES
@@ -62,14 +66,19 @@ public class FOSUnitTypes {
         legionnaire, legionnaireReplica,
 
         // FLYING (DESTROYERS)
-        brunt,
+        brunt;
 
-        // FLYING (INJECTORS)
+    public static @EntityDef({Unitc.class, DamageAbsorbc.class}) UnitType
+        // FLYING W/ DR (INJECTORS)
         captain;
 
     public static @EntityDef({Unitc.class, Legsc.class}) UnitType
         // LEGS (ELIMINATORS)
-        radix, foetus, vitarus;
+        radix, foetus;
+
+    public static @EntityDef({Unitc.class, Legsc.class, DamageAbsorbc.class}) UnitType
+        // LEGS W/ DR (ELIMINATORS)
+        vitarus;
 
     public static @EntityDef({Unitc.class, Payloadc.class}) UnitType
         // PAYLOAD TODO
@@ -228,10 +237,11 @@ public class FOSUnitTypes {
 
             //aiController = GroundBossAI::new;
         }};
-        citadel = new BossUnitType("citadel", MechUnit.class){
+        citadel = new BossUnitType("citadel", DamageAbsorbMechUnit.class){
             {
                 health = 9000;
                 armor = 20;
+                absorption = 0.2f;
                 hitSize = 40;
                 rotateSpeed = 2f;
                 speed = 0.2f;
@@ -915,6 +925,7 @@ public class FOSUnitTypes {
         captain = new TrailUnitType("captain", UnitEntity.class){{
             health = 4200;
             armor = 8;
+            absorption = 0.15f;
             hitSize = 20;
             speed = 0.3f;
             flying = true;
@@ -1093,9 +1104,10 @@ public class FOSUnitTypes {
                 }};
             }});
         }};
-        vitarus = new FOSUnitType("vitarus", LegsUnit.class){{
+        vitarus = new FOSUnitType("vitarus", DamageAbsorbLegsUnit.class){{
             health = 3100;
             armor = 7;
+            absorption = 0.1f;
             speed = 0.35f;
             hitSize = 22;
             rotateSpeed = 1f;

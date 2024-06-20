@@ -77,7 +77,7 @@ public class WeaponSet extends StatusEffect {
         stats.add(Stat.buildCost, reqs.length == 0 ? StatValues.string("[gray]" + Core.bundle.get("none") + "[]") : StatValues.items(reqs));
         stats.add(Stat.weapons, StatValues.weapons(FOSUnitTypes.weaponSetInit, weapons));
         if (abilities.any()) {
-            stats.add(Stat.abilities, abilities(this.abilities));
+            stats.add(Stat.abilities, StatValues.abilities(abilities));
         }
     }
 

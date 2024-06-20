@@ -10,7 +10,7 @@ import mindustry.type.UnitType;
 
 import static ent.anno.Annotations.*;
 
-@EntityComponent
+@EntityComponent @SuppressWarnings("unused")
 abstract class LumoniPlayerComp implements Weaponsc, Entityc, Syncc, Unitc {
     transient boolean isEditedWeapons = false;
     transient WeaponSet weaponSet = null;

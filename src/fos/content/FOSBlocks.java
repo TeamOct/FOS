@@ -623,6 +623,7 @@ public class FOSBlocks {
 
             shootSound = Sounds.tractorbeam;
             shootEffect = FOSFx.dotLaserEnd;
+            smokeEffect = Fx.none;
 
             consumePower(2f);
             drawer = new DrawTurret("lumoni-");
@@ -632,6 +633,7 @@ public class FOSBlocks {
                 lifetime = 10f;
                 pierceDamageFactor = 1f;
                 pierceArmor = true;
+                hittable = false;
 
                 lineEffect = FOSFx.dotLaserLine;
                 endEffect = FOSFx.dotLaserEnd;
@@ -1121,8 +1123,6 @@ public class FOSBlocks {
             minWarmup = 0.99f;
             hasLiquids = true;
             targetAir = targetGround = true;
-            loopSound = Sounds.techloop;
-            loopSoundVolume = 4f;
             consumePower(150f);
             consumeCoolant(5f);
             liquidCapacity = 450f;
@@ -1131,6 +1131,8 @@ public class FOSBlocks {
             shake = 10f;
             outlineIcon = false;
             squareSprite = false;
+            shootSound = Sounds.corexplode;
+            loopSound = Sounds.beam;
             shootType = new OhioBeamBulletType(3600f, 18f){{
                 buildingDamageMultiplier = 0.3f;
             }};
@@ -1181,8 +1183,8 @@ public class FOSBlocks {
             range = 600f;
             hasLiquids = true;
             targetAir = targetGround = true;
-            loopSound = Sounds.laserbig;
-            loopSoundVolume = 4f;
+            loopSound = Sounds.beam;
+            //FIXME: shootSound = Sounds.corexplode;
             consumePower(200f);
             consumeLiquid(cryofluid, 5f);
             liquidCapacity = 450f;

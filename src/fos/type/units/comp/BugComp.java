@@ -9,7 +9,7 @@ import mindustry.type.UnitType;
 import static ent.anno.Annotations.*;
 import static mindustry.Vars.world;
 
-@EntityComponent
+@EntityComponent @SuppressWarnings("unused")
 abstract class BugComp implements Unitc {
     /** A unit that this bug follows. */
     transient Unit following;

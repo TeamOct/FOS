@@ -297,13 +297,13 @@ public class NewDeathRayTurret extends PowerTurret {
         }
 
         @Override
-        public float activeSoundVolume(){
-            return 0.4f;
+        public boolean shouldActiveSound(){
+            return shooting;
         }
 
         @Override
-        public boolean shouldActiveSound(){
-            return shooting;
+        public float activeSoundVolume() {
+            return loopSoundVolume;
         }
 
         @Override

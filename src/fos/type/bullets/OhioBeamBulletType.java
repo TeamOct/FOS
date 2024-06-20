@@ -6,15 +6,12 @@ import arc.math.Mathf;
 import arc.math.geom.Point2;
 import fos.content.FOSFx;
 import mindustry.Vars;
-import mindustry.content.StatusEffects;
+import mindustry.content.*;
 import mindustry.entities.Effect;
 import mindustry.entities.bullet.ContinuousBulletType;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.world.blocks.defense.turrets.Turret;
-
-import static arc.graphics.g2d.Draw.color;
-import static arc.math.Angles.randLenVectors;
 
 /**
  * A death ray fired by the Judge turret. Currently, only works properly with turrets.
@@ -26,15 +23,7 @@ public class OhioBeamBulletType extends ContinuousBulletType {
     /** The beam radius. */
     public float width;
     /** Evaporation effect when a ray lands on liquid. */
-    // TODO: ZMC is broken, replace with Fx.smokePuff reference later
-    public Effect evaporationEffect = new Effect(30, e -> {
-        color(e.color);
-
-        randLenVectors(e.id, 6, 4f + 30f * e.finpow(), (x, y) -> {
-            Fill.circle(e.x + x, e.y + y, e.fout() * 3f);
-            Fill.circle(e.x + x / 2f, e.y + y / 2f, e.fout());
-        });
-    }).layer(Layer.debris + 0.1f);
+    public Effect evaporationEffect = Fx.smokePuff;
 
     public OhioBeamBulletType(float dps, float width) {
         super();
@@ -117,10 +106,12 @@ public class OhioBeamBulletType extends ContinuousBulletType {
     @Override
     public void draw(Bullet b) {
         var centerTile = b.tileOn();
-        centerTile.circle((int) (width / Vars.tilesize + 1), t -> {
-            if (t.floor().isLiquid && !t.solid())
-                evaporationEffect.at(t.worldx(), t.worldy(), t.floor().liquidDrop.gasColor);
-        });
+        if (centerTile != null) {
+            centerTile.circle((int) (width / Vars.tilesize + 1), t -> {
+                if (t != null && t.floor().isLiquid && !t.solid())
+                    evaporationEffect.at(t.worldx(), t.worldy(), t.floor().liquidDrop.gasColor);
+            });
+        }
 
         Lines.stroke(80f, color);
         drawBeam(color, b.x, b.y, width);

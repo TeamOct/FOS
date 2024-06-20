@@ -122,5 +122,10 @@ public class DeathrayTurret extends LaserTurret {
         protected boolean hasTargets() {
             return Units.closestTarget(team, x, y, range, unitCons, buildCons) != null;
         }
+
+        @Override
+        public boolean shouldActiveSound() {
+            return bullet != null;
+        }
     }
 }
