@@ -960,17 +960,23 @@ public class FOSUnitTypes {
                         trailColor = FOSPal.hacked;
                     }};
                 }},
-                new InjectorWeapon("fos-hack-laser"){{
+                new InjectorWeapon("fos-hack-beamer"){{
                     x = 0; y = 6;
                     mirror = false;
-                    rotate = false;
+                    rotate = true;
+                    rotateSpeed = 0.75f;
                     continuous = true;
                     reload = 10f;
                     targetSwitchInterval = 60f;
+                    controllable = false;
+                    autoTarget = true;
+                    rotationLimit = 45f;
                     shootSound = Sounds.none;
                     bullet = new InjectorHackLaserBulletType(){{
                         minHP = 500;
                         maxHP = 1800;
+                        smokeEffect = Fx.none;
+                        shootEffect = Fx.none;
                     }};
                 }}
             );

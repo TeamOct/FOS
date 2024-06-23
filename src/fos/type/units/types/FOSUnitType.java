@@ -1,6 +1,7 @@
 package fos.type.units.types;
 
 import arc.graphics.Color;
+import arc.math.Mathf;
 import fos.gen.EntityRegistry;
 import fos.type.draw.FOSStats;
 import mindustry.gen.*;
@@ -24,6 +25,6 @@ public class FOSUnitType extends UnitType {
     @Override
     public void setStats() {
         super.setStats();
-        stats.add(FOSStats.damageReduction, (absorption * 100) + "%");
+        stats.add(FOSStats.damageReduction, Mathf.round(absorption * 100) + "%");
     }
 }

@@ -2,6 +2,7 @@ package fos.type.bullets;
 
 import arc.Core;
 import arc.graphics.g2d.TextureRegion;
+import arc.math.Mathf;
 import arc.util.Time;
 import mindustry.entities.bullet.ContinuousLaserBulletType;
 import mindustry.gen.*;
@@ -9,7 +10,7 @@ import mindustry.graphics.Drawf;
 
 public class InjectorHackLaserBulletType extends ContinuousLaserBulletType implements InjectorBulletType {
     public TextureRegion laser, laserCenter, laserEnd;
-    public String laserName = "mend"; // TODO
+    public String laserName = "hack";
 
     public float minHP, maxHP;
     /** Maximum time required to hack an enemy (with 0% chance), in seconds. */
@@ -62,9 +63,10 @@ public class InjectorHackLaserBulletType extends ContinuousLaserBulletType imple
 
         var d = (HackBulletData)b.data;
         if (d.target == null)
-            d.target = Groups.unit.find(u -> u.x == ((Weaponsc)b.owner).aimX() && u.y == ((Weaponsc)b.owner).aimY());
+            // TODO: this is scuffed
+            d.target = Groups.unit.find(u -> u.lastX == b.aimX && u.lastY == b.aimY);
 
-        if (d.target == null || d.target.dead()) {
+        if (d.target == null || d.target.dead() || (Mathf.dst(b.x, b.y, d.target.x(), d.target.y()) > ((Unitc)b.owner).range())) {
             b.remove();
             return;
         }
