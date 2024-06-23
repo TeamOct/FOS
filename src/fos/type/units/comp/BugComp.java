@@ -1,6 +1,7 @@
 package fos.type.units.comp;
 
 import arc.util.io.*;
+import fos.ai.FOSPathfinder;
 import fos.core.FOSVars;
 import mindustry.gen.*;
 import mindustry.io.TypeIO;
@@ -26,6 +27,12 @@ abstract class BugComp implements Unitc {
     @Replace
     public boolean isPathImpassable(int x, int y) {
         return !type.flying && world.tiles.in(x, y) && type.pathCost.getCost(team().id, FOSVars.pathfinder.get(x, y)) == -1;
+    }
+
+    @Override
+    @Replace(100)
+    public int pathType() {
+        return FOSPathfinder.costBugLegs;
     }
 
     @Override

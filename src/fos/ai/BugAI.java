@@ -48,7 +48,7 @@ public class BugAI extends AIController implements FOSPathfindAI {
         Tile tile = unit.tileOn();
         Tile targetTile = tile;
 
-        if ((bug.invading() && evo() >= 0.05f) || !hasNests()) {
+        if ((bug.invading()) || !hasNests()) {
             target = target(unit.x, unit.y, 25f * tilesize, false, true);
 
             if (target != null) {

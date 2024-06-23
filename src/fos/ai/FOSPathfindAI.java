@@ -14,7 +14,6 @@ public interface FOSPathfindAI {
     /** @return next tile to travel to */
     default Tile pathfind(Unit unit) {
         Tile tile = unit.tileOn();
-        //TODO: mod conflict is, even though VERY unlikely, still possible
         FOSPathfinder.FOSFlowfield ff = FOSVars.pathfinder.getField(unit.team, unit.pathType(), FOSPathfinder.costBugLegs);
         return FOSVars.pathfinder.getTargetTile(tile, ff);
     }
