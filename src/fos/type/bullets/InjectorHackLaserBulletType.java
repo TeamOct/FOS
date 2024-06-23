@@ -85,7 +85,7 @@ public class InjectorHackLaserBulletType extends ContinuousLaserBulletType imple
     public void draw(Bullet b) {
         var data = (HackBulletData)b.data;
         if (data == null) return;
-        Drawf.laser(laser, laserEnd, b.x, b.y, data.target.x(), data.target.y());
+        Drawf.laser(laser, laserEnd, b.x, b.y, data.target.x(), data.target.y(), 0.5f);
     }
 
     public class HackBulletData {

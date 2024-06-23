@@ -927,7 +927,7 @@ public class FOSUnitTypes {
             armor = 8;
             absorption = 0.15f;
             hitSize = 20;
-            speed = 0.3f;
+            speed = 0.6f;
             flying = true;
             engineColorInner = FOSPal.hacked;
             engineColor = FOSPal.hackedBack;
