@@ -1,7 +1,6 @@
 package fos.content;
 
 import arc.graphics.Color;
-import mindustry.content.StatusEffects;
 import mindustry.type.Liquid;
 
 public class FOSFluids {
@@ -16,7 +15,7 @@ public class FOSFluids {
             viscosity = 0.95f;
             heatCapacity = 0.65f;
             temperature = 0.4f;
-            effect = StatusEffects.slow;
+            effect = FOSStatuses.tokiciteSlowed;
             boilPoint = 0.8f;
         }};
     }

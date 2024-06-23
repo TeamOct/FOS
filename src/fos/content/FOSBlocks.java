@@ -2,6 +2,8 @@ package fos.content;
 
 import arc.Core;
 import arc.graphics.Color;
+import arc.math.Mathf;
+import arc.math.geom.*;
 import arc.struct.Seq;
 import arc.util.Strings;
 import fos.audio.FOSSounds;
@@ -19,12 +21,12 @@ import fos.type.blocks.units.*;
 import fos.type.bullets.*;
 import fos.type.draw.DrawOutputLiquids;
 import mindustry.content.*;
-import mindustry.entities.Effect;
+import mindustry.entities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.MultiEffect;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
-import mindustry.gen.Sounds;
+import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.ui.*;
@@ -46,6 +48,7 @@ import multicraft.*;
 import static fos.content.FOSFluids.*;
 import static fos.content.FOSItems.*;
 import static fos.content.FOSUnitTypes.*;
+import static mindustry.Vars.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.Liquids.*;
 import static mindustry.type.ItemStack.with;
@@ -72,7 +75,7 @@ public class FOSBlocks {
 
     // DEFENSE
     zincWall, zincWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
-    helix, sticker, dot, particulator, firefly, pulse, breakdown, rupture, thunder, cluster, judge, newJudge, bugSentry,
+    helix, sticker, sludge, dot, particulator, firefly, pulse, breakdown, rupture, thunder, cluster, judge, newJudge, bugSentry,
     matrixShieldProj, beamMender, beamMendProjector,
     landMine,
 
@@ -610,6 +613,88 @@ public class FOSBlocks {
                 );
             }};
             requirements(Category.turret, with(zinc, 75, silver, 50, silicon, 50));
+        }};
+        sludge = new LiquidTurret("sludge"){{
+            health = 2400;
+            size = 3;
+            range = 270;
+            reload = 90f;
+            shootCone = 20f;
+            inaccuracy = 2f;
+            targetGround = targetAir = true;
+            liquidCapacity = 60f;
+
+            loopSound = Sounds.none;
+            shootSound = Sounds.mud;
+
+            ammo(
+                tokicite, new LiquidBulletType(tokicite){
+                    {
+                        puddleSize = 30f;
+                        orbSize = 6f;
+                        ammoMultiplier = 1f/30f;
+                        lifetime = 60f; speed = 4.5f;
+                        damage = 30f;
+
+                        trailEffect = FOSFx.tokiciteDrop;
+                        trailChance = 0.2f;
+
+                        setDefaults = false;
+                        despawnHit = true;
+                        fragOnHit = true;
+                        fragBullets = 6;
+                        fragVelocityMin = 0.6f;
+                        fragVelocityMax = 1.4f;
+                        fragBullet = new LiquidBulletType(tokicite){{
+                            lifetime = 20f; speed = 1.5f;
+                            despawnHit = true;
+                            pierce = true;
+                            pierceCap = 2;
+                            pierceBuilding = false;
+                        }};
+                    }
+
+                    // oh COME ON anuke why doesn't it create frags by default.
+                    @Override
+                    public void hit(Bullet b, float x, float y){
+                        hitEffect.at(x, y, b.rotation(), hitColor);
+                        hitSound.at(x, y, hitSoundPitch, hitSoundVolume);
+
+                        Effect.shake(hitShake, hitShake, b);
+
+                        if(fragOnHit){
+                            createFrags(b, x, y);
+                        }
+                        createPuddles(b, x, y);
+                        createIncend(b, x, y);
+                        createUnits(b, x, y);
+
+                        if(suppressionRange > 0){
+                            //bullets are pooled, require separate Vec2 instance
+                            Damage.applySuppression(b.team, b.x, b.y, suppressionRange, suppressionDuration, 0f, suppressionEffectChance, new Vec2(b.x, b.y));
+                        }
+
+                        createSplashDamage(b, x, y);
+
+                        for(int i = 0; i < lightning; i++){
+                            Lightning.create(b, lightningColor, lightningDamage < 0 ? damage : lightningDamage, b.x, b.y, b.rotation() + Mathf.range(lightningCone/2) + lightningAngle, lightningLength + Mathf.random(lightningLengthRand));
+                        }
+
+                        Puddles.deposit(world.tileWorld(x, y), liquid, puddleSize);
+
+                        if(liquid.temperature <= 0.5f && liquid.flammability < 0.3f){
+                            float intensity = 400f * puddleSize/6f;
+                            Fires.extinguish(world.tileWorld(x, y), intensity);
+                            for(Point2 p : Geometry.d4){
+                                Fires.extinguish(world.tileWorld(x + p.x * tilesize, y + p.y * tilesize), intensity);
+                            }
+                        }
+                    }
+                }
+            );
+
+            drawer = new DrawTurret("lumoni-");
+            requirements(Category.turret, with(zinc, 125, silicon, 100, brass, 75));
         }};
         dot = new PowerTurret("dot"){{
             scaledHealth = 480;

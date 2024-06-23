@@ -38,7 +38,8 @@ public class FOSStatuses {
             }
         };
         tokiciteSlowed = new StatusEffect("tokicite-slowed"){{
-            speedMultiplier = 0.4f;
+            speedMultiplier = 0.25f;
+            effect = FOSFx.tokiciteDrop;
         }};
         buildBoost = new StatusEffect("build-boost"){{
             buildSpeedMultiplier = 1.25f;

@@ -3,6 +3,7 @@ package fos.content;
 import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
+import arc.math.Mathf;
 import arc.math.geom.*;
 import arc.util.Tmp;
 import fos.graphics.FOSPal;
@@ -203,5 +204,12 @@ public class FOSFx {
         Draw.rect(Core.atlas.find("fos-team-corru-upscale"), e.x, e.y, 64 * (1 + e.fin()), 64 * (1 + e.fin()));
 
         Draw.reset();
+    }),
+
+    tokiciteDrop = new Effect(80f, e -> {
+        color(FOSFluids.tokicite.color);
+        alpha(Mathf.clamp(e.fin() * 2f));
+
+        Fill.circle(e.x, e.y, e.fout() * 4f);
     });
 }

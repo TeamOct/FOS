@@ -17,7 +17,7 @@ public interface InjectorBulletType {
     boolean attacksGuardians();
 
     default float chance(Entityc owner, Entityc entity) {
-        float health = ((Unit) entity).health;
+        float health = ((Healthc) entity).health();
         float chance;
 
         if (health <= minHP()){
@@ -40,7 +40,7 @@ public interface InjectorBulletType {
         return chance;
     }
 
-    default void onHit(Bullet b, Hitboxc entity) {
+    default void onHit(Bullet b, Hitboxc entity, boolean always) {
         if (entity instanceof Unit u) {
             //if the target is a boss AND a projectile can't attack bosses, return
             if (u.isBoss() && !attacksGuardians()) return;
@@ -52,11 +52,15 @@ public interface InjectorBulletType {
             if (u.isPlayer()) return;
 
             float chance = chance(b.owner, entity);
-            if (Mathf.random() < chance) {
+            if (Mathf.random() < chance || always) {
                 u.apply(FOSStatuses.hacked);
                 u.team = b.team;
                 if (u.isBoss()) u.unapply(StatusEffects.boss);
             }
         }
+    }
+
+    default void onHit(Bullet b, Hitboxc entity) {
+        onHit(b, entity, false);
     }
 }
