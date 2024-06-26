@@ -123,8 +123,6 @@ public class FOSMod extends Mod {
 
         SplashTexts.load();
 
-        FOSCommands.init();
-
         FOSAttributes.load();
         FOSStatuses.load();
         FOSItems.load();

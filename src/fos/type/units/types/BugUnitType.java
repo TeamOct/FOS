@@ -2,7 +2,6 @@ package fos.type.units.types;
 
 import arc.Events;
 import arc.graphics.Color;
-import arc.math.geom.Vec2;
 import fos.ai.*;
 import fos.content.FOSStatuses;
 import fos.gen.Bugc;
@@ -13,7 +12,9 @@ import mindustry.world.meta.BlockFlag;
 
 /** Just a template for bugs. */
 public class BugUnitType extends FOSUnitType {
-    private static final Vec2 legOffset = new Vec2();
+    public <T extends Unit> BugUnitType(String name, Class<T> type) {
+        this(name, type, false);
+    }
 
     public <T extends Unit> BugUnitType(String name, Class<T> type, boolean flying) {
         super(name, type);
@@ -32,6 +33,7 @@ public class BugUnitType extends FOSUnitType {
         this.flying = flying;
         targetAir = flying;
         targetGround = true;
+        playerControllable = false;
         targetFlags = new BlockFlag[]{BlockFlag.drill, BlockFlag.factory, BlockFlag.core, null};
         controller = u -> flying ? new FlyingBugAI() : new BugAI();
     }

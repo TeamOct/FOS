@@ -33,6 +33,7 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.weapons.*;
+import mindustry.world.meta.BlockFlag;
 
 import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.stroke;
@@ -88,21 +89,21 @@ public class FOSUnitTypes {
         // TETHER TODO
         testOverdrive;
 
-    public static @EntityDef({Unitc.class, Submarinec.class}) UnitType
-        // SUBMARINES TODO
-        subSmall;
-
     public static @EntityDef({Unitc.class, LumoniPlayerc.class, Legsc.class}) UnitType
         // PLAYER UNITS
         lord, king;
 
     public static @EntityDef({Unitc.class, Crawlc.class, Bugc.class}) UnitType
         // CRAWLING INSECTS
-        bugSmall, bugMedium;
+        bugSmall, bugMedium, terrapod;
 
     public static @EntityDef({Unitc.class, Bugc.class}) UnitType
         // FLYING INSECTS
         bugFlyingSmall, bugFlyingMedium;
+
+    public static @EntityDef({Unitc.class, Crawlc.class, Burrowc.class, Bugc.class}) UnitType
+        // BURROWING INSECTS
+        bugStalker;
 
     public static @EntityDef({Unitc.class, Minerc.class, BuildingTetherc.class}) UnitType
         // MINER UNITS
@@ -1371,6 +1372,20 @@ public class FOSUnitTypes {
             segmentMag = 0.5f;
         }};
 
+        // TODO
+        terrapod = new BugUnitType("terrapod", BugCrawlUnit.class, false){{
+            health = 14000;
+            armor = 12;
+            absorption = 0.75f;
+            speed = 0.6f;
+            segments = 18;
+            crushDamage = 1f;
+
+            segmentScl = 8f;
+            segmentMag = 6f;
+
+        }};
+
         bugFlyingSmall = new BugUnitType("bug-flying-small", BugUnit.class, true, true){{
             health = 60;
             armor = 1;
@@ -1434,6 +1449,37 @@ public class FOSUnitTypes {
                 }}
             );
         }};
+        bugStalker = new BurrowUnitType("bug-stalker", BugBurrowCrawlUnit.class){{
+            health = 900;
+            armor = 5;
+            hitSize = 24f;
+            absorption = 0.15f;
+            speed = 0.5f;
+            targetAir = false;
+            targetGround = true;
+            targetFlags = new BlockFlag[]{BlockFlag.unitCargoUnloadPoint, BlockFlag.core, null};
+
+            weapons.add(
+                new Weapon("fos-stalker-claw"){{
+                    x = 4; y = 12;
+                    reload = 600f;
+                    rotate = false;
+                    shootCone = 180f;
+                    alternate = true;
+                    ejectEffect = Fx.none;
+                    shootY = 8f;
+                    // TODO: parts
+                    bullet = new ExplosionBulletType(){{
+                        shootEffect = Fx.none;
+                        splashDamage = 1200f;
+                        splashDamageRadius = 4f;
+                        splashDamagePierce = true;
+                        killShooter = false;
+                        rangeOverride = 2f;
+                    }};
+                }}
+            );
+        }};
 
         draug = new FOSUnitType("draug", BuildingTetherMinerUnit.class){{
             health = 110;
@@ -1464,29 +1510,5 @@ public class FOSUnitTypes {
                 weapons.add(s.weapons);
             }
         }};
-
-        //TODO
-/*
-        subSmall = new SubmarineUnitType("sub-small"){{
-            health = 250;
-            speed = 0.7f;
-            hitSize = 12f;
-            hidden = true; // TODO: unused
-            weapons.add(new Weapon("fos-sub-missile-launcher"){{
-                reload = 22f;
-                x = 0f;
-                y = 1f;
-                top = true;
-                rotate = true;
-                mirror = false;
-                ejectEffect = Fx.casing1;
-                bullet = new MissileBulletType(3f, 5){{
-                    width = 8f;
-                    height = 11f;
-                    lifetime = 36f;
-                }};
-            }});
-        }};
-*/
     }
 }

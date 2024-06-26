@@ -6,7 +6,7 @@ import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.scene.style.TextureRegionDrawable;
 import arc.scene.ui.layout.Table;
-import arc.struct.Seq;
+import arc.struct.*;
 import arc.util.Time;
 import arc.util.io.*;
 import fos.audio.FOSSounds;
@@ -56,6 +56,7 @@ public class OreDetector extends Block {
         fogRadius = (int)range / 8;
         clipSize = range * 2f;
         loopSound = FOSSounds.radar;
+        flags = EnumSet.of(BlockFlag.unitCargoUnloadPoint);
 
         config(Boolean.class, (r, b) -> ((OreDetectorBuild) r).showOres = b);
     }

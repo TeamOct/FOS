@@ -3,7 +3,7 @@ package fos.ai;
 import arc.Events;
 import arc.math.Mathf;
 import fos.core.FOSVars;
-import fos.gen.Bugc;
+import fos.gen.*;
 import fos.type.blocks.units.BugSpawn;
 import fos.ui.FOSEventTypes;
 import mindustry.Vars;
@@ -25,6 +25,8 @@ public class BugAI extends AIController implements FOSPathfindAI {
             bug = (Bugc) unit;
         }
 
+        super.updateUnit();
+
         if (bug.isFollowed()) {
             int followers = Units.count(unit.x, unit.y, 15f * tilesize, u -> u instanceof Bugc b && b.following() == bug);
 
@@ -39,8 +41,6 @@ public class BugAI extends AIController implements FOSPathfindAI {
             //become a swarm leader if none exist, or if this bug is a boss
             if (bug.following() == null || bug.isBoss()) bug.isFollowed(true);
         }
-
-        super.updateUnit();
     }
 
     @Override
@@ -52,13 +52,19 @@ public class BugAI extends AIController implements FOSPathfindAI {
             target = target(unit.x, unit.y, 25f * tilesize, false, true);
 
             if (target != null) {
-                if (unit.within(target, bug.hitSize() * 1.5f)) {
+                if (unit.within(target, bug.hitSize() * 2.5f)) {
+                    if (bug instanceof Burrowc b && b.burrowed()) {
+                        b.burrow();
+                    }
                     vec.set(target).sub(unit);
                     vec.setLength(unit.speed());
                     unit.lookAt(vec);
                     unit.moveAt(vec);
                     return;
                 } else {
+                    if (bug instanceof Burrowc b && !b.burrowed()) {
+                        b.burrow();
+                    }
                     targetTile = pathfind(unit);
                 }
             }

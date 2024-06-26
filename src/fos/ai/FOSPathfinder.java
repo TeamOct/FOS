@@ -34,9 +34,11 @@ public class FOSPathfinder implements Runnable{
     static int[] tiles = new int[0];
 
     public static final int
-        fieldPos = 0;
+        fieldPos = 0,
+        fieldBurrowing = 1;
     public static final Seq<Prov<FOSFlowfield>> fieldTypes = Seq.with(
-        () -> new FlagTargetsField(BlockFlag.generator, BlockFlag.drill, BlockFlag.factory, BlockFlag.core, null)
+        () -> new FlagTargetsField(BlockFlag.generator, BlockFlag.drill, BlockFlag.factory, BlockFlag.core, null),
+        () -> new FlagTargetsField(BlockFlag.unitCargoUnloadPoint, BlockFlag.core, null)
     );
 
     public static final int
@@ -84,6 +86,7 @@ public class FOSPathfinder implements Runnable{
             //don't bother setting up paths unless necessary
             if(state.rules.waveTeam == FOSTeams.bessin && !net.client()){
                 preloadPath(getField(state.rules.waveTeam, costBugLegs, fieldPos));
+                preloadPath(getField(state.rules.waveTeam, costBugLegs, fieldBurrowing));
                 Log.debug("[FOS] Preloading ground bug flowfield.");
             }
 
@@ -455,12 +458,7 @@ public class FOSPathfinder implements Runnable{
         @Override
         protected void getPositions(IntSeq out) {
             for (var f : flags) {
-                Seq<Building> seq = new Seq<>();
-                Groups.build.each(
-                    b -> b.team != this.team && b.team != Team.derelict && (f == null || b.block.flags.contains(f)),
-                    seq::add
-                );
-
+                Seq<Building> seq = f != null ? indexer.getEnemy(team, f) : Groups.build.copy();
                 if (seq.isEmpty()) continue;
 
                 for (var b : seq) {
