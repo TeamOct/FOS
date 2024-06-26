@@ -226,10 +226,10 @@ public class FOSBlocks {
             liquidCapacity = 60f;
             squareSprite = false;
             consumePower(4.5f);
-            consumeItems(with(copper, 3, zinc, 1));
+            consumeItems(with(copper, 2, zinc, 1));
             consumeLiquid(tokicite, 0.5f);
             outputItems = with(brass, 1);
-            requirements(Category.crafting, with(zinc, 120, copper, 80, silicon, 160));
+            requirements(Category.crafting, with(zinc, 100, copper, 75, silicon, 150));
             craftEffect = FOSFx.brassSmelterCraft;
             drawer = new DrawMulti(
                 //new DrawRegion("-bottom"),
