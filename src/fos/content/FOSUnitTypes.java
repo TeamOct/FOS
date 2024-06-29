@@ -1275,12 +1275,12 @@ public class FOSUnitTypes {
                         trailLength = 4;
                         buildingDamageMultiplier = 0.3f;
 
-                        fragOnHit = false;
+                        fragOnHit = true;
                         fragBullets = 1;
                         fragRandomSpread = 0;
                         fragBullet = new BasicBulletType(){{
                             width = height = 12;
-                            shrinkX = shrinkY = -1;
+                            shrinkX = shrinkY = -0.5f;
                             sprite = "shell";
                             speed = 1f;
                             drag = 0.0083f;
@@ -1451,9 +1451,8 @@ public class FOSUnitTypes {
         }};
         grain = new BurrowUnitType("grain", BugBurrowLegsUnit.class){{
             health = 900;
-            armor = 5;
-            hitSize = 24f;
             absorption = 0.15f;
+            hitSize = 24f;
             speed = 0.5f;
             rotateSpeed = 4.5f;
             targetAir = false;
