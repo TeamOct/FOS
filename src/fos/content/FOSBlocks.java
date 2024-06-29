@@ -13,6 +13,7 @@ import fos.type.blocks.crafting.ResourceExtractor;
 import fos.type.blocks.defense.*;
 import fos.type.blocks.distribution.*;
 import fos.type.blocks.environment.*;
+import fos.type.blocks.legacy.LegacyReplaceBlock;
 import fos.type.blocks.power.*;
 import fos.type.blocks.production.*;
 import fos.type.blocks.special.*;
@@ -1787,17 +1788,16 @@ public class FOSBlocks {
             purpurWater.asFloor().wall = this;
         }};
         alienMoss = new OverlayFloor("alien-moss");
-        oreZinc = new UndergroundOreBlock("ore-zinc"){{
+        oreZinc = new UndergroundOreBlock("ore-tin"){{
             drop = zinc;
         }};
-        oreZincSurface = new OreBlock("ore-zinc-surface"){{
+        oreZincSurface = new OreBlock("ore-tin-surface"){{
             itemDrop = zinc;
             // this is stupid - can't place this on shallow water without it.
             needsSurface = false;
         }};
-        oreZincDeep = new OreBlock("ore-zinc-deep"){{
+        oreZincDeep = new OreBlock("ore-tin-deep"){{
             itemDrop = zinc;
-
         }};
         oreSilver = new UndergroundOreBlock("ore-silver"){{
             drop = silver;
@@ -2075,5 +2075,17 @@ public class FOSBlocks {
                 }}
             );
         }};
+
+        // legacy blocks, no need to reference
+        new LegacyReplaceBlock("tin-drill", zincDrill);
+        new LegacyReplaceBlock("tin-belt", zincBelt);
+        new LegacyReplaceBlock("tin-junction", zincJunction);
+        new LegacyReplaceBlock("tin-router", zincRouter);
+        new LegacyReplaceBlock("tin-bridge", zincBridge);
+        new LegacyReplaceBlock("tin-sorter", zincSorter);
+        new LegacyReplaceBlock("tin-wire", zincWire);
+        new LegacyReplaceBlock("tin-wire-pole", zincWirePole);
+        new LegacyReplaceBlock("tin-wall", zincWall);
+        new LegacyReplaceBlock("tin-wall-large", zincWallLarge);
     }
 }
