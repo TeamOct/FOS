@@ -279,7 +279,7 @@ public class LumoniTechTree {
                         node(zincMiningSite, Seq.with(new SectorComplete(intruders)), () -> {
                             soontm();
                         });
-                        node(intrudersChallenge, Seq.with(new SectorComplete(intruders)), () -> {});
+                        node(hostiles, Seq.with(new SectorComplete(intruders)), () -> {});
                     });
                     node(FOSSectors.citadel, Seq.with(new SectorComplete(ruins)), () -> {
                         soontm();
