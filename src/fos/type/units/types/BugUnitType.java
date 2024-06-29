@@ -28,7 +28,7 @@ public class BugUnitType extends FOSUnitType {
         canDrown = false; // FIXME: they still drown for some reason
         deathExplosionEffect = Fx.none;
         deathSound = Sounds.plantBreak;
-        immunities.addAll(FOSStatuses.hacked, FOSStatuses.injected, StatusEffects.disarmed, StatusEffects.sapped);
+        immunities.addAll(FOSStatuses.hacked, FOSStatuses.injected, StatusEffects.sapped);
         omniMovement = flying;
         this.flying = flying;
         targetAir = flying;

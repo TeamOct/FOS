@@ -25,8 +25,6 @@ public class BugAI extends AIController implements FOSPathfindAI {
             bug = (Bugc) unit;
         }
 
-        super.updateUnit();
-
         if (bug.isFollowed()) {
             int followers = Units.count(unit.x, unit.y, 15f * tilesize, u -> u instanceof Bugc b && b.following() == bug);
 
@@ -35,12 +33,14 @@ public class BugAI extends AIController implements FOSPathfindAI {
                 Events.fire(new FOSEventTypes.InsectInvasionEvent());
             }
         } else {
-            //check for bug swarms nearby
+            // check for bug swarms nearby
             bug.following(Units.closest(unit.team, unit.x, unit.y, 15f * tilesize, u -> u instanceof Bugc b && b.isFollowed()));
 
-            //become a swarm leader if none exist, or if this bug is a boss
+            // become a swarm leader if none exist, or if this bug is a boss
             if (bug.following() == null || bug.isBoss()) bug.isFollowed(true);
         }
+
+        super.updateUnit();
     }
 
     @Override
@@ -52,21 +52,17 @@ public class BugAI extends AIController implements FOSPathfindAI {
             target = target(unit.x, unit.y, 25f * tilesize, false, true);
 
             if (target != null) {
-                if (unit.within(target, bug.hitSize() * 2.5f)) {
-                    if (bug instanceof Burrowc b && b.burrowed()) {
+                if (unit.within(target, bug.hitSize() * 1.5f)) {
+                    if (unit instanceof Burrowc b && b.burrowed() && !b.isBurrowing()) {
                         b.burrow();
                     }
-                    vec.set(target).sub(unit);
-                    vec.setLength(unit.speed());
-                    unit.lookAt(vec);
-                    unit.moveAt(vec);
-                    return;
                 } else {
-                    if (bug instanceof Burrowc b && !b.burrowed()) {
+                    if (unit instanceof Burrowc b && !b.burrowed() && !b.isBurrowing()) {
                         b.burrow();
                     }
-                    targetTile = pathfind(unit);
                 }
+
+                targetTile = pathfind(unit);
             }
         } else if (bug.following() != null) {
             var f = bug.following();
@@ -77,7 +73,7 @@ public class BugAI extends AIController implements FOSPathfindAI {
         }
 
         if (!bug.invading() && !bug.idle()) {
-            //find a random point to walk at
+            // find a random point to walk at
             boolean foundTile = false;
             while (!foundTile) {
                 int x = Mathf.random(-40, 40);
@@ -94,7 +90,7 @@ public class BugAI extends AIController implements FOSPathfindAI {
         if (targetTile == tile) return;
 
         unit.movePref(vec.trns(unit.angleTo(targetTile.worldx(), targetTile.worldy()), unit.speed()));
-        faceTarget();
+        unit.lookAt(unit.angleTo(targetTile.worldx(), targetTile.worldy()));
     }
 
     @Override
@@ -110,7 +106,7 @@ public class BugAI extends AIController implements FOSPathfindAI {
 
         Teamc result = Units.closestTarget(unit.team, x, y, range, u -> false, b -> true);
 
-        return checkTarget(result, x, y, range) ? bug.closestEnemyCore() : result;
+        return checkTarget(result, x, y, range) ? unit.closestEnemyCore() : result;
     }
 
     @Override

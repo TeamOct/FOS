@@ -211,5 +211,20 @@ public class FOSFx {
         alpha(Mathf.clamp(e.fin() * 2f));
 
         Fill.circle(e.x, e.y, e.fout() * 4f);
+    }),
+
+    burrowDustSingle = new Effect(40f, e -> {
+        Draw.color(e.color);
+        Draw.alpha(0.4f);
+
+        randLenVectors(e.id, 1, e.fin() * 40f, (x, y) -> {
+            Fill.circle(e.x + x, e.y + y, e.fout() * 8f);
+        });
+
+        Draw.reset();
+    }).layer(Layer.groundUnit + 1f),
+
+    burrowDust = new Effect(180f, e -> {
+        burrowDustSingle.at(e.x, e.y, e.color);
     });
 }

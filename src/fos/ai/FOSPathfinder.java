@@ -9,7 +9,6 @@ import fos.content.FOSTeams;
 import fos.core.FOSVars;
 import fos.ui.FOSEventTypes;
 import mindustry.content.Blocks;
-import mindustry.core.World;
 import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.world.Tile;
@@ -34,7 +33,7 @@ public class FOSPathfinder implements Runnable{
     static int[] tiles = new int[0];
 
     public static final int
-        fieldPos = 0,
+        fieldBug = 0,
         fieldBurrowing = 1;
     public static final Seq<Prov<FOSFlowfield>> fieldTypes = Seq.with(
         () -> new FlagTargetsField(BlockFlag.generator, BlockFlag.drill, BlockFlag.factory, BlockFlag.core, null),
@@ -42,15 +41,24 @@ public class FOSPathfinder implements Runnable{
     );
 
     public static final int
-        costBugLegs = 0;
+        costBugLegs = 0,
+        costBurrowing = 1;
     public static final Seq<PathCost> costTypes = Seq.with(
-        //ground bugs
+        // ground bugs
         (team, tile) -> {
             int data = tiles[tile];
             if (PathTile.legSolid(data)) return -1;
             return 1 + (PathTile.deep(data) ? 6000 : 0) + //leg units can now drown
                 (PathTile.solid(data) ? 5 : 0) +
                 FOSVars.deathMapControl.deathMap[tile]; //take into account recent unit deaths
+        },
+
+        // burrowing bugs, ignore death map values
+        (team, tile) -> {
+            int data = tiles[tile];
+            if (PathTile.legSolid(data)) return -1;
+            return 1 + (PathTile.deep(data) ? 6000 : 0) + //leg units can now drown
+                (PathTile.solid(data) ? 5 : 0);
         }
     );
 
@@ -85,8 +93,8 @@ public class FOSPathfinder implements Runnable{
 
             //don't bother setting up paths unless necessary
             if(state.rules.waveTeam == FOSTeams.bessin && !net.client()){
-                preloadPath(getField(state.rules.waveTeam, costBugLegs, fieldPos));
-                preloadPath(getField(state.rules.waveTeam, costBugLegs, fieldBurrowing));
+                preloadPath(getField(state.rules.waveTeam, costBugLegs, fieldBug));
+                preloadPath(getField(state.rules.waveTeam, costBurrowing, fieldBurrowing));
                 Log.debug("[FOS] Preloading ground bug flowfield.");
             }
 
@@ -431,20 +439,6 @@ public class FOSPathfinder implements Runnable{
         if(hadAny && path.frontier.size == 0){
             System.arraycopy(path.weights, 0, path.completeWeights, 0, path.weights.length);
             path.hasComplete = true;
-        }
-    }
-
-    public static class PositionTarget extends FOSFlowfield {
-        public final Position position;
-
-        public PositionTarget(Position position){
-            this.position = position;
-            this.refreshRate = 900;
-        }
-
-        @Override
-        public void getPositions(IntSeq out){
-            out.add(world.packArray(World.toTile(position.getX()), World.toTile(position.getY())));
         }
     }
 

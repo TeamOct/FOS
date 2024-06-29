@@ -1,7 +1,7 @@
 package fos.type.units.types;
 
-import arc.graphics.g2d.Lines;
 import fos.gen.Burrowc;
+import mindustry.game.Team;
 import mindustry.gen.Unit;
 
 public class BurrowUnitType extends BugUnitType {
@@ -13,10 +13,15 @@ public class BurrowUnitType extends BugUnitType {
     @Override
     public void draw(Unit unit) {
         if (unit instanceof Burrowc b && b.burrowed()) {
-            Lines.poly(unit.x, unit.y, 5, hitSize);
+            //Lines.poly(unit.x, unit.y, 5, hitSize);
             return;
         }
 
         super.draw(unit);
+    }
+
+    @Override
+    public boolean targetable(Unit unit, Team targeter) {
+        return targetable && (!(unit instanceof Burrowc b) || !b.burrowed());
     }
 }

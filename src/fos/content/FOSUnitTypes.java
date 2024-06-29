@@ -101,9 +101,9 @@ public class FOSUnitTypes {
         // FLYING INSECTS
         bugFlyingSmall, bugFlyingMedium;
 
-    public static @EntityDef({Unitc.class, Crawlc.class, Burrowc.class, Bugc.class}) UnitType
+    public static @EntityDef({Unitc.class, Legsc.class, Burrowc.class, Bugc.class}) UnitType
         // BURROWING INSECTS
-        bugStalker;
+        grain;
 
     public static @EntityDef({Unitc.class, Minerc.class, BuildingTetherc.class}) UnitType
         // MINER UNITS
@@ -1449,22 +1449,24 @@ public class FOSUnitTypes {
                 }}
             );
         }};
-        bugStalker = new BurrowUnitType("bug-stalker", BugBurrowCrawlUnit.class){{
+        grain = new BurrowUnitType("grain", BugBurrowLegsUnit.class){{
             health = 900;
             armor = 5;
             hitSize = 24f;
             absorption = 0.15f;
             speed = 0.5f;
+            rotateSpeed = 4.5f;
             targetAir = false;
             targetGround = true;
             targetFlags = new BlockFlag[]{BlockFlag.unitCargoUnloadPoint, BlockFlag.core, null};
 
+            legCount = 6;
+
             weapons.add(
-                new Weapon("fos-stalker-claw"){{
+                new Weapon("fos-slashing-claw"){{
                     x = 4; y = 12;
-                    reload = 600f;
+                    reload = 300f;
                     rotate = false;
-                    shootCone = 180f;
                     alternate = true;
                     ejectEffect = Fx.none;
                     shootY = 8f;
