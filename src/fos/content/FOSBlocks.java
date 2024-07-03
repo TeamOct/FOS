@@ -486,9 +486,11 @@ public class FOSBlocks {
                 );
             }};
             ammo(
-                zinc, new BasicBulletType(3f, 20){{
+                zinc, new BasicBulletType(3f, 10){{
                     width = 3f; height = 6f;
                     lifetime = 44f;
+                    splashDamage = 24;
+                    splashDamageRadius = 10;
                     trailColor = frontColor = FOSPal.tin;
                     backColor = FOSPal.tinBack;
                     trailWidth = 1.5f;
@@ -496,69 +498,47 @@ public class FOSBlocks {
                     ammoMultiplier = 2f;
                     buildingDamageMultiplier = 0.3f;
                 }},
-                diamond, new BasicBulletType(3f, 36){{
-                    width = 3f; height = 6f;
-                    lifetime = 44f;
+                diamond, new BasicBulletType(6f, 72){{
+                    width = 4f; height = 8f;
+                    lifetime = 22f;
                     trailColor = frontColor = FOSPal.diamond;
                     backColor = FOSPal.diamondBack;
                     trailWidth = 1.5f;
                     trailLength = 8;
-                    ammoMultiplier = 3f;
-                    pierce = true;
-                    pierceCap = 2;
+                    ammoMultiplier = 1f;
+                    reloadMultiplier = 0.5f;
                     buildingDamageMultiplier = 0.3f;
                 }},
-                silicon, new BasicBulletType(3f, 28){{
-                    width = 3f; height = 6f;
-                    lifetime = 44f;
+                silicon, new BasicBulletType(3f, 48){{
+                    width = 4f; height = 8f;
+                    lifetime = 66f;
+                    rangeChange = 66f;
                     trailColor = frontColor = Pal.unitFront;
                     backColor = Pal.unitBack;
                     trailWidth = 1.5f;
                     trailLength = 8;
-                    ammoMultiplier = 3f;
-                    homingRange = 56f;
-                    homingPower = 0.1f;
+                    ammoMultiplier = 1f;
+                    homingDelay = 10f;
+                    homingRange = 96f;
+                    homingPower = 0.15f;
                     buildingDamageMultiplier = 0.3f;
+                    fragBullets = 3;
+                    fragBullet = new BasicBulletType(2f, 10){{
+                        lifetime = 20f;
+                        pierce = true;
+                        pierceCap = 1;
+                        buildingDamageMultiplier = 0.3f;
+                    }};
                 }},
-                vanadium, new BasicBulletType(4f, 40){{
-                    width = 3f; height = 6f;
-                    lifetime = 44f;
-                    rangeChange = 44f;
+                vanadium, new BasicBulletType(4f, 64){{
+                    width = 4f; height = 8f;
+                    lifetime = 50f;
+                    rangeChange = 66f;
                     trailColor = frontColor = Pal.gray;
                     backColor = Pal.darkerGray;
                     trailWidth = 1.5f;
                     trailLength = 8;
-                    ammoMultiplier = 3f;
-                    buildingDamageMultiplier = 0.3f;
-                }},
-                nickel, new BasicBulletType(4f, 44){{
-                    width = 4f; height = 8f;
-                    lifetime = 44f;
-                    rangeChange = 44f;
-                    trailColor = frontColor = Color.valueOf("a3bda7");
-                    backColor = Color.valueOf("4e5b4c");
-                    trailWidth = 1.5f;
-                    trailLength = 8;
-                    ammoMultiplier = 4f;
-                    buildingDamageMultiplier = 0.3f;
-                }},
-                //TODO: trail shader?
-                luminium, new BasicBulletType(){{
-                    width = 4f; height = 8f;
-                    speed = 4.5f;
-                    damage = 52.5f;
-                    lifetime = 44f;
-                    rangeChange = 66f;
-                    trailColor = frontColor = FOSPal.luminium1;
-                    backColor = FOSPal.luminium2;
-                    trailWidth = 1.5f;
-                    trailLength = 12;
-                    ammoMultiplier = 3f;
-                    lightColor = FOSPal.luminium1.cpy().a(0.6f);
-                    pierce = true;
-                    pierceCap = 2;
-                    hitEffect = Fx.hitEmpSpark;
-                    status = StatusEffects.blasted;
+                    ammoMultiplier = 2f;
                     buildingDamageMultiplier = 0.3f;
                 }}
             );
