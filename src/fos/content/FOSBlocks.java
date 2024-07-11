@@ -13,7 +13,6 @@ import fos.type.blocks.crafting.ResourceExtractor;
 import fos.type.blocks.defense.*;
 import fos.type.blocks.distribution.*;
 import fos.type.blocks.environment.*;
-import fos.type.blocks.legacy.LegacyReplaceBlock;
 import fos.type.blocks.power.*;
 import fos.type.blocks.production.*;
 import fos.type.blocks.special.*;
@@ -338,7 +337,7 @@ public class FOSBlocks {
             researchCost = with(rawNethratium, 150);
             envRequired = envEnabled = Env.space;
         }};
-        zincDrill = new UndergroundDrill("zinc-drill"){{
+        zincDrill = new UndergroundDrill("tin-drill"){{
             size = 2;
             tier = 3;
             drillTime = 360f;
@@ -408,13 +407,13 @@ public class FOSBlocks {
         }};
         //endregion
         //region defense
-        zincWall = new Wall("zinc-wall"){{
+        zincWall = new Wall("tin-wall"){{
             scaledHealth = 800;
             size = 1;
             buildCostMultiplier = 3f;
             requirements(Category.defense, with(zinc, 6));
         }};
-        zincWallLarge = new Wall("zinc-wall-large"){{
+        zincWallLarge = new Wall("tin-wall-large"){{
             scaledHealth = 800;
             size = 2;
             buildCostMultiplier = 3f;
@@ -1400,29 +1399,29 @@ public class FOSBlocks {
             requirements(Category.distribution, with(aluminium, 120, lithium, 75, silver, 100, titanium, 125));
             envRequired = envEnabled = Env.space;
         }};
-        zincBelt = new PipeConveyor("zinc-belt"){{
+        zincBelt = new PipeConveyor("tin-belt"){{
             health = 10;
             speed = 0.058f;
             displayedSpeed = 8.1f;
             researchCost = with(zinc, 30);
             requirements(Category.distribution, with(zinc, 1));
         }};
-        zincJunction = new Junction("zinc-junction"){{
+        zincJunction = new Junction("tin-junction"){{
             speed = 16f;
             researchCost = with(zinc, 60);
             ((Conveyor) zincBelt).junctionReplacement = this;
             requirements(Category.distribution, with(zinc, 2));
         }};
-        zincRouter = new Router("zinc-router"){{
+        zincRouter = new Router("tin-router"){{
             researchCost = with(zinc, 90);
             requirements(Category.distribution, with(zinc, 3));
         }};
-        zincDistributor = new Router("zinc-distributor"){{
+        zincDistributor = new Router("tin-distributor"){{
             size = 2;
             researchCost = with(zinc, 120);
             requirements(Category.distribution, with(zinc, 4));
         }};
-        zincSorter = new Sorter("zinc-sorter"){{
+        zincSorter = new Sorter("tin-sorter"){{
             researchCost = with(zinc, 60, silver, 60);
             requirements(Category.distribution, with(zinc, 2, silver, 2));
         }};
@@ -1430,7 +1429,7 @@ public class FOSBlocks {
             researchCost = with(zinc, 60, silver, 60);
             requirements(Category.distribution, with(zinc, 2, silver, 2));
         }};
-        zincBridge = new BufferedItemBridge("zinc-bridge"){{
+        zincBridge = new BufferedItemBridge("tin-bridge"){{
             fadeIn = moveArrows = false;
             range = 4;
             speed = 44f;
@@ -1493,7 +1492,7 @@ public class FOSBlocks {
         }};
         //endregion
         //region power
-        zincWire = new PowerWire("zinc-wire"){{
+        zincWire = new PowerWire("tin-wire"){{
             health = 3;
             consumesPower = true;
             consumePower(2f / 60f);
@@ -1510,7 +1509,7 @@ public class FOSBlocks {
             //does not consume any power
             requirements(Category.power, with(brass, 1));
         }};
-        zincWirePole = new PowerWireNode("zinc-wire-pole"){{
+        zincWirePole = new PowerWireNode("tin-wire-pole"){{
             health = 30;
             consumesPower = true;
             consumePower(4f / 60f);
@@ -2055,17 +2054,5 @@ public class FOSBlocks {
                 }}
             );
         }};
-
-        // legacy blocks, no need to reference
-        new LegacyReplaceBlock("tin-drill", zincDrill);
-        new LegacyReplaceBlock("tin-belt", zincBelt);
-        new LegacyReplaceBlock("tin-junction", zincJunction);
-        new LegacyReplaceBlock("tin-router", zincRouter);
-        new LegacyReplaceBlock("tin-bridge", zincBridge);
-        new LegacyReplaceBlock("tin-sorter", zincSorter);
-        new LegacyReplaceBlock("tin-wire", zincWire);
-        new LegacyReplaceBlock("tin-wire-pole", zincWirePole);
-        new LegacyReplaceBlock("tin-wall", zincWall);
-        new LegacyReplaceBlock("tin-wall-large", zincWallLarge);
     }
 }
