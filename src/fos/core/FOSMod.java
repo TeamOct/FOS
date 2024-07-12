@@ -19,7 +19,6 @@ import fos.controllers.CapsulesController;
 import fos.gen.*;
 import fos.graphics.*;
 import fos.net.FOSCall;
-import fos.ui.*;
 import fos.ui.menus.*;
 import mindustry.game.*;
 import mindustry.gen.*;
@@ -191,11 +190,6 @@ public class FOSMod extends Mod {
         //add a couple of buttons to in-game editor
         ui.editor.shown(this::addEditorTeams);
 
-        //damage display
-        //noinspection InstantiationOfUtilityClass
-        new ClassicDamageDisplay();
-        new DamageDisplay();
-
         //add a new font page for... reasons
         //FIXME
 /*
@@ -324,16 +318,6 @@ public class FOSMod extends Mod {
                 "@setting.fos-menutheme.default");
             t.checkPref("fos-rotatemenucamera", true);
             t.checkPref("fos-animatedore", true);
-            t.checkPref("fos-classicdamagedisplay", true, b -> {
-                if (b) {
-                    settings.put("fos-damagedisplay", false);
-                }
-            });
-            t.checkPref("fos-damagedisplay", false, b -> {
-                if (b) {
-                    settings.put("fos-classicdamagedisplay", false);
-                }
-            });
             t.sliderPref("fos-damagedisplayfrequency", 30, 3, 120, 3, s ->
                 bundle.format("setting.seconds", s / 60f));
             t.checkPref("fos-ostdontshowagain", false);
