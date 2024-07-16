@@ -52,11 +52,11 @@ public class BugAI extends AIController implements FOSPathfindAI {
             target = target(unit.x, unit.y, 25f * tilesize, false, true);
 
             if (target != null) {
-                if (unit.within(target, bug.hitSize() * 1.5f)) {
+                if (unit.within(target, 64f)) {
                     if (unit instanceof Burrowc b && b.burrowed() && !b.isBurrowing()) {
                         b.burrow();
                     }
-                } else {
+                } else if (!unit.within(target, 128f)) {
                     if (unit instanceof Burrowc b && !b.burrowed() && !b.isBurrowing()) {
                         b.burrow();
                     }
@@ -68,7 +68,7 @@ public class BugAI extends AIController implements FOSPathfindAI {
             var f = bug.following();
             bug.invading(f instanceof Bugc bf && bf.invading());
 
-            moveTo(f, 12f + f.type.hitSize, 7, true, null);
+            moveTo(f, 12f + f.type.hitSize, 0, true, null);
             return;
         }
 

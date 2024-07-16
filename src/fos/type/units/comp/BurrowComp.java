@@ -18,7 +18,7 @@ abstract class BurrowComp implements Syncc, Unitc {
     @Override
     @Replace
     public boolean isGrounded() {
-        return elevation <= 0.01f && !burrowed;
+        return elevation <= 0.001f && !burrowed;
     }
 
     @Override
@@ -49,6 +49,8 @@ abstract class BurrowComp implements Syncc, Unitc {
             Damage.damage(team(), x, y, type().hitSize / 4, 2000);
             burrowed = !burrowed;
             isBurrowing = false;
+
+            // FIXME: remove collisions when burrowed
         });
     }
 }

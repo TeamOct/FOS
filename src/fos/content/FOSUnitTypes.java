@@ -1452,31 +1452,69 @@ public class FOSUnitTypes {
         grain = new BurrowUnitType("grain", BugBurrowLegsUnit.class){{
             health = 900;
             absorption = 0.15f;
-            hitSize = 24f;
-            speed = 0.5f;
-            rotateSpeed = 4.5f;
+            hitSize = 40f;
+            speed = 0.3f;
+            rotateSpeed = 2f;
             targetAir = false;
             targetGround = true;
             targetFlags = new BlockFlag[]{BlockFlag.unitCargoUnloadPoint, BlockFlag.core, null};
 
-            legCount = 6;
+            legCount = 4;
+            legLength = 24;
+            legBaseOffset = 12;
+            legExtension = 3.25f;
+            legStraightness = 0.5f;
+
+            parts.addAll(
+                new RegionPart(),
+                new RegionPart("-armor"){{
+                    x = 0; y = -12;
+                    layerOffset = 0.01f;
+                }}
+            );
 
             weapons.add(
-                new Weapon("fos-slashing-claw"){{
-                    x = 4; y = 12;
+                new Weapon(){{
+                    x = 8; y = 20;
                     reload = 300f;
                     rotate = false;
-                    alternate = true;
+                    alternate = false;
                     ejectEffect = Fx.none;
-                    shootY = 8f;
-                    // TODO: parts
+                    recoil = 0;
+                    shootX = -8f;
+                    shootCone = 360f;
+                    shootStatus = StatusEffects.unmoving;
+                    shootStatusDuration = 600f;
+                    shoot.firstShotDelay = 40f;
+                    cooldownTime = 260f;
+
+                    parts.addAll(
+                        new RegionPart("fos-grain-claw-base"){{
+                            x = 6; y = -6;
+                            rotation = 45;
+                            moveX = -6; moveY = -6; moveRot = -45;
+                            progress = p -> p.heat > 0 ? 0 : Mathf.slope(Interp.pow4In.apply(p.charge));
+                            layer = Layer.groundUnit - 0.01f;
+                        }},
+                        new RegionPart("fos-grain-claw"){{
+                            x = 6; y = 4;
+                            rotation = 120;
+                            moveX = 6; moveY = -8; moveRot = -75;
+                            progress = p -> p.heat > 0 ? 0 : Mathf.slope(Interp.pow4In.apply(p.charge));
+                        }}
+                    );
+
                     bullet = new ExplosionBulletType(){{
                         shootEffect = Fx.none;
-                        splashDamage = 1200f;
+                        hitEffect = Fx.none;
+                        despawnEffect = Fx.none;
+                        smokeEffect = Fx.none;
+                        shootSound = Sounds.largeExplosion;
+                        splashDamage = 600f;
                         splashDamageRadius = 4f;
                         splashDamagePierce = true;
                         killShooter = false;
-                        rangeOverride = 2f;
+                        rangeOverride = 1f;
                     }};
                 }}
             );
