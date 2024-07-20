@@ -208,7 +208,7 @@ public class FOSFx {
 
     tokiciteDrop = new Effect(80f, e -> {
         color(FOSFluids.tokicite.color);
-        alpha(Mathf.clamp(e.fin() * 2f));
+        alpha(Mathf.clamp(e.fout() * 2f));
 
         Fill.circle(e.x, e.y, e.fout() * 4f);
     }),

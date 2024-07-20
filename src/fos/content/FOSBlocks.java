@@ -2,6 +2,7 @@ package fos.content;
 
 import arc.Core;
 import arc.graphics.Color;
+import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.math.geom.*;
 import arc.struct.Seq;
@@ -45,6 +46,8 @@ import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 import multicraft.*;
 
+import static arc.graphics.g2d.Draw.color;
+import static arc.math.Angles.randLenVectors;
 import static fos.content.FOSFluids.*;
 import static fos.content.FOSItems.*;
 import static fos.content.FOSUnitTypes.*;
@@ -67,7 +70,7 @@ public class FOSBlocks {
     spaceDuct, spaceRouter, spaceBridge, itemCatapult, zincRouter, zincDistributor, zincJunction, zincBridge, zincBelt, zincSorter, flowGate, liquidConveyor,
 
     // FLUIDS
-    copperPipe, brassPipe, fluidJunction, fluidBridge, pumpjack, fluidRouter, fluidBarrel, fluidTank,
+    copperPipe, brassPipe, fluidJunction, fluidBridge, pneumaticPump, pumpjack, fluidRouter, fluidBarrel, fluidTank,
 
     // POWER
     zincWire, copperWire, brassWire, zincWirePole, copperWirePole, brassWirePole, windTurbine, steamTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
@@ -467,10 +470,29 @@ public class FOSBlocks {
             reload = 30f;
             inaccuracy = 0f;
             shootY = 4f;
-            shootSound = Sounds.pew;
+
+            shootSound = Sounds.shootAlt;
+            shootEffect = new Effect(8, e -> {
+                color(Pal.lighterOrange, Pal.lightOrange, e.fin());
+                float w = 1f + 5 * e.fout();
+                for (int i = -4; i <= 4; i += 8) {
+                    float realRot = e.rotation - 90;
+                    Drawf.tri(e.x + Mathf.cosDeg(realRot) * i, e.y + Mathf.sinDeg(realRot) * i, w, 15f * e.fout(), e.rotation);
+                    Drawf.tri(e.x + Mathf.cosDeg(realRot) * i, e.y + Mathf.sinDeg(realRot) * i, w, 3f * e.fout(), e.rotation + 180f);
+                }
+            });
+            smokeEffect = new Effect(20f, e -> {
+                color(Pal.lighterOrange, Color.lightGray, Color.gray, e.fin());
+                for (int i = -4; i <= 4; i += 8) {
+                    int finalI = i; // I am disgusted.
+                    randLenVectors(e.id, 5, e.finpow() * 6f, e.rotation, 20f, (x, y) -> {
+                        Fill.circle(e.x + x + Mathf.cosDeg(e.rotation-90) * finalI, e.y + y + Mathf.sinDeg(e.rotation-90) * finalI, e.fout() * 1.5f);
+                    });
+                }
+            });
             squareSprite = false;
+
             shoot = new ShootHelix(){{
-                shots = 2;
                 mag = 2.5f;
             }};
             drawer = new DrawTurret("lumoni-"){{
@@ -486,7 +508,7 @@ public class FOSBlocks {
             }};
             ammo(
                 zinc, new BasicBulletType(3f, 10){{
-                    width = 3f; height = 6f;
+                    width = 6f; height = 9f;
                     lifetime = 44f;
                     splashDamage = 24;
                     splashDamageRadius = 10;
@@ -498,7 +520,7 @@ public class FOSBlocks {
                     buildingDamageMultiplier = 0.3f;
                 }},
                 diamond, new BasicBulletType(6f, 72){{
-                    width = 4f; height = 8f;
+                    width = 8f; height = 12f;
                     lifetime = 22f;
                     trailColor = frontColor = FOSPal.diamond;
                     backColor = FOSPal.diamondBack;
@@ -508,21 +530,29 @@ public class FOSBlocks {
                     reloadMultiplier = 0.5f;
                     buildingDamageMultiplier = 0.3f;
                 }},
-                silicon, new BasicBulletType(3f, 48){{
-                    width = 4f; height = 8f;
+                silicon, new MissileBulletType(3f, 48){{
+                    width = 10f; height = 16f;
                     lifetime = 66f;
                     rangeChange = 66f;
+                    ammoMultiplier = 1f;
+                    buildingDamageMultiplier = 0.3f;
+
+                    homingDelay = 10f;
+                    homingRange = 96f;
+                    homingPower = 0.15f;
+
                     trailColor = frontColor = Pal.unitFront;
                     backColor = Pal.unitBack;
                     trailWidth = 1.5f;
                     trailLength = 8;
-                    ammoMultiplier = 1f;
-                    homingDelay = 10f;
-                    homingRange = 96f;
-                    homingPower = 0.15f;
-                    buildingDamageMultiplier = 0.3f;
-                    fragBullets = 3;
-                    fragBullet = new BasicBulletType(2f, 10){{
+
+                    hitSound = Sounds.explosion;
+                    despawnSound = Sounds.explosion;
+                    despawnShake = 1f;
+                    hitEffect = despawnEffect = Fx.flakExplosion;
+
+                    fragBullets = 2;
+                    fragBullet = new BasicBulletType(2f, 15){{
                         lifetime = 20f;
                         pierce = true;
                         pierceCap = 1;
@@ -530,11 +560,11 @@ public class FOSBlocks {
                     }};
                 }},
                 vanadium, new BasicBulletType(4f, 64){{
-                    width = 4f; height = 8f;
+                    width = 8f; height = 12f;
                     lifetime = 50f;
                     rangeChange = 66f;
-                    trailColor = frontColor = Pal.gray;
-                    backColor = Pal.darkerGray;
+                    trailColor = frontColor = Pal.lightishGray;
+                    backColor = Pal.gray;
                     trailWidth = 1.5f;
                     trailLength = 8;
                     ammoMultiplier = 2f;
@@ -554,7 +584,7 @@ public class FOSBlocks {
             reload = 45f;
             inaccuracy = 4f;
             outlineColor = Color.valueOf("302326");
-            shootSound = Sounds.mud;
+            shootSound = FOSSounds.sticky;
             squareSprite = false;
             consumeLiquid(tokicite, 0.2f);
             ammo(
@@ -605,7 +635,7 @@ public class FOSBlocks {
             liquidCapacity = 60f;
 
             loopSound = Sounds.none;
-            shootSound = Sounds.mud;
+            shootSound = FOSSounds.sticky;
 
             ammo(
                 tokicite, new LiquidBulletType(tokicite){
@@ -618,6 +648,18 @@ public class FOSBlocks {
 
                         trailEffect = FOSFx.tokiciteDrop;
                         trailChance = 0.2f;
+                        hitSound = FOSSounds.sticky;
+                        hitSoundPitch = 0.7f;
+                        // TODO: smokeEffect doesn't work for some reason
+                        smokeEffect = new Effect(40f, e -> {
+                            Draw.color(tokicite.color);
+
+                            randLenVectors(e.id, 4, 18, e.rotation, 25f, (x, y) -> {
+                                Fill.circle(x, y, e.fout() * 6f);
+                            });
+
+                            Draw.reset();
+                        });
 
                         setDefaults = false;
                         despawnHit = true;
@@ -631,6 +673,10 @@ public class FOSBlocks {
                             pierce = true;
                             pierceCap = 2;
                             pierceBuilding = false;
+
+                            hitSound = FOSSounds.sticky;
+                            hitSoundVolume = 0.5f;
+                            hitSoundPitch = 0.6f;
                         }};
                     }
 
@@ -673,7 +719,17 @@ public class FOSBlocks {
                 }
             );
 
-            drawer = new DrawTurret("lumoni-");
+            drawer = new DrawTurret("lumoni-"){{
+                parts.add(
+                    new RegionPart("-back"){{
+                        mirror = true;
+                        layerOffset -= 0.001f;
+                    }},
+                    new RegionPart(){{
+                        layerOffset -= 0.001f;
+                    }}
+                );
+            }};
             requirements(Category.turret, with(zinc, 125, silicon, 100, brass, 75));
         }};
         dot = new PowerTurret("dot"){{
@@ -685,6 +741,7 @@ public class FOSBlocks {
             reload = 20f;
             targetAir = targetGround = true;
             squareSprite = false;
+            shootY = 6f;
 
             shootSound = Sounds.tractorbeam;
             shootEffect = FOSFx.dotLaserEnd;
@@ -703,16 +760,6 @@ public class FOSBlocks {
                 lineEffect = FOSFx.dotLaserLine;
                 endEffect = FOSFx.dotLaserEnd;
                 shootSound = Sounds.bolt;
-
-/*
-                lightning = 1;
-                lightningType = new LightningBulletType(){{
-                    lightningLength = 6;
-                    lightningLengthRand = 4;
-                    damage = 3f;
-                    lightningColor = Color.scarlet.cpy().mul(1.2f);
-                }};
-*/
 
                 buildingDamageMultiplier = 0.3f;
             }};
@@ -1067,7 +1114,7 @@ public class FOSBlocks {
                         }}
                     );
                 }};
-                requirements(Category.turret, with(zinc, 300, silver, 300, diamond, 400, silicon, 250, vanadium, 250));
+                requirements(Category.turret, with(zinc, 250, silver, 300, diamond, 400, silicon, 200, vanadium, 150, nickel, 200));
             }
 
             //hard-coding time
@@ -1466,11 +1513,21 @@ public class FOSBlocks {
             ((Conduit)copperPipe).bridgeReplacement = this;
             ((Conduit)brassPipe).bridgeReplacement = this;
         }};
+        pneumaticPump = new Pump("pneumatic-pump"){{
+            health = 200;
+            size = 1;
+            pumpAmount = 0.1f;
+            liquidCapacity = 30f;
+            squareSprite = false;
+            requirements(Category.liquid, with(zinc, 25, copper, 50));
+        }};
         pumpjack = new Pump("pumpjack"){{
             scaledHealth = 60;
             size = 3;
             pumpAmount = 0.25f;
-            liquidCapacity = 45f;
+            liquidCapacity = 300f;
+            squareSprite = false;
+            consumePower(3f);
             requirements(Category.liquid, with(zinc, 150, silicon, 50, copper, 100, vanadium, 75));
         }};
         fluidRouter = new LiquidRouter("fluid-router"){{

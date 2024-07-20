@@ -2,6 +2,7 @@ package fos.content;
 
 import arc.*;
 import arc.graphics.Color;
+import fos.audio.FOSSounds;
 import fos.type.abilities.UnitResistanceAbility;
 import fos.type.bullets.*;
 import fos.type.content.WeaponSet;
@@ -309,7 +310,7 @@ public class FOSWeaponModules {
                         recoil = 2f;
                         reload = 60f;
                         inaccuracy = 6f;
-                        shootSound = Sounds.mud;
+                        shootSound = FOSSounds.sticky;
                         bullet = new StickyBulletType(4f, 20f){{
                             lifetime = 40f;
                             width = height = 16f;

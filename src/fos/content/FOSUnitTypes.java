@@ -7,6 +7,7 @@ import arc.math.geom.*;
 import arc.struct.Seq;
 import arc.util.*;
 import fos.ai.*;
+import fos.audio.FOSSounds;
 import fos.gen.*;
 import fos.graphics.*;
 import fos.type.abilities.*;
@@ -300,7 +301,7 @@ public class FOSUnitTypes {
                             backColor = Pal.plastaniumBack;
                             frontColor = Pal.plastaniumFront;
                             ejectEffect = Fx.smokeCloud;
-                            hitSound = Sounds.mud;
+                            hitSound = FOSSounds.sticky;
                             despawnEffect = Fx.explosion;
                             splashDamage = 60f;
                             splashDamageRadius = 16f;

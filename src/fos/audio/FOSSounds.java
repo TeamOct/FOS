@@ -6,10 +6,11 @@ import static mindustry.Vars.tree;
 
 public class FOSSounds {
     public static Sound
-        radar = load("radar"),
-        buzz = load("buzz");
+        radar = load("loops/radar"),
+        buzz = load("loops/buzz"),
+        sticky = load("sticky");
 
     static Sound load(String name) {
-        return tree.loadSound("loops/" + name);
+        return tree.loadSound(name);
     }
 }

@@ -24,11 +24,10 @@ public class StickyBulletType extends BasicBulletType {
         super(speed, damage);
         this.explosionDelay = explosionDelay;
 
-        sprite = "fos-sticky-bullet";
-        backSprite = "bullet-back";
         layer = Layer.flyingUnit + 1f;
         hitEffect = Fx.blastExplosion;
         hitSound = Sounds.explosion;
+        shrinkX = shrinkY = 0f;
 
         setDefaults = false;
         despawnHit = false;
