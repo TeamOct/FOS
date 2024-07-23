@@ -226,5 +226,23 @@ public class FOSFx {
 
     burrowDust = new Effect(180f, e -> {
         burrowDustSingle.at(e.x, e.y, e.color);
-    });
+    }),
+
+    bruntChargeSmoke = new Effect(80f, e -> {
+        color(Pal.reactorPurple2);
+        alpha(e.fin());
+
+        randLenVectors(e.id, 1, e.fout() * 20f, (x, y) -> {
+            float rad = 12f * e.fout();
+
+            Fill.circle(e.x + x, e.y + y, rad);
+            Drawf.light(e.x + x, e.y + y, rad * 2.5f, Pal.reactorPurple, 0.5f);
+        });
+    }).followParent(true).layer(Layer.flyingUnit + 0.01f),
+
+    bruntCharge = new Effect(300f, e -> {
+        if (Mathf.chance(0.08f) && e.time < 220f) {
+            bruntChargeSmoke.at(e.x, e.y);
+        }
+    }).followParent(true);
 }
