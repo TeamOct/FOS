@@ -18,6 +18,7 @@ import fos.content.*;
 import fos.controllers.CapsulesController;
 import fos.gen.*;
 import fos.graphics.*;
+import fos.graphics.cachelayers.FOSCacheLayers;
 import fos.net.FOSCall;
 import fos.ui.menus.*;
 import mindustry.game.*;
@@ -116,8 +117,8 @@ public class FOSMod extends Mod {
             ConveyorSpritesPacker.pack(); // generate conveyor regions
 
             FOSVars.oreRenderer = new FOSOreRenderer();
-
             FOSShaders.init();
+            FOSCacheLayers.init();
         }
 
         SplashTexts.load();

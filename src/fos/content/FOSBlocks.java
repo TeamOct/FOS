@@ -9,6 +9,7 @@ import arc.struct.Seq;
 import arc.util.Strings;
 import fos.audio.FOSSounds;
 import fos.graphics.*;
+import fos.graphics.cachelayers.FOSCacheLayers;
 import fos.type.blocks.campaign.*;
 import fos.type.blocks.crafting.ResourceExtractor;
 import fos.type.blocks.defense.*;
@@ -84,7 +85,7 @@ public class FOSBlocks {
 
     // ENVIRONMENT & ORES
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
-    annite, anniteWall, blublu, blubluWall, purpur, purpurWall,
+    annite, anniteWall, blublu, blubluWall, purpur, purpurWall, murmur, murmurWall,
     tokiciteFloor,
     cyaniumWater, crimsonStoneWater, anniteWater, blubluWater, purpurWater,
     alienMoss,
@@ -1704,7 +1705,7 @@ public class FOSBlocks {
             variants = 0;
             liquidDrop = tokicite;
             isLiquid = true;
-            cacheLayer = CacheLayer.tar;
+            cacheLayer = FOSCacheLayers.tokicite;
             albedo = 1f;
         }};
         cyaniumWater = new Floor("cyanium-water"){{
@@ -1811,17 +1812,17 @@ public class FOSBlocks {
         blubluWall = new StaticWall("blublu-wall"){{
             blubluWater.asFloor().wall = this;
         }};
-/*      TODO: this sucks
-        blubluAlt = new Floor("blublu-alt"){{
-            variants = 4;
-            wall = blubluWall;
-        }};
-*/
         purpur = new Floor("purpur"){{
             variants = 4;
         }};
         purpurWall = new StaticWall("purpur-wall"){{
             purpurWater.asFloor().wall = this;
+        }};
+        murmur = new Floor("murmur"){{
+            variants = 4;
+        }};
+        murmurWall = new Floor("murmur-wall"){{
+            variants = 1;
         }};
         alienMoss = new OverlayFloor("alien-moss");
         oreZinc = new UndergroundOreBlock("ore-tin"){{
