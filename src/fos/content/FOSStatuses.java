@@ -48,7 +48,7 @@ public class FOSStatuses {
             healthMultiplier = 0.8f;
             damage = 1.5f;
             effect = new Effect(42f, e -> {
-                color(Color.valueOf(""));
+                color(Color.valueOf("6abe30"));
 
                 randLenVectors(e.id, 2, 1f + e.fin() * 2f, (x, y) -> {
                     Fill.circle(e.x + x, e.y + y, e.fout());

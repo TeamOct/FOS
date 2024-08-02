@@ -7,7 +7,6 @@ import fos.gen.*;
 import fos.type.blocks.units.BugSpawn;
 import fos.ui.FOSEventTypes;
 import mindustry.Vars;
-import mindustry.content.Blocks;
 import mindustry.entities.Units;
 import mindustry.entities.units.AIController;
 import mindustry.gen.*;
@@ -47,10 +46,9 @@ public class BugAI extends AIController implements FOSPathfindAI {
     public void updateMovement() {
         Tile tile = unit.tileOn();
         Tile targetTile = tile;
+        target = target(unit.x, unit.y, 25f * tilesize, false, true);
 
         if ((bug.invading()) || !hasNests()) {
-            target = target(unit.x, unit.y, 25f * tilesize, false, true);
-
             if (target != null) {
                 if (unit.within(target, 64f)) {
                     if (unit instanceof Burrowc b && b.burrowed() && !b.isBurrowing()) {
@@ -76,10 +74,10 @@ public class BugAI extends AIController implements FOSPathfindAI {
             // find a random point to walk at
             boolean foundTile = false;
             while (!foundTile) {
-                int x = Mathf.random(-40, 40);
-                int y = Mathf.random(-40, 40);
+                int x = Mathf.random(-20, 20);
+                int y = Mathf.random(-20, 20);
                 Tile t = Vars.world.tileWorld(unit.x + x, unit.y + y);
-                if (t != null && t.block() == Blocks.air) {
+                if (t != null && !t.legSolid()) {
                     targetTile = pathfind(unit);
                     foundTile = true;
                     bug.idle(true);
@@ -89,13 +87,17 @@ public class BugAI extends AIController implements FOSPathfindAI {
 
         if (targetTile == tile) return;
 
-        unit.movePref(vec.trns(unit.angleTo(targetTile.worldx(), targetTile.worldy()), unit.speed()));
-        unit.lookAt(unit.angleTo(targetTile.worldx(), targetTile.worldy()));
+        if (!unit.inRange(target))
+            unit.movePref(vec.trns(unit.angleTo(targetTile.worldx(), targetTile.worldy()), unit.speed()));
+        unit.lookAt(unit.angleTo(target));
     }
 
     @Override
     public Teamc target(float x, float y, float range, boolean air, boolean ground) {
-        for(BlockFlag flag : unit.type.targetFlags) {
+        var unitTarget = Units.closestTarget(unit.team, x, y, unit.range(), Unit::isValid, t -> false);
+        if (unitTarget != null) return unitTarget;
+
+        for (BlockFlag flag : unit.type.targetFlags) {
             Teamc target = null;
             if (flag != null) {
                 target = targetFlag(x, y, flag, true);
@@ -111,7 +113,7 @@ public class BugAI extends AIController implements FOSPathfindAI {
 
     @Override
     public boolean keepState() {
-        return true;
+        return false; // TODO: debug reasons
     }
 
     private float evo() {

@@ -39,7 +39,9 @@ public class BugUnitType extends FOSUnitType {
     }
     public <T extends Unit> BugUnitType(String name, Class<T> type, boolean flying, boolean melee) {
         this(name, type, flying);
-        if (melee) this.range = 0.01f;
+
+        // weaponless unit's range depends on its mineRange, apparently...
+        if (melee) this.mineRange = 0.01f;
     }
 
     @Override

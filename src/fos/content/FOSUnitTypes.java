@@ -37,6 +37,7 @@ import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.stroke;
 import static arc.math.Angles.randLenVectors;
 import static ent.anno.Annotations.EntityDef;
+import static fos.content.FOSFluids.bugAcid;
 import static fos.content.FOSItems.zinc;
 import static fos.content.FOSStatuses.*;
 
@@ -94,6 +95,10 @@ public class FOSUnitTypes {
     public static @EntityDef({Unitc.class, Crawlc.class, Bugc.class}) UnitType
         // CRAWLING INSECTS
         bugSmall, bugMedium, terrapod;
+
+    public static @EntityDef({Unitc.class, Legsc.class, Bugc.class}) UnitType
+        // LEGS BUGS
+        bugSmallSpitter;
 
     public static @EntityDef({Unitc.class, Bugc.class}) UnitType
         // FLYING INSECTS
@@ -1255,7 +1260,7 @@ public class FOSUnitTypes {
         }};
 */
 
-        bugSmall = new BugUnitType("bug-small", BugCrawlUnit.class, false){{
+        bugSmall = new BugUnitType("bug-small", BugCrawlUnit.class, false, true){{
             health = 160;
             armor = 8;
             hitSize = 16f;
@@ -1269,7 +1274,7 @@ public class FOSUnitTypes {
             segmentMag = 0.5f;
         }};
 
-        bugMedium = new BugUnitType("bug-medium", BugCrawlUnit.class, false){{
+        bugMedium = new BugUnitType("bug-medium", BugCrawlUnit.class, false, true){{
             health = 480;
             armor = 15;
             hitSize = 18f;
@@ -1294,7 +1299,39 @@ public class FOSUnitTypes {
 
             segmentScl = 8f;
             segmentMag = 6f;
+        }};
 
+        bugSmallSpitter = new BugUnitType("bug-small-spitter", BugLegsUnit.class, false){{
+            health = 600;
+            armor = 0;
+            absorption = 0;
+            speed = 0.6f;
+            hitSize = 8;
+
+            legCount = 6;
+
+            weapons.add(
+                new Weapon(){{
+                    x = 0; y = 6;
+                    reload = 150f;
+                    recoil = 0;
+                    mirror = false;
+                    rotate = false;
+                    shootCone = 20f;
+                    shootSound = FOSSounds.spit;
+                    bullet = new LiquidBulletType(bugAcid){{
+                        speed = 4; lifetime = 37.5f;
+                        damage = 40;
+                        puddleSize = 15f;
+                        orbSize = 3f;
+                        despawnHit = true;
+
+                        trailLength = 8;
+                        trailWidth = 3f;
+                        trailColor = bugAcid.color;
+                    }};
+                }}
+            );
         }};
 
         bugFlyingSmall = new BugUnitType("bug-flying-small", BugUnit.class, true, true){{

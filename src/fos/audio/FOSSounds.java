@@ -8,7 +8,8 @@ public class FOSSounds {
     public static Sound
         radar = load("loops/radar"),
         buzz = load("loops/buzz"),
-        sticky = load("sticky");
+        sticky = load("sticky"),
+        spit = load("spit");
 
     static Sound load(String name) {
         return tree.loadSound(name);
