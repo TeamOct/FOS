@@ -27,6 +27,7 @@ public class UndergroundDrill extends Drill {
         super(name);
         drillTime = 360f;
         schematicPriority = -5; // build last to ensure ore detectors are built beforehand
+        drawMineItem = false;
     }
 
     //placeable on drill bases or replaceable by other underground drills
@@ -47,8 +48,6 @@ public class UndergroundDrill extends Drill {
 
     @Override
     public void drawPlace(int x, int y, int rotation, boolean valid) {
-        //super.drawPlace(x, y, rotation, valid);
-
         Tile tile = world.tile(x, y);
         var detector = nearestDetector(player.team(), x*8, y*8);
         if (tile == null) return;
@@ -175,6 +174,16 @@ public class UndergroundDrill extends Drill {
 
             dominantItem = getOutput(tile);
             if (dominantItem == Items.sand) dominantItems = (int)Mathf.sqr(size);
+        }
+
+        @Override
+        public void draw() {
+            super.draw();
+
+            //since drawMineItems is false, re-draw this thing
+            Draw.color(dominantItem.color);
+            Draw.rect(itemRegion, x, y);
+            Draw.color();
         }
 
         @Override
