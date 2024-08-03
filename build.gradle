@@ -192,23 +192,3 @@ configure(rootProject){
         }
     }
 }
-
-for(def i = 0; i < 2; i++){
-    final def isDex = i == 1
-    final def name = isDex ? 'installDex' : 'install'
-    final def input = isDex ? tasks.dex : tasks.jar
-
-    tasks.register(name){
-        inputs.files input
-        doLast{
-            def folder = Fi.get(OS.getAppDataDirectoryString('Mindustry')).child('mods')
-            folder.mkdirs()
-
-            folder.child(tasks.jar.archiveFileName.get()).delete()
-            folder.child(tasks.dex.archiveFileName.get()).delete()
-
-            new Fi(input.archiveFile.get().asFile).copyTo(folder)
-            logger.log(LogLevel.LIFECYCLE, "Copied :${isDex ? 'dex' : 'jar'} output to $folder.")
-        }
-    }
-}
