@@ -7,7 +7,7 @@ import fos.content.FOSSectors;
 import fos.controllers.*;
 import fos.files.InternalFileTree;
 import fos.graphics.FOSOreRenderer;
-import fos.io.DeathMapControl;
+import fos.io.DeathMapController;
 import fos.ui.*;
 import fos.ui.menus.FOSMenuRenderer;
 import mindustry.ai.Pathfinder;
@@ -28,7 +28,7 @@ public class FOSVars {
     public static CapsulesController capsulesController;
 
     /** Contains the map for recent unit deaths. Used in insect AI. */
-    public static DeathMapControl deathMapControl = new DeathMapControl();
+    public static DeathMapController deathMapController = new DeathMapController();
     /** An additional modded pathfinder for insect AI. Should not affect vanilla {@link Pathfinder}. */
     public static FOSPathfinder pathfinder = new FOSPathfinder();
 
@@ -60,6 +60,8 @@ public class FOSVars {
 
     /** Insect evolution controller. */
     public static EvolutionController evoController = new EvolutionController();
+    /** Wind power controller. */
+    public static WindPowerController windController = new WindPowerController();
 
     /** Hint handler. */
     public static FOSHints hints = new FOSHints();

@@ -7,6 +7,7 @@ import arc.math.Mathf;
 import arc.math.geom.Point2;
 import arc.util.Time;
 import fos.content.FOSAttributes;
+import fos.core.FOSVars;
 import mindustry.Vars;
 import mindustry.game.Team;
 import mindustry.graphics.*;
@@ -15,7 +16,6 @@ import mindustry.world.blocks.power.PowerGenerator;
 import mindustry.world.meta.*;
 
 public class WindTurbine extends PowerGenerator {
-    public float displayEfficiencyScale = 1f;
     public Attribute attr = FOSAttributes.windPower;
 
     public WindTurbine(String name) {
@@ -62,7 +62,7 @@ public class WindTurbine extends PowerGenerator {
         super.setStats();
 
         stats.remove(generationType);
-        stats.add(generationType, powerProduction * 60.0f / displayEfficiencyScale, StatUnit.powerSecond);
+        stats.add(generationType, powerProduction * 60.0f, StatUnit.powerSecond);
     }
 
     @SuppressWarnings("unused")
@@ -75,8 +75,15 @@ public class WindTurbine extends PowerGenerator {
         }
 
         @Override
+        public void created() {
+            super.created();
+
+            FOSVars.windController.turbineEfficiencies.put(this, productionEfficiency);
+        }
+
+        @Override
         public void updateTile() {
-            productionEfficiency = Mathf.lerpDelta(productionEfficiency, attr.env(), 0.01f);
+            productionEfficiency = Mathf.lerpDelta(productionEfficiency, attr.env() * FOSVars.windController.windPower, 0.01f);
 
             int no = 0;
             Point2[] edges = block.getEdges();

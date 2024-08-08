@@ -10,14 +10,12 @@ import java.io.*;
 
 import static mindustry.Vars.world;
 
-public class DeathMapControl implements SaveFileReader.CustomChunk {
+public class DeathMapController implements SaveFileReader.CustomChunk {
     public volatile short[] deathMap;
     public boolean shouldSave;
 
-    public DeathMapControl() {
-        Events.on(EventType.ResetEvent.class, e ->
-            reset()
-        );
+    public DeathMapController() {
+        Events.on(EventType.ResetEvent.class, e -> reset());
 
         Events.on(EventType.WorldLoadEvent.class, e -> {
             deathMap = new short[world.width() * world.height()];
@@ -47,6 +45,7 @@ public class DeathMapControl implements SaveFileReader.CustomChunk {
         deathMap = null;
     }
 
+    @SuppressWarnings("resource")
     @Override
     public void write(DataOutput stream) throws IOException {
         Writes write = new Writes(stream);
@@ -57,6 +56,7 @@ public class DeathMapControl implements SaveFileReader.CustomChunk {
         }
     }
 
+    @SuppressWarnings("resource")
     @Override
     public void read(DataInput stream) throws IOException {
         Reads read = new Reads(stream);

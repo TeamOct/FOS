@@ -50,7 +50,7 @@ public class FOSPathfinder implements Runnable{
             if (PathTile.legSolid(data)) return -1;
             return 1 + (PathTile.deep(data) ? 6000 : 0) + //leg units can now drown
                 (PathTile.solid(data) ? 5 : 0) +
-                FOSVars.deathMapControl.deathMap[tile]; //take into account recent unit deaths
+                FOSVars.deathMapController.deathMap[tile]; //take into account recent unit deaths
         },
 
         // burrowing bugs, ignore death map values
