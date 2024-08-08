@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 
 public class ConveyorSpritesPacker { // TODO rename
     public static Field packer;
+	public static int spacing = 4;
     static {
         try {
             packer = Vars.mods.getClass().getDeclaredField("packer");
@@ -45,7 +46,7 @@ public class ConveyorSpritesPacker { // TODO rename
         for (int y = 0; y < 5; y++) {
             for (int x = 0; x < 5; x++) {
                 TextureAtlas.AtlasRegion newRegion = new TextureAtlas.AtlasRegion(
-                        region.texture, region.getX() + x * 32, region.getY() + y * 32, 32, 32);
+                        region.texture, region.getX() + x * (32 + spacing), region.getY() + y * (32 + spacing), 32, 32);
 
                 if(region.splits != null){
                     newRegion.splits = region.splits;
