@@ -106,7 +106,7 @@ configure(rootProject){
         // Required for Discord RPC integration.
         compileOnly "${arc(":discord")}"
         // MultiCrafter Lib dependency.
-        implementation "com.github.liplum:MultiCrafterLib:v1.7"
+        implementation "com.github.liplum:MultiCrafterLib:v1.8"
         // Arc's SDL binds.
         compileOnly "${arc(":backend-sdl")}"
     }
