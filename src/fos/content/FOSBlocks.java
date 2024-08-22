@@ -48,6 +48,7 @@ import mindustry.world.meta.*;
 import multicraft.*;
 
 import static arc.graphics.g2d.Draw.color;
+import static arc.graphics.g2d.Lines.*;
 import static arc.math.Angles.randLenVectors;
 import static fos.content.FOSFluids.*;
 import static fos.content.FOSItems.*;
@@ -556,7 +557,7 @@ public class FOSBlocks {
                     fragBullet = new BasicBulletType(2f, 15){{
                         lifetime = 20f;
                         pierce = true;
-                        pierceCap = 1;
+                        pierceCap = 2;
                         buildingDamageMultiplier = 0.3f;
                     }};
                 }},
@@ -778,69 +779,117 @@ public class FOSBlocks {
             shootSound = Sounds.shootBig;
             squareSprite = false;
             ammo(
-                silver, new BasicBulletType(4f, 80){{
-                    lifetime = 60f;
+                silicon, new BasicBulletType(4f, 80){{
+                    lifetime = 60f * 10;
                     width = 16f; height = 24f;
-                    backColor = FOSPal.silverBack;
-                    frontColor = trailColor = lightColor = FOSPal.silver;
-                    trailEffect = Fx.artilleryTrail;
-                    trailWidth = 4;
-                    trailLength = 20;
                     ammoMultiplier = 1;
-                    splashDamage = 10f;
-                    splashDamageRadius = 24f;
+                    splashDamage = 40f;
+                    splashDamageRadius = 32f;
                     knockback = 3.2f;
                     fragOnHit = true;
-                    hitEffect = despawnEffect = Fx.explosion;
+                    scaleLife = true;
                     buildingDamageMultiplier = 0.3f;
-                    fragBullets = 6;
-                    fragBullet = new BasicBulletType(0.8f, 10){{
-                        lifetime = 60f * 5; //frags will stay for pretty long
-                        drag = 0.024f;
-                        width = height = 6f;
-                        backColor = FOSPal.silverBack;
-                        frontColor = trailColor = FOSPal.silver;
-                        trailEffect = Fx.artilleryTrail;
-                        trailLength = 8;
-                        pierceArmor = true;
+
+                    backColor = Pal.unitBack;
+                    frontColor = trailColor = lightColor = Pal.unitFront;
+                    trailEffect = Fx.artilleryTrail;
+                    trailWidth = 3.4f;
+                    trailLength = 20;
+                    hitShake = 4f;
+                    hitSound = Sounds.largeExplosion;
+                    hitEffect = despawnEffect = new Effect(30, e -> {
+                        // Fx.flakExplosionBig except with different color
+                        color(Pal.bulletYellowBack);
+
+                        e.scaled(6, i -> {
+                            stroke(3f * i.fout());
+                            Lines.circle(e.x, e.y, 3f + i.fin() * 25f);
+                        });
+
+                        color(Pal.unitFront);
+
+                        randLenVectors(e.id, 6, 2f + 23f * e.finpow(), (x, y) -> {
+                            Fill.circle(e.x + x, e.y + y, e.fout() * 4f + 0.5f);
+                        });
+
+                        color(Pal.bulletYellow);
+                        stroke(e.fout());
+
+                        randLenVectors(e.id + 1, 4, 1f + 23f * e.finpow(), (x, y) -> {
+                            lineAngle(e.x + x, e.y + y, Mathf.angle(x, y), 1f + e.fout() * 3f);
+                        });
+
+                        Drawf.light(e.x, e.y, 60f, Pal.bulletYellowBack, 0.7f * e.fout());
+                    });
+
+                    fragBullets = 4;
+                    fragVelocityMin = 0.6f;
+                    fragVelocityMax = 1.4f;
+                    fragBullet = new BasicBulletType(){{
+                        damage = 0;
+                        speed = 0.8f;
+                        lifetime = 60f * 10;
+                        drag = 0.048f;
+                        width = height = 8f;
+                        sprite = "shell";
+
+                        backColor = Pal.unitBack;
+                        frontColor = trailColor = lightColor = Pal.unitFront;
+                        trailWidth = 1.2f;
+                        trailLength = 12;
+                        hitEffect = new MultiEffect(Fx.explosion, Fx.blockExplosionSmoke);
+                        hitSound = Sounds.explosion;
+                        despawnHit = true;
+                        hitShake = 3f;
+
+                        splashDamage = 48f;
+                        splashDamageRadius = 28f;
+                        hitSize = 8f;
                         collidesAir = false;
                         collidesTiles = true;
-                        collideTerrain = false;
-                        hitEffect = Fx.hitBulletSmall;
-                        despawnEffect = Fx.none;
+                        collideTerrain = true;
                         buildingDamageMultiplier = 0.3f;
                     }};
                 }},
-                vanadium, new BasicBulletType(6f, 120){{
+                vanadium, new BasicBulletType(6f, 160){{
                     lifetime = 40f;
                     width = 16f; height = 24f;
+                    ammoMultiplier = 1;
+                    knockback = 4f;
+                    buildingDamageMultiplier = 0.3f;
+
                     backColor = vanadium.color.cpy().mul(0.8f);
                     frontColor = trailColor = lightColor = vanadium.color;
                     trailEffect = Fx.artilleryTrail;
-                    trailWidth = 4;
+                    trailWidth = 3.4f;
                     trailLength = 20;
-                    ammoMultiplier = 1;
-                    splashDamage = 25f;
-                    splashDamageRadius = 24f;
-                    knockback = 4f;
+                    hitShake = 2.5f;
+                    hitSound = Sounds.explosion;
+                    hitEffect = despawnEffect = Fx.flakExplosionBig;
+
                     fragOnHit = true;
-                    hitEffect = despawnEffect = Fx.explosion;
-                    buildingDamageMultiplier = 0.3f;
-                    fragBullets = 7;
-                    fragBullet = new BasicBulletType(0.8f, 16){{
-                        lifetime = 60f * 5; //frags will stay for pretty long
-                        drag = 0.024f;
+                    fragBullets = 2;
+                    fragRandomSpread = 30f;
+                    fragVelocityMin = 0.5f;
+                    fragVelocityMax = 1.5f;
+                    fragBullet = new BasicBulletType(1.6f, 25){{
+                        lifetime = 60f * 5;
+                        drag = 0.048f;
                         width = height = 6f;
-                        backColor = vanadium.color.cpy().mul(0.8f);
-                        frontColor = trailColor = vanadium.color;
-                        trailEffect = Fx.artilleryTrail;
-                        trailLength = 8;
-                        pierceArmor = true;
-                        collidesAir = false;
-                        collidesTiles = true;
-                        collideTerrain = false;
+
                         hitEffect = Fx.hitBulletSmall;
                         despawnEffect = Fx.none;
+                        backColor = vanadium.color.cpy().mul(0.8f);
+                        frontColor = trailColor = lightColor = vanadium.color;
+                        trailWidth = 1.2f;
+                        trailLength = 12;
+
+                        pierceArmor = true;
+                        pierce = true;
+                        pierceCap = 2;
+                        collidesTiles = true;
+                        collideTerrain = true;
+                        hittable = false;
                         buildingDamageMultiplier = 0.3f;
                     }};
                 }}
@@ -875,7 +924,7 @@ public class FOSBlocks {
                     pierce = true;
                     pierceCap = 2;
                     despawnHit = true;
-                    hitEffect = fireLong;
+                    hittable = false;
                     //scaleLife = true;
 
                     puddleSize = 5f;
@@ -883,6 +932,7 @@ public class FOSBlocks {
                     puddles = 3;
                     orbSize = 4f;
 
+                    hitEffect = fireLong;
                     trailEffect = fire;
                     //trailColor = arkycite.color;
                     trailParam = 6f;
@@ -900,7 +950,7 @@ public class FOSBlocks {
                     pierce = true;
                     pierceCap = 2;
                     despawnHit = true;
-                    hitEffect = fireLong;
+                    hittable = false;
                     //scaleLife = true;
 
                     puddleSize = 5f;
@@ -908,6 +958,7 @@ public class FOSBlocks {
                     puddles = 3;
                     orbSize = 4f;
 
+                    hitEffect = fireLong;
                     trailEffect = fire;
                     //trailColor = oil.color;
                     trailParam = 6f;

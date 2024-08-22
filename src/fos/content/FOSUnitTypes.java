@@ -866,7 +866,7 @@ public class FOSUnitTypes {
             legMoveSpace = 2F;
 
             weapons.add(
-                    new Weapon("cp-e-weapon"){{
+                    new Weapon("fos-e-weapon"){{
                         x = 0; y = 3;
                         recoil = 1f;
                         mirror = false;
@@ -931,7 +931,7 @@ public class FOSUnitTypes {
                 //buildingDamageMultiplier = 1.25f;
             }});
 
-            weapons.add(new PointDefenseWeapon("cp-e-point-defense-small"){{
+            weapons.add(new PointDefenseWeapon("fos-e-point-defense-small"){{
                 x = 9; y = -3;
                 mirror = true;
                 rotate = true;
@@ -973,7 +973,7 @@ public class FOSUnitTypes {
             legMoveSpace = 1.085F;
 
             weapons.add(
-                    new Weapon("cp-e-railgun"){{
+                    new Weapon("fos-e-railgun"){{
                         x = 9.5f; y = 4f;
                         recoil = 3f;
                         rotate = true;
@@ -985,14 +985,14 @@ public class FOSUnitTypes {
                         shootSound = Sounds.shootSmite;
 
                         bullet = new RailBulletType(){{
-                            pierceCap = 1;
+                            pierceCap = 2;
                             pierce = pierceBuilding = true;
                             collidesAir = false;
                             damage = 75f;
                             //buildingDamageMultiplier = 0.75f;
                             length = 100f;
                             hitColor = Pal.surge;
-                            hitEffect = endEffect = Fx.dynamicSpikes.wrap(Pal.surge, 16f);
+                            endEffect = Fx.dynamicSpikes.wrap(Pal.surge, 16f);
                             shootEffect = Fx.shootBig2;
                             smokeEffect = Fx.colorSpark;
                             lineEffect = Fx.chainLightning;
@@ -1011,7 +1011,7 @@ public class FOSUnitTypes {
                             }};
                         }};
                     }},
-                    new PointDefenseWeapon("cp-e-point-defense-small"){{
+                    new PointDefenseWeapon("fos-e-point-defense-small"){{
                         x = 30f/4f; y = -25f/4f;
                         mirror = true;
                         rotate = true;

@@ -158,7 +158,6 @@ public class FOSMod extends Mod {
                     if (FOSVars.deathMapController.deathMap[i] == 0) continue;
 
                     Draw.z(Layer.light);
-                    Draw.color(Color.red);
                     Draw.alpha(FOSVars.deathMapController.deathMap[i] / 100f);
 
                     Draw.rect("empty", world.tiles.geti(i).worldx(), world.tiles.geti(i).worldy());
