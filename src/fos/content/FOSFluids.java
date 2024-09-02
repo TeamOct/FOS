@@ -18,11 +18,12 @@ public class FOSFluids {
             effect = FOSStatuses.tokiciteSlowed;
             boilPoint = 0.8f;
         }};
-        bugAcid = new Liquid("bug-acid", Color.valueOf("6abe30")){{
+        bugAcid = new Liquid("bug-acid", Color.valueOf("b3db81")){{
             viscosity = 0.4f;
             heatCapacity = 0.3f;
             effect = FOSStatuses.dissolving;
             hidden = true;
+            coolant = false;
         }};
     }
 }

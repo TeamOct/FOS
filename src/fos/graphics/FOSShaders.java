@@ -17,7 +17,7 @@ public class FOSShaders {
     public static LuminiumOreShader los;
     public static LuminiumTrailShader lts;
 
-    public static ModSurfaceShader tokicite;
+    public static ModSurfaceShader tokicite, calcite, calciteCrystals;
 
     public static void init() {
         lis = new LuminiumItemShader();
@@ -25,6 +25,8 @@ public class FOSShaders {
         lts = new LuminiumTrailShader();
 
         tokicite = new ModSurfaceShader("tokicite");
+        calcite = new ModSurfaceShader("calcite");
+        calciteCrystals = new ModSurfaceShader("calcite-crystals");
     }
 
     public static class LuminiumItemShader extends Shader {

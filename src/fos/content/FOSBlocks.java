@@ -69,7 +69,8 @@ public class FOSBlocks {
     oreDetectorSmall, oreDetector, oreDetectorReinforced, oreDetectorOverclocked,
 
     // DISTRIBUTION
-    spaceDuct, spaceRouter, spaceBridge, itemCatapult, zincRouter, zincDistributor, zincJunction, zincBridge, zincBelt, zincSorter, flowGate, liquidConveyor,
+    spaceDuct, spaceRouter, spaceBridge, itemCatapult, zincRouter, zincDistributor, zincJunction, zincBridge, zincBelt, brassBelt, zincSorter, flowGate,
+    liquidConveyor,
 
     // FLUIDS
     copperPipe, brassPipe, fluidJunction, fluidBridge, pneumaticPump, pumpjack, fluidRouter, fluidBarrel, fluidTank,
@@ -86,7 +87,7 @@ public class FOSBlocks {
 
     // ENVIRONMENT & ORES
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
-    annite, anniteWall, blublu, blubluWall, purpur, purpurWall, murmur, murmurWall,
+    annite, anniteWall, blublu, blubluWall, purpur, purpurWall, murmur, murmurWall, calcite, calciteWall,
     tokiciteFloor,
     cyaniumWater, crimsonStoneWater, anniteWater, blubluWater, purpurWater,
     alienMoss,
@@ -94,7 +95,7 @@ public class FOSBlocks {
     hiveFloor, bugSpawn,
 
     // PROPS
-    softbush,
+    softbush, calciteCrystal, calciteMineral, blueTree,
 
     // UNITS
     upgradeCenter, destroyerFactory, eliminatorFactory, injectorFactory, simpleReconstructor, droidConstructor, draugFactory,
@@ -1505,10 +1506,17 @@ public class FOSBlocks {
             researchCost = with(zinc, 30);
             requirements(Category.distribution, with(zinc, 1));
         }};
+        brassBelt = new PipeConveyor("brass-belt"){{
+            health = 10;
+            speed = 0.087f;
+            displayedSpeed = 12.1f;
+            requirements(Category.distribution, with(brass, 1));
+        }};
         zincJunction = new Junction("tin-junction"){{
             speed = 16f;
             researchCost = with(zinc, 60);
             ((Conveyor) zincBelt).junctionReplacement = this;
+            ((Conveyor) brassBelt).junctionReplacement = this;
             requirements(Category.distribution, with(zinc, 2));
         }};
         zincRouter = new Router("tin-router"){{
@@ -1536,6 +1544,7 @@ public class FOSBlocks {
             bufferCapacity = 14;
             researchCost = with(zinc, 150);
             ((Conveyor) zincBelt).bridgeReplacement = this;
+            ((Conveyor) brassBelt).bridgeReplacement = this;
             requirements(Category.distribution, with(zinc, 10));
         }};
         //endregion
@@ -1872,8 +1881,15 @@ public class FOSBlocks {
         murmur = new Floor("murmur"){{
             variants = 4;
         }};
-        murmurWall = new Floor("murmur-wall"){{
-            variants = 1;
+        murmurWall = new StaticWall("murmur-wall"){{
+            variants = 0;
+        }};
+        calcite = new Floor("calcite"){{
+            variants = 4;
+            cacheLayer = FOSCacheLayers.calcite;
+        }};
+        calciteWall = new StaticWall("calcite-wall"){{
+            variants = 2;
         }};
         alienMoss = new OverlayFloor("alien-moss");
         oreZinc = new UndergroundOreBlock("ore-tin"){{
@@ -1937,6 +1953,21 @@ public class FOSBlocks {
             blublu.asFloor().decoration = this;
             breakSound = Sounds.plantBreak;
         }};
+        calciteCrystal = new StaticWall("calcite-crystal"){{
+            variants = 0;
+            //size = 2;
+            //cacheLayer = FOSCacheLayers.calciteCrystals;
+        }};
+        calciteMineral = new StaticWall("calcite-mineral"){{
+            variants = 0;
+            //size = 3;
+            //cacheLayer = FOSCacheLayers.calciteCrystals;
+        }};
+        blueTree = new TreeBlock("blue-tree"){{
+            // for visual elevation
+            shadowOffset = -7f;
+        }};
+
         //endregion
         //region units
         upgradeCenter = new UpgradeCenter("upgrade-center"){{

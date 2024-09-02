@@ -27,7 +27,8 @@ public class LumoniTechTree {
             );
 
             // TRANSPORT. TODO
-            node(zincBelt, () ->
+            node(zincBelt, () -> {
+                node(brassBelt);
                 node(zincJunction, () ->
                     node(zincRouter, () -> {
                         node(zincDistributor);
@@ -36,8 +37,8 @@ public class LumoniTechTree {
                         );
                         node(zincBridge);
                     })
-                )
-            );
+                );
+            });
 
             // POWER. TODO
             node(windTurbine, () -> {
