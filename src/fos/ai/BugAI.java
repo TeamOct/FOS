@@ -2,10 +2,9 @@ package fos.ai;
 
 import arc.Events;
 import arc.math.Mathf;
-import fos.core.FOSVars;
+import fos.core.*;
 import fos.gen.*;
 import fos.type.blocks.units.BugSpawn;
-import fos.ui.FOSEventTypes;
 import mindustry.Vars;
 import mindustry.entities.Units;
 import mindustry.entities.units.AIController;

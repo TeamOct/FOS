@@ -4,6 +4,7 @@ import arc.*;
 import arc.func.Boolp;
 import arc.struct.ObjectSet;
 import arc.util.*;
+import fos.core.FOSEventTypes;
 import fos.type.blocks.production.UndergroundDrill;
 import mindustry.Vars;
 import mindustry.game.EventType;

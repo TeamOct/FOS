@@ -1,4 +1,4 @@
-package fos.ui;
+package fos.core;
 
 import mindustry.world.Tile;
 

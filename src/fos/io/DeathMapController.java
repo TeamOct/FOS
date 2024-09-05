@@ -2,7 +2,7 @@ package fos.io;
 
 import arc.Events;
 import arc.util.io.*;
-import fos.ui.FOSEventTypes;
+import fos.core.FOSEventTypes;
 import mindustry.game.EventType;
 import mindustry.io.*;
 
