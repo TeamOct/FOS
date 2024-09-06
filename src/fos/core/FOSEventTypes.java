@@ -11,4 +11,6 @@ public class FOSEventTypes {
             this.tile = tile;
         }
     }
+
+    public static class RealisticToggleEvent {}
 }
