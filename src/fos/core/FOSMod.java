@@ -157,6 +157,7 @@ public class FOSMod extends Mod {
         // add modded hints
         FOSVars.hints.load();
 
+        // handle input for active abilities of certain weapons
         input.addProcessor(new GestureDetector(new GestureListener() {
             @Override
             public boolean tap(float x, float y, int count, KeyCode button) {
@@ -192,13 +193,11 @@ public class FOSMod extends Mod {
                 s == 7 ? "@setting.fos-menutheme.lumoniterrain" :
                 "@setting.fos-menutheme.default");
             t.checkPref("fos-rotatemenucamera", true);
-            t.checkPref("fos-animatedore", true);
-            t.sliderPref("fos-damagedisplayfrequency", 30, 3, 120, 3, s ->
-                bundle.format("setting.seconds", s / 60f));
             t.checkPref("fos-ostdontshowagain", false);
             t.checkPref("fos-realisticmode", false, b ->
                 Events.fire(new FOSEventTypes.RealisticToggleEvent())
             );
+            t.checkPref("fos-moddedrichpresence", true);
             t.checkPref("fos-refreshsplash", false, b -> {
                 Time.run(60f, () ->
                     settings.put("fos-refreshsplash", false)

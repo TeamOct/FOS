@@ -52,6 +52,7 @@ public class UIHandler {
                 }, () -> {});
         }
 
+        // menu background (can be space or surface)
         Element menu = ((Element) Reflect.get(ui.menufrag, "container")).parent.parent;
         Group menuCont = menu.parent;
         menuCont.addChildBefore(menu, new Element(){
@@ -60,7 +61,6 @@ public class UIHandler {
                 FOSVars.menuRenderer.render();
             }
         });
-
         int tn = settings.getInt("fos-menutheme");
         MenuBackground bg = (
             tn == 2 ? FOSMenus.uxerdSpace :
@@ -73,6 +73,7 @@ public class UIHandler {
             FOSVars.menuRenderer.changeBackground(bg);
         }
 
+        // 2 more team buttons in editor UI
         ui.editor.shown(() -> {
             // java sucks
             WidgetGroup teambuttons = (WidgetGroup) ui.editor.getChildren().get(0);

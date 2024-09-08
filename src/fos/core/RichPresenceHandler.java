@@ -1,5 +1,6 @@
 package fos.core;
 
+import arc.Core;
 import arc.discord.DiscordRPC;
 import arc.util.*;
 import mindustry.gen.Groups;
@@ -12,7 +13,7 @@ public class RichPresenceHandler {
     public static RichPresence presence = new RichPresence();
 
     public static void init() {
-        if (mobile) return;
+        if (mobile || !Core.settings.getBool("fos-moddedrichpresence", true)) return;
 
         presence.startTimestamp = System.currentTimeMillis();
 
