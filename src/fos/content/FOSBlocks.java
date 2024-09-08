@@ -1157,13 +1157,13 @@ public class FOSBlocks {
                         new ShapePart(){{
                             circle = true;
                             hollow = true;
-                            color = Color.red;
+                            color = Color.salmon;
                             radius = 0f;
                             radiusTo = 3f;
                             stroke = 0f;
                             strokeTo = 3f;
                             x = 0f; y = 18f;
-                            layer = Layer.effect;
+                            layer = Layer.effect - 0.01f;
                         }}
                     );
                 }};
