@@ -98,29 +98,6 @@ public class LumoniTechTree {
                 soontm();
             });
 
-            // DRILLS
-            node(crudeDrill, () -> {
-                node(improvedDrill, Seq.with(new OnSector(ruins)), () -> {
-                    node(draugFactory, Seq.with(new SectorComplete(zincMiningSite)), () ->
-                        node(draug, ItemStack.with(), Seq.with(new Research(draugFactory)), () -> {})
-                    );
-                    soontm();
-/*
-                    node(proficientDrill));
-*/
-                });
-            });
-
-            // UNDERGROUND DRILLS
-            node(zincDrill, () ->
-                node(silverDrill, () -> {
-                    node(diamondDrill, Seq.with(new OnSector(intruders)), () -> {
-                        node(surfaceDetonator);
-                        soontm();
-                    });
-                })
-            );
-
             // DEFENCE
             node(helix, Seq.with(new OnSector(ruins)), () -> {
                 node(sticker, () -> {
@@ -148,7 +125,30 @@ public class LumoniTechTree {
                 });
             });
 
-            // FLUIDS
+            // DRILLS
+            node(crudeDrill, () -> {
+                node(improvedDrill, Seq.with(new OnSector(ruins)), () -> {
+                    node(draugFactory, Seq.with(new SectorComplete(zincMiningSite)), () ->
+                        node(draug, ItemStack.with(), Seq.with(new Research(draugFactory)), () -> {})
+                    );
+                    soontm();
+/*
+                    node(proficientDrill));
+*/
+                });
+            });
+
+            // UNDERGROUND DRILLS
+            node(zincDrill, () ->
+                node(silverDrill, () -> {
+                    node(diamondDrill, Seq.with(new OnSector(intruders)), () -> {
+                        node(surfaceDetonator);
+                        soontm();
+                    });
+                })
+            );
+
+            // FLUID BLOCKS
             node(pneumaticPump, () -> {
                 node(pumpjack);
                 node(copperPipe, () -> {
@@ -243,18 +243,13 @@ public class LumoniTechTree {
                 nodeProduce(silver, () ->
                     nodeProduce(diamond, () -> {
                         nodeProduce(silicon, () -> {});
-                        nodeProduce(vanadium, () ->
-                            soontm()
+                        nodeProduce(vanadium, () -> {
+                            nodeProduce(sulphur, Seq.with(new Research(arkyciteRefinery)), () -> {});
+                            soontm();
 /*
-                            nodeProduce(nickel, () ->
-                                nodeProduce(luminium, () -> {})
-                            )
+                            nodeProduce(nickel)
 */
-                        );
-                        soontm();
-/*
-                        nodeProduce(sulphur, Seq.with(new Research(arkyciteRefinery)), () -> {});
-*/
+                        });
                     })
                 );
                 nodeProduce(copper, () ->
@@ -266,8 +261,8 @@ public class LumoniTechTree {
             nodeProduce(water, () -> {
                 nodeProduce(tokicite, () -> {});
                 nodeProduce(arkycite, () -> {
-                    soontm();
-                    //nodeProduce(oil, () -> {});
+                    nodeProduce(oil, () -> {});
+                    nodeProduce(nitrogen, () -> {});
                 });
             });
 

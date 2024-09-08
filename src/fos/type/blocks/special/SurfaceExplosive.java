@@ -2,6 +2,7 @@ package fos.type.blocks.special;
 
 import arc.audio.Sound;
 import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
 import arc.math.Mathf;
 import arc.math.geom.*;
 import arc.struct.Seq;
@@ -16,7 +17,7 @@ import mindustry.graphics.*;
 import mindustry.ui.Fonts;
 import mindustry.world.*;
 
-import static fos.content.FOSBlocks.tokiciteFloor;
+import static fos.content.FOSBlocks.*;
 import static mindustry.Vars.*;
 import static mindustry.content.Blocks.*;
 
@@ -28,7 +29,7 @@ public class SurfaceExplosive extends Block {
     public Sound explosionSound = Sounds.explosionbig;
     public float explosionShake = 10f;
     public float damage = 2000f;
-    public Seq<Block> bannedFloors = Seq.with(arkyicStone, arkyciteFloor, tokiciteFloor, deepwater);
+    public Seq<Block> bannedFloors = Seq.with(arkyicStone, arkyciteFloor, tokiciteFloor, murmur, deepwater);
 
     public SurfaceExplosive(String name) {
         super(name);
@@ -70,16 +71,18 @@ public class SurfaceExplosive extends Block {
         public void draw() {
             super.draw();
 
-            Fonts.def.draw(Strings.fixed(Mathf.ceil(counter / 60f), 0), x, y + 2, Pal.redSpark, 0.2f, false, Align.center);
+            Draw.z(Layer.endPixeled);
+            if (counter < 180f)
+                Fonts.def.draw(Strings.fixed(Mathf.ceil(counter / 60f), 0), x, y + 2, Pal.redSpark, 0.2f, false, Align.center);
         }
 
         @Override
         public void updateTile() {
-            if (counter <= 0) {
+            if (counter <= 0)
                 detonate();
-            }
 
-            counter -= Time.delta;
+            if (canConsume())
+                counter -= Time.delta;
         }
 
         // hard-coded for now

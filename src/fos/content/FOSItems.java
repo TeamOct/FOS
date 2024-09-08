@@ -44,6 +44,7 @@ public class FOSItems {
         }};
         sulphur = new Item("sulphur", Color.valueOf("f0b454")){{
             flammability = 0.6f;
+            explosiveness = 0.4f;
             cost = 0.5f;
         }};
         cuberium = new Item("cuberium", Color.valueOf("855992")){{

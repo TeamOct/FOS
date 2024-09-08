@@ -2135,7 +2135,10 @@ public class FOSBlocks {
         surfaceDetonator = new SurfaceExplosive("surface-detonator"){{
             health = 160;
             size = 3;
-            requirements(Category.effect, with(diamond, 100, brass, 75, vanadium, 100)); // TODO: temporary recipe
+            hasItems = true;
+            itemCapacity = 15;
+            consumeItem(sulphur, 15);
+            requirements(Category.effect, with(diamond, 50, brass, 50, vanadium, 50));
         }};
         orbitalAccelerator = new OrbitalAccelerator("orbital-accelerator"){{
             health = 5000;
