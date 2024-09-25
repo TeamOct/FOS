@@ -83,6 +83,16 @@ public class SurfaceExplosive extends Block {
 
             if (canConsume())
                 counter -= Time.delta;
+            else
+                counter = 180f;
+        }
+
+        @Override
+        public void onDestroyed() {
+            super.onDestroyed();
+
+            if (canConsume())
+                detonate();
         }
 
         // hard-coded for now
@@ -103,7 +113,10 @@ public class SurfaceExplosive extends Block {
             // pre-detonation init
             tileOn().circle(range, t -> {
                 if (t == null || bannedFloors.contains(t.floor()) ||
-                    (t.block() != air && t.block() != this.block && t.block() != cliff)) return;
+                    ((t.block() != air && t.build == null) && t.block() != this.block && t.block() != cliff)) return;
+
+                // first destroy buildings!
+                if (t.build != null && t.build != this) t.build.kill();
 
                 tiles.add(t);
                 if (t.floor() != deepFloor())
