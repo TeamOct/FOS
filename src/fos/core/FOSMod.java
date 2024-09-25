@@ -152,7 +152,7 @@ public class FOSMod extends Mod {
         UIHandler.init();
 
         // setup Discord RPC
-        RichPresenceHandler.init();
+        if (!mobile) RichPresenceHandler.init();
 
         // add modded hints
         FOSVars.hints.load();
