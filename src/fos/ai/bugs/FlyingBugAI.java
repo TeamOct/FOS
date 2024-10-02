@@ -1,4 +1,4 @@
-package fos.ai;
+package fos.ai.bugs;
 
 import arc.math.Mathf;
 import fos.gen.Bugc;

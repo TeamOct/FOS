@@ -180,6 +180,8 @@ public class FOSMod extends Mod {
                 return GestureListener.super.touchDown(x, y, pointer, button);
             }
         }));
+
+        Events.fire(new FOSEventTypes.RealisticToggleEvent());
     }
 
     public void constructSettings() {

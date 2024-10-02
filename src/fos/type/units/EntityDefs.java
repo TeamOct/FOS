@@ -11,4 +11,5 @@ class EntityDefs<G> {
     @EntityDef({Unitc.class, Legsc.class, Bugc.class}) G bugLegsUnit;
     @EntityDef({Unitc.class, Bugc.class}) G bugUnit;
     @EntityDef({Unitc.class, Legsc.class, Burrowc.class, Bugc.class}) G bugBurrowLegsUnit;
+    @EntityDef({Unitc.class, Minerc.class, BWorkerc.class}) G bWorkerMinerUnit;
 }
