@@ -12,14 +12,10 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          packages: 'platforms;android-34 build-tools;34.0.0'
       - name: Build mod artifact
         run: |
           chmod +x gradlew
-          ./gradlew clean dex
+          ./gradlew clean nmpBuildRelease
       - name: Upload built mod artifact
         uses: actions/upload-artifact@v4
         with:
