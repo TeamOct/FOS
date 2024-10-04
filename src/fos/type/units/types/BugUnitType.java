@@ -2,7 +2,7 @@ package fos.type.units.types;
 
 import arc.Events;
 import arc.graphics.Color;
-import fos.ai.*;
+import fos.ai.bugs.*;
 import fos.content.FOSStatuses;
 import fos.core.FOSEventTypes;
 import fos.gen.Bugc;

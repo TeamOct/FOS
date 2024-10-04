@@ -6,10 +6,11 @@ import arc.math.Mathf;
 import arc.util.Time;
 import fos.content.FOSUnitTypes;
 import fos.core.FOSVars;
+import fos.gen.BWorkerc;
 import mindustry.game.EventType;
-import mindustry.gen.Unit;
+import mindustry.gen.*;
 import mindustry.graphics.Layer;
-import mindustry.type.UnitType;
+import mindustry.type.*;
 import mindustry.world.blocks.payloads.UnitPayload;
 import mindustry.world.blocks.units.UnitBlock;
 import mindustry.world.meta.BuildVisibility;
@@ -21,6 +22,8 @@ public class BugSpawn extends UnitBlock {
 
     public BugSpawn(String name) {
         super(name);
+        hasItems = true;
+        itemCapacity = 100;
         solid = false;
         canOverdrive = false;
         rotate = false;
@@ -48,7 +51,9 @@ public class BugSpawn extends UnitBlock {
             float maxInterval = interval + 300f;
 
             if (Mathf.chance((progress - minInterval) / (maxInterval - minInterval) * (Time.delta / 60f))) {
-                Unit unit = getBug().create(team);
+                var type = getBug();
+                Unit unit = type.create(team);
+                if (unit instanceof BWorkerc miner) miner.nest(this);
                 payload = new UnitPayload(unit);
                 payVector.setZero();
                 unit.x(this.x); unit.y(this.y);
@@ -56,6 +61,8 @@ public class BugSpawn extends UnitBlock {
                 Events.fire(new EventType.UnitCreateEvent(payload.unit, this));
 
                 spawned();
+                if (type.getFirstRequirements() != null)
+                    items.remove(type.getFirstRequirements());
             }
         }
 
@@ -71,19 +78,29 @@ public class BugSpawn extends UnitBlock {
             }
         }
 
+        @Override
+        public boolean acceptItem(Building source, Item item) {
+            return item.hardness > 0 && items.get(item) < getMaximumAccepted(item);
+        }
 
         @SuppressWarnings("ConstantConditions")
         private UnitType getBug() {
             UnitType[][] units = {
-                {FOSUnitTypes.bugSmall, FOSUnitTypes.bugMedium}
+                { FOSUnitTypes.bugSmall, FOSUnitTypes.bugMedium },
+                { FOSUnitTypes.bugSmallSpitter },
+                { FOSUnitTypes.bugScout }
             };
 
-            //unit tier depends on evolution, and a bit of random chance for +1 tier
-            int curTier = evo() < 0.5f ? Mathf.ceil(evo() / 0.25f) : 3;
-            if (Mathf.chance(evo())) curTier++;
+            UnitType[] workers = { FOSUnitTypes.bugWorker };
 
-            if (curTier > units[0].length) curTier = units[0].length;
-            return units[Mathf.random(units.length - 1)][curTier - 1];
+            //unit tier depends on evolution, and a bit of random chance for +1 tier
+            int tier = evo() < 0.5f ? Mathf.ceil(evo() / 0.25f) : 3;
+            if (Mathf.chance(evo())) tier++;
+            int branch = Mathf.random(units.length - 1);
+
+            if (tier > units[branch].length) tier = units[branch].length;
+            var type = units[branch][tier-1];
+            return (!items.has(type.getFirstRequirements())) ? workers[Math.min(tier-1, workers.length-1)] : type;
         }
 
         private float evo() {

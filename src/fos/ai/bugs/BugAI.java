@@ -1,11 +1,11 @@
-package fos.ai;
+package fos.ai.bugs;
 
 import arc.Events;
 import arc.math.Mathf;
+import fos.ai.FOSPathfindAI;
 import fos.core.*;
 import fos.gen.*;
 import fos.type.blocks.units.BugSpawn;
-import mindustry.Vars;
 import mindustry.entities.Units;
 import mindustry.entities.units.AIController;
 import mindustry.gen.*;
@@ -69,6 +69,7 @@ public class BugAI extends AIController implements FOSPathfindAI {
             return;
         }
 
+/*
         if (!bug.invading() && !bug.idle()) {
             // find a random point to walk at
             boolean foundTile = false;
@@ -83,6 +84,7 @@ public class BugAI extends AIController implements FOSPathfindAI {
                 }
             }
         }
+*/
 
         if (targetTile == tile) return;
 

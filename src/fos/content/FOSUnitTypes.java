@@ -6,6 +6,7 @@ import arc.math.*;
 import arc.math.geom.Rect;
 import arc.struct.Seq;
 import fos.ai.*;
+import fos.ai.bugs.*;
 import fos.audio.FOSSounds;
 import fos.gen.*;
 import fos.graphics.*;
@@ -38,8 +39,9 @@ import static arc.graphics.g2d.Lines.stroke;
 import static arc.math.Angles.randLenVectors;
 import static ent.anno.Annotations.EntityDef;
 import static fos.content.FOSFluids.bugAcid;
-import static fos.content.FOSItems.zinc;
+import static fos.content.FOSItems.*;
 import static fos.content.FOSStatuses.*;
+import static mindustry.content.Items.copper;
 
 public class FOSUnitTypes {
     public static @EntityDef({Unitc.class, Mechc.class}) UnitType
@@ -103,6 +105,14 @@ public class FOSUnitTypes {
     public static @EntityDef({Unitc.class, Bugc.class}) UnitType
         // FLYING INSECTS
         bugFlyingSmall, bugFlyingMedium;
+
+    public static @EntityDef({Unitc.class, Minerc.class, BWorkerc.class}) UnitType
+        // FLYING MINER INSECTS
+        bugWorker;
+
+    public static @EntityDef({Unitc.class}) UnitType
+        // SCOUT INSECT - DIFFERENT UNIT ENTITY DUE TO UNIQUE BEHAVIOUR
+        bugScout;
 
     public static @EntityDef({Unitc.class, Legsc.class, Burrowc.class, Bugc.class}) UnitType
         // BURROWING INSECTS
@@ -1272,6 +1282,8 @@ public class FOSUnitTypes {
             segmentScl = 3f;
             segmentPhase = 5f;
             segmentMag = 0.5f;
+
+            firstRequirements = ItemStack.with(zinc, 5);
         }};
 
         bugMedium = new BugUnitType("bug-medium", BugCrawlUnit.class, false, true){{
@@ -1286,6 +1298,8 @@ public class FOSUnitTypes {
             segmentScl = 3f;
             segmentPhase = 5f;
             segmentMag = 0.5f;
+
+            firstRequirements = ItemStack.with(zinc, 5, diamond, 3);
         }};
 
         // TODO
@@ -1332,6 +1346,8 @@ public class FOSUnitTypes {
                     }};
                 }}
             );
+
+            firstRequirements = ItemStack.with(copper, 5);
         }};
 
         bugFlyingSmall = new BugUnitType("bug-flying-small", BugUnit.class, true, true){{
@@ -1397,6 +1413,46 @@ public class FOSUnitTypes {
                 }}
             );
         }};
+
+        bugWorker = new BugUnitType("bug-worker", BWorkerMinerUnit.class){{
+            health = 140;
+            absorption = 0.1f;
+            speed = 0.6f;
+            //drag = 0.08f;
+            //accel = 0.12f;
+            flying = true;
+
+            engineSize = 0;
+            itemOffsetY = -3f;
+
+            isEnemy = false;
+
+            itemCapacity = 1;
+            mineSpeed = 0.2f;
+            mineTier = 2;
+            mineRange = 4f;
+            mineItems = Seq.with(zinc, copper);
+
+            controller = u -> new MinerBugAI();
+            defaultCommand = UnitCommand.mineCommand;
+            playerControllable = false;
+        }};
+
+        bugScout = new BugUnitType("bug-scout", UnitEntity.class){{
+            health = 120;
+            speed = 1.4f;
+            flying = true;
+            drag = 0.06f;
+            accel = 0.04f;
+            omniMovement = false;
+            fogRadius = 22.5f;
+            drawBody = true;
+
+            firstRequirements = ItemStack.with(zinc, 1, copper, 1);
+
+            controller = u -> new ScoutBugAI();
+        }};
+
         grain = new BurrowUnitType("grain", BugBurrowLegsUnit.class){{
             health = 900;
             absorption = 0.15f;
