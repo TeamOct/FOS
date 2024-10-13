@@ -117,6 +117,7 @@ public class FOSBlocks {
         //fine, I will document this block right here.
         resourceExtractor = new ResourceExtractor("resource-extractor"){
             {
+
                 //ResourceExtractor is a multi-crafter, and since MultiCrafter class extends Block, any field from Block class works here as well.
                 itemCapacity = 15;
                 size = 3;
