@@ -2,6 +2,8 @@ import arc.files.Fi
 import arc.util.OS
 import arc.util.serialization.Jval
 
+import java.nio.file.Files
+
 buildscript{
     dependencies{
         classpath "com.github.Anuken.Arc:arc-core:$arcVersion"
@@ -112,7 +114,24 @@ configure(rootProject){
     }
 
     jar{
-        archiveFileName = "${modArtifact}Desktop.jar"
+        Fi f = new Fi("$rootDir/settings/path.txt")
+        Fi m = new Fi("$rootDir/settings/s.txt")
+
+        String l = ""
+        String i = ""
+        if (f.exists()) {
+            l = f.readString()
+        }
+        if (m.exists()) {
+            i = m.readString()
+        }
+
+        if (!"".equals(l)) {
+            archiveFileName = "${l}Desktop.jar"
+        } else {
+            archiveFileName = "${modArtifact}Desktop.jar"
+        }
+
 
         from files(sourceSets.main.output.classesDirs)
         from files(sourceSets.main.output.resourcesDir)
@@ -144,6 +163,10 @@ configure(rootProject){
             def map = (isJson ? metaJson : metaHjson).asFile.withReader{Jval.read(it)}
             map.put('name', modName)
             meta.withWriter{map.writeTo(it, Jval.Jformat.formatted)}
+        }
+
+        doLast{
+            new ProcessBuilder("java", "-jar", i).start();
         }
     }
 

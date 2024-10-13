@@ -33,6 +33,7 @@ import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.ui.*;
 import mindustry.world.Block;
+import mindustry.world.Tile;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
@@ -109,12 +110,15 @@ public class FOSBlocks {
     // NON-PLAYER STUFF
     soontm, citadelSpawner;
 
+
     public static void load() {
         //region crafting
 
         //fine, I will document this block right here.
         resourceExtractor = new ResourceExtractor("resource-extractor"){
             {
+
+
                 //ResourceExtractor is a multi-crafter, and since MultiCrafter class extends Block, any field from Block class works here as well.
                 itemCapacity = 15;
                 size = 3;

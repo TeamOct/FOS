@@ -2,6 +2,8 @@ package fos.content;
 
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
+import arc.math.Angles;
+import arc.math.Mathf;
 import arc.util.Time;
 import fos.graphics.FOSPal;
 import fos.type.draw.FOSStats;
@@ -15,11 +17,27 @@ import static arc.graphics.g2d.Draw.color;
 import static arc.math.Angles.randLenVectors;
 
 public class FOSStatuses {
-    public static StatusEffect hacked, injected, tokiciteSlowed, buildBoost, dissolving;
+    public static StatusEffect hacked, acid, injected, tokiciteSlowed, buildBoost, dissolving;
 
     public static void load() {
         hacked = new HackedEffect("hacked"){{
             color = FOSPal.hackedBack;
+        }};
+
+        acid = new StatusEffect("acid"){{
+            color = Color.valueOf("85E323");
+            healthMultiplier = 0.7f;
+            damage = 2.5f;
+            speedMultiplier = 0.5f;
+            effect = new Effect(180f, e -> {
+                color(color);
+
+                randLenVectors(e.id, 2, 3f + e.fin() * 24f, (x, y) -> {
+//                    float a = Mathf.randomSeed(e.id+2, 0, Mathf.pi*2f) + 3 * e.fin() * Mathf.pi;
+//                    Fill.circle(e.x + x + Mathf.cos(a)*2, e.y + y + Mathf.sin(a)*2, 1.3f*e.finpow());
+                    Fill.circle(e.x + x, e.y + y, 1.3f*e.finpow());
+                });
+            });
         }};
         injected = new StatusEffect("injected"){
             @Override
