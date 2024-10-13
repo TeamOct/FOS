@@ -2,6 +2,7 @@ import arc.files.Fi
 import arc.util.OS
 import arc.util.serialization.Jval
 
+
 buildscript{
     dependencies{
         classpath "com.github.Anuken.Arc:arc-core:$arcVersion"
