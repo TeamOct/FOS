@@ -73,7 +73,7 @@ public class FOSBlocks {
     liquidConveyor,
 
     // FLUIDS
-    copperPipe, brassPipe, fluidJunction, fluidBridge, pneumaticPump, pumpjack, fluidRouter, fluidBarrel, fluidTank,
+    copperPipe, brassPipe, fluidJunction, fluidBridge, pneumaticPump, pumpjack, fluidRouter, fluidContainer, fluidTank,
 
     // POWER
     zincWire, copperWire, brassWire, zincWirePole, copperWirePole, brassWirePole, windTurbine, steamTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
@@ -1596,7 +1596,7 @@ public class FOSBlocks {
             liquidCapacity = 30f;
             requirements(Category.liquid, with(copper, 3));
         }};
-        fluidBarrel = new LiquidRouter("fluid-barrel"){{
+        fluidContainer = new LiquidRouter("fluid-container"){{
             scaledHealth = 75;
             size = 2;
             liquidCapacity = 300f;
@@ -1630,7 +1630,7 @@ public class FOSBlocks {
         zincWirePole = new PowerWireNode("tin-wire-pole"){{
             health = 30;
             consumesPower = true;
-            consumePower(4f / 60f);
+            consumePower(10f / 60f);
             range = 4;
             fogRadius = 1;
             squareSprite = false;
@@ -1641,7 +1641,7 @@ public class FOSBlocks {
         copperWirePole = new PowerWireNode("copper-wire-pole"){{
             health = 50;
             consumesPower = true;
-            consumePower(1f / 60f);
+            consumePower(10f / 60f);
             range = 7;
             fogRadius = 1;
             squareSprite = false;
@@ -1657,7 +1657,7 @@ public class FOSBlocks {
             fogRadius = 1;
             squareSprite = false;
             researchCostMultiplier = 0.25f;
-            requirements(Category.power, with(brass, 20));
+            requirements(Category.power, with(brass, 20, vanadium, 5));
 
             ((PowerWire)brassWire).bridgeReplacement = this;
         }};
