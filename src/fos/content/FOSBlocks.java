@@ -112,7 +112,6 @@ public class FOSBlocks {
 
 
     public static void load() {
-
         //region crafting
 
         //fine, I will document this block right here.
