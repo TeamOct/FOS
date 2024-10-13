@@ -12,6 +12,7 @@ import arc.math.Mathf;
 import arc.struct.Seq;
 import arc.util.*;
 import fos.content.*;
+import fos.controllers.AcidController;
 import fos.controllers.CapsulesController;
 import fos.gen.*;
 import fos.graphics.*;
@@ -124,6 +125,7 @@ public class FOSMod extends Mod {
 
         //init modded teams
         FOSTeams.load();
+        AcidController.init();
     }
 
     public void clientLoaded() {

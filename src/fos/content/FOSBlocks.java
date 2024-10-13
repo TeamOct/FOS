@@ -33,6 +33,7 @@ import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.ui.*;
 import mindustry.world.Block;
+import mindustry.world.Tile;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
@@ -110,6 +111,7 @@ public class FOSBlocks {
     soontm, citadelSpawner;
 
     public static void load() {
+
         //region crafting
 
         //fine, I will document this block right here.
