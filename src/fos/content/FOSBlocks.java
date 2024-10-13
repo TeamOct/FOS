@@ -110,6 +110,7 @@ public class FOSBlocks {
     // NON-PLAYER STUFF
     soontm, citadelSpawner;
 
+
     public static void load() {
 
         //region crafting
