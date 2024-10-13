@@ -283,12 +283,15 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         if (poles < 0.63f) {
             ores.add(oreVanadium);
         }
+        // TODO: nickel to be added later, luminium is probably scrapped altogether
+/*
         if (poles < 0.49f) {
             ores.add(oreIridium);
         }
         if (poles < 0.34f) {
             ores.add(oreLuminium);
         }
+*/
 
         FloatSeq frequencies = new FloatSeq();
         for(int i = 0; i < ores.size; i++){
@@ -297,12 +300,12 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
         //island ores
         for (ObjectMap.Entry<Room, Integer> r : islands) {
-            ores(ores, r.key.x, r.key.y, r.value);
+            oresSquare(ores, r.key.x, r.key.y, r.value);
         }
         //map ores
         ores(ores);
         //early-game ores next to player's core
-        ores(Seq.with(oreZincSurface, oreZinc, oreSilver), spawn.x, spawn.y, 20);
+        oresSquare(Seq.with(oreZincSurface, oreZinc, oreSilver), spawn.x, spawn.y, 20);
 
         trimDark();
         median(2);
@@ -311,13 +314,8 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         oreAround(alienMoss, blubluWall, 2, 1f, 0f);
 
         pass((x, y) -> {
-            //bushes on blublu biome
-            //TODO: add trees
-            if (floor == blublu && block == air) {
-                if (rand.chance(0.01)){
-                    block = softbush;
-                }
-            }
+            //variable(s) to be used across this lambda
+            Tile cur = tiles.get(x, y);
 
             //shallow water
             if (floor == deepwater) {
@@ -334,22 +332,36 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                 }
             }
 
-            //tokicite
-            if ((floor == annite || floor == blublu) && block == air) {
-                //tokicite and water don't mix.
-                for (Point2 p : Geometry.d4) {
-                    Tile other = tiles.get(x + p.x, y + p.y);
-                    if (other.floor().isLiquid && other.floor() != tokiciteFloor) return;
-                }
+            //tokicite mini-biomes
+            if (block == air && !floor.asFloor().isLiquid && noise(x + 69, y - 69, 2, 0.6, 80) > 0.88f) {
+                int rad = rand.random(15, 20);
 
-                if (noise(x + 69, y - 69, 2, 0.6, 80) > 0.86f) {
-                    floor = tokiciteFloor;
-                    ore = air;
-                }
+                floor = tokiciteFloor;
+
+                cur.circle(rad, other -> {
+                    var noise = noise(other.x + 69, other.y - 69, 2, 0.6, 80);
+                    if (noise > 0.87f) {
+                        other.setFloor(tokiciteFloor.asFloor());
+                        other.setAir();
+                        for (Point2 p : Geometry.d8) {
+                            if (!tiles.get(other.x + p.x, other.y + p.y).block().isAir()) return;
+                        }
+                        if (rand.chance(0.06f)) other.setBlock(vibrantCrystalCluster);
+                    } else if (noise > 0.76f) {
+                        other.setFloor(murmur.asFloor());
+                        if (other.block() != air) other.setBlock(murmurWall);
+                    }
+                    else if (noise > 0.57f) {
+                        other.setFloor(carbonStone.asFloor());
+                        if (other.block() != air) other.setBlock(carbonWall);
+                    }
+                });
+
+                oresSquare(Seq.with(oreDiamond), cur.x, cur.y, rad, 0.8f, carbonStone.asFloor());
             }
 
             //arkycite puddles
-            if (floor == cyanium && block == air) {
+            if (block == air) {
                 //don't mix multiple liquids
                 for (Point2 p : Geometry.d4) {
                     Tile other = tiles.get(x + p.x, y + p.y);
@@ -358,7 +370,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
                 //only generate 1x1 puddles with a certain distance between them
                 /* java sucks */ final boolean[] isFree = {true};
-                tiles.get(x, y).circle(36, t -> {
+                tiles.get(x, y).circle(60, t -> {
                     if (t.floor() == arkyciteFloor) isFree[0] = false;
                 });
 
@@ -385,6 +397,30 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
             if (block == sandWall) block = air;
         });
 
+        pass((x, y) -> {
+            Tile cur = tiles.get(x, y);
+
+            //plants on blublu - has to be done after all liquid/mini-biome stuff so no conflicts happen
+            if (floor == blublu && block == air) {
+                if (rand.chance(0.0015f)) {
+                    block = blueTree;
+                    cur.circle(6, other -> {
+                        if (rand.chance(0.3f) && other.floor() == blublu) {
+                            other.setBlock(softbush);
+                            var ang = Mathf.angle(other.x - x, other.y - y);
+                            if (ang > 60f && ang < 120f && rand.chance(0.6f)) {
+                                other.setOverlay(alienMoss);
+                            }
+                        }
+                    });
+                }
+
+                if (rand.chance(0.02f)) {
+                    block = softbush;
+                }
+            }
+        });
+
         float difficulty = sector.threat;
         ints.clear();
         ints.ensureCapacity(width * height / 4);
@@ -393,12 +429,25 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
         if (!sector.hasEnemyBase())
             enemies.each(espawn -> {
-                tiles.getn(espawn.x, espawn.y).setBlock(bugSpawn, FOSTeams.bessin);
-                tiles.getn(espawn.x, espawn.y).circle(7, t -> t.setFloor(hiveFloor.asFloor()));
-                tiles.getn(espawn.x, espawn.y).circle(11, t -> {
+                Tile cur = tiles.getn(espawn.x, espawn.y);
+
+                // bug nest
+                cur.setBlock(bugSpawn, FOSTeams.bessin);
+
+                // wasp nests - the anti-core unit rush, in its core
+                for (int i = 0; i < 3; i++) {
+                    Tmp.v4.trns(rand.random(360), rand.random(4, 6));
+                    tiles.get(Math.round(cur.x + Tmp.v4.x), Math.round(cur.y + Tmp.v4.y)).setBlock(bugSentry, FOSTeams.bessin);
+                }
+
+                // hive floor
+                cur.circle(7, t -> t.setFloor(hiveFloor.asFloor()));
+                cur.circle(11, t -> {
                     if (rand.chance(0.35f)) t.setFloor(hiveFloor.asFloor());
                 });
-                tiles.getn(espawn.x, espawn.y).setOverlay(Blocks.spawn);
+
+                // spawn point
+                cur.setOverlay(Blocks.spawn);
             });
 
         if (sector.hasEnemyBase()){
@@ -430,14 +479,15 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
     }
 
     /**
-     * This method ensures that the given ores generate in a limited square area, no matter how many tries it takes.
+     * Ensures that the given ores generate in a limited square area, no matter how many tries it takes.
      * This probably hurts sector generation time quite a bit, but I don't know what else to try.
      * @param ores List of ores to generate.
      * @param cx Center X coordinate.
      * @param cy Center Y coordinate.
      * @param rad A "radius" of a square (very dumb description, I know.)
+     * @param floorOn If not {@code Blocks.empty}, on which floor should the ores be generated.
      */
-    public void ores(Seq<Block> ores, int cx, int cy, int rad) {
+    public void oresSquare(Seq<Block> ores, int cx, int cy, int rad, float scl, Floor floorOn) {
         for (Block cur : ores) {
             boolean generated = false;
             int offset = 0;
@@ -446,13 +496,13 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                 for (int x = -rad; x <= rad; x++) {
                     for (int y = -rad; y <= rad; y++) {
                         Tile tile = tiles.get(x + cx, y + cy);
-                        if (tile == null || (!tile.floor().hasSurface() && !tile.floor().supportsOverlay) || tile.floor() == deepwater) return;
+                        if (tile == null || (!tile.floor().hasSurface() && !tile.floor().supportsOverlay) || tile.overlay() != air || tile.floor() == deepwater || (floorOn != empty && tile.floor() != floorOn)) continue;
 
                         int i = ores.indexOf(cur);
-                        int offsetX = x - 4, offsetY = y + 23;
+                        int offsetX = Math.round((x - 4) * scl), offsetY = Math.round((y + 23) * scl);
                         if (Math.abs(0.5f - noise(offsetX + offset, offsetY + i * 999, 2, 0.7, (40 + i * 2))) > 0.24f &&
                             Math.abs(0.5f - noise(offsetX + offset, offsetY - i * 999, 1, 1, (30 + i * 4))) > 0.33f) {
-                            ore = cur;
+                            tile.setOverlay(cur);
                             if (tile.block() == air) generated = true;
                         }
                     }
@@ -463,6 +513,18 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                 }
             }
         }
+    }
+
+    /**
+     * Ensures that the given ores generate in a limited square area, no matter how many tries it takes.
+     * This probably hurts sector generation time quite a bit, but I don't know what else to try.
+     * @param ores List of ores to generate.
+     * @param cx Center X coordinate.
+     * @param cy Center Y coordinate.
+     * @param rad A "radius" of a square (very dumb description, I know.)
+     */
+    public void oresSquare(Seq<Block> ores, int cx, int cy, int rad) {
+        oresSquare(ores, cx, cy, rad, 1f, empty.asFloor());
     }
 
     @Override
