@@ -94,9 +94,11 @@ public class FOSBlocks {
     alienMoss,
     oreZinc, oreZincSurface, oreZincDeep, oreSilver, oreSilverDeep, oreLithium, oreDiamond, oreVanadium, oreVanadiumDeep, oreIridium, oreLuminium,
     hiveFloor, bugSpawn,
+    ashStone, ashStoneCraters, ashStoneWall,
+    quartum, quartumWall,
 
     // PROPS
-    softbush, calciteCrystal, calciteMineral, blueTree,
+    softbush, calciteCrystal, calciteMineral, blueTree, ashStoneBoulder, quartumBoulder,
 
     // UNITS
     upgradeCenter, destroyerFactory, eliminatorFactory, injectorFactory, simpleReconstructor, droidConstructor, draugFactory,
@@ -1951,6 +1953,24 @@ public class FOSBlocks {
             createRubble = false;
             unitCapModifier = 15;
         }};
+	ashStone = new Floor("ash-stone"){{
+            variants = 4;
+        }};
+	ashStoneCraters = new Floor("ash-stone-craters"){{
+            variants = 4;
+        }};
+	ashStoneWall = new StaticWall("ash-stone-wall"){{
+            variants = 3;
+            ashStone.asFloor().wall = ashStoneCraters.asFloor().wall = this;
+        }};
+	quartum = new Floor("quartum"){{
+            variants = 4;
+        }};
+	quartumWall = new StaticWall("quartum-wall"){{
+            variants = 3;
+            quartum.asFloor().wall = this;
+        }};
+
 
         softbush = new Prop("softbush"){{
             variants = 3;
@@ -1970,6 +1990,16 @@ public class FOSBlocks {
         blueTree = new TreeBlock("blue-tree"){{
             // for visual elevation
             shadowOffset = -7f;
+        }};
+        ashStoneBoulder = new Prop("ash-stone-boulder"){{
+            variants = 3;
+            customShadow = true;
+            ashStone.asFloor().decoration = ashStoneCraters.asFloor().decoration = this;
+        }};
+	quartumBoulder = new Prop("quartum-boulder"){{
+            variants = 3;
+            customShadow = true;
+            quartum.asFloor().decoration = this;
         }};
 
         //endregion
