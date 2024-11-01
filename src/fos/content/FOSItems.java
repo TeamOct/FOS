@@ -9,36 +9,26 @@ import mindustry.type.Item;
 import static mindustry.content.Items.*;
 
 public class FOSItems {
-    public static Item rawNethratium, rawElbium, rawElithite, aluminium, zinc, silver, lithium, brass, sulphur, cuberium, diamond, vanadium, nickel, luminium;
+    public static Item
+        // LUMONI
+        zinc, nickel, quartz, brass, sulphur, cuberium, diamond, vanadium, silver, luminium;
+
+    public static Item
+        // UXERD
+        rawNethratium, rawElbium, rawElithite, aluminium, lithium;
 
     public static Seq<Item> uxerdItems = new Seq<>(), lumoniItems = new Seq<>();
 
     public static void load(){
-        rawNethratium = new Item("raw-nethratium", Color.valueOf("974545")){{
-            hardness = 1;
-            cost = 0.8f;
-        }};
-        rawElbium = new Item("raw-elbium", Color.valueOf("975c43")){{
-            hardness = 1;
-        }};
-        rawElithite = new Item("raw-elithite", Color.valueOf("4e4f55")){{
-            hardness = 1;
-        }};
-        aluminium = new Item("aluminium", Color.valueOf("de8900")){{
-            radioactivity = 0.1f;
-        }};
         zinc = new Item("zinc", Color.valueOf("85b374")){{
             hardness = 2;
             cost = 1.2f;
         }};
-        silver = new Item("silver", Color.valueOf("813ba1")){{
+        nickel = new Item("nickel", Color.valueOf("a3bda7")){{
             hardness = 3;
             cost = 1.5f;
         }};
-        lithium = new Item("lithium", Color.valueOf("b6e358")){{
-            hardness = 1;
-            cost = 1.4f;
-        }};
+        quartz = new Item("quartz", Color.valueOf("ffffff"));
         brass = new Item("brass", Color.valueOf("b57050")){{
             cost = 2f;
         }};
@@ -59,7 +49,7 @@ public class FOSItems {
             cost = 3f;
             hardness = 5;
         }};
-        nickel = new Item("nickel", Color.valueOf("a3bda7")){{
+        silver = new Item("silver", Color.valueOf("813ba1")){{
             cost = 4f;
             hardness = 6;
         }};
@@ -75,6 +65,24 @@ public class FOSItems {
                     new Texture(FOSVars.internalTree.child("sprites/items/luminium.png")), (s, o) -> {}, 0);
             }
         };
+
+        rawNethratium = new Item("raw-nethratium", Color.valueOf("974545")){{
+            hardness = 1;
+            cost = 0.8f;
+        }};
+        rawElbium = new Item("raw-elbium", Color.valueOf("975c43")){{
+            hardness = 1;
+        }};
+        rawElithite = new Item("raw-elithite", Color.valueOf("4e4f55")){{
+            hardness = 1;
+        }};
+        aluminium = new Item("aluminium", Color.valueOf("de8900")){{
+            radioactivity = 0.1f;
+        }};
+        lithium = new Item("lithium", Color.valueOf("b6e358")){{
+            hardness = 1;
+            cost = 1.4f;
+        }};
 
         uxerdItems.addAll(rawNethratium, rawElbium, rawElithite, aluminium, zinc, silver, lithium, titanium, cuberium);
         lumoniItems.addAll(copper, zinc, silver, diamond, sand, silicon, brass, vanadium, nickel, luminium);

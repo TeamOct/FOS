@@ -215,11 +215,11 @@ public class FOSBlocks {
         siliconSynthesizer = new GenericCrafter("silicon-synthesizer"){{
             scaledHealth = 40;
             size = 4;
-            craftTime = 120f;
+            craftTime = 60f;
             itemCapacity = 16;
             consumePower(8f);
-            consumeItems(with(diamond, 1, sand, 8));
-            outputItems = with(silicon, 8);
+            consumeItems(with(diamond, 1, quartz, 4));
+            outputItems = with(silicon, 4);
             requirements(Category.crafting, with(zinc, 180, silver, 150, diamond, 100));
             drawer = new DrawMulti(
                 new DrawRegion("-bottom"),

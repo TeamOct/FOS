@@ -7,9 +7,9 @@ import arc.graphics.g2d.Draw;
 import arc.math.Mathf;
 import arc.struct.ObjectFloatMap;
 import arc.util.*;
+import fos.content.FOSItems;
 import fos.type.blocks.environment.UndergroundOreBlock;
 import fos.type.blocks.storage.DetectorCoreBlock;
-import mindustry.content.Items;
 import mindustry.game.Team;
 import mindustry.gen.Building;
 import mindustry.graphics.Drawf;
@@ -127,8 +127,8 @@ public class UndergroundDrill extends Drill {
     public Item getOutput(Tile tile) {
         countOre(tile);
 
-        //if nothing's under the drill, mine sand
-        return returnItem != null ? returnItem : Items.sand;
+        //if nothing's under the drill, mine quartz
+        return returnItem != null ? returnItem : FOSItems.quartz;
     }
 
     protected Item getUnderDrop(Block b) {
@@ -173,7 +173,7 @@ public class UndergroundDrill extends Drill {
             super.onProximityUpdate();
 
             dominantItem = getOutput(tile);
-            if (dominantItem == Items.sand) dominantItems = (int)Mathf.sqr(size);
+            if (dominantItem == FOSItems.quartz) dominantItems = (int)Mathf.sqr(size);
         }
 
         @Override

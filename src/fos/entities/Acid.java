@@ -2,7 +2,7 @@ package fos.entities;
 
 import arc.math.Mathf;
 import arc.util.Time;
-import fos.content.*;
+import fos.content.FOSStatuses;
 import fos.controllers.AcidController;
 import mindustry.Vars;
 import mindustry.content.Fx;
@@ -51,7 +51,7 @@ public class Acid implements Cloneable{
     }
 
     public static void at(Acid a, float x, float y) {
-        at(a, FOSTeams.bessin, 10, 120f, x, y);
+        at(a, Team.derelict, 10, 120f, x, y);
     }
 
     public static void at(Acid a, Team team, float damage, float lifetime, float x, float y) {
