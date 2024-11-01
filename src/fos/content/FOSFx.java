@@ -3,11 +3,12 @@ package fos.content;
 import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
-import arc.math.Mathf;
+import arc.math.*;
 import arc.math.geom.*;
 import arc.util.Tmp;
 import fos.graphics.FOSPal;
 import fos.type.bullets.OhioBeamBulletType;
+import mindustry.content.Fx;
 import mindustry.entities.Effect;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -215,16 +216,16 @@ public class FOSFx {
 
     burrowDustSingle = new Effect(40f, e -> {
         Draw.color(e.color);
-        Draw.alpha(0.4f);
+        Draw.alpha(0.6f);
 
-        randLenVectors(e.id, 1, e.fin() * 40f, (x, y) -> {
-            Fill.circle(e.x + x, e.y + y, e.fout() * 8f);
+        randLenVectors(e.id, 1, e.fin() * 160f, (x, y) -> {
+            Fill.circle(e.x + x, e.y + y, e.fout() * 24f);
         });
 
         Draw.reset();
     }).layer(Layer.groundUnit + 1f),
 
-    burrowDust = new Effect(180f, e -> {
+    burrowDust = new Effect(120f, e -> {
         burrowDustSingle.at(e.x, e.y, e.color);
     }),
 
@@ -244,5 +245,34 @@ public class FOSFx {
         if (Mathf.chance(0.08f) && e.time < 220f) {
             bruntChargeSmoke.at(e.x, e.y);
         }
-    }).followParent(true);
+    }).followParent(true),
+
+    bugDeath1 = new Effect(600f, e -> {
+        float intensity = 4f;
+
+        color(Color.valueOf("51c7d8"), 0.6f);
+        for (int i = 0; i < 4; i++) {
+            Fx.rand.setSeed(e.id* 2L + i);
+            float lenScl = Fx.rand.random(0.5f, 1f);
+            int fi = i;
+            e.scaled(e.lifetime * lenScl, e2 -> {
+                randLenVectors(e2.id + fi - 1, e2.fin(Interp.pow10Out), (int)(2.9f * intensity), 1.8f * intensity, (x, y, in, out) -> {
+                    float fout = e2.fout(Interp.pow5Out) * Fx.rand.random(0.5f, 1f);
+                    float rad = fout * ((intensity - 1f));
+
+                    Fill.circle(e2.x + x, e2.y + y, rad);
+                    //Drawf.light(e2.x + x, e2.y + y, rad * 2.5f, e.color, 0.5f);
+                });
+            });
+        }
+    }).layer(Layer.floor + 1),
+
+    bugDeath2 = new Effect(90f, e -> {
+        color(Color.valueOf("51c7d8"), 0.6f);
+
+        randLenVectors(e.id, 4, e.fin() * 28f, (x, y) -> {
+            Fill.circle(x, y, 5f);
+            if (e.fin() >= 0.99f) bugDeath1.at(x, y);
+        });
+    }).layer(Layer.legUnit + 1);
 }

@@ -10,7 +10,7 @@ import fos.ai.bugs.*;
 import fos.audio.FOSSounds;
 import fos.gen.*;
 import fos.graphics.*;
-import fos.type.abilities.UnitResistanceAbility;
+import fos.type.abilities.*;
 import fos.type.bullets.*;
 import fos.type.content.WeaponSet;
 import fos.type.units.types.*;
@@ -100,7 +100,7 @@ public class FOSUnitTypes {
 
     public static @EntityDef({Unitc.class, Legsc.class, Bugc.class}) UnitType
         // LEGS BUGS
-        bugSmallSpitter;
+        spewer;
 
     public static @EntityDef({Unitc.class, Bugc.class}) UnitType
         // FLYING INSECTS
@@ -1315,14 +1315,22 @@ public class FOSUnitTypes {
             segmentMag = 6f;
         }};
 
-        bugSmallSpitter = new BugUnitType("bug-small-spitter", BugLegsUnit.class, false){{
-            health = 600;
-            armor = 0;
+        spewer = new BugUnitType("spewer", BugLegsUnit.class, false){{
+            health = 130;
+            armor = 5;
             absorption = 0;
             speed = 0.6f;
             hitSize = 8;
 
             legCount = 6;
+
+            abilities.add(
+                new AcidExplodeAbility(){{
+                    radius = 3;
+                    damage = 5f;
+                    lifetime = 30f * 60;
+                }}
+            );
 
             weapons.add(
                 new Weapon(){{
@@ -1463,6 +1471,8 @@ public class FOSUnitTypes {
             targetGround = true;
             targetFlags = new BlockFlag[]{BlockFlag.unitCargoUnloadPoint, BlockFlag.core, null};
 
+            deathExplosionEffect = FOSFx.bugDeath2;
+
             legCount = 4;
             legLength = 24;
             legBaseOffset = 12;
@@ -1514,6 +1524,7 @@ public class FOSUnitTypes {
                         despawnEffect = Fx.none;
                         smokeEffect = Fx.none;
                         shootSound = Sounds.largeExplosion;
+
                         splashDamage = 600f;
                         splashDamageRadius = 4f;
                         splashDamagePierce = true;

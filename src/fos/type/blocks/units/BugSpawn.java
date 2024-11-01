@@ -87,7 +87,7 @@ public class BugSpawn extends UnitBlock {
         private UnitType getBug() {
             UnitType[][] units = {
                 { FOSUnitTypes.bugSmall, FOSUnitTypes.bugMedium },
-                { FOSUnitTypes.bugSmallSpitter },
+                { FOSUnitTypes.spewer},
                 { FOSUnitTypes.bugScout }
             };
 

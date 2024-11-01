@@ -12,9 +12,8 @@ public class BurrowUnitType extends BugUnitType {
     //hopefully I did not break everything.
     @Override
     public void draw(Unit unit) {
-        if (unit instanceof Burrowc b && b.burrowed()) {
-            //Lines.poly(unit.x, unit.y, 5, hitSize);
-            return;
+        if (unit instanceof Burrowc b) {
+            if (b.burrowed()) return;
         }
 
         super.draw(unit);

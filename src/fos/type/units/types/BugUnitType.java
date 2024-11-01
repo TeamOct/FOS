@@ -3,10 +3,10 @@ package fos.type.units.types;
 import arc.Events;
 import arc.graphics.Color;
 import fos.ai.bugs.*;
-import fos.content.FOSStatuses;
+import fos.content.*;
 import fos.core.FOSEventTypes;
 import fos.gen.Bugc;
-import mindustry.content.*;
+import mindustry.content.StatusEffects;
 import mindustry.gen.*;
 import mindustry.world.meta.BlockFlag;
 
@@ -23,10 +23,10 @@ public class BugUnitType extends FOSUnitType {
         drawCell = false;
         drawBody = false;
         outlineColor = Color.valueOf("452319");
-        createScorch = false;
+        //createScorch = false;
         //createWreck = false;
         canDrown = false; // FIXME: they still drown for some reason
-        deathExplosionEffect = Fx.none;
+        deathExplosionEffect = FOSFx.bugDeath1;
         deathSound = Sounds.plantBreak;
         immunities.addAll(FOSStatuses.hacked, FOSStatuses.injected, StatusEffects.sapped);
         omniMovement = flying;

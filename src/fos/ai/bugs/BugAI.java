@@ -65,7 +65,7 @@ public class BugAI extends AIController implements FOSPathfindAI {
             var f = bug.following();
             bug.invading(f instanceof Bugc bf && bf.invading());
 
-            moveTo(f, 12f + f.type.hitSize, 0, true, null);
+            moveTo(f, 12f + f.type.hitSize, 0, false, null);
             return;
         }
 
@@ -95,7 +95,7 @@ public class BugAI extends AIController implements FOSPathfindAI {
 
     @Override
     public Teamc target(float x, float y, float range, boolean air, boolean ground) {
-        var unitTarget = Units.closestTarget(unit.team, x, y, unit.range(), Unit::isValid, t -> false);
+        var unitTarget = Units.closestTarget(unit.team, x, y, unit.range(), u -> u.isValid() && bug.type().range > 0.01f, t -> false);
         if (unitTarget != null) return unitTarget;
 
         for (BlockFlag flag : unit.type.targetFlags) {

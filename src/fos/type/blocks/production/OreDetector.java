@@ -11,6 +11,7 @@ import arc.util.Time;
 import arc.util.io.*;
 import fos.audio.FOSSounds;
 import fos.type.blocks.environment.UndergroundOreBlock;
+import mindustry.content.Fx;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.logic.Ranged;
@@ -211,6 +212,18 @@ public class OreDetector extends Block {
                     Draw.rect(u.drop.uiIcon, ore.x * 8, ore.y * 8 + 8);
                 }
             }
+        }
+
+        @Override
+        public void onDestroyed() {
+            super.onDestroyed();
+
+            indexer.eachBlock(this, range(),
+                b -> b instanceof UndergroundDrill.UndergroundDrillBuild && b.enabled() && b.potentialEfficiency > 0,
+                b -> {
+                    Fx.circleColorSpark.at(b.x, b.y, Pal.orangeSpark);
+                    Sounds.spark.at(b);
+                });
         }
 
         @Override

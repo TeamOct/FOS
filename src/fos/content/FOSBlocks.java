@@ -33,7 +33,6 @@ import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.ui.*;
 import mindustry.world.Block;
-import mindustry.world.Tile;
 import mindustry.world.blocks.defense.Wall;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
@@ -643,6 +642,7 @@ public class FOSBlocks {
 
             loopSound = Sounds.none;
             shootSound = FOSSounds.sticky;
+            squareSprite = false;
 
             ammo(
                 tokicite, new LiquidBulletType(tokicite){
