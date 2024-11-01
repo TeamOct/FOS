@@ -4,8 +4,8 @@ import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.util.Time;
 import fos.graphics.FOSPal;
+import fos.type.*;
 import fos.world.draw.FOSStats;
-import fos.type.HackedEffect;
 import mindustry.entities.Effect;
 import mindustry.gen.Unit;
 import mindustry.type.StatusEffect;
@@ -22,7 +22,10 @@ public class FOSStatuses {
             color = FOSPal.hackedBack;
         }};
 
-        injected = new StatusEffect("injected"){
+        injected = new FOSStatusEffect("injected"){
+            {
+                color = FOSPal.hackedBack;
+            }
             @Override
             public void setStats() {
                 super.setStats();
@@ -38,14 +41,15 @@ public class FOSStatuses {
                 Draw.reset();
             }
         };
-        tokiciteSlowed = new StatusEffect("tokicite-slowed"){{
+        tokiciteSlowed = new FOSStatusEffect("tokicite-slowed"){{
             speedMultiplier = 0.25f;
             effect = FOSFx.tokiciteDrop;
+            color = Color.valueOf("d16792");
         }};
-        buildBoost = new StatusEffect("build-boost"){{
+        buildBoost = new FOSStatusEffect("build-boost"){{
             buildSpeedMultiplier = 1.25f;
         }};
-        dissolving = new StatusEffect("dissolving"){{
+        dissolving = new FOSStatusEffect("dissolving"){{
             healthMultiplier = 0.8f;
             damage = 1.5f;
             color = Color.valueOf("b3db81");
