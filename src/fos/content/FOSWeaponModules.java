@@ -5,7 +5,6 @@ import arc.graphics.Color;
 import fos.audio.FOSSounds;
 import fos.entities.abilities.UnitResistanceAbility;
 import fos.entities.bullet.*;
-import fos.type.bullets.*;
 import fos.type.WeaponSet;
 import mindustry.Vars;
 import mindustry.content.Fx;
