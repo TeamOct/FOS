@@ -6,7 +6,7 @@ import arc.math.geom.Vec2;
 import arc.struct.*;
 import arc.util.*;
 import fos.content.FOSBlocks;
-import fos.type.blocks.environment.UndergroundOreBlock;
+import fos.world.blocks.environment.UndergroundOreBlock;
 import mindustry.ai.BaseRegistry;
 import mindustry.ctype.Content;
 import mindustry.game.*;

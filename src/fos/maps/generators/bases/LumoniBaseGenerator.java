@@ -3,7 +3,7 @@ package fos.maps.generators.bases;
 import arc.math.*;
 import arc.math.geom.*;
 import arc.struct.Seq;
-import fos.type.blocks.environment.UndergroundOreBlock;
+import fos.world.blocks.environment.UndergroundOreBlock;
 import mindustry.ai.*;
 import mindustry.content.Blocks;
 import mindustry.game.*;

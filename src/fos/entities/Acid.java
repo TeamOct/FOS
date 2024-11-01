@@ -3,7 +3,7 @@ package fos.entities;
 import arc.math.Mathf;
 import arc.util.Time;
 import fos.content.FOSStatuses;
-import fos.controllers.AcidController;
+import fos.mod.AcidController;
 import mindustry.Vars;
 import mindustry.content.Fx;
 import mindustry.entities.Effect;

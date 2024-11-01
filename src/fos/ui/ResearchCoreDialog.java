@@ -1,7 +1,7 @@
 package fos.ui;
 
 import fos.core.FOSVars;
-import fos.type.blocks.campaign.ResearchCore.ResearchCoreBuild;
+import fos.world.blocks.campaign.ResearchCore.ResearchCoreBuild;
 import mindustry.content.*;
 import mindustry.type.*;
 import mindustry.ui.dialogs.*;

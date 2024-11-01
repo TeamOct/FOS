@@ -2,7 +2,7 @@ package fos.type.units.comp;
 
 import arc.util.io.*;
 import fos.io.FOSTypeIO;
-import fos.type.content.WeaponSet;
+import fos.type.WeaponSet;
 import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.*;

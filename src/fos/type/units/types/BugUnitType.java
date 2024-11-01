@@ -4,7 +4,7 @@ import arc.Events;
 import arc.graphics.Color;
 import fos.ai.bugs.*;
 import fos.content.*;
-import fos.core.FOSEventTypes;
+import fos.mod.FOSEventTypes;
 import fos.gen.Bugc;
 import mindustry.content.StatusEffects;
 import mindustry.gen.*;

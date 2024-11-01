@@ -1,6 +1,6 @@
 package fos.net.packets;
 
-import fos.type.bullets.StickyBulletType;
+import fos.entities.bullet.StickyBulletType;
 import mindustry.gen.Player;
 import mindustry.net.*;
 

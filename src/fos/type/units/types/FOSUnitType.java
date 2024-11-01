@@ -3,7 +3,7 @@ package fos.type.units.types;
 import arc.graphics.Color;
 import arc.math.Mathf;
 import fos.gen.EntityRegistry;
-import fos.type.draw.FOSStats;
+import fos.world.draw.FOSStats;
 import mindustry.gen.*;
 import mindustry.type.UnitType;
 

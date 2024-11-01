@@ -1,6 +1,6 @@
 package fos.content;
 
-import fos.type.content.ChallengeSectorPreset;
+import fos.type.ChallengeSectorPreset;
 import mindustry.type.SectorPreset;
 
 import static fos.content.FOSPlanets.lumoni;

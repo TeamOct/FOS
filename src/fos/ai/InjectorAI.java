@@ -1,7 +1,7 @@
 package fos.ai;
 
 import fos.content.FOSStatuses;
-import fos.type.bullets.InjectorBulletType;
+import fos.entities.bullet.InjectorBulletType;
 import mindustry.ai.types.GroundAI;
 import mindustry.entities.*;
 import mindustry.gen.Teamc;

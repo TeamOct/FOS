@@ -1,6 +1,6 @@
 package fos.ai;
 
-import fos.type.blocks.campaign.ResearchCore;
+import fos.world.blocks.campaign.ResearchCore;
 import mindustry.content.*;
 import mindustry.entities.units.AIController;
 import mindustry.game.Team;

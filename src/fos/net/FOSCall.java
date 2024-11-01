@@ -1,8 +1,8 @@
 package fos.net;
 
 import fos.net.packets.*;
-import fos.type.blocks.special.UpgradeCenter;
-import fos.type.bullets.StickyBulletType;
+import fos.world.blocks.special.UpgradeCenter;
+import fos.entities.bullet.StickyBulletType;
 import mindustry.gen.Player;
 import mindustry.net.*;
 import mindustry.world.Tile;

@@ -3,7 +3,7 @@ package fos.type.units.weapons;
 import arc.Core;
 import arc.math.Mathf;
 import arc.scene.ui.layout.Table;
-import fos.type.bullets.InjectorBulletType;
+import fos.entities.bullet.InjectorBulletType;
 import mindustry.type.*;
 
 public class InjectorWeapon extends Weapon {

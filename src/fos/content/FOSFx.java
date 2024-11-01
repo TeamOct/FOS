@@ -7,7 +7,7 @@ import arc.math.*;
 import arc.math.geom.*;
 import arc.util.Tmp;
 import fos.graphics.FOSPal;
-import fos.type.bullets.OhioBeamBulletType;
+import fos.entities.bullet.OhioBeamBulletType;
 import mindustry.content.Fx;
 import mindustry.entities.Effect;
 import mindustry.gen.*;

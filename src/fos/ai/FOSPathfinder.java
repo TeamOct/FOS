@@ -7,6 +7,7 @@ import arc.struct.*;
 import arc.util.*;
 import fos.content.FOSTeams;
 import fos.core.*;
+import fos.mod.FOSEventTypes;
 import mindustry.content.Blocks;
 import mindustry.game.*;
 import mindustry.gen.*;
