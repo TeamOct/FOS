@@ -1,11 +1,11 @@
-package fos.maps.generators;
+package fos.maps.planet;
 
 import arc.math.*;
 import arc.math.geom.*;
 import arc.struct.Seq;
 import arc.util.noise.*;
 import fos.content.FOSSchematics;
-import fos.maps.generators.bases.UxerdBaseGenerator;
+import fos.maps.bases.UxerdBaseGenerator;
 import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.game.Schematics;

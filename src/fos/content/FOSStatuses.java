@@ -46,8 +46,9 @@ public class FOSStatuses {
             effect = FOSFx.tokiciteDrop;
             color = Color.valueOf("d16792");
         }};
-        buildBoost = new FOSStatusEffect("build-boost"){{
+        buildBoost = new StatusEffect("build-boost"){{
             buildSpeedMultiplier = 1.25f;
+            show = false;
         }};
         dissolving = new FOSStatusEffect("dissolving"){{
             healthMultiplier = 0.8f;

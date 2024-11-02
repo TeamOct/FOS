@@ -1,4 +1,4 @@
-package fos.maps.generators;
+package fos.maps.planet;
 
 import arc.graphics.Color;
 import arc.math.*;
@@ -7,7 +7,8 @@ import arc.struct.*;
 import arc.util.Tmp;
 import arc.util.noise.*;
 import fos.content.FOSTeams;
-import fos.maps.generators.bases.LumoniBaseGenerator;
+import fos.maps.bases.LumoniBaseGenerator;
+import fos.maps.generators.LumoniWaves;
 import mindustry.ai.Astar;
 import mindustry.content.Blocks;
 import mindustry.game.*;

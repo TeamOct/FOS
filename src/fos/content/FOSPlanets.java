@@ -6,7 +6,7 @@ import arc.math.geom.Mat3D;
 import arc.struct.Seq;
 import arc.util.Tmp;
 import fos.core.FOSVars;
-import fos.maps.generators.*;
+import fos.maps.planet.*;
 import mindustry.content.Items;
 import mindustry.game.Team;
 import mindustry.graphics.g3d.*;

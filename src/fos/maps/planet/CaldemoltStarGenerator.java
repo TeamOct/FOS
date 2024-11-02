@@ -1,4 +1,4 @@
-package fos.maps.generators;
+package fos.maps.planet;
 
 import arc.graphics.Color;
 import arc.math.geom.Vec3;
