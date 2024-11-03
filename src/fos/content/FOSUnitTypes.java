@@ -1327,7 +1327,7 @@ public class FOSUnitTypes {
             abilities.add(
                 new AcidExplodeAbility(){{
                     radius = 3;
-                    damage = 5f;
+                    damage = 0.5f;
                     lifetime = 30f * 60;
                 }}
             );
