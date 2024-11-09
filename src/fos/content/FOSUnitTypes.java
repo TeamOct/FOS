@@ -100,7 +100,7 @@ public class FOSUnitTypes {
 
     public static @EntityDef({Unitc.class, Legsc.class, Bugc.class}) UnitType
         // LEGS BUGS
-        spewer;
+        spewer, purger;
 
     public static @EntityDef({Unitc.class, Bugc.class}) UnitType
         // FLYING INSECTS
@@ -1323,39 +1323,144 @@ public class FOSUnitTypes {
             hitSize = 8;
 
             legCount = 6;
+            // TODO: better legs
 
             abilities.add(
                 new AcidExplodeAbility(){{
                     radius = 3;
                     damage = 0.5f;
-                    lifetime = 30f * 60;
+                    lifetime = 40f * 60;
                 }}
             );
 
             weapons.add(
-                new Weapon(){{
+                new AcidWeapon(){{
                     x = 0; y = 6;
                     reload = 150f;
                     recoil = 0;
                     mirror = false;
                     rotate = false;
                     shootCone = 20f;
+
                     shootSound = FOSSounds.spit;
-                    bullet = new LiquidBulletType(bugAcid){{
+
+                    bullet = new AcidBulletType(){{
                         speed = 4; lifetime = 37.5f;
-                        damage = 40;
+                        damage = 30;
                         puddleSize = 15f;
                         orbSize = 3f;
                         despawnHit = true;
+                        knockback = 0.1f;
+                        collides = false;
+                        collidesTiles = false;
+                        collidesAir = false;
+                        scaleLife = true;
 
                         trailLength = 8;
                         trailWidth = 3f;
                         trailColor = bugAcid.color;
+
+                        acidDamage = 20f / 60;
+                        acidLifetime = 300f;
+                        acidRadius = 6f;
+
+                        fragBullets = 5;
+                        fragVelocityMin = 0.4f;
+                        fragVelocityMax = 1f;
+                        fragBullet = new AcidBulletType(){{
+                            speed = 2.5f; lifetime = 15;
+                            damage = 5;
+                            puddleSize = 6f;
+                            orbSize = 2f;
+                            despawnHit = true;
+                            knockback = 0f;
+
+                            trailLength = 4;
+                            trailWidth = 2f;
+                            trailColor = bugAcid.color;
+
+                            acidDamage = 20f / 60;
+                            acidLifetime = 300f;
+                            acidRadius = 6f;
+                        }};
                     }};
                 }}
             );
 
             firstRequirements = ItemStack.with(copper, 5);
+        }};
+
+        purger = new BugUnitType("purger", BugLegsUnit.class, false){{
+            health = 350;
+            armor = 8;
+            absorption = 0;
+            speed = 0.55f;
+            hitSize = 14;
+
+            legCount = 8;
+            // TODO: better legs
+
+            abilities.add(
+                new AcidExplodeAbility(){{
+                    radius = 6;
+                    damage = 1.5f;
+                    lifetime = 60f * 60;
+                }}
+            );
+
+            weapons.add(
+                new AcidWeapon(){{
+                    x = 0; y = 4;
+                    reload = 110f;
+                    recoil = 0f;
+                    mirror = false;
+                    alternate = false;
+                    rotate = false;
+                    shootCone = 20f;
+
+                    shoot.shots = 5;
+                    shoot.shotDelay = 10f;
+
+                    shootSound = FOSSounds.spit;
+
+                    bullet = new FragLiquidBulletType(bugAcid){{
+                        speed = 5; lifetime = 40f;
+                        damage = 22;
+                        puddleSize = 0f;
+                        orbSize = 2f;
+                        despawnHit = false;
+                        knockback = 0.14f;
+
+                        trailLength = 10;
+                        trailWidth = 2f;
+                        trailColor = bugAcid.color;
+
+                        fragOnHit = true;
+                        fragBullets = 1;
+                        fragVelocityMin = 0.75f;
+                        fragVelocityMax = 1f;
+                        fragRandomSpread = 15f;
+                        fragBullet = new AcidBulletType(){{
+                            speed = 2f; lifetime = 20;
+                            damage = 5;
+                            puddleSize = 0f;
+                            orbSize = 1.4f;
+                            knockback = 0;
+                            pierce = true;
+                            pierceBuilding = true;
+                            pierceCap = 3;
+
+                            trailLength = 4;
+                            trailWidth = 1.4f;
+                            trailColor = bugAcid.color;
+
+                            acidDamage = 0.5f;
+                            acidLifetime = 180f;
+                            acidRadius = 5f;
+                        }};
+                    }};
+                }}
+            );
         }};
 
         bugFlyingSmall = new BugUnitType("bug-flying-small", BugUnit.class, true, true){{

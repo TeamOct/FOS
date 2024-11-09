@@ -18,9 +18,12 @@ public class Acid implements Cloneable{
     public float y;
     public float damage = 10;
     public float maxLifetime = 120f;
-    public float lifetime = maxLifetime;
+    public float radius = 6.7f;
+
     public Effect effect = Fx.none;
     public StatusEffect status = FOSStatuses.dissolving;
+
+    public float lifetime = maxLifetime;
     public float timer = 0f;
     public static float maxTimer = 20f;
 
@@ -55,10 +58,15 @@ public class Acid implements Cloneable{
     }
 
     public static void at(Acid a, Team team, float damage, float lifetime, float x, float y) {
+        at(a, team, damage, lifetime, x, y, 6.7f);
+    }
+
+    public static void at(Acid a, Team team, float damage, float lifetime, float x, float y, float radius) {
         Acid aa = a.clone();
         aa.team = team;
         aa.damage = damage;
         aa.maxLifetime = lifetime;
+        aa.radius = radius;
         aa.at(x, y);
     }
 
@@ -83,7 +91,7 @@ public class Acid implements Cloneable{
 //            }
 //        }
 
-        Groups.unit.each(un -> Mathf.dst(un.x, un.y, acid.x, acid.y) < 6.7f, u -> {
+        Groups.unit.each(un -> Mathf.dst(un.x, un.y, acid.x, acid.y) < acid.radius, u -> {
             if (!u.hasEffect(acid.status) && u.team() != acid.team) u.apply(acid.status, acid.maxLifetime);
         });
 

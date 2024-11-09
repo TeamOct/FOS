@@ -14,7 +14,9 @@ public class AcidController {
     public static Color acidColor = Color.valueOf("B3DB81");
     public static Acid acid2 = new Acid(1f, new Effect(260f, e -> {
         Draw.z(29-0.1f);
+        Draw.alpha(0.6f);
         Draw.color(acidColor);
+
         float xx = 1-(Mathf.cos(2*Mathf.pi*Mathf.pow(2.71828182845f, 3f*(1f-e.fin())-3f))+1f)/2f;
         Fill.circle(e.x + Mathf.cos(Mathf.randomSeed(e.id+2, 0, Mathf.pi*2f)) * e.finpow() * 2.8f, e.y + Mathf.sin(Mathf.randomSeed(e.id+2, 0, Mathf.pi*2f)) * e.finpow() * 2.8f, 5.7f*xx);
 
