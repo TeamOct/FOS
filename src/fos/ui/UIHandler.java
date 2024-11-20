@@ -1,18 +1,26 @@
 package fos.ui;
 
-import arc.Events;
+import arc.*;
+import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
+import arc.input.KeyCode;
+import arc.math.Mathf;
 import arc.scene.*;
-import arc.scene.ui.ImageButton;
+import arc.scene.event.*;
+import arc.scene.ui.*;
 import arc.scene.ui.layout.*;
-import arc.util.Reflect;
+import arc.struct.Seq;
+import arc.util.*;
 import fos.core.FOSVars;
+import fos.type.WeaponSet;
 import fos.ui.menus.*;
+import mindustry.Vars;
+import mindustry.ctype.UnlockableContent;
 import mindustry.game.*;
-import mindustry.gen.Tex;
-import mindustry.graphics.Layer;
+import mindustry.gen.*;
+import mindustry.graphics.*;
 import mindustry.mod.Mods;
-import mindustry.ui.Styles;
+import mindustry.ui.*;
 import mindustry.ui.dialogs.PlanetDialog;
 
 import static arc.Core.*;
@@ -120,5 +128,70 @@ public class UIHandler {
                 }
             });
         }
+
+        // dedicated weapon module tab in core DB
+        ui.database.shown(() -> {
+            WidgetGroup w = (WidgetGroup) ui.database.getChildren().get(1);
+            w = (WidgetGroup) w.getChildren().get(1);
+            w = (WidgetGroup) w.getChildren().get(0);
+
+            Table t = (Table)w;
+
+            Seq<WeaponSet> array = WeaponSet.sets;
+
+            t.add("@content.fos-weaponmodules.name").growX().left().color(Pal.accent);
+            t.row();
+            t.image().growX().pad(5).padLeft(0).padRight(0).height(3).color(Pal.accent);
+            t.row();
+            t.table(list -> {
+                list.left();
+
+                int cols = (int) Mathf.clamp((Core.graphics.getWidth() - Scl.scl(30)) / Scl.scl(32 + 12), 1, 22);
+                int count = 0;
+
+                for(int i = 0; i < array.size; i++){
+                    UnlockableContent unlock = array.get(i);
+
+                    Image image = unlocked(unlock) ? new Image(unlock.uiIcon).setScaling(Scaling.fit) : new Image(Icon.lock, Pal.gray);
+
+                    //banned cross
+                    if(state.isGame() && state.rules.tags.get("fos-bannedMountUpgrades") != null && state.rules.tags.get("fos-bannedMountUpgrades").contains(unlock.name)) {
+                        list.stack(image, new Image(Icon.cancel){{
+                            setColor(Color.scarlet);
+                            touchable = Touchable.disabled;
+                        }}).size(8 * 4).pad(3);
+                    }else{
+                        list.add(image).size(8 * 4).pad(3);
+                    }
+
+                    ClickListener listener = new ClickListener();
+                    image.addListener(listener);
+                    if(!mobile && unlocked(unlock)){
+                        image.addListener(new HandCursorListener());
+                        image.update(() -> image.color.lerp(!listener.isOver() ? Color.lightGray : Color.white, Mathf.clamp(0.4f * Time.delta)));
+                    }
+
+                    if(unlocked(unlock)){
+                        image.clicked(() -> {
+                            if(Core.input.keyDown(KeyCode.shiftLeft) && Fonts.getUnicode(unlock.name) != 0){
+                                Core.app.setClipboardText((char)Fonts.getUnicode(unlock.name) + "");
+                                ui.showInfoFade("@copied");
+                            }else{
+                                ui.content.show(unlock);
+                            }
+                        });
+                        image.addListener(new Tooltip(tt -> tt.background(Tex.button).add(unlock.localizedName + (settings.getBool("console") ? "\n[gray]" + unlock.name : ""))));
+                    }
+
+                    if((++count) % cols == 0){
+                        list.row();
+                    }
+                }
+            }).growX().left().padBottom(10);
+        });
+    }
+
+    static boolean unlocked(UnlockableContent content) {
+        return (!Vars.state.isCampaign() && !Vars.state.isMenu()) || content.unlocked();
     }
 }

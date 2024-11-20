@@ -10,7 +10,6 @@ import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.Unit;
 import mindustry.type.*;
-import mindustry.ui.Styles;
 import mindustry.world.meta.*;
 
 //YES, this looks very cursed lmao
@@ -39,6 +38,8 @@ public class WeaponSet extends StatusEffect {
         id = sets.size;
         sets.add(this);
         permanent = false;
+
+        show = false;
     }
 
     public WeaponSet(String name, Weapon... weapons) {
@@ -144,34 +145,6 @@ public class WeaponSet extends StatusEffect {
         this.produceTime = ticks;
 
         return this;
-    }
-
-    // Stolen from Mindustry v146 because this mod's annotation processor is outdated as fuck.
-    // @nekit508 pls fix
-    public static StatValue abilities(Seq<Ability> abilities) {
-        return table -> {
-            table.row();
-            table.table(t -> {
-                int count = 0;
-                for(Ability ability : abilities){
-                    if(ability.display){
-                        t.table(Styles.grayPanel, a -> {
-                            a.add("[accent]" + ability.localized()).padBottom(4).center().top().expandX();
-                            a.row();
-                            a.left().top().defaults().left();
-                            if(Core.bundle.has(ability.localized() + ".description")){
-                                a.add(Core.bundle.get(ability.localized() + ".description")).wrap().width(350f);
-                                a.row();
-                            }
-                        }).pad(5).margin(10).growX().top().uniformX();
-                        if((++count) == 2){
-                            count = 0;
-                            t.row();
-                        }
-                    }
-                }
-            });
-        };
     }
 }
 

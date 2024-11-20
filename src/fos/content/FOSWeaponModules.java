@@ -25,9 +25,9 @@ import static mindustry.type.ItemStack.*;
 //just because it looks nicer :)
 public class FOSWeaponModules {
     public static WeaponSet
-        standard1, standard2, standard3, standard4, standard5,
-        shotgun1, shotgun2, shotgun3, shotgun4, shotgun5,
-        support1, support2, support3, support4, support5,
+        standard1, standard2, standard3, standard4,
+        shotgun1, shotgun2, shotgun3, shotgun4,
+        support1, support2, support3, support4,
         legionFabricator, citadelStickyLauncher;
 
     public static void load() {
@@ -100,47 +100,8 @@ public class FOSWeaponModules {
                 homingPower = 0.8f;
             }};
         }}).reqs(with(zinc, 250, silicon, 200, vanadium, 100));
-        //TODO: placeholders
+        //TODO: placeholder
         standard4 = new WeaponSet("standard4", new Weapon("fos-standard-weapon4")).reqs(with(lead, 1));
-        standard5 = new WeaponSet("standard5", new Weapon("fos-standard-weapon5"){{
-            x = 0; y = 0;
-            alternate = mirror = false;
-            rotate = true;
-            top = true;
-            recoil = 4f;
-            reload = recoilTime = 10f;
-            bullet = new BasicBulletType(13f, 240){{
-                pierce = true;
-                pierceCap = 10;
-                width = 14f;
-                height = 33f;
-                lifetime = 15f;
-                shootEffect = Fx.shootBig;
-                trailLength = 24;
-                fragVelocityMin = 0.4f;
-
-                hitEffect = Fx.blastExplosion;
-                splashDamage = 18f;
-                splashDamageRadius = 13f;
-
-                fragBullets = 3;
-                fragLifeMin = 0f;
-                fragRandomSpread = 30f;
-
-                fragBullet = new BasicBulletType(9f, 20){{
-                    width = 10f;
-                    height = 10f;
-                    pierce = true;
-                    pierceBuilding = true;
-                    pierceCap = 3;
-
-                    lifetime = 20f;
-                    hitEffect = Fx.flakExplosion;
-                    splashDamage = 15f;
-                    splashDamageRadius = 10f;
-                }};
-            }};
-        }}).reqs(with(zinc, 500, silver, 500, vanadium, 300, nickel, 250, luminium, 200));
 
         // SHOTGUNS
         shotgun1 = new WeaponSet("shotgun1"){{
@@ -221,9 +182,8 @@ public class FOSWeaponModules {
                 }};
             }};
         }}).reqs(with(zinc, 200, silver, 50, silicon, 200, vanadium, 100));
-        //TODO: placeholders
+        //TODO: placeholder
         shotgun4 = new WeaponSet("shotgun4", new Weapon()).reqs(with(lead, 1));
-        shotgun5 = new WeaponSet("shotgun5", new Weapon()).reqs(with(lead, 1));
 
         // SUPPORT MODULES
         support1 = new WeaponSet("support1"){{
