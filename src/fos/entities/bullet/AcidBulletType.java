@@ -1,17 +1,17 @@
 package fos.entities.bullet;
 
-import fos.content.FOSFluids;
 import fos.entities.Acid;
 import fos.mod.AcidController;
+import mindustry.entities.bullet.BasicBulletType;
 import mindustry.gen.Bullet;
 
-public class AcidBulletType extends FragLiquidBulletType {
+public class AcidBulletType extends BasicBulletType {
     public float acidDamage = 20f / 60;
     public float acidLifetime = 60f;
     public float acidRadius = 6f;
 
     public AcidBulletType() {
-        super(FOSFluids.bugAcid);
+        super();
         despawnHit = true;
     }
 

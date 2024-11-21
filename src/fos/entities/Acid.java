@@ -71,7 +71,7 @@ public class Acid implements Cloneable{
     }
 
     public static void update(Acid acid) {
-        if (!acid.alive) return;
+        if (acid == null || !acid.alive) return;
         if (Vars.state.isPaused()) return;
         acid.lifetime -= Time.delta;
         if (acid.lifetime <= 0) {

@@ -43,12 +43,12 @@ public class FOSUnitType extends UnitType {
 
         ObjectSet<String> outlined = new ObjectSet<>();
 
-        try{
+        try {
             Unit sample = constructor.get();
 
             Func<Pixmap, Pixmap> outline = i -> i.outline(outlineColor, 3);
             Cons<TextureRegion> outliner = t -> {
-                if(t != null && t.found()){
+                if(t != null && t.found()) {
                     packer.add(PageType.main, t.asAtlas().name, outline.get( Core.atlas.getPixmap(t).crop() ));
                 }
             };
@@ -56,21 +56,22 @@ public class FOSUnitType extends UnitType {
             Seq<TextureRegion> toOutline = new Seq<>();
             getRegionsToOutline(toOutline);
 
-            for(TextureRegion region : toOutline){
+            for (TextureRegion region : toOutline) {
                 Pixmap pix = Core.atlas.getPixmap(region).crop().outline(outlineColor, outlineRadius);
                 packer.add(PageType.main, region.asAtlas().name, pix);
+                Log.info("[FOS] generated outline: @", region.asAtlas().name);
             }
 
             Seq<Weapon> weps = weapons.copy();
             weps.each(Weapon::load);
             weps.removeAll(w -> !w.region.found());
 
-            for(Weapon weapon : weps){
-                if(outlined.add(weapon.name) && packer.has(weapon.name) && !(this instanceof LumoniPlayerUnitType)) { // don't outline modular weapons twice
+            for (Weapon weapon : weps) {
+                if (outlined.add(weapon.name) && packer.has(weapon.name) && !(this instanceof LumoniPlayerUnitType)) { // don't outline modular weapons twice
                     //only non-top weapons need separate outline sprites (this is mostly just mechs)
-                    if(!weapon.top || weapon.parts.contains(p -> p.under)){
+                    if (!weapon.top || weapon.parts.contains(p -> p.under)) {
                         packer.add(PageType.main, weapon.name + "-outline", outline.get( Core.atlas.getPixmap(weapon.name).crop() ));
-                    }else{
+                    } else {
                         //replace weapon with outlined version, no use keeping standard around
                         outliner.get(weapon.region);
                     }
@@ -78,7 +79,7 @@ public class FOSUnitType extends UnitType {
             }
 
             //generate tank animation
-            if(sample instanceof Tankc){
+            if (sample instanceof Tankc) {
                 Pixmap pix = Core.atlas.getPixmap(treadRegion).crop();
 
                 for(int r = 0; r < treadRects.length; r++){
@@ -108,8 +109,8 @@ public class FOSUnitType extends UnitType {
             outliner.get(footRegion);
             outliner.get(legBaseRegion);
             outliner.get(baseJointRegion);
-            if(sample instanceof Legsc) outliner.get(legRegion);
-            if(sample instanceof Tankc) outliner.get(treadRegion);
+            if (sample instanceof Legsc) outliner.get(legRegion);
+            if (sample instanceof Tankc) outliner.get(treadRegion);
 
             Pixmap image = segments > 0 ? Core.atlas.getPixmap(segmentRegions[0]).crop() : outline.get(Core.atlas.getPixmap(previewRegion).crop());
 
@@ -131,11 +132,11 @@ public class FOSUnitType extends UnitType {
             boolean anyUnder = false;
 
             //draw each extra segment on top before it is saved as outline
-            if(sample instanceof Crawlc){
-                for(int i = 0; i < segments; i++){
+            if (sample instanceof Crawlc) {
+                for (int i = 0; i < segments; i++) {
                     packer.add(PageType.main, name + "-segment-outline" + i, outline.get( Core.atlas.getPixmap(segmentRegions[i]).crop() ));
 
-                    if(i > 0){
+                    if (i > 0) {
                         drawCenter(image, Core.atlas.getPixmap(segmentRegions[i]).crop());
                     }
                 }
@@ -143,32 +144,32 @@ public class FOSUnitType extends UnitType {
             }
 
             //outline is currently never needed, although it could theoretically be necessary
-            if(needsBodyOutline()){
+            if (needsBodyOutline()) {
                 packer.add(PageType.main, name + "-outline", image);
-            }else if (segments == 0) {
+            } else if (segments == 0) {
                 packer.add(PageType.main, name, outline.get(Core.atlas.getPixmap(region).crop()));
             }
 
             //draw weapons that are under the base
-            for(Weapon weapon : weps.select(w -> w.layerOffset < 0)){
+            for (Weapon weapon : weps.select(w -> w.layerOffset < 0)) {
                 drawWeapon.get(weapon, outline.get(weaponRegion.get(weapon)));
                 anyUnder = true;
             }
 
             //draw over the weapons under the image
-            if(anyUnder){
+            if (anyUnder) {
                 image.draw(outline.get(Core.atlas.getPixmap(previewRegion).crop()), true);
             }
 
             //draw treads
-            if(sample instanceof Tankc){
+            if (sample instanceof Tankc) {
                 Pixmap treads = outline.get(Core.atlas.getPixmap(treadRegion).crop());
                 image.draw(treads, image.width / 2 - treads.width / 2, image.height / 2 - treads.height / 2, true);
                 image.draw(Core.atlas.getPixmap(previewRegion), true);
             }
 
             //draw mech parts
-            if(sample instanceof Mechc){
+            if (sample instanceof Mechc) {
                 drawCenter(image, Core.atlas.getPixmap(baseRegion).crop());
                 drawCenter(image, Core.atlas.getPixmap(legRegion).crop());
                 drawCenter(image, Core.atlas.getPixmap(legRegion).crop().flipX());
@@ -176,7 +177,7 @@ public class FOSUnitType extends UnitType {
             }
 
             //draw weapon outlines on base
-            for(Weapon weapon : weps){
+            for (Weapon weapon : weps) {
                 //skip weapons under unit
                 if(weapon.layerOffset < 0) continue;
 
@@ -184,9 +185,9 @@ public class FOSUnitType extends UnitType {
             }
 
             //draw base region on top to mask weapons
-            if(drawCell) image.draw(Core.atlas.getPixmap(previewRegion), true);
+            if (drawCell) image.draw(Core.atlas.getPixmap(previewRegion), true);
 
-            if(drawCell){
+            if (drawCell) {
                 Pixmap baseCell = Core.atlas.getPixmap(cellRegion).crop();
                 Pixmap cell = baseCell.copy();
 
@@ -195,16 +196,16 @@ public class FOSUnitType extends UnitType {
                 image.draw(cell, image.width / 2 - cell.width / 2, image.height / 2 - cell.height / 2, true);
             }
 
-            for(Weapon weapon : weps){
+            for (Weapon weapon : weps) {
                 //skip weapons under unit
-                if(weapon.layerOffset < 0) continue;
+                if (weapon.layerOffset < 0) continue;
 
                 Pixmap reg = weaponRegion.get(weapon);
                 Pixmap wepReg = weapon.top ? outline.get(reg) : reg;
 
                 drawWeapon.get(weapon, wepReg);
 
-                if(weapon.cellRegion.found()){
+                if (weapon.cellRegion.found()) {
                     Pixmap weaponCell = Core.atlas.getPixmap(weapon.cellRegion).crop();
                     weaponCell.replace(in -> in == 0xffffffff ? 0x8ae3dfff : in == 0xdcc6c6ff || in == 0xdcc5c5ff ? 0x51a0b0ff : 0);
                     drawWeapon.get(weapon, weaponCell);
@@ -212,7 +213,7 @@ public class FOSUnitType extends UnitType {
             }
 
             packer.add(PageType.ui, name + "-full", image);
-        }catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             Log.err("WARNING: Skipping unit @: @", name, e.getMessage());
         }
     }

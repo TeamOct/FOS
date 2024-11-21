@@ -1320,10 +1320,29 @@ public class FOSUnitTypes {
             armor = 5;
             absorption = 0;
             speed = 0.6f;
-            hitSize = 8;
+            hitSize = 16f;
 
-            legCount = 6;
-            // TODO: better legs
+            legCount = 4;
+            legBaseOffset = 6f;
+            legExtension = 1.8f;
+            legForwardScl = 0.8f;
+            baseLegStraightness = 0.9f;
+            legStraightness = 0.4f;
+            legStraightLength = 0.9f;
+
+            drawBody = true;
+
+            parts.addAll(
+                //new RegionPart(),
+                new RegionPart("-face-l"){{
+                    rotation = 0f;
+                    moveRot = 10f;
+                }},
+                new RegionPart("-face-r"){{
+                    rotation = 0f;
+                    moveRot = -10f;
+                }}
+            );
 
             abilities.add(
                 new AcidExplodeAbility(){{
@@ -1345,10 +1364,8 @@ public class FOSUnitTypes {
                     shootSound = FOSSounds.spit;
 
                     bullet = new AcidBulletType(){{
-                        speed = 4; lifetime = 37.5f;
+                        speed = 2; lifetime = 75f;
                         damage = 30;
-                        puddleSize = 15f;
-                        orbSize = 3f;
                         despawnHit = true;
                         knockback = 0.1f;
                         collides = false;
@@ -1356,9 +1373,18 @@ public class FOSUnitTypes {
                         collidesAir = false;
                         scaleLife = true;
 
+                        Interp arc = a -> 1f - Mathf.sqr(a-0.5f) * 4;
+
+                        width = height = 8f;
+                        sprite = "circle-bullet";
+                        backColor = frontColor = bugAcid.color;
+                        shrinkX = shrinkY = 0.9f;
+                        shrinkInterp = arc;
+
                         trailLength = 8;
-                        trailWidth = 3f;
+                        trailWidth = 4f;
                         trailColor = bugAcid.color;
+                        trailInterp = arc;
 
                         acidDamage = 20f / 60;
                         acidLifetime = 300f;
@@ -1370,10 +1396,14 @@ public class FOSUnitTypes {
                         fragBullet = new AcidBulletType(){{
                             speed = 2.5f; lifetime = 15;
                             damage = 5;
-                            puddleSize = 6f;
-                            orbSize = 2f;
                             despawnHit = true;
                             knockback = 0f;
+
+                            width = height = 4f;
+                            sprite = "circle-bullet";
+                            backColor = frontColor = bugAcid.color;
+                            shrinkX = 0.07f;
+                            shrinkY = 0.31f;
 
                             trailLength = 4;
                             trailWidth = 2f;
@@ -1395,10 +1425,24 @@ public class FOSUnitTypes {
             armor = 8;
             absorption = 0;
             speed = 0.55f;
-            hitSize = 14;
+            hitSize = 22;
 
-            legCount = 8;
-            // TODO: better legs
+            legCount = 4;
+            legLength = 15f;
+            legBaseOffset = 6f;
+            legExtension = 1f;
+            legForwardScl = 0.8f;
+            baseLegStraightness = 0.9f;
+            legStraightness = 0.4f;
+            legStraightLength = 0.9f;
+
+            drawBody = true;
+
+            parts.addAll(
+                //new RegionPart(),
+                new RegionPart("-face-l"),
+                new RegionPart("-face-r")
+            );
 
             abilities.add(
                 new AcidExplodeAbility(){{
@@ -1410,30 +1454,38 @@ public class FOSUnitTypes {
 
             weapons.add(
                 new AcidWeapon(){{
-                    x = 0; y = 4;
-                    reload = 110f;
+                    x = 0; y = 2;
+                    reload = 140f;
                     recoil = 0f;
                     mirror = false;
-                    alternate = false;
                     rotate = false;
                     shootCone = 20f;
+                    inaccuracy = 15f;
 
                     shoot.shots = 5;
                     shoot.shotDelay = 10f;
 
                     shootSound = FOSSounds.spit;
 
-                    bullet = new FragLiquidBulletType(bugAcid){{
+                    bullet = new BasicBulletType(){{
                         speed = 5; lifetime = 40f;
                         damage = 22;
-                        puddleSize = 0f;
-                        orbSize = 2f;
+                        setDefaults = false;
                         despawnHit = false;
                         knockback = 0.14f;
+
+                        width = height = 4f;
+                        sprite = "circle-bullet";
+                        backColor = frontColor = bugAcid.color;
+                        shrinkX = shrinkY = 0.21f;
 
                         trailLength = 10;
                         trailWidth = 2f;
                         trailColor = bugAcid.color;
+                        //trailInterp = Interp.slope;
+
+                        shootEffect = FOSFx.acidSpit;
+                        parentizeEffects = false;
 
                         fragOnHit = true;
                         fragBullets = 1;
@@ -1443,12 +1495,14 @@ public class FOSUnitTypes {
                         fragBullet = new AcidBulletType(){{
                             speed = 2f; lifetime = 20;
                             damage = 5;
-                            puddleSize = 0f;
-                            orbSize = 1.4f;
                             knockback = 0;
                             pierce = true;
                             pierceBuilding = true;
                             pierceCap = 3;
+
+                            width = height = 3f;
+                            sprite = "circle-bullet";
+                            backColor = frontColor = bugAcid.color;
 
                             trailLength = 4;
                             trailWidth = 1.4f;
