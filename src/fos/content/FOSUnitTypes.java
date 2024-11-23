@@ -269,7 +269,7 @@ public class FOSUnitTypes {
                         rotationLimit = 10f;
                         mirror = true;
                         alternate = true;
-                        //layerOffset = -0.15f;
+                        layerOffset = -0.0001f;
                         recoil = 4f;
                         recoilTime = 60f;
                         shake = 1f;

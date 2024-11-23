@@ -2176,19 +2176,19 @@ public class FOSBlocks {
             buildVisibility = BuildVisibility.editorOnly;
             animationEffects = new Effect[]{FOSFx.citadelSteam, Fx.smokeCloud};
             drawer = new DrawMulti(
-                new DrawDefault(),
-                new DrawRegion("-cannon"){{
-                    x = -8; y = -10;
-                }},
-                new DrawRegion("-cannon"){{
-                    x = 8; y = -10;
-                }},
                 new DrawPistons(){{
                     suffix = "-arm";
                     sides = 2;
                     lenOffset = 5f;
                     sinScl = 1f;
                     sinMag = 16f;
+                }},
+                new DrawDefault(),
+                new DrawRegion("-cannon"){{
+                    x = -8; y = -10;
+                }},
+                new DrawRegion("-cannon"){{
+                    x = 8; y = -10;
                 }}
             );
         }};
