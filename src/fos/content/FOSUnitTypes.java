@@ -264,7 +264,7 @@ public class FOSUnitTypes {
 
                 weapons.add(
                     new Weapon("fos-citadel-shotgun"){{
-                        x = 18; y = 0;
+                        x = 81f/4f; y = 0;
                         rotate = true;
                         rotationLimit = 10f;
                         mirror = true;
