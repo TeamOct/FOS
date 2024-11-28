@@ -1,11 +1,10 @@
-package fos.type;
+package fos.type.statuses;
 
 import arc.graphics.g2d.Draw;
 import arc.math.Mathf;
 import arc.util.Tmp;
 import fos.gen.DamageAbsorbc;
 import fos.graphics.FOSPal;
-import fos.type.FOSStatusEffect;
 import fos.world.draw.FOSStats;
 import mindustry.content.Fx;
 import mindustry.entities.Effect;

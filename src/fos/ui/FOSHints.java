@@ -4,6 +4,7 @@ import arc.*;
 import arc.func.Boolp;
 import arc.struct.ObjectSet;
 import arc.util.*;
+import fos.content.FOSPlanets;
 import fos.mod.FOSEventTypes;
 import fos.world.blocks.production.UndergroundDrill;
 import mindustry.Vars;
@@ -54,6 +55,10 @@ public class FOSHints {
         detonatorIntro(
             () -> surfaceDetonator.unlocked(),
             () -> placedBlocks.contains(surfaceDetonator)
+        ),
+        bossHealthScaling(
+            () -> state.boss() != null && state.isCampaign() && state.rules.planet == FOSPlanets.lumoni && Groups.player.size() >= 2,
+            () -> state.boss() == null
         );
 
         @Nullable

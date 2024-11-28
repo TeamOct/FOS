@@ -4,7 +4,8 @@ import arc.*;
 import arc.graphics.Color;
 import fos.audio.FOSSounds;
 import fos.entities.abilities.UnitResistanceAbility;
-import fos.entities.bullet.*;
+import fos.entities.bullet.StickyBulletType;
+import fos.entities.bullet.player.*;
 import fos.type.WeaponSet;
 import mindustry.Vars;
 import mindustry.content.Fx;
@@ -41,7 +42,7 @@ public class FOSWeaponModules {
                     top = true;
                     recoil = 0.4f;
                     reload = recoilTime = 20f;
-                    bullet = new BasicBulletType(2.5f, 72){{
+                    bullet = new PlayerBasicBulletType(2.5f, 72){{
                         width = 7f; height = 9f;
                         trailLength = 8;
                         lifetime = 60f;
@@ -59,7 +60,7 @@ public class FOSWeaponModules {
                     rotate = true;
                     recoil = 0.3f;
                     reload = recoilTime = 40f;
-                    bullet = new BasicBulletType(2f, 180){{
+                    bullet = new PlayerBasicBulletType(2f, 180){{
                         width = 8f; height = 10f;
                         lifetime = 40f;
                         shootEffect = Fx.shootSmallSmoke;
@@ -67,7 +68,7 @@ public class FOSWeaponModules {
                         fragOnHit = false;
                         fragBullets = 2;
                         fragVelocityMin = 1f;
-                        fragBullet = new SmartBulletType(7f, 60){{
+                        fragBullet = new PlayerSmartBulletType(7f, 60){{
                             width = 4f; height = 5f;
                             lifetime = 20f;
                             trailLength = 15;
@@ -93,7 +94,7 @@ public class FOSWeaponModules {
                 spread = 4f;
                 shots = 2;
             }};
-            bullet = new BasicBulletType(7f, 60){{
+            bullet = new PlayerBasicBulletType(7f, 60){{
                 width = 7f; height = 9f;
                 trailLength = 12;
                 lifetime = 30f;
@@ -117,7 +118,7 @@ public class FOSWeaponModules {
                     reload = recoilTime = 90f;
                     shootSound = Sounds.shotgun;
                     ejectEffect = Fx.casing2;
-                    bullet = new ShrapnelBulletType(){{
+                    bullet = new PlayerShrapnelBulletType(){{
                         width = 2f;
                         length = 48f;
                         fromColor = Pal.accentBack;
@@ -142,7 +143,7 @@ public class FOSWeaponModules {
             reload = recoilTime = 90f;
             shootSound = Sounds.shotgun;
             ejectEffect = Fx.casing2;
-            bullet = new ShrapnelBulletType(){{
+            bullet = new PlayerShrapnelBulletType(){{
                 width = 2f;
                 length = 80f;
                 fromColor = Pal.accentBack;
@@ -165,9 +166,9 @@ public class FOSWeaponModules {
             reload = recoilTime = 40f;
             shootSound = Sounds.cannon;
             ejectEffect = Fx.casing3;
-            bullet = new BasicBulletType(){{
+            bullet = new PlayerBasicBulletType(){{
                 speed = 4f; lifetime = 20f;
-                damage = 80;
+                damage = 150;
                 hitEffect = Fx.hitBulletSmall;
                 trailLength = 4;
                 trailEffect = Fx.trailFade;
@@ -175,7 +176,7 @@ public class FOSWeaponModules {
                 fragOnHit = true;
                 fragBullets = 1;
                 fragBullet = new ExplosionBulletType(){{
-                    splashDamage = 120;
+                    splashDamage = 50;
                     splashDamageRadius = 16;
                     killShooter = false;
                     knockback = 4f;
@@ -204,7 +205,7 @@ public class FOSWeaponModules {
             inaccuracy = 4f;
             shootCone = 10f;
             recoil = 2f;
-            bullet = new BasicBulletType(){{
+            bullet = new PlayerBasicBulletType(){{
                 lifetime = 30f; speed = 4f;
 
                 width = 10f; height = 20f;
@@ -223,7 +224,7 @@ public class FOSWeaponModules {
         }}).reqs(with(zinc, 50, silver, 100));
         support3 = new WeaponSet("support3"){{
             abilities.add(
-                new EnergyFieldAbility(80f, 40f, 64f){{
+                new EnergyFieldAbility(0f, 40f, 64f){{
                     x = 0; y = 2;
                     statusDuration = 120f;
                     maxTargets = 6;

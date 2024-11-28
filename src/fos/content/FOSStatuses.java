@@ -4,7 +4,7 @@ import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.util.Time;
 import fos.graphics.FOSPal;
-import fos.type.*;
+import fos.type.statuses.*;
 import fos.world.draw.FOSStats;
 import mindustry.entities.Effect;
 import mindustry.gen.Unit;

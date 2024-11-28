@@ -1,4 +1,4 @@
-package fos.type;
+package fos.type.statuses;
 
 import arc.Core;
 import arc.graphics.*;
