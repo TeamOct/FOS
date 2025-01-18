@@ -6,9 +6,8 @@ import arc.math.geom.*;
 import arc.struct.*;
 import arc.util.*;
 import fos.content.FOSTeams;
-import fos.core.*;
+import fos.core.FOSVars;
 import fos.mod.FOSEventTypes;
-import mindustry.content.Blocks;
 import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.world.Tile;
@@ -30,24 +29,24 @@ public class FOSPathfinder implements Runnable{
     static final int impassable = -1;
 
     /** tile data, see PathTileStruct - kept as a separate array for threading reasons */
-    static int[] tiles = new int[0];
+    public static int[] tiles = new int[0];
 
     public static final int
         fieldBug = 0,
         fieldBurrowing = 1;
     public static final Seq<Prov<FOSFlowfield>> fieldTypes = Seq.with(
-        () -> new FlagTargetsField(BlockFlag.generator, BlockFlag.drill, BlockFlag.factory, BlockFlag.core, null),
-        () -> new FlagTargetsField(BlockFlag.unitCargoUnloadPoint, BlockFlag.core, null)
+        () -> new FlagTargetsField(BlockFlag.generator, BlockFlag.drill, BlockFlag.factory, BlockFlag.core),
+        () -> new FlagTargetsField(BlockFlag.unitCargoUnloadPoint, BlockFlag.core)
     );
 
     public static final int
         costBugLegs = 0,
-        costBurrowing = 1;
+        costBurrowing = 1; // unused right now
     public static final Seq<PathCost> costTypes = Seq.with(
         // ground bugs
         (team, tile) -> {
             int data = tiles[tile];
-            if (PathTile.legSolid(data)) return -1;
+            if (PathTile.legSolid(data)) return impassable;
             return 1 + (PathTile.deep(data) ? 6000 : 0) +
                 (PathTile.solid(data) ? 5 : 0) +
                 FOSVars.deathMapController.deathMap[tile]; //take into account recent unit deaths
@@ -56,7 +55,7 @@ public class FOSPathfinder implements Runnable{
         // burrowing bugs, ignore death map values
         (team, tile) -> {
             int data = tiles[tile];
-            if (PathTile.legSolid(data)) return -1;
+            if (PathTile.legSolid(data)) return impassable;
             return 1 + (PathTile.deep(data) ? 6000 : 0) +
                 (PathTile.solid(data) ? 5 : 0);
         }
@@ -93,9 +92,10 @@ public class FOSPathfinder implements Runnable{
 
             //don't bother setting up paths unless necessary
             if(state.rules.waveTeam == FOSTeams.bessin && !net.client()){
+                Log.debug("[FOS] Bug flowfield preloading.");
                 preloadPath(getField(state.rules.waveTeam, costBugLegs, fieldBug));
-                preloadPath(getField(state.rules.waveTeam, costBurrowing, fieldBurrowing));
-                Log.debug("[FOS] Preloading ground bug flowfield.");
+                Log.debug("[FOS] Burrowing bug flowfield preloading.");
+                preloadPath(getField(state.rules.waveTeam, costBugLegs, fieldBurrowing));
             }
 
             start();
@@ -149,13 +149,12 @@ public class FOSPathfinder implements Runnable{
             if(other != null){
                 Floor floor = other.floor();
                 boolean osolid = other.solid();
-                boolean olsolid = other.legSolid();
                 if(floor.isLiquid) nearLiquid = true;
                 //TODO potentially strange behavior when teamPassable is false for other teams?
                 if(osolid && !other.block().teamPassable) nearSolid = true;
-                if(olsolid && !other.block().teamPassable) nearLegSolid = true;
                 if(!floor.isLiquid) nearGround = true;
                 if(!floor.isDeep()) allDeep = false;
+                if(other.legSolid()) nearLegSolid = true;
 
                 //other tile is now near solid
                 if(solid && !tile.block().teamPassable){
@@ -171,7 +170,7 @@ public class FOSPathfinder implements Runnable{
             tid == 0 && tile.build != null && state.rules.coreCapture ? 255 : tid, //use teamid = 255 when core capture is enabled to mark out derelict structures
             solid,
             tile.floor().isLiquid,
-            tile.staticDarkness() >= 2 || (tile.floor().solid && tile.block() == Blocks.air),
+            tile.legSolid(),
             nearLiquid,
             nearGround,
             nearSolid,
@@ -451,14 +450,14 @@ public class FOSPathfinder implements Runnable{
 
         @Override
         protected void getPositions(IntSeq out) {
+            var added = false;
             for (var f : flags) {
-                Seq<Building> seq = f != null ? indexer.getEnemy(team, f) : Groups.build.copy();
-                if (seq.isEmpty()) continue;
-
-                for (var b : seq) {
-                    out.add(b.tile.array());
+                for (Building other : indexer.getEnemy(team, f)) {
+                    out.add(other.tile.array());
+                    added = true;
                 }
-                break;
+
+                if (added) break;
             }
         }
     }
@@ -487,15 +486,15 @@ public class FOSPathfinder implements Runnable{
         public int[] completeWeights;
 
         /** search frontier, these are Pos objects */
-        IntQueue frontier = new IntQueue();
+        public IntQueue frontier = new IntQueue();
         /** all target positions; these positions have a cost of 0, and must be synchronized on! */
-        final IntSeq targets = new IntSeq();
+        public final IntSeq targets = new IntSeq();
         /** current search ID */
         int search = 1;
         /** last updated time */
         long lastUpdateTime;
         /** whether this flow field is ready to be used */
-        boolean initialized;
+        public boolean initialized;
 
         void setup(int length){
             this.weights = new int[length];

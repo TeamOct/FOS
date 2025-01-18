@@ -3,7 +3,6 @@ package fos.type.units.comp;
 import arc.struct.Seq;
 import arc.util.*;
 import arc.util.io.*;
-import fos.ai.FOSPathfinder;
 import fos.content.FOSFx;
 import mindustry.Vars;
 import mindustry.async.PhysicsProcess;
@@ -30,11 +29,13 @@ abstract class BurrowComp implements Syncc, Unitc {
         return elevation <= 0.001f && !burrowed;
     }
 
+/* don't do this for now
     @Override
     @Replace(101)
     public int pathType() {
         return FOSPathfinder.costBurrowing;
     }
+*/
 
     @Override
     @Replace(100)

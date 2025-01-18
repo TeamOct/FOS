@@ -3,7 +3,7 @@ package fos.ai.bugs;
 import arc.Events;
 import arc.math.Mathf;
 import fos.ai.FOSPathfindAI;
-import fos.core.*;
+import fos.core.FOSVars;
 import fos.gen.*;
 import fos.mod.FOSEventTypes;
 import fos.world.blocks.units.BugSpawn;
@@ -59,9 +59,8 @@ public class BugAI extends AIController implements FOSPathfindAI {
                         b.burrow();
                     }
                 }
-
-                targetTile = pathfind(unit);
             }
+            targetTile = pathfind(unit);
         } else if (bug.following() != null) {
             var f = bug.following();
             bug.invading(f instanceof Bugc bf && bf.invading());
@@ -91,12 +90,13 @@ public class BugAI extends AIController implements FOSPathfindAI {
 
         if (!unit.inRange(target))
             unit.movePref(vec.trns(unit.angleTo(targetTile.worldx(), targetTile.worldy()), unit.speed()));
-        unit.lookAt(unit.angleTo(target));
+        // NEVER EVER UNCOMMENT THIS. TODO: Why did I even want this?
+        //unit.lookAt(unit.angleTo(target));
     }
 
     @Override
     public Teamc target(float x, float y, float range, boolean air, boolean ground) {
-        var unitTarget = Units.closestTarget(unit.team, x, y, unit.range(), u -> u.isValid() && bug.type().range > 0.01f, t -> false);
+        var unitTarget = Units.closestTarget(unit.team, x, y, unit.range(), u -> u.isValid() && bug.type().range > 0.01f, b -> false);
         if (unitTarget != null) return unitTarget;
 
         for (BlockFlag flag : unit.type.targetFlags) {
