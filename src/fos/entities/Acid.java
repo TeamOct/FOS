@@ -91,7 +91,7 @@ public class Acid implements Cloneable{
 //            }
 //        }
 
-        Groups.unit.each(un -> Mathf.dst(un.x, un.y, acid.x, acid.y) < acid.radius, u -> {
+        Groups.unit.each(un -> Mathf.dst(un.x, un.y, acid.x, acid.y) < acid.radius && un.isGrounded(), u -> {
             if (!u.hasEffect(acid.status) && u.team() != acid.team) u.apply(acid.status, acid.maxLifetime);
         });
 
