@@ -6,8 +6,9 @@ import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.math.geom.Rect;
-import arc.struct.*;
+import arc.struct.Seq;
 import arc.util.Log;
+import fos.core.FOSVars;
 import fos.gen.EntityRegistry;
 import fos.world.draw.FOSStats;
 import mindustry.gen.*;
@@ -41,8 +42,6 @@ public class FOSUnitType extends UnitType {
     public void createIcons(MultiPacker packer) {
         //if(internal) return;
 
-        ObjectSet<String> outlined = new ObjectSet<>();
-
         try {
             Unit sample = constructor.get();
 
@@ -57,9 +56,14 @@ public class FOSUnitType extends UnitType {
             getRegionsToOutline(toOutline);
 
             for (TextureRegion region : toOutline) {
+                var name = region.asAtlas().name;
+                if (!FOSVars.outlined.add(name)) {
+                    Log.warn("[FOS] Outline already exists for part: @, skipping.", name);
+                    continue;
+                }
                 Pixmap pix = Core.atlas.getPixmap(region).crop().outline(outlineColor, outlineRadius);
-                packer.add(PageType.main, region.asAtlas().name, pix);
-                Log.info("[FOS] generated outline: @", region.asAtlas().name);
+                packer.add(PageType.main, name, pix);
+                Log.info("[FOS] Generated outline for part: @.", name);
             }
 
             Seq<Weapon> weps = weapons.copy();
@@ -67,7 +71,11 @@ public class FOSUnitType extends UnitType {
             weps.removeAll(w -> !w.region.found());
 
             for (Weapon weapon : weps) {
-                if (outlined.add(weapon.name) && packer.has(weapon.name) && !(this instanceof LumoniPlayerUnitType)) { // don't outline modular weapons twice
+                if (packer.has(weapon.name) && !(this instanceof LumoniPlayerUnitType)) { // don't outline modular weapons twice
+                    if (!FOSVars.outlined.add(weapon.name)) {
+                        Log.warn("[FOS] Outline already exists for weapon: @, skipping.", weapon.name);
+                        continue;
+                    }
                     //only non-top weapons need separate outline sprites (this is mostly just mechs)
                     if (!weapon.top || weapon.parts.contains(p -> p.under)) {
                         packer.add(PageType.main, weapon.name + "-outline", outline.get( Core.atlas.getPixmap(weapon.name).crop() ));
@@ -75,6 +83,7 @@ public class FOSUnitType extends UnitType {
                         //replace weapon with outlined version, no use keeping standard around
                         outliner.get(weapon.region);
                     }
+                    Log.info("[FOS] Generated outline for weapon: @.", weapon.name);
                 }
             }
 

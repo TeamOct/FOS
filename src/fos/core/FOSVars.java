@@ -1,7 +1,7 @@
 package fos.core;
 
 import arc.Core;
-import arc.struct.Seq;
+import arc.struct.*;
 import fos.ai.FOSPathfinder;
 import fos.content.FOSSectors;
 import fos.files.InternalFileTree;
@@ -54,7 +54,7 @@ public class FOSVars {
     /** Mod reference **/
     public static Mods.LoadedMod mod;
 
-    /** Placement plans stored for wire bridging. DO NOT MODIFY! */
+    /** Placement plans stored for wire bridging. Internal; do not modify! */
     public static Seq<BuildPlan> wirePlans = new Seq<>();
 
     /** Insect evolution controller. */
@@ -64,6 +64,9 @@ public class FOSVars {
 
     /** Hint handler. */
     public static FOSHints hints = new FOSHints();
+
+    /** Names of outlined sprites. Internal. */
+    public static final ObjectSet<String> outlined = new ObjectSet<>();
 
     public static void load() {
 /*
