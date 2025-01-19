@@ -4,8 +4,8 @@ import arc.Events;
 import arc.graphics.Color;
 import fos.ai.bugs.*;
 import fos.content.*;
-import fos.mod.FOSEventTypes;
 import fos.gen.Bugc;
+import fos.mod.FOSEventTypes;
 import mindustry.content.StatusEffects;
 import mindustry.gen.*;
 import mindustry.world.meta.BlockFlag;
@@ -34,7 +34,7 @@ public class BugUnitType extends FOSUnitType {
         targetAir = flying;
         targetGround = true;
         playerControllable = false;
-        targetFlags = new BlockFlag[]{BlockFlag.drill, BlockFlag.factory, BlockFlag.core, null};
+        targetFlags = new BlockFlag[]{BlockFlag.generator, BlockFlag.drill, BlockFlag.factory, BlockFlag.core};
         controller = u -> flying ? new FlyingBugAI() : new BugAI();
     }
     public <T extends Unit> BugUnitType(String name, Class<T> type, boolean flying, boolean melee) {

@@ -453,6 +453,7 @@ public class FOSPathfinder implements Runnable{
             var added = false;
             for (var f : flags) {
                 for (Building other : indexer.getEnemy(team, f)) {
+                    if (other.efficiency < 0.5f) continue;
                     out.add(other.tile.array());
                     added = true;
                 }

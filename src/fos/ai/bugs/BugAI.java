@@ -88,10 +88,9 @@ public class BugAI extends AIController implements FOSPathfindAI {
 
         if (targetTile == tile) return;
 
-        if (!unit.inRange(target))
+        if (target == null || !unit.inRange(target))
             unit.movePref(vec.trns(unit.angleTo(targetTile.worldx(), targetTile.worldy()), unit.speed()));
-        // NEVER EVER UNCOMMENT THIS. TODO: Why did I even want this?
-        //unit.lookAt(unit.angleTo(target));
+        else unit.lookAt(unit.angleTo(target));
     }
 
     @Override
@@ -102,7 +101,8 @@ public class BugAI extends AIController implements FOSPathfindAI {
         for (BlockFlag flag : unit.type.targetFlags) {
             Teamc target = null;
             if (flag != null) {
-                target = targetFlag(x, y, flag, true);
+                var other = (Building) targetFlag(x, y, flag, true);
+                if (other != null && other.efficiency >= 0.5f) target = other;
             }
 
             if (target != null) return target;

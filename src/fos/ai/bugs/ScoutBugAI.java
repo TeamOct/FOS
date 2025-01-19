@@ -3,8 +3,8 @@ package fos.ai.bugs;
 import arc.Events;
 import arc.math.Mathf;
 import arc.struct.Seq;
-import arc.util.Reflect;
-import fos.core.*;
+import arc.util.*;
+import fos.core.FOSVars;
 import fos.mod.FOSEventTypes;
 import mindustry.entities.units.AIController;
 import mindustry.game.Team;
@@ -17,17 +17,20 @@ import static mindustry.Vars.*;
 public class ScoutBugAI extends AIController {
     public Tile dest;
     public Seq<Building> foundTurrets = new Seq<>();
+    public float lastCheckedTime = 0f;
 
     @Override
     public void updateMovement() {
+        if (lastCheckedTime == 0f) lastCheckedTime = Time.time;
+
         if (dest == null) {
             int x = Mathf.random(world.width()-1);
             int y = Mathf.random(world.height()-1);
             dest = world.tile(x, y);
         }
 
-        if (dest == null || isDiscovered(unit.team, dest.x, dest.y) || unit.tileOn() == dest) {
-            // pick a different not yet discovered tile
+        // pick an undiscovered tile, or go anywhere if failed to find one within 5 seconds
+        if (dest == null || (isDiscovered(unit.team, dest.x, dest.y) && Time.time - lastCheckedTime < 300f) || unit.tileOn() == dest) {
             dest = null;
             return;
         }
