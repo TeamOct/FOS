@@ -343,7 +343,7 @@ public class FOSUnitTypes {
 
                         parts.add(
                             new RegionPart("fos-citadel-front"){{
-                                x = 0; y = 3;
+                                x = 0; y = 5;
                                 growX = growY = -1;
                                 //layer = Layer.groundUnit - 0.01f;
                                 growProgress = p -> {
@@ -697,7 +697,8 @@ public class FOSUnitTypes {
             weapons.add(
                 new InjectorWeapon("fos-injector"){{
                     x = 0; y = 0;
-                    reload = 45;
+                    mirror = false;
+                    reload = 45f;
                     ejectEffect = Fx.casing1;
                     shootSound = Sounds.bolt;
                     bullet = new InjectorBasicBulletType(0, 0.5f, 200, 450, false){{
