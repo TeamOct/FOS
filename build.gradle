@@ -2,8 +2,6 @@ import arc.files.Fi
 import arc.util.OS
 import arc.util.serialization.Jval
 
-import java.nio.file.Files
-
 buildscript{
     dependencies{
         classpath "com.github.Anuken.Arc:arc-core:$arcVersion"
@@ -13,6 +11,7 @@ buildscript{
         mavenCentral()
         maven{url 'https://oss.sonatype.org/content/repositories/snapshots/'}
         maven{url 'https://oss.sonatype.org/content/repositories/releases/'}
+        maven{url 'https://raw.githubusercontent.com/GlennFolker/EntityAnnoMaven/main'}
         maven{url 'https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository'}
         maven{url 'https://jitpack.io'}
     }
@@ -66,6 +65,9 @@ configure(allprojects){
 
         // Use Zelaux's non-buggy repository for release Mindustry and Arc builds.
         if(!useJitpack) maven{url 'https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository'}
+
+        maven{url 'https://raw.githubusercontent.com/GlennFolker/EntityAnnoMaven/main'}
+
         maven{url 'https://jitpack.io'}
     }
 
@@ -166,7 +168,7 @@ configure(rootProject){
         }
 
         doLast{
-            new ProcessBuilder("java", "-jar", i).start();
+            new ProcessBuilder("java", "-jar", i).start()
         }
     }
 
