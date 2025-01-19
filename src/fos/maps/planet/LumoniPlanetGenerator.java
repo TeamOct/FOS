@@ -28,11 +28,11 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
     float scl = 8f;
 
     Block[][] arr = {
-        {crimsonStone, purpur, crimsonStone, purpur, crimsonStone, purpur},
-        {crimsonStone, purpur, purpur, crimsonStone, purpur, purpur},
-        {purpur, blublu, purpur, blublu, purpur, blublu},
-        {blublu, purpur, blublu, purpur, purpur, purpur},
-        {annite, cyanium, cyanium, cyanium, annite, annite},
+        {crimsonStone, ashStone, crimsonStone, ashStone, crimsonStone, ashStone},
+        {crimsonStone, ashStone, purpur, crimsonStone, ashStone, ashStone},
+        {purpur, quartum, purpur, quartum, purpur, quartum},
+        {quartum, purpur, quartum, purpur, purpur, purpur},
+        {quartum, cyanium, quartum, cyanium, annite, annite},
         {cyanium, cyanium, cyanium, annite, cyanium, cyanium}
     };
 
@@ -114,7 +114,6 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
     Block getFlooded(Block b) {
         return b == annite ? anniteWater :
-            b == blublu ? blubluWater :
                 b == crimsonStone ? crimsonStoneWater :
                     b == cyanium ? cyaniumWater :
                         b == purpur ? purpurWater :
@@ -312,7 +311,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         median(2);
         //tech(metalFloor, metalFloor2, darkMetal);
 
-        oreAround(alienMoss, blubluWall, 2, 1f, 0f);
+        oreAround(alienMoss, quartumWall, 2, 1f, 0f);
 
         pass((x, y) -> {
             //variable(s) to be used across this lambda
@@ -401,12 +400,12 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         pass((x, y) -> {
             Tile cur = tiles.get(x, y);
 
-            //plants on blublu - has to be done after all liquid/mini-biome stuff so no conflicts happen
-            if (floor == blublu && block == air) {
+            //plants on quartum - has to be done after all liquid/mini-biome stuff so no conflicts happen
+            if (floor == quartum && block == air) {
                 if (rand.chance(0.0015f)) {
                     block = blueTree;
                     cur.circle(6, other -> {
-                        if (rand.chance(0.3f) && other.floor() == blublu) {
+                        if (rand.chance(0.3f) && other.floor() == quartum && !other.solid()) {
                             other.setBlock(softbush);
                             var ang = Mathf.angle(other.x - x, other.y - y);
                             if (ang > 60f && ang < 120f && rand.chance(0.6f)) {

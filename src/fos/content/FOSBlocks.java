@@ -93,6 +93,7 @@ public class FOSBlocks {
     hiveFloor, bugSpawn,
     ashStone, ashStoneCraters, ashStoneWall,
     quartum, quartumWall,
+    concreteT, concreteB, concreteL, concreteR, concreteTL, concreteTR, concreteBL, concreteBR, concreteFull, concreteWall,
 
     // PROPS
     softbush, calciteCrystal, calciteMineral, blueTree, ashStoneBoulder, quartumBoulder,
@@ -116,8 +117,6 @@ public class FOSBlocks {
         //fine, I will document this block right here.
         resourceExtractor = new ResourceExtractor("resource-extractor"){
             {
-
-
                 //ResourceExtractor is a multi-crafter, and since MultiCrafter class extends Block, any field from Block class works here as well.
                 itemCapacity = 15;
                 size = 3;
@@ -1725,29 +1724,16 @@ public class FOSBlocks {
         }};
         //endregion
         //region environment & ores
-        tokiciteFloor = new Floor("tokicite-floor"){{
+        tokiciteFloor = new Floor("tokicite-floor", 0){{
             drownTime = 360f;
             status = FOSStatuses.tokiciteSlowed;
             speedMultiplier = 0.15f;
-            variants = 0;
             liquidDrop = tokicite;
             isLiquid = true;
             cacheLayer = FOSCacheLayers.tokicite;
             albedo = 1f;
         }};
-        cyaniumWater = new Floor("cyanium-water"){{
-            isLiquid = true;
-            status = StatusEffects.wet;
-            liquidDrop = water;
-            cacheLayer = CacheLayer.water;
-            speedMultiplier = 0.8f;
-            statusDuration = 50f;
-            albedo = 0.9f;
-            shallow = true;
-            supportsOverlay = true;
-            variants = 4;
-        }};
-        crimsonStoneWater = new Floor("crimson-stone-water"){{
+        cyaniumWater = new Floor("cyanium-water", 4){{
             isLiquid = true;
             status = StatusEffects.wet;
             liquidDrop = water;
@@ -1758,8 +1744,7 @@ public class FOSBlocks {
             shallow = true;
             supportsOverlay = true;
         }};
-        anniteWater = new Floor("annite-water"){{
-            variants = 4;
+        crimsonStoneWater = new Floor("crimson-stone-water", 4){{
             isLiquid = true;
             status = StatusEffects.wet;
             liquidDrop = water;
@@ -1770,8 +1755,7 @@ public class FOSBlocks {
             shallow = true;
             supportsOverlay = true;
         }};
-        blubluWater = new Floor("blublu-water"){{
-            variants = 4;
+        anniteWater = new Floor("annite-water", 4){{
             isLiquid = true;
             status = StatusEffects.wet;
             liquidDrop = water;
@@ -1782,8 +1766,8 @@ public class FOSBlocks {
             shallow = true;
             supportsOverlay = true;
         }};
-        purpurWater = new Floor("purpur-water"){{
-            variants = 4;
+/*
+        blubluWater = new Floor("blublu-water", 4){{
             isLiquid = true;
             status = StatusEffects.wet;
             liquidDrop = water;
@@ -1794,11 +1778,20 @@ public class FOSBlocks {
             shallow = true;
             supportsOverlay = true;
         }};
-        cyanium = new Floor("cyanium"){{
-            variants = 4;
+*/
+        purpurWater = new Floor("purpur-water", 4){{
+            isLiquid = true;
+            status = StatusEffects.wet;
+            liquidDrop = water;
+            cacheLayer = CacheLayer.water;
+            speedMultiplier = 0.8f;
+            statusDuration = 50f;
+            albedo = 0.9f;
+            shallow = true;
+            supportsOverlay = true;
         }};
+        cyanium = new Floor("cyanium", 4);
         cyaniumWall = new StaticWall("cyanium-wall"){{
-            variants = 4;
             cyaniumWater.asFloor().wall = this;
         }};
 /*      TODO: this sucks
@@ -1807,52 +1800,41 @@ public class FOSBlocks {
             wall = cyaniumWall;
         }};
 */
-        crimsonStone = new Floor("crimson-stone");
+        crimsonStone = new Floor("crimson-stone", 4);
         crimsonStoneWall = new StaticWall("crimson-stone-wall"){{
-            variants = 1;
             crimsonStoneWater.asFloor().wall = this;
         }};
-        elithite = new Floor("elithite"){{
+        elithite = new Floor("elithite", 4){{
             itemDrop = rawElithite;
-            variants = 4;
         }};
         elithiteWall = new StaticWall("elithite-wall");
-        elbium = new Floor("elbium"){{
+        elbium = new Floor("elbium", 4){{
             itemDrop = rawElbium;
-            variants = 4;
         }};
         elbiumWall = new StaticWall("elbium-wall");
-        nethratium = new Floor("nethratium"){{
+        nethratium = new Floor("nethratium", 4){{
             itemDrop = rawNethratium;
-            variants = 4;
         }};
         nethratiumWall = new StaticWall("nethratium-wall");
-        annite = new Floor("annite"){{
-            variants = 4;
-        }};
+        annite = new Floor("annite", 4);
         anniteWall = new StaticWall("annite-wall"){{
             anniteWater.asFloor().wall = this;
         }};
-        blublu = new Floor("blublu"){{
-            variants = 4;
-        }};
+/*
+        blublu = new Floor("blublu", 4);
         blubluWall = new StaticWall("blublu-wall"){{
             blubluWater.asFloor().wall = this;
         }};
-        purpur = new Floor("purpur"){{
-            variants = 4;
-        }};
+*/
+        purpur = new Floor("purpur", 4);
         purpurWall = new StaticWall("purpur-wall"){{
             purpurWater.asFloor().wall = this;
         }};
-        murmur = new Floor("murmur"){{
-            variants = 4;
-        }};
+        murmur = new Floor("murmur", 4);
         murmurWall = new StaticWall("murmur-wall"){{
             variants = 0;
         }};
-        calcite = new Floor("calcite"){{
-            variants = 4;
+        calcite = new Floor("calcite", 4){{
             cacheLayer = FOSCacheLayers.calcite;
         }};
         calciteWall = new StaticWall("calcite-wall"){{
@@ -1914,28 +1896,45 @@ public class FOSBlocks {
             createRubble = false;
             unitCapModifier = 15;
         }};
-	ashStone = new Floor("ash-stone"){{
-            variants = 4;
-        }};
-	ashStoneCraters = new Floor("ash-stone-craters"){{
-            variants = 4;
-        }};
-	ashStoneWall = new StaticWall("ash-stone-wall"){{
+	    ashStone = new Floor("ash-stone", 4);
+	    ashStoneCraters = new Floor("ash-stone-craters", 4);
+	    ashStoneWall = new StaticWall("ash-stone-wall"){{
             variants = 3;
             ashStone.asFloor().wall = ashStoneCraters.asFloor().wall = this;
         }};
-	quartum = new Floor("quartum"){{
-            variants = 4;
-        }};
-	quartumWall = new StaticWall("quartum-wall"){{
-            variants = 3;
-            quartum.asFloor().wall = this;
-        }};
+	    quartum = new Floor("quartum", 4);
+	    quartumWall = new StaticWall("quartum-wall");
 
+        concreteFull = new Floor("concrete-full", 0);
+        concreteT = new Floor("concrete-t", 0){{
+            blendGroup = concreteFull;
+        }};
+        concreteB = new Floor("concrete-b", 0){{
+            blendGroup = concreteFull;
+        }};
+        concreteL = new Floor("concrete-l", 0){{
+            blendGroup = concreteFull;
+        }};
+        concreteR = new Floor("concrete-r", 0){{
+            blendGroup = concreteFull;
+        }};
+        concreteTL = new Floor("concrete-tl", 0){{
+            blendGroup = concreteFull;
+        }};
+        concreteTR = new Floor("concrete-tr", 0){{
+            blendGroup = concreteFull;
+        }};
+        concreteBL = new Floor("concrete-bl", 0){{
+            blendGroup = concreteFull;
+        }};
+        concreteBR = new Floor("concrete-br", 0){{
+            blendGroup = concreteFull;
+        }};
+        concreteWall = new StaticWall("concrete-wall");
 
         softbush = new Prop("softbush"){{
             variants = 3;
-            blublu.asFloor().decoration = this;
+            annite.asFloor().decoration = this;
             breakSound = Sounds.plantBreak;
         }};
         calciteCrystal = new StaticWall("calcite-crystal"){{
