@@ -19,7 +19,7 @@ import mindustry.type.Weapon;
 import mindustry.type.weapons.*;
 
 import static fos.content.FOSItems.*;
-import static mindustry.content.Items.*;
+import static mindustry.content.Items.silicon;
 import static mindustry.type.ItemStack.*;
 
 //why the heck I added FOS to class's name if weapon modules are unique to this mod anyway
@@ -83,26 +83,31 @@ public class FOSWeaponModules {
         }};
         standard3 = new WeaponSet("standard3", new Weapon("fos-standard-weapon3"){{
             x = 0; y = 0;
+            rotateSpeed = 5f;
             alternate = mirror = false;
             rotate = true;
             recoil = 2f;
-            reload = recoilTime = 15f;
+            reload = recoilTime = 110f;
             inaccuracy = 8f;
-            cooldownTime = 30f;
-            shootSound = Sounds.pew;
-            shoot = new ShootAlternate(){{
-                spread = 4f;
-                shots = 2;
-            }};
+            shake = 1f;
+            shootY = 1f;
+
+            shoot.shots = 11;
+            shoot.shotDelay = 20f;
+
+            cooldownTime = 90f;
+            ejectEffect = Fx.casing3;
+            shootSound = Sounds.splash;
+
             bullet = new PlayerBasicBulletType(7f, 60){{
                 width = 7f; height = 9f;
                 trailLength = 12;
                 lifetime = 30f;
-                homingPower = 0.8f;
+                homingPower = 0.03f;
             }};
         }}).reqs(with(zinc, 250, silicon, 200, vanadium, 100));
         //TODO: placeholder
-        standard4 = new WeaponSet("standard4", new Weapon("fos-standard-weapon4")).reqs(with(lead, 1));
+        //standard4 = new WeaponSet("standard4", new Weapon("fos-standard-weapon4")).reqs(with(lead, 1));
 
         // SHOTGUNS
         shotgun1 = new WeaponSet("shotgun1"){{
@@ -112,48 +117,115 @@ public class FOSWeaponModules {
                     alternate = mirror = false;
                     rotate = true;
                     rotateSpeed = 5f;
-                    inaccuracy = 30f;
-                    shoot.shots = 4;
-                    shoot.shotDelay = 0f;
-                    reload = recoilTime = 90f;
-                    shootSound = Sounds.shotgun;
+                    inaccuracy = 0f;
+                    reload = recoilTime = 45f;
+                    shootY = 0.5f;
+
+                    shootSound = Sounds.shootBig;
                     ejectEffect = Fx.casing2;
-                    bullet = new PlayerShrapnelBulletType(){{
-                        width = 2f;
-                        length = 48f;
-                        fromColor = Pal.accentBack;
-                        toColor = Pal.accent;
-                        damage = 120;
-                        lifetime = 20f;
-                        hitEffect = Fx.hitBulletSmall;
+
+                    bullet = new PlayerBasicBulletType(){{
+                        speed = 4.8f; lifetime = 15f;
+                        width = 8f; height = 10f;
+                        damage = 60;
                         knockback = 4f;
+                        pierce = true;
+                        pierceCap = 2;
+
+                        hitColor = trailColor = Pal.accent;
+                        hitEffect = despawnEffect = Fx.hitSquaresColor;
+                        shootEffect = Fx.shootTitan;
+                        smokeEffect = Fx.shootSmokeSquareSparse;
+                        trailWidth = 2f;
+                        trailLength = 6;
+                        trailEffect = Fx.shootSmokeSquare;
+                        trailChance = 0.08f;
+
+                        intervalBullets = 3;
+                        intervalRandomSpread = 30f;
+                        bulletInterval = 45f;
+                        intervalBullet = new PlayerBasicBulletType(){{
+                            speed = 4.8f; lifetime = 15f;
+                            width = 8f; height = 10f;
+                            damage = 60;
+                            knockback = 4f;
+                            pierce = true;
+                            pierceCap = 2;
+
+                            velocityRnd = 0.2f;
+
+                            hitColor = trailColor = Pal.accent;
+                            hitEffect = despawnEffect = Fx.hitSquaresColor;
+                            shootEffect = Fx.shootBigColor;
+                            smokeEffect = Fx.shootSmokeSquareSparse;
+                            trailWidth = 2f;
+                            trailLength = 6;
+                            trailEffect = Fx.shootSmokeSquare;
+                            trailChance = 0.08f;
+                        }};
                     }};
                 }}
             );
             reqs = empty;
         }};
-        shotgun2 = new WeaponSet("shotgun2", new Weapon("fos-shotgun-mount2"){{
-            x = y = 0;
-            alternate = mirror = false;
-            rotate = true;
-            rotateSpeed = 5f;
-            inaccuracy = 10f;
-            shoot.shots = 4;
-            shoot.shotDelay = 0f;
-            reload = recoilTime = 90f;
-            shootSound = Sounds.shotgun;
-            ejectEffect = Fx.casing2;
-            bullet = new PlayerShrapnelBulletType(){{
-                width = 2f;
-                length = 80f;
-                fromColor = Pal.accentBack;
-                toColor = Pal.accent;
-                damage = 120;
-                lifetime = 20f;
-                hitEffect = Fx.hitBulletSmall;
-                knockback = 3f;
-            }};
-        }}).reqs(with(zinc, 60, silver, 90));
+        shotgun2 = new WeaponSet("shotgun2"){{
+            weapons.add(
+                new Weapon("fos-shotgun-mount2"){{
+                    x = y = 0;
+                    alternate = mirror = false;
+                    rotate = true;
+                    rotateSpeed = 5f;
+                    inaccuracy = 0f;
+                    reload = recoilTime = 45f;
+                    shootY = 0.5f;
+
+                    shootSound = Sounds.shootBig;
+                    ejectEffect = Fx.casing2;
+
+                    bullet = new PlayerBasicBulletType(){{
+                        speed = 6f; lifetime = 15f;
+                        width = 8f; height = 10f;
+                        damage = 60;
+                        knockback = 4f;
+                        pierce = true;
+                        pierceCap = 2;
+
+                        hitColor = trailColor = Pal.accent;
+                        hitEffect = despawnEffect = Fx.hitSquaresColor;
+                        shootEffect = Fx.shootTitan;
+                        smokeEffect = Fx.shootSmokeSquareSparse;
+                        trailWidth = 2f;
+                        trailLength = 6;
+                        trailEffect = Fx.shootSmokeSquare;
+                        trailChance = 0.08f;
+
+                        intervalBullets = 3;
+                        intervalRandomSpread = 10f;
+                        bulletInterval = 45f;
+                        intervalBullet = new PlayerBasicBulletType(){{
+                            speed = 6f; lifetime = 15f;
+                            width = 8f; height = 10f;
+                            damage = 60;
+                            knockback = 4f;
+                            pierce = true;
+                            pierceCap = 2;
+
+                            velocityRnd = 0.2f;
+
+                            hitColor = trailColor = Pal.accent;
+                            hitEffect = despawnEffect = Fx.hitSquaresColor;
+                            shootEffect = Fx.shootBigColor;
+                            smokeEffect = Fx.shootSmokeSquareSparse;
+                            trailWidth = 2f;
+                            trailLength = 6;
+                            trailEffect = Fx.shootSmokeSquare;
+                            trailChance = 0.08f;
+                        }};
+                    }};
+                }}
+            );
+            reqs = with(zinc, 60, silver, 90);
+        }};
         shotgun3 = new WeaponSet("shotgun3", new Weapon("fos-shotgun-mount3"){{
             x = y = 0;
             alternate = mirror = false;
@@ -161,16 +233,17 @@ public class FOSWeaponModules {
             rotateSpeed = 3f;
             shoot = new ShootAlternate(){{
                 shots = barrels = 6;
-                spread = 3f;
+                spread = 1.2f;
             }};
             reload = recoilTime = 40f;
             shootSound = Sounds.cannon;
             ejectEffect = Fx.casing3;
+            shootY = 1.5f;
             bullet = new PlayerBasicBulletType(){{
-                speed = 4f; lifetime = 20f;
+                speed = 8f; lifetime = 12f;
                 damage = 150;
-                hitEffect = Fx.hitBulletSmall;
-                trailLength = 4;
+                hitEffect = Fx.flakExplosion;
+                trailLength = 7;
                 trailEffect = Fx.trailFade;
                 knockback = 5f;
                 fragOnHit = true;
@@ -184,7 +257,7 @@ public class FOSWeaponModules {
             }};
         }}).reqs(with(zinc, 200, silver, 50, silicon, 200, vanadium, 100));
         //TODO: placeholder
-        shotgun4 = new WeaponSet("shotgun4", new Weapon()).reqs(with(lead, 1));
+        //shotgun4 = new WeaponSet("shotgun4", new Weapon()).reqs(with(lead, 1));
 
         // SUPPORT MODULES
         support1 = new WeaponSet("support1"){{

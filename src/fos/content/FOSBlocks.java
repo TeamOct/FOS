@@ -350,16 +350,23 @@ public class FOSBlocks {
             tier = 3;
             drillTime = 360f;
             envEnabled |= Env.space;
+            consumeLiquid(water, 0.08f).boost();
+
+            drillEffect = Fx.mineHuge;
+            drillEffectChance = 0.6f;
+
             requirements(Category.production, with(zinc, 15));
             researchCost = with(zinc, 50);
-            consumeLiquid(water, 0.08f).boost();
         }};
         silverDrill = new UndergroundDrill("silver-drill"){{
             size = 2;
             tier = 4;
             drillTime = 300f;
-            requirements(Category.production, with(zinc, 10, silver, 10));
             consumeLiquid(water, 0.1f).boost();
+
+            drillEffect = Fx.mineImpact;
+
+            requirements(Category.production, with(zinc, 10, silver, 10));
         }};
         diamondDrill = new UndergroundDrill("diamond-drill"){{
             size = 3;
@@ -367,16 +374,23 @@ public class FOSBlocks {
             drillTime = 210f;
             squareSprite = false;
             consumePower(2f);
-            requirements(Category.production, with(silver, 45, silicon, 75, diamond, 40));
             consumeLiquid(tokicite, 0.2f).boost();
+
+            drillEffect = Fx.mineHuge;
+            drillEffectChance = 0.3f;
+
+            requirements(Category.production, with(silver, 45, silicon, 75, diamond, 40));
         }};
         vanadiumDrill = new UndergroundDrill("vanadium-drill"){{
             size = 3;
             tier = 6;
             drillTime = 165f;
             consumePower(3f);
-            requirements(Category.production, with(zinc, 30, silver, 95, silicon, 50, vanadium, 50));
             consumeLiquid(tokicite, 0.25f).boost();
+
+            drillEffect = Fx.mineImpact;
+
+            requirements(Category.production, with(zinc, 30, silver, 95, silicon, 50, vanadium, 50));
         }};
         oreDetectorSmall = new OreDetector("ore-detector-small"){{
             health = 480;

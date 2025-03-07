@@ -1,9 +1,12 @@
 package fos.world.blocks.special;
 
 import arc.Core;
+import arc.func.*;
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
+import arc.math.Mathf;
 import arc.scene.style.TextureRegionDrawable;
+import arc.scene.ui.*;
 import arc.scene.ui.layout.Table;
 import arc.struct.Seq;
 import arc.util.*;
@@ -12,16 +15,16 @@ import fos.gen.LumoniPlayerc;
 import fos.net.FOSCall;
 import fos.type.WeaponSet;
 import mindustry.Vars;
+import mindustry.ctype.UnlockableContent;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.ui.*;
 import mindustry.world.*;
-import mindustry.world.blocks.ItemSelection;
 import mindustry.world.consumers.ConsumeItemDynamic;
 import mindustry.world.draw.*;
 
-import static mindustry.Vars.state;
+import static mindustry.Vars.*;
 
 public class UpgradeCenter extends Block {
     /** Called when player upgrades their weapon
@@ -47,7 +50,7 @@ public class UpgradeCenter extends Block {
         hasItems = true;
         clearOnDoubleTap = true;
 
-        selectionColumns = 5;
+        selectionColumns = 3;
 
         config(Integer.class, (UpgradeCenterBuild tile, Integer i) -> {
             if (!configurable) return;
@@ -185,7 +188,7 @@ public class UpgradeCenter extends Block {
         @Override
         public void buildConfiguration(Table table) {
             if (WeaponSet.sets.size > 0) {
-                ItemSelection.buildTable(UpgradeCenter.this, table, WeaponSet.sets.select(ws -> !isSetBanned(ws)),
+                buildWeaponsTable(UpgradeCenter.this, table, WeaponSet.sets.select(ws -> !isSetBanned(ws)),
                         () -> weaponSet == null ? null : weaponSet,
                         ws -> {
                             configure(ws == null || isSetBanned(ws) ? -1 : ws.id);
@@ -241,6 +244,55 @@ public class UpgradeCenter extends Block {
                 weaponSet = WeaponSet.sets.get(id);
             }
             progress = read.f();
+        }
+
+        // Stolen from ItemSelection.java & slightly modified for our needs.
+        public <T extends UnlockableContent> void buildWeaponsTable(@Nullable Block block, Table table, Seq<T> items, Prov<T> holder, Cons<T> consumer, int rows, int columns){
+            ButtonGroup<ImageButton> group = new ButtonGroup<>();
+            group.setMinCheckCount(0);
+            Table cont = new Table().top();
+            cont.defaults().size(40);
+
+            Runnable rebuild = () -> {
+                group.clear();
+                cont.clearChildren();
+
+                var text = "";
+                int i = 0;
+
+                for(T item : items){
+                    if(!item.unlockedNow() || (item instanceof Item checkVisible && state.rules.hiddenBuildItems.contains(checkVisible))) continue;
+
+                    ImageButton button = cont.button(Tex.whiteui, Styles.clearNoneTogglei, Mathf.clamp(item.selectionSize, 0f, 40f), () -> {
+                        control.input.config.hideConfig();
+                    }).tooltip(item.localizedName).group(group).get();
+                    button.changed(() -> consumer.get(button.isChecked() ? item : null));
+                    button.getStyle().imageUp = new TextureRegionDrawable(item.uiIcon);
+                    button.update(() -> button.setChecked(holder.get() == item));
+
+                    if(i++ % columns == (columns - 1)){
+                        cont.row();
+                    }
+                }
+            };
+
+            rebuild.run();
+
+            Table main = new Table().background(Styles.black6);
+
+            ScrollPane pane = new ScrollPane(cont, Styles.smallPane);
+            pane.setScrollingDisabled(true, false);
+
+            if(block != null){
+                pane.setScrollYForce(block.selectScroll);
+                pane.update(() -> {
+                    block.selectScroll = pane.getScrollY();
+                });
+            }
+
+            pane.setOverscroll(false, false);
+            main.add(pane).maxHeight(40 * rows);
+            table.top().add(main);
         }
     }
 }
