@@ -87,9 +87,9 @@ public class FOSBlocks {
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
     annite, anniteWall, blublu, blubluWall, purpur, purpurWall, murmur, murmurWall, calcite, calciteWall,
     tokiciteFloor,
-    cyaniumWater, crimsonStoneWater, anniteWater, blubluWater, purpurWater,
+    cyaniumWater, crimsonStoneWater, anniteWater, blubluWater, purpurWater, quartumWater,
     alienMoss,
-    oreZinc, oreZincSurface, oreZincDeep, oreSilver, oreSilverDeep, oreLithium, oreDiamond, oreVanadium, oreVanadiumDeep, oreIridium, oreLuminium,
+    oreAluminium, oreZinc, oreZincSurface, oreZincDeep, oreSilver, oreSilverDeep, oreLithium, oreDiamond, oreVanadium, oreVanadiumDeep, oreIridium, oreLuminium,
     hiveFloor, bugSpawn,
     ashStone, ashStoneCraters, ashStoneWall,
     quartum, quartumWall,
@@ -1804,6 +1804,18 @@ public class FOSBlocks {
             shallow = true;
             supportsOverlay = true;
         }};
+        quartumWater = new Floor("quartum-water", 4){{
+            isLiquid = true;
+            status = StatusEffects.wet;
+            liquidDrop = water;
+            cacheLayer = CacheLayer.water;
+            speedMultiplier = 0.8f;
+            statusDuration = 50f;
+            albedo = 0.9f;
+            shallow = true;
+            supportsOverlay = true;
+        }};
+
         cyanium = new Floor("cyanium", 4);
         cyaniumWall = new StaticWall("cyanium-wall"){{
             cyaniumWater.asFloor().wall = this;
@@ -1855,12 +1867,18 @@ public class FOSBlocks {
             variants = 2;
         }};
         alienMoss = new OverlayFloor("alien-moss");
+
+        oreAluminium = new OreBlock("ore-aluminium-surface"){{
+            itemDrop = aluminium;
+            // this is stupid - can't place this on shallow water without it.
+            needsSurface = false;
+        }};
         oreZinc = new UndergroundOreBlock("ore-tin"){{
             drop = zinc;
         }};
         oreZincSurface = new OreBlock("ore-tin-surface"){{
             itemDrop = zinc;
-            // this is stupid - can't place this on shallow water without it.
+            // this is stupid x2.
             needsSurface = false;
         }};
         oreZincDeep = new OreBlock("ore-tin-deep"){{
@@ -1877,7 +1895,7 @@ public class FOSBlocks {
         }};
         oreDiamond = new OreBlock("ore-diamond"){{
             itemDrop = diamond;
-            // this is stupid x2
+            // this is stupid x3
             needsSurface = false;
         }};
         oreVanadium = new UndergroundOreBlock("ore-vanadium"){{
@@ -1967,12 +1985,10 @@ public class FOSBlocks {
         }};
         ashStoneBoulder = new Prop("ash-stone-boulder"){{
             variants = 3;
-            customShadow = true;
             ashStone.asFloor().decoration = ashStoneCraters.asFloor().decoration = this;
         }};
-	quartumBoulder = new Prop("quartum-boulder"){{
+	    quartumBoulder = new Prop("quartum-boulder"){{
             variants = 3;
-            customShadow = true;
             quartum.asFloor().decoration = this;
         }};
 
