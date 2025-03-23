@@ -34,7 +34,7 @@ void main() {
     vec3 trns = rgb2hsv(color.rgb);
     trns -= (vec3(-0.1, 0.3, -0.3) * a);
 
-    color = vec4(hsv2rgb(trns), 1.0);
+    color = vec4(hsv2rgb(trns), color.a);
 
     gl_FragColor = color;
 }
