@@ -17,10 +17,11 @@ This mod brings you to the brand-new star system to explore as a standalone camp
 ---
 
 ## How to build
-Run `copyBuildRelease` task:
+### Use java 20
+Run `nmpBuildRelease` task:
 
 ```shell
-./gradlew copyBuildRelease
+./gradlew nmpBuildRelease
 ```
 
 Mod file will be in artifacts.
