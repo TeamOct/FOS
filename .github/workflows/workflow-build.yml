@@ -19,9 +19,9 @@ jobs:
       - name: Build mod artifact
         run: |
           chmod +x gradlew
-          ./gradlew clean dex
+          ./gradlew clean nmpBuildRelease
       - name: Upload built mod artifact
         uses: actions/upload-artifact@v4
         with:
           name: FOS (zipped)
-          path: build/libs/FOS.jar
+          path: build/libs/*.jar

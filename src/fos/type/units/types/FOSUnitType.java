@@ -29,7 +29,7 @@ public class FOSUnitType extends UnitType {
         super(name);
         outlineColor = Color.valueOf("2b2f36");
         constructor = EntityRegistry.content(name, type, n -> EntityMapping.map(this.name));
-        if (constructor == null) throw new IllegalArgumentException("Unit entity class `" + type + "` not registered.");
+        if (constructor == null) throw new IllegalArgumentException("Unit entity class `" + type + "` with name '" + name + "' not registered.");
     }
 
     @Override

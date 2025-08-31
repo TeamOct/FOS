@@ -5,15 +5,12 @@ cache/
 javax.annotation.processing.Processor
 artifacts/
 
-/settings/path.txt
-/settings/s.txt
-
-
 ### Local files
 /settings/local.json
 
 ### Generated files
 gen/
+/fetchedComps/*
 
 ### IntelliJ IDEA files
 /.idea/
@@ -21,6 +18,4 @@ gen/
 ### Aseprite files
 *.aseprite
 *.ase
-
-
 
