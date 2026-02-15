@@ -45,7 +45,7 @@ core.configure {
     tasks.nmpBuild.from project.file("mod.json")
     tasks.nmpBuild.from project.file("icon.png")
 
-    dependencies{
+    dependencies {
         implementation "com.github.liplum:MultiCrafterLib:$multiCrafterLibVersion"
         compileOnly nmp.arcDependency(mindustryVersion.get(), "discord")
         compileOnly nmp.arcDependency(mindustryVersion.get(), "backend-sdl")
