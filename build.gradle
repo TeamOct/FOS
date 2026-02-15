@@ -11,9 +11,6 @@ allprojects.each { project ->
     }
 
     project.apply plugin: "java"
-
-    /*project.sourceSets.main.java.srcDirs = ["src"]
-    project.sourceSets.main.resources.srcDirs = ["res"]*/
 }
 
 apply plugin: "java-library"
