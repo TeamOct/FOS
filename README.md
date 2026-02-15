@@ -24,7 +24,7 @@ Run `nmpBuildRelease` task:
 ./gradlew nmpBuildRelease
 ```
 
-Mod file will be in artifacts.
+Mod file will be in [build/libs](build%2Flibs).
 
 
 ## Credits
