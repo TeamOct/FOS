@@ -4,14 +4,17 @@ import arc.graphics.g2d.Draw;
 import fos.world.blocks.production.OreDetector;
 import mindustry.graphics.Layer;
 import mindustry.type.Item;
-import mindustry.world.Tile;
+import mindustry.world.*;
 import mindustry.world.blocks.environment.OverlayFloor;
 
 public class UndergroundOreBlock extends OverlayFloor {
     /** Used instead of itemDrop! */
     public Item drop;
-    /** Self-explanatory. How strong of an ore detector is needed to find this. */
+    /** (Optional) Output block of this tile, if drilled by certain payload-centric drills. */
+    public Block blockDrop;
+    /** How strong of an ore detector is needed to locate this ore. */
     public int depth = 1;
+    public boolean isBlockOre = false;
 
     /** Used by {@link OreDetector} **/
     public boolean shouldDrawBase = false;
@@ -35,6 +38,8 @@ public class UndergroundOreBlock extends OverlayFloor {
             drop = itemDrop;
             itemDrop = null;
         }
+
+        if (blockDrop != null) isBlockOre = true;
     }
 
     @Override

@@ -32,7 +32,7 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.weapons.*;
-import mindustry.world.meta.BlockFlag;
+import mindustry.world.meta.*;
 
 import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.stroke;
@@ -58,10 +58,14 @@ public class FOSUnitTypes {
 
     public static @EntityDef({Unitc.class, ElevationMovec.class}) UnitType
         // HOVERCRAFT (INJECTORS)
-        sergeant, lieutenant,
+        /*sergeant,*/ lieutenant,
 
         // HOVERCRAFT (DESTROYERS)
         assault, abrupt;
+
+    public static @EntityDef({Unitc.class, Tankc.class}) UnitType
+        // TANKS (INJECTORS)
+        sergeant,
 
     public static @EntityDef({Unitc.class}) UnitType
         // FLYING (LEGION SUMMONS)
@@ -666,21 +670,22 @@ public class FOSUnitTypes {
         }};
 
         sergeant = new TrailUnitType("sergeant", ElevationMoveUnit.class){{
+            squareShape = true;
+            omniMovement = false;
+            rotateMoveFirst = true;
+            rotateSpeed = 1.3f;
+            envDisabled = Env.none;
+            speed = 1.2f;
+
             health = 720;
             armor = 4;
             hitSize = 12;
-            speed = 2f;
-            hovering = true;
-            omniMovement = true;
             immunities.add(hacked);
-            circleTarget = false;
-            engineColorInner = FOSPal.hacked;
-            engineColor = FOSPal.hackedBack;
-            engineLayer = Layer.groundUnit - 0.1f;
+
             trailColor = FOSPal.hackedBack;
-            trailLength = 32;
+            trailLength = 20;
             trailType = ArrowFadeTrail.class;
-            useEngineElevation = false;
+
             aiController = InjectorAI::new;
 
             parts.add(new HoverPart(){{

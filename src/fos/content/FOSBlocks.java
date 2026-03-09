@@ -1969,17 +1969,20 @@ public class FOSBlocks {
             annite.asFloor().decoration = this;
             breakSound = Sounds.plantBreak;
         }};
-        calciteCrystal = new StaticWall("calcite-crystal"){{
+        calciteCrystal = new Prop("calcite-crystal"){{
             variants = 0;
+            calcite.asFloor().decoration = this;
+            customShadow = true;
             //size = 2;
             //cacheLayer = FOSCacheLayers.calciteCrystals;
         }};
-        calciteMineral = new StaticWall("calcite-mineral"){{
+        calciteMineral = new Prop("calcite-mineral"){{
             variants = 0;
+            customShadow = true;
             //size = 3;
             //cacheLayer = FOSCacheLayers.calciteCrystals;
         }};
-        blueTree = new TreeBlock("blue-tree"){{
+        blueTree = new ImprovedTreeBlock("blue-tree"){{
             // for visual elevation
             shadowOffset = -7f;
         }};
