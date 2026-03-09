@@ -65,7 +65,7 @@ public class FOSUnitTypes {
 
     public static @EntityDef({Unitc.class, Tankc.class}) UnitType
         // TANKS (INJECTORS)
-        sergeant,
+        sergeant;
 
     public static @EntityDef({Unitc.class}) UnitType
         // FLYING (LEGION SUMMONS)
