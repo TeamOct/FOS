@@ -60,7 +60,9 @@ public class WindPowerController implements SaveFileReader.CustomChunk {
         FOSWeathers.wind.instance().opacity(Mathf.lerpDelta(opacity, windPower, 0.05f));
 
         updateEfficiencyGlobal();
-        turbineEfficiencies.each(wt -> updateEfficiency(wt.key));
+        turbineEfficiencies.each(wt -> {
+            if (wt.key != null) updateEfficiency(wt.key);
+        });
     }
 
     public void updateTurbine(WindTurbineBuild build) {

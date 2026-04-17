@@ -1,20 +1,21 @@
-package fos.graphics;
+package fos.graphics.trails;
 
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
+import arc.math.geom.Vec2;
 import arc.util.Tmp;
 import mindustry.graphics.*;
 
-public class ArrowFadeTrail extends Trail {
+public class ArrowFadeTrail extends PositionalTrail {
     public ArrowFadeTrail(int length) {
         super(length);
     }
 
     @Override
-    public void draw(Color color, float width) {
+    public void draw(Vec2 pos, float rot, Color color, float width, boolean ground) {
         Draw.color(color);
-        Draw.z(Layer.light);
+        Draw.z(ground ? Layer.groundUnit - 0.1f : Layer.light);
 
         float[] items = points.items;
         float lastAngle = this.lastAngle;
@@ -22,6 +23,9 @@ public class ArrowFadeTrail extends Trail {
         var a0 = Tmp.c1.set(color).a(0).toFloatBits();
 
         Tmp.c2.set(color);
+
+        Tmp.v5.set(pos).rotate(rot - 90f);
+        float drawX = Tmp.v5.x, drawY = Tmp.v5.y;
 
         for(int i = 0; i < points.size; i += 3){
             float x1 = items[i], y1 = items[i + 1], w1 = items[i + 2];
@@ -40,7 +44,7 @@ public class ArrowFadeTrail extends Trail {
 
             float z2 = -Angles.angleRad(x1, y1, x2, y2);
             //end of the trail (i = 0) has the same angle as the next.
-            float z1 = i == 0 ? z2 : lastAngle;
+            float z1 = /*i == 0 ? z2 :*/ lastAngle;
             if(w1 <= 0.001f || w2 <= 0.001f) continue;
 
             float
@@ -52,20 +56,20 @@ public class ArrowFadeTrail extends Trail {
             var fcolor = i % 2 == 0 ? Tmp.c2.a((float)i / points.size).toFloatBits() : a0;
 
             Fill.quad(
-                x1 - cx, y1 - cy, fcolor,
-                x1 - cy, y1 + cx, fcolor,
-                x2 - ny, y2 + nx, fcolor,
-                x2 - nx, y2 - ny, fcolor
+                x1 - cx + drawX, y1 - cy + drawY, fcolor,
+                x1 - cy + drawX, y1 + cx + drawY, fcolor,
+                x2 - ny + drawX, y2 + nx + drawY, fcolor,
+                x2 - nx + drawX, y2 - ny + drawY, fcolor
             );
             Fill.quad(
-                x1 - cy, y1 + cx, fcolor,
-                x1 + cx, y1 + cy, fcolor,
-                x2 + nx, y2 + ny, fcolor,
-                x2 - ny, y2 + nx, fcolor
+                x1 - cy + drawX, y1 + cx + drawY, fcolor,
+                x1 + cx + drawX, y1 + cy + drawY, fcolor,
+                x2 + nx + drawX, y2 + ny + drawY, fcolor,
+                x2 - ny + drawX, y2 + nx + drawY, fcolor
             );
 
             Draw.blend(Blending.additive);
-            Drawf.light(x1, y1, width * ((float)i / points.size) * 2, color, (float)i / points.size / 2);
+            Drawf.light(x1 + drawX, y1 + drawY, width * ((float)i / points.size) * 2, color, (float)i / points.size / 2);
             Draw.blend();
 
             lastAngle = z2;

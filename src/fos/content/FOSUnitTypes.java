@@ -3,7 +3,7 @@ package fos.content;
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.math.*;
-import arc.math.geom.Rect;
+import arc.math.geom.*;
 import arc.struct.Seq;
 import fos.ai.*;
 import fos.ai.bugs.*;
@@ -12,6 +12,7 @@ import fos.entities.abilities.*;
 import fos.entities.bullet.*;
 import fos.gen.*;
 import fos.graphics.*;
+import fos.graphics.trails.ArrowFadeTrail;
 import fos.type.WeaponSet;
 import fos.type.units.types.*;
 import fos.type.units.weapons.*;
@@ -669,51 +670,80 @@ public class FOSUnitTypes {
             weapons.add(FOSWeaponModules.standard2.weapons);
         }};
 
-        sergeant = new TrailUnitType("sergeant", ElevationMoveUnit.class){{
+        sergeant = new TrailUnitType("sergeant", TankUnit.class){{
             squareShape = true;
             omniMovement = false;
             rotateMoveFirst = true;
             rotateSpeed = 1.3f;
-            envDisabled = Env.none;
+            envDisabled = Env.space | Env.underwater;
             speed = 1.2f;
 
             health = 720;
             armor = 4;
-            hitSize = 12;
+            hitSize = 18f;
             immunities.add(hacked);
 
+            useEngineElevation = false;
             trailColor = FOSPal.hackedBack;
             trailLength = 20;
             trailType = ArrowFadeTrail.class;
+            trailCoords.addAll(
+                new Vec2(6f, -3f),
+                new Vec2(-6f, -3f)
+            );
 
             aiController = InjectorAI::new;
 
-            parts.add(new HoverPart(){{
-                x = 4f;
-                y = 1f;
-                mirror = true;
-                radius = 4f;
-                phase = 90f;
-                stroke = 2f;
-                layerOffset = -0.001f;
-                color = FOSPal.hackedBack;
-            }});
+            treadRects = new Rect[]{
+                new Rect(12f + 78f/2, 6f + 88f/2, 7f, 28f),
+                new Rect(12f + 78f/2, 37f + 88f/2, 7f, 34f)
+            };
 
             weapons.add(
-                new InjectorWeapon("fos-injector"){{
-                    x = 0; y = 0;
+                new InjectorWeapon("fos-sergeant-cannon"){{
+                    x = 0f; y = -2f;
                     mirror = false;
                     reload = 45f;
+                    rotate = true;
+                    rotateSpeed = 2f;
+
+                    shootCone = 20f;
+                    inaccuracy = 8f;
+
                     ejectEffect = Fx.casing1;
+                    recoil = 0f;
                     shootSound = Sounds.bolt;
+
+                    parts.add(
+                        new RegionPart("-barrel"){{
+                            x = 0f; y = 6f;
+                            moveY = -1.5f;
+                            mirror = false;
+                            progress = PartProgress.recoil;
+                            under = true;
+                        }}
+                    );
+
                     bullet = new InjectorBasicBulletType(0, 0.5f, 200, 450, false){{
-                        homingPower = 0.2f;
+                        homingPower = 0.08f;
                         width = 4f; height = 6f;
                         damage = 60;
                         speed = 6f;
                         lifetime = 50f;
+
                         trailColor = FOSPal.hackedBack;
                         trailLength = 6;
+                        trailWidth = 1f;
+
+                        shootEffect = new Effect(20f, e -> {
+                            Draw.color(FOSPal.hacked);
+
+                            float[] arr = new float[]{-6f, 6f};
+                            for (float i : arr) {
+                                Drawf.tri(e.x, e.y, 2f, 6f * e.fin(), e.rotation - 120f);
+                                Drawf.tri(e.x, e.y - 1f, 2f, 6f * e.fin(), e.rotation - 120f);
+                            }
+                        });
                     }};
                 }}
             );

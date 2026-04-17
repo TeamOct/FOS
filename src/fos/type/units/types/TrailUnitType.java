@@ -1,12 +1,16 @@
 package fos.type.units.types;
 
 import arc.math.Mathf;
-import arc.util.Time;
+import arc.math.geom.Vec2;
+import arc.struct.Seq;
+import arc.util.*;
+import fos.graphics.trails.PositionalTrail;
 import mindustry.gen.Unit;
-import mindustry.graphics.Trail;
+import mindustry.graphics.*;
 
 public class TrailUnitType extends FOSUnitType {
     public Class<? extends Trail> trailType = Trail.class;
+    public Seq<Vec2> trailCoords = new Seq<>();
 
     public <T extends Unit> TrailUnitType(String name, Class<T> type) {
         super(name, type);
@@ -23,7 +27,12 @@ public class TrailUnitType extends FOSUnitType {
         }
         Trail trail = unit.trail;
         if (trail != null) {
-            trail.draw(trailColor == null ? unit.team.color : trailColor, (engineSize + Mathf.absin(Time.time, 2f, engineSize / 4f) * (useEngineElevation ? unit.elevation : 1f)) * trailScl);
+            if (!trailCoords.isEmpty() && trail instanceof PositionalTrail pt) {
+                for (Vec2 pos : trailCoords) {
+                    pt.draw(pos, unit.rotation, trailColor == null ? unit.team.color : trailColor, (engineSize + Mathf.absin(Time.time, 2f, engineSize / 4f) * (useEngineElevation ? unit.elevation : 1f)) * trailScl, unit.isGrounded());
+                }
+            } else
+                trail.draw(trailColor == null ? unit.team.color : trailColor, (engineSize + Mathf.absin(Time.time, 2f, engineSize / 4f) * (useEngineElevation ? unit.elevation : 1f)) * trailScl);
         }
 
     }
