@@ -1,5 +1,6 @@
 package fos.content;
 
+import fos.type.FOSSectorPreset;
 import mindustry.type.SectorPreset;
 
 import static fos.content.FOSPlanets.lumoni;
@@ -17,7 +18,7 @@ public class FOSSectors {
         }};
 */
 
-        awakening = new SectorPreset("awakening", lumoni, 89){{
+        awakening = new FOSSectorPreset("awakening", lumoni, 89){{
             alwaysUnlocked = true;
             difficulty = 1;
             captureWave = 2;
