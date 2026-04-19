@@ -7,7 +7,6 @@ import arc.struct.Seq;
 import arc.util.Tmp;
 import fos.core.FOSVars;
 import fos.maps.planet.*;
-import mindustry.content.Items;
 import mindustry.game.Team;
 import mindustry.graphics.g3d.*;
 import mindustry.type.*;
@@ -16,9 +15,7 @@ import mindustry.world.meta.Env;
 import java.util.Calendar;
 
 import static fos.content.FOSBlocks.*;
-import static fos.content.FOSItems.*;
 import static mindustry.content.Blocks.*;
-import static mindustry.content.Planets.*;
 import static mindustry.type.Weather.WeatherEntry;
 
 public class FOSPlanets {
@@ -67,7 +64,7 @@ public class FOSPlanets {
             clearSectorOnLose = true;
             accessible = true;
             //alwaysUnlocked = true;
-            itemWhitelist = uxerdItems;
+            //itemWhitelist = uxerdItems;
             generator = new UxerdAsteroidGenerator(){{
                 seed = 8;
                 defaultFloor = ice;
@@ -157,7 +154,7 @@ public class FOSPlanets {
             //TODO you'll see why I did this :)
             launchCandidates.add(uxerd);
             solarSystem = caldemolt;
-            itemWhitelist = lumoniItems;
+            //itemWhitelist = lumoniItems;
             cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 5, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
             ruleSetter = r -> {
                 r.loadout = ItemStack.list();
@@ -175,7 +172,7 @@ public class FOSPlanets {
         }};
 
         //hide modded items from vanilla planets
-        serpulo.hiddenItems.addAll(uxerdItems).addAll(lumoniItems).removeAll(Items.serpuloItems);
-        erekir.hiddenItems.addAll(uxerdItems).addAll(lumoniItems).removeAll(Items.erekirItems);
+        //serpulo.hiddenItems.addAll(uxerdItems).addAll(lumoniItems).removeAll(Items.serpuloItems);
+        //erekir.hiddenItems.addAll(uxerdItems).addAll(lumoniItems).removeAll(Items.erekirItems);
     }
 }

@@ -1,6 +1,5 @@
 package fos.content;
 
-import fos.type.ChallengeSectorPreset;
 import mindustry.type.SectorPreset;
 
 import static fos.content.FOSPlanets.lumoni;
@@ -34,7 +33,7 @@ public class FOSSectors {
             captureWave = 31;
         }};
 
-        hostiles = new ChallengeSectorPreset("hostiles", lumoni, 68){{
+        hostiles = new SectorPreset("hostiles", lumoni, 68){{
             difficulty = 8;
             captureWave = 16;
         }};

@@ -232,9 +232,7 @@ public class FOSMod extends Mod {
         input.getInputMultiplexer().clear();
         Log.debug("input cleared");
 
-        graphics.setFullscreen();
-        graphics.setBorderless(true);
-        graphics.setResizable(false);
+        graphics.setFullscreen(true);
         Log.debug("window prepared");
 
         Music mistake = tree.loadMusic("mistake");

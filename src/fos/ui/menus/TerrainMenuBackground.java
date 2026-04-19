@@ -76,7 +76,7 @@ public class TerrainMenuBackground extends MenuBackground {
         batch.beginCache();
         for (Tile tile : world.tiles) {
             if (tile.block().hasBuilding()) {
-                tile.build.init(tile.build.tile(), FOSTeams.corru, true, 0).draw();
+                tile.build.init(tile.build.tile, FOSTeams.corru, true, 0).draw();
             }
         }
         cacheBuild = batch.endCache();

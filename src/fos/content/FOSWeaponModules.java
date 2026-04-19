@@ -97,7 +97,7 @@ public class FOSWeaponModules {
 
             cooldownTime = 90f;
             ejectEffect = Fx.casing3;
-            shootSound = Sounds.splash;
+            shootSound = Sounds.shootSpectre;
 
             bullet = new PlayerBasicBulletType(7f, 60){{
                 width = 7f; height = 9f;
@@ -121,7 +121,7 @@ public class FOSWeaponModules {
                     reload = recoilTime = 45f;
                     shootY = 0.5f;
 
-                    shootSound = Sounds.shootBig;
+                    shootSound = Sounds.shootDiffuse;
                     ejectEffect = Fx.casing2;
 
                     bullet = new PlayerBasicBulletType(){{
@@ -179,7 +179,7 @@ public class FOSWeaponModules {
                     reload = recoilTime = 45f;
                     shootY = 0.5f;
 
-                    shootSound = Sounds.shootBig;
+                    shootSound = Sounds.shootDiffuse;
                     ejectEffect = Fx.casing2;
 
                     bullet = new PlayerBasicBulletType(){{
@@ -236,7 +236,7 @@ public class FOSWeaponModules {
                 spread = 1.2f;
             }};
             reload = recoilTime = 40f;
-            shootSound = Sounds.cannon;
+            shootSound = Sounds.shootSpectre;
             ejectEffect = Fx.casing3;
             shootY = 1.5f;
             bullet = new PlayerBasicBulletType(){{
@@ -286,7 +286,7 @@ public class FOSWeaponModules {
                 backColor = Pal.heal;
                 frontColor = Color.white;
                 shootEffect = Fx.shootHeal;
-                shootSound = Sounds.lasershoot;
+                shootSound = Sounds.shootLaser;
 
                 damage = 0;
                 collidesTeam = true;

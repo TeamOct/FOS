@@ -48,7 +48,7 @@ public class DetectorCoreBlock extends CoreBlock {
         super(name);
         configurable = true;
         clipSize = radarRange * 2f;
-        loopSound = FOSSounds.radar;
+        ambientSound = FOSSounds.radar;
     }
 
     @Override
@@ -109,7 +109,7 @@ public class DetectorCoreBlock extends CoreBlock {
                 Time.run(timer, () -> {
                     if (player.dead()) {
                         super.requestSpawn(player);
-                        Call.soundAt(Sounds.respawn, x, y, 1, 1);
+                        Call.soundAt(Sounds.unitCreate, x, y, 1, 1);
                     }
                     requested = false;
                 });
@@ -158,7 +158,7 @@ public class DetectorCoreBlock extends CoreBlock {
             }
 
             if (timer > 0) {
-                ui.showLabel(String.valueOf(Mathf.ceil(timer / 60f)), 1f / 60f, x, y + 16f);
+                ui.showLabel(String.valueOf(Mathf.ceil(timer / 60f)), 999 /*TODO: what the hell is an id???*/, 1f / 60f, x, y + 16f);
 
                 Draw.z(Layer.overlayUI);
                 Draw.color(Pal.gray);
@@ -174,7 +174,7 @@ public class DetectorCoreBlock extends CoreBlock {
         }
 
         @Override
-        public boolean shouldActiveSound() {
+        public boolean shouldAmbientSound() {
             return canConsume() && showOres && FOSVars.mapStarted();
         }
 

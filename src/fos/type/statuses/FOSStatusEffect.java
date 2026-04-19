@@ -5,7 +5,9 @@ import arc.graphics.*;
 import arc.math.Mathf;
 import arc.util.*;
 import fos.gen.DamageAbsorbc;
+import mindustry.Vars;
 import mindustry.content.Fx;
+import mindustry.entities.units.StatusEntry;
 import mindustry.gen.Unit;
 import mindustry.graphics.*;
 import mindustry.type.StatusEffect;
@@ -16,18 +18,38 @@ public class FOSStatusEffect extends StatusEffect {
     }
 
     @Override
-    public void update(Unit unit, float time) {
+    public void update(Unit unit, StatusEntry entry) {
         if(damage > 0){
-            if (unit instanceof DamageAbsorbc abs)
-                // status effects ignore damage reduction
+            if (unit instanceof DamageAbsorbc abs) {
                 abs.damageContinuousPierce(true, damage);
-            else
+            } else {
                 unit.damageContinuousPierce(damage);
+            }
         }else if(damage < 0){ //heal unit
             unit.heal(-1f * damage * Time.delta);
         }
 
-        if(effect != Fx.none && Mathf.chanceDelta(effectChance)){
+        if(intervalDamageTime > 0){
+            entry.damageTime += Time.delta;
+            if(entry.damageTime >= intervalDamageTime){
+                entry.damageTime %= intervalDamageTime;
+                if(intervalDamagePierce){
+                    if (unit instanceof DamageAbsorbc abs) {
+                        abs.damagePierce(true, damage);
+                    } else {
+                        unit.damagePierce(damage);
+                    }
+                }else{
+                    if (unit instanceof DamageAbsorbc abs) {
+                        abs.damage(true, damage);
+                    } else {
+                        unit.damage(damage);
+                    }
+                }
+            }
+        }
+
+        if(!Vars.headless && effect != Fx.none && Mathf.chanceDelta(effectChance) && !unit.inFogTo(Vars.player.team())){
             Tmp.v1.rnd(Mathf.range(unit.type.hitSize/2f));
             effect.at(unit.x + Tmp.v1.x, unit.y + Tmp.v1.y, 0, color, parentizeEffect ? unit : null);
         }

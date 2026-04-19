@@ -199,7 +199,7 @@ public class UpgradeCenter extends Block {
                 table.row();
                 table.button(Icon.units, Styles.clearTogglei, () -> {
                     if (weaponSet == null || Vars.player == null) return;
-                    FOSCall.upgrade(Vars.player, tile());
+                    FOSCall.upgrade(Vars.player, tile);
                     deselect();
                 }).visible(() -> !isSetBanned(weaponSet) && fraction() >= 1f);
             } else {
@@ -261,7 +261,7 @@ public class UpgradeCenter extends Block {
                 int i = 0;
 
                 for(T item : items){
-                    if(!item.unlockedNow() || (item instanceof Item checkVisible && state.rules.hiddenBuildItems.contains(checkVisible))) continue;
+                    if(!item.unlockedNow() || (item instanceof Item checkVisible /*&& state.rules.hiddenBuildItems.contains(checkVisible)*/)) continue;
 
                     ImageButton button = cont.button(Tex.whiteui, Styles.clearNoneTogglei, Mathf.clamp(item.selectionSize, 0f, 40f), () -> {
                         control.input.config.hideConfig();

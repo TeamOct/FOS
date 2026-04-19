@@ -82,9 +82,9 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
     }
 
     @Override
-    public Color getColor(Vec3 position) {
+    public void getColor(Vec3 position, Color out) {
         Block block = getBlock(position);
-        return Tmp.c1.set(block.mapColor).a(1 - block.albedo);
+        out.set(block.mapColor).a(1 - block.albedo);
     }
 
     Block getSolidBlock(Vec3 position) {
@@ -139,13 +139,13 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
     }
 
     @Override
-    public void generate(Tiles tiles, Sector sec, int seed) {
+    public void generate(Tiles tiles, Sector sec, WorldParams params) {
         this.tiles = tiles;
-        this.seed = seed;
+        this.seed = params.seedOffset + baseSeed;
         this.sector = sec;
         this.width = tiles.width;
         this.height = tiles.height;
-        this.rand.setSeed(seed);
+        this.rand.setSeed(sec.id + params.seedOffset + baseSeed);
 
         TileGen gen = new TileGen();
         tiles.each((x, y) -> {
@@ -422,8 +422,10 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         });
 
         float difficulty = sector.threat;
+/*      UNNEEDED FOR NOW
         ints.clear();
         ints.ensureCapacity(width * height / 4);
+*/
 
         Schematics.placeLaunchLoadout(spawn.x, spawn.y);
 

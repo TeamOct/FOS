@@ -1,9 +1,7 @@
 package fos.content;
 
-import arc.graphics.*;
+import arc.graphics.Color;
 import arc.struct.Seq;
-import fos.core.FOSVars;
-import fos.graphics.*;
 import mindustry.type.Item;
 
 import static mindustry.content.Items.*;
@@ -58,12 +56,14 @@ public class FOSItems {
                 cost = 5.9f;
                 hardness = 7;
             }
+/*
             @Override
             public void loadIcon(){
                 super.loadIcon();
                 fullIcon = uiIcon = new ShaderTextureRegion(FOSShaders.lis,
                     new Texture(FOSVars.internalTree.child("sprites/items/luminium.png")), (s, o) -> {}, 0);
             }
+*/
         };
 
         rawNethratium = new Item("raw-nethratium", Color.valueOf("974545")){{

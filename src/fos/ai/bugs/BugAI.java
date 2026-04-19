@@ -123,6 +123,6 @@ public class BugAI extends AIController implements FOSPathfindAI {
     }
 
     private boolean hasNests() {
-        return Groups.build.contains(b -> b instanceof BugSpawn.BugSpawnBuild && b.enabled());
+        return Groups.build.contains(b -> b instanceof BugSpawn.BugSpawnBuild && b.enabled);
     }
 }

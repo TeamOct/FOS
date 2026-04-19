@@ -227,7 +227,7 @@ public class FOSUnitTypes {
                     layerOffset = -0.05f;
                     rotate = false;
                     shootCone = 25f;
-                    shootSound = Sounds.sap;
+                    shootSound = Sounds.shootSap;
                     shoot = new ShootAlternate(){{
                         barrels = 2;
                         spread = 4f;
@@ -326,8 +326,8 @@ public class FOSUnitTypes {
                         shake = 2f;
                         healthFrac = 0.5f;
 
-                        chargeSound = Sounds.lasercharge2;
-                        shootSound = Sounds.laserbig;
+                        chargeSound = Sounds.chargeVela;
+                        shootSound = Sounds.shootMeltdown;
 
                         bullet = new ContinuousLaserBulletType(60){{
                             length = 120;
@@ -399,7 +399,7 @@ public class FOSUnitTypes {
                         trailWidth = 5f;
                         trailLength = 12;
                         trailEffect = Fx.artilleryTrail;
-                        shootSound = Sounds.artillery;
+                        shootSound = Sounds.shootArtillery;
                         hitEffect = despawnEffect = Fx.massiveExplosion;
                     }};
                 }},
@@ -424,7 +424,7 @@ public class FOSUnitTypes {
                         trailWidth = 5f;
                         trailLength = 12;
                         trailEffect = Fx.artilleryTrail;
-                        shootSound = Sounds.artillery;
+                        shootSound = Sounds.shootArtillery;
                         hitEffect = despawnEffect = Fx.massiveExplosion;
                     }};
                 }},
@@ -490,7 +490,7 @@ public class FOSUnitTypes {
                         lifetime = 30f;
                         collidesAir = true;
                         collidesGround = false;
-                        shootSound = Sounds.missile;
+                        shootSound = Sounds.shootMissileLong;
                         hitEffect = Fx.blastExplosion;
                     }};
                 }}
@@ -512,7 +512,7 @@ public class FOSUnitTypes {
             treadRects = new Rect[]{new Rect(27 - xo, 152 - yo, 56, 73), new Rect(24 - xo, 51 - 9 - yo, 29, 17), new Rect(59 - xo, 18 - 9 - yo, 39, 19)};
 
             weapons.add(new Weapon("fos-myriad-point-weapon"){{
-                shootSound = Sounds.bolt;
+                shootSound = Sounds.shootLaser;
                 reload = 45f;
                 shootY = 7f;
                 recoil = 2f;
@@ -543,7 +543,7 @@ public class FOSUnitTypes {
                     mag = 1f;
                     scl = 3f;
                 }};
-                shootSound = Sounds.largeCannon;
+                shootSound = Sounds.shootTank;
                 layerOffset = 0.1f;
                 reload = 120f;
                 shootY = 27.5f;
@@ -712,7 +712,7 @@ public class FOSUnitTypes {
 
                     ejectEffect = Fx.casing1;
                     recoil = 0f;
-                    shootSound = Sounds.bolt;
+                    shootSound = Sounds.shootLaser;
 
                     parts.add(
                         new RegionPart("-barrel"){{
@@ -787,7 +787,7 @@ public class FOSUnitTypes {
                     shootCone = 15f;
                     rotate = false;
                     shootY = 4f;
-                    shootSound = Sounds.spark;
+                    shootSound = Sounds.shootArc;
                     bullet = new BasicBulletType(){{
                         width = height = 12f;
                         backColor = FOSPal.hackedBack;
@@ -855,7 +855,7 @@ public class FOSUnitTypes {
                     rotate = true;
                     reload = 30f;
                     inaccuracy = 12f;
-                    shootSound = Sounds.missile;
+                    shootSound = Sounds.shootMissileSmall;
                     bullet = new MissileBulletType(){{
                         damage = 25f;
                         speed = 2.4f; lifetime = 90f;
@@ -919,7 +919,7 @@ public class FOSUnitTypes {
                         layerOffset = -0.0001f;
                         reload = 30f;
                         rotate = false;
-                        shootSound = Sounds.missile;
+                        shootSound = Sounds.shootMissile;
                         bullet = new BasicBulletType(){{
                             damage = 20;
                             lifetime = 45;
@@ -989,7 +989,7 @@ public class FOSUnitTypes {
                 recoil = 0.2f;
 
                 bullet = new BulletType(){{
-                    shootSound = Sounds.lasershoot;
+                    shootSound = Sounds.shootLaser;
                     shootEffect = Fx.sparkShoot;
                     hitEffect = Fx.pointHit;
                     maxRange = 175f;
@@ -1069,7 +1069,7 @@ public class FOSUnitTypes {
                         recoil = 0.2f;
 
                         bullet = new BulletType(){{
-                            shootSound = Sounds.lasershoot;
+                            shootSound = Sounds.shootLaser;
                             shootEffect = Fx.sparkShoot;
                             hitEffect = Fx.pointHit;
                             maxRange = 160f;
@@ -1171,7 +1171,7 @@ public class FOSUnitTypes {
                     reload = 240f;
                     shoot.shots = 5;
                     inaccuracy = 11.25f;
-                    shootSound = Sounds.artillery;
+                    shootSound = Sounds.shootArtillery;
                     bullet = new BasicBulletType(){{
                         width = height = 12;
                         speed = 3f;
@@ -1198,7 +1198,7 @@ public class FOSUnitTypes {
                             backColor = Pal.sapBulletBack;
                             frontColor = Pal.reactorPurple2;
                             hitEffect = Fx.massiveExplosion;
-                            hitSound = Sounds.boom;
+                            hitSound = Sounds.explosion;
                         }};
                     }};
                 }}
@@ -1234,7 +1234,7 @@ public class FOSUnitTypes {
                         spread = 2f;
                     }};
 
-                    shootSound = Sounds.missile;
+                    shootSound = Sounds.shootMissile;
 
                     bullet = new MissileBulletType(){{
                         speed = 4f; lifetime = 30f;
@@ -1284,7 +1284,7 @@ public class FOSUnitTypes {
                         shootStatusDuration = 300f;
 
                         hitEffect = Fx.reactorExplosion;
-                        hitSound = Sounds.largeExplosion;
+                        hitSound = Sounds.explosionReactor;
                         chargeEffect = FOSFx.bruntCharge;
                     }};
                 }}
@@ -1597,7 +1597,7 @@ public class FOSUnitTypes {
                 new Weapon(){{
                     x = 0f; y = 6f;
                     reload = 180f;
-                    shootSound = Sounds.mud;
+                    shootSound = Sounds.stepMud;
                     rotate = false;
                     shoot = new ShootSpread(){{
                         shots = 3;
@@ -1718,7 +1718,7 @@ public class FOSUnitTypes {
                         hitEffect = Fx.none;
                         despawnEffect = Fx.none;
                         smokeEffect = Fx.none;
-                        shootSound = Sounds.largeExplosion;
+                        shootSound = Sounds.explosionDull;
 
                         splashDamage = 600f;
                         splashDamageRadius = 4f;

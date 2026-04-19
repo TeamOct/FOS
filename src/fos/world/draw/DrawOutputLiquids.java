@@ -14,7 +14,7 @@ public class DrawOutputLiquids extends DrawLiquidOutputs {
         for(int i = 0; i < crafter.outputLiquids.length; i++){
             int side = i < crafter.liquidOutputDirections.length ? crafter.liquidOutputDirections[i] : -1;
             if(side != -1){
-                float amount = build.liquids().get(crafter.outputLiquids[i].liquid);
+                float amount = build.liquids.get(crafter.outputLiquids[i].liquid);
                 int realRot = (side + build.rotation) % 4;
                 Draw.alpha(amount / crafter.liquidCapacity);
                 Draw.rect(liquidOutputRegions[realRot > 1 ? 1 : 0][i], build.x, build.y, realRot * 90);

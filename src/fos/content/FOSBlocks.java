@@ -4,14 +4,12 @@ import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
-import arc.struct.Seq;
 import arc.util.Strings;
 import fos.audio.FOSSounds;
 import fos.entities.bullet.*;
 import fos.graphics.*;
 import fos.graphics.cachelayers.FOSCacheLayers;
 import fos.world.blocks.campaign.*;
-import fos.world.blocks.crafting.ResourceExtractor;
 import fos.world.blocks.defense.*;
 import fos.world.blocks.distribution.*;
 import fos.world.blocks.environment.*;
@@ -44,7 +42,6 @@ import mindustry.world.blocks.units.*;
 import mindustry.world.consumers.ConsumeLiquidFlammable;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
-import multicraft.*;
 
 import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.*;
@@ -115,6 +112,7 @@ public class FOSBlocks {
         //region crafting
 
         //fine, I will document this block right here.
+/*
         resourceExtractor = new ResourceExtractor("resource-extractor"){
             {
                 //ResourceExtractor is a multi-crafter, and since MultiCrafter class extends Block, any field from Block class works here as well.
@@ -144,7 +142,9 @@ public class FOSBlocks {
                             //input items go here (can be empty if you wish to use fluids only)
                             Seq.with(ItemStack.with(rawNethratium, 2)),
                             //input fluids go here (there are no fluids required so this is empty)
-                            Seq.with(/* example: LiquidStack.with(water, 10) */)
+                            Seq.with(*/
+/* example: LiquidStack.with(water, 10) *//*
+)
                         ),
                         //IOEntry output: this recipe's output goes here
                         new IOEntry(
@@ -181,6 +181,7 @@ public class FOSBlocks {
                 );
             }
         };
+*/
         cuberiumSynthesizer = new GenericCrafter("cuberium-synthesizer"){{
             scaledHealth = 10;
             size = 3;
@@ -490,7 +491,7 @@ public class FOSBlocks {
             inaccuracy = 0f;
             shootY = 4f;
 
-            shootSound = Sounds.shootAlt;
+            shootSound = Sounds.shootBreach;
             shootEffect = new Effect(8, e -> {
                 color(Pal.lighterOrange, Pal.lightOrange, e.fin());
                 float w = 1f + 5 * e.fout();
@@ -726,7 +727,7 @@ public class FOSBlocks {
             squareSprite = false;
             shootY = 6f;
 
-            shootSound = Sounds.tractorbeam;
+            shootSound = Sounds.beamParallax;
             shootEffect = FOSFx.dotLaserEnd;
             smokeEffect = Fx.none;
 
@@ -742,7 +743,7 @@ public class FOSBlocks {
 
                 lineEffect = FOSFx.dotLaserLine;
                 endEffect = FOSFx.dotLaserEnd;
-                shootSound = Sounds.bolt;
+                shootSound = Sounds.shootLaser;
 
                 buildingDamageMultiplier = 0.3f;
             }};
@@ -757,7 +758,7 @@ public class FOSBlocks {
             reload = 40;
             inaccuracy = 5;
             outlineColor = Color.valueOf("302326");
-            shootSound = Sounds.shootBig;
+            shootSound = Sounds.shootSpectre;
             squareSprite = false;
             ammo(
                 silicon, new BasicBulletType(4f, 80){{
@@ -777,7 +778,7 @@ public class FOSBlocks {
                     trailWidth = 3.4f;
                     trailLength = 20;
                     hitShake = 4f;
-                    hitSound = Sounds.largeExplosion;
+                    hitSound = Sounds.explosionArtillery;
                     hitEffect = despawnEffect = new Effect(30, e -> {
                         // Fx.flakExplosionBig except with different color
                         color(Pal.bulletYellowBack);
@@ -891,7 +892,7 @@ public class FOSBlocks {
             targetGround = true;
             extinguish = false;
             minWarmup = 0.99f;
-            shootSound = Sounds.flame2;
+            shootSound = Sounds.shootFlame;
 
             var fire = new MultiEffect(Fx.fire, Fx.fireSmoke);
             var fireLong = new MultiEffect(FOSFx.fireLong, FOSFx.fireSmokeLong);
@@ -1105,8 +1106,8 @@ public class FOSBlocks {
                     )
                 );
                 shootEffect = Fx.lightningShoot;
-                shootSound = Sounds.laser;
-                chargeSound = Sounds.lasercharge;
+                shootSound = Sounds.shootSmite;
+                chargeSound = Sounds.chargeLancer;
                 consumePower(10f);
                 consumeCoolant(2f).boost();
                 coolantMultiplier = 0.5f;
@@ -1223,7 +1224,7 @@ public class FOSBlocks {
             inaccuracy = 20f;
             targetAir = targetGround = true;
             recoil = 3f;
-            shootSound = Sounds.missile;
+            shootSound = Sounds.shootMissileSmall;
             shoot = new ShootAlternate(){{
                 barrels = 8;
                 spread = 2f;
@@ -1276,8 +1277,8 @@ public class FOSBlocks {
             shake = 10f;
             outlineIcon = false;
             squareSprite = false;
-            shootSound = Sounds.corexplode;
-            loopSound = Sounds.beam;
+            shootSound = Sounds.explosionCore;
+            loopSound = Sounds.beamMeltdown;
             shootType = new OhioBeamBulletType(3600f, 18f){{
                 buildingDamageMultiplier = 0.3f;
             }};
@@ -1328,7 +1329,7 @@ public class FOSBlocks {
             range = 600f;
             hasLiquids = true;
             targetAir = targetGround = true;
-            loopSound = Sounds.beam;
+            loopSound = Sounds.beamMeltdown;
             //FIXME: shootSound = Sounds.corexplode;
             consumePower(200f);
             consumeLiquid(cryofluid, 5f);
@@ -2177,7 +2178,7 @@ public class FOSBlocks {
             buildCostMultiplier = 0.2f;
             consumePower(10f);
             consumeLiquid(hydrogen, 300);
-            launching = coreFortress;
+            launchBlock = coreFortress;
             requirements(Category.effect, BuildVisibility.campaignOnly, with(aluminium, 5000, titanium, 3000, lithium, 2500, zinc, 2500, silver, 2000, cuberium, 2000));
         }};
         mechResearchCore = new ResearchCore("mech-research-core"){{

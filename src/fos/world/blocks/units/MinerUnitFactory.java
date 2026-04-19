@@ -41,7 +41,7 @@ public class MinerUnitFactory extends UnitBlock {
         hasItems = true;
         solid = true;
         //commandable = true;
-        ambientSound = Sounds.respawning;
+        ambientSound = Sounds.unitCreate;
     }
 
     @Override
@@ -92,7 +92,7 @@ public class MinerUnitFactory extends UnitBlock {
         }
 
         @Override
-        public boolean shouldActiveSound() {
+        public boolean shouldAmbientSound() {
             return shouldConsume();
         }
 
