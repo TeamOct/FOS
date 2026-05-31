@@ -2,33 +2,32 @@ plugins {
     id "com.github.nekit508.mindustry-mod-plugin" version "$nmpVersion" apply true
 }
 
-allprojects.each {project ->
+allprojects.each { project ->
     project.repositories {
         mavenCentral()
         mavenLocal()
         maven { url "https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository" }
         maven { url "https://www.jitpack.io" }
-        maven { url "https://maven.xpdustry.com/mindustry" }
-    }
-
-    project.repositories {
-        mavenCentral()
     }
 
     project.apply plugin: "java"
-    project.apply plugin: "idea"
 }
 
-group = modGroup
-version = modVersion
+apply plugin: "java-library"
+apply plugin: "maven-publish"
 
 nmp.core project, "core"
 nmp.entityAnno project, "eanno", core
 
-core.with {
-    configureTasks {
-        nmpGenerateModInfo {
-            set(
+group = modGroup
+version = modVersion
+
+core.configure {
+    genericModInit()
+
+    core.configureTasks {
+        nmpGenerateModInfo { task ->
+            task.set(
                     "displayName": "Fictional Octo System",
                     "description": "FOS is a large-scale mod with a campaign that contains a brand-new solar system and unique mechanics.",
                     "author": "Team Oct",
@@ -39,36 +38,35 @@ core.with {
                     "hidden": false
             )
         }
-
-        nmpBuild.from project.file("mod.json")
-        nmpBuild.from project.file("icon.png")
     }
+    tasks.nmpBuild.from project.file("mod.json")
+    tasks.nmpBuild.from project.file("icon.png")
 
-    nmp.setting {
-        modName.set gameModName
-        modGroup.set group as String
-        modVersion.set version as String
-
-        mindustryVersion.set prop("mindustryVersion") as String
-
-        generateModInfo.set true
-    }
-
-    nmp.configuration {
-        dependencies {
-            implementation "com.github.liplum:MultiCrafterLib:$multiCrafterLibVersion"
-            compileOnly nmp.arcDependency(arcVersion.get(), "discord")
-            compileOnly nmp.arcDependency(arcVersion.get(), "backend-sdl")
-        }
+    dependencies {
+        implementation "com.github.liplum:MultiCrafterLib:$multiCrafterLibVersion"
+        compileOnly nmp.arcDependency(mindustryVersion.get(), "discord")
+        compileOnly nmp.arcDependency(mindustryVersion.get(), "backend-sdl")
     }
 }
 
-eanno.with {
-    nmp.setting {
-        genPackage.set modGen
-        modCompsPackage.set modComps
-        fetchedCompsPackage.set fetchedComps
+core.settings {
+    modName.set gameModName
+    modGroup.set group as String
+    modVersion.set version as String
 
-        entityAnnoVersion.set prop("entityAnnoVersion") as String
-    }
+    mindustryVersion.set prop("mindustryVersion") as String
+
+    generateModInfo.set true
+}
+
+eanno.settings {
+    genPackage.set modGen
+    modCompsPackage.set modComps
+    fetchedCompsPackage.set fetchedComps
+
+    entityAnnoVersion.set prop("entityAnnoVersion") as String
+}
+
+eanno.configure {
+    genericInit()
 }
