@@ -19,7 +19,7 @@ jobs:
       - name: Configure local.json
         run: |
           mkdir -p settings
-          echo {"offlineMode":false,"autoOfflineMode":false} | tee settings/local.json
+          printf '%s\n' '{"offlineMode":false,"autoOfflineMode":false}' | tee "settings/local.json"
       - name: Build mod artifact
         run: |
           chmod +x gradlew
