@@ -16,6 +16,10 @@ jobs:
         uses: android-actions/setup-android@v3
         with:
           packages: 'platforms;android-34 build-tools;34.0.0'
+      - name: Configure local.json
+        run: |
+          mkdir -p settings
+          echo {"offlineMode":false,"autoOfflineMode":false} | tee settings/local.json
       - name: Build mod artifact
         run: |
           chmod +x gradlew
