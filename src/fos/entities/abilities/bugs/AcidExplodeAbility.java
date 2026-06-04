@@ -1,4 +1,4 @@
-package fos.entities.abilities;
+package fos.entities.abilities.bugs;
 
 import arc.Core;
 import arc.math.Mathf;

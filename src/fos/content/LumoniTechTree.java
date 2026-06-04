@@ -1,14 +1,16 @@
 package fos.content;
 
 import arc.struct.Seq;
-import mindustry.type.ItemStack;
+import mindustry.type.*;
 
 import static fos.content.FOSBlocks.*;
 import static fos.content.FOSFluids.tokicite;
 import static fos.content.FOSItems.*;
 import static fos.content.FOSObjectives.*;
 import static fos.content.FOSSectors.*;
+import static fos.content.FOSStatuses.bestiary;
 import static fos.content.FOSUnitTypes.*;
+import static fos.content.FOSUnitTypes.citadel;
 import static fos.content.FOSWeaponModules.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.Liquids.*;
@@ -140,11 +142,9 @@ public class LumoniTechTree {
 
             // UNDERGROUND DRILLS
             node(zincDrill, () ->
-                node(silverDrill, () -> {
-                    node(diamondDrill, Seq.with(new OnSector(intruders)), () -> {
-                        node(surfaceDetonator);
-                        soontm();
-                    });
+                node(diamondDrill, Seq.with(new OnSector(intruders)), () -> {
+                    node(surfaceDetonator);
+                    soontm();
                 })
             );
 
@@ -232,7 +232,7 @@ public class LumoniTechTree {
                 );
                 // BOSS-SPECIFIC WEAPONS
                 node(legionFabricator, Seq.with(new DefeatBoss(legion)), () -> {
-                    node(citadelStickyLauncher, Seq.with(new DefeatBoss(FOSUnitTypes.citadel)), () -> {
+                    node(citadelStickyLauncher, Seq.with(new DefeatBoss(citadel)), () -> {
                         soontm();
                     });
                 });
@@ -283,10 +283,44 @@ public class LumoniTechTree {
                     });
                 });
             });
+
+            // INSECT/DRONE BESTIARY
+            node(bestiary, Seq.with(new SectorComplete(awakening)), () -> {
+                bugNode(bugSmall, 20, () -> {
+                    bugNode(bugMedium, 15, () -> {
+                        bugNode(grain, 3, () -> {
+                            soontm();
+                        });
+                    });
+                });
+                bugNode(spewer, 20, () -> {
+                    bugNode(purger, 15, () -> {
+                        soontm();
+                    });
+                });
+                bugNode(bugWorker, 10, () -> {
+                    bugNode(bugScout, 5, () -> {});
+                });
+
+                bossNode(legion, () -> {
+                    node(legionnaire, Seq.with(new DefeatBoss(legion)), () -> {});
+                    bossNode(FOSUnitTypes.citadel, () -> {
+                        soontm();
+                    });
+                });
+            });
         });
     }
     
     public static void soontm() {
         node(soontm, Seq.with(new TBDObjective()), () -> {});
+    }
+
+    public static void bugNode(UnitType type, int amount, Runnable node) {
+        node(type, Seq.with(new DefeatBugs(type, amount)), node);
+    }
+
+    public static void bossNode(UnitType type, Runnable node) {
+        node(type, Seq.with(new DefeatBoss(type)), node);
     }
 }

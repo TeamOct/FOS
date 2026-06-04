@@ -6,6 +6,7 @@ import arc.util.Strings;
 import fos.world.draw.FOSStats;
 import mindustry.entities.abilities.Ability;
 import mindustry.gen.*;
+import mindustry.graphics.Layer;
 import mindustry.type.UnitType;
 import mindustry.world.meta.*;
 
@@ -34,11 +35,16 @@ public class UnitResistanceAbility extends Ability {
         if (units == 0) return;
 
         Draw.color(unit.team.color);
-        Draw.alpha(Math.min(resistance * units, 0.5f));
+        Draw.alpha(Math.min(0.5f + units * 1f, 1f));
+        Draw.z(Layer.shields);
+        Fill.square(unit.x, unit.y, unit.hitSize * 0.8f, unit.rotation + 45f);
 
-        Fill.circle(unit.x, unit.y, unit.hitSize);
-        Lines.stroke(2f);
-        Lines.circle(unit.x, unit.y, unit.hitSize);
+        //Lines.stroke(2f);
+        //Lines.circle(unit.x, unit.y, unit.hitSize);
+
+        // set a different Z-value for legion's UnitSpawnAbility
+        Draw.z(Layer.buildBeam);
+        Draw.reset();
     }
 
     @Override

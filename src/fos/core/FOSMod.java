@@ -115,9 +115,6 @@ public class FOSMod extends Mod {
         if (FOSVars.isAprilFools)
             Musics.menu = tree.loadMusic("mistake");
 
-        //display the mod version
-        FOSVars.mod.meta.description += "\n\n" + bundle.get("mod.currentversion") + "\n" + FOSVars.mod.meta.version;
-
         //load icons and menu themes
         FOSIcons.load();
         FOSMenus.load();

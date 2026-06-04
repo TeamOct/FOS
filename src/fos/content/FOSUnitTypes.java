@@ -9,9 +9,10 @@ import fos.ai.*;
 import fos.ai.bugs.*;
 import fos.audio.FOSSounds;
 import fos.entities.abilities.*;
+import fos.entities.abilities.bugs.*;
 import fos.entities.bullet.*;
 import fos.gen.*;
-import fos.graphics.*;
+import fos.graphics.FOSPal;
 import fos.graphics.trails.ArrowFadeTrail;
 import fos.type.WeaponSet;
 import fos.type.units.types.*;
@@ -24,12 +25,12 @@ import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
+import mindustry.gen.*;
 import mindustry.gen.ElevationMoveUnit;
 import mindustry.gen.LegsUnit;
 import mindustry.gen.MechUnit;
 import mindustry.gen.TankUnit;
 import mindustry.gen.UnitEntity;
-import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.weapons.*;
@@ -133,16 +134,19 @@ public class FOSUnitTypes {
 
     public static void load(){
         legionnaire = new FOSUnitType("legionnaire", UnitEntity.class){{
-            health = 200;
+            health = 500;
             hitSize = 12;
-            rotateSpeed = 12f;
+            rotateSpeed = 6f;
             speed = 2.5f;
             accel = 0.08f;
-            drag = 0.04f;
+            drag = 0.03f;
             isEnemy = false;
             flying = true;
+            circleTarget = true;
+            circleTargetRadius = 46f;
             targetPriority = -2f;
             playerControllable = false;
+            fogRadius = 0f;
             weapons.add(
                 new Weapon(){{
                     x = 2f; y = 3f;
@@ -168,16 +172,17 @@ public class FOSUnitTypes {
             controller = u -> new ProtectorAI();
         }};
         legionnaireReplica = new FOSUnitType("legionnaire-replica", UnitEntity.class){{
-            health = 150;
+            health = 350;
             hitSize = 12;
-            rotateSpeed = 12f;
+            rotateSpeed = 6f;
             speed = 2f;
             accel = 0.08f;
-            drag = 0.04f;
+            drag = 0.03f;
             isEnemy = false;
             flying = true;
             targetPriority = -2f;
             playerControllable = false;
+            fogRadius = 0f;
             weapons.add(
                 new Weapon(){{
                     x = 0f; y = 3f;
@@ -208,13 +213,15 @@ public class FOSUnitTypes {
             speed = 0.3f;
             flying = false;
             canBoost = false;
-            range = 40f;
+            maxRange = 144f;
+            rotateMoveFirst = true;
 
             weapons.add(
                 new RepairBeamWeapon("fos-legion-beam"){{
                     x = 4; y = 0;
                     mirror = true;
                     beamWidth = 0.6f;
+                    repairSpeed = 1f;
                     bullet = new BulletType(){{
                         maxRange = 40f;
                     }};
@@ -222,34 +229,36 @@ public class FOSUnitTypes {
                 new Weapon("fos-legion-sapper"){{
                     x = 0f; y = 6f;
                     mirror = false;
-                    reload = 40f;
+                    reload = 20f;
                     top = false;
                     layerOffset = -0.05f;
                     rotate = false;
-                    shootCone = 25f;
+                    shootCone = 120f;
                     shootSound = Sounds.shootSap;
                     shoot = new ShootAlternate(){{
                         barrels = 2;
                         spread = 4f;
                     }};
                     bullet = new SapBulletType(){{
-                        length = 80f;
-                        damage = 60;
+                        length = maxRange = 80f;
+                        damage = 90;
+                        buildingDamageMultiplier = 2f;
+                        sapStrength = 0.2f;
+
                         hitColor = color = Color.valueOf("bf92f9");
-                        sapStrength = 0.6f;
                         despawnEffect = Fx.none;
                         shootEffect = Fx.shootSmall;
                     }};
                 }}
             );
 
-            abilities.add(new UnitResistanceAbility(legionnaire, 0.1f));
+            abilities.add(new UnitResistanceAbility(legionnaire, 0.2f));
 
-            float angle = 0f;
-            int units = 1;
+            float angle = Mathf.PI / 4;
+            int units = 4;
             for(int i = 0; i < units; i++){
-                float x = Mathf.cos(angle) * 32;
-                float y = Mathf.sin(angle) * 32;
+                float x = Mathf.cos(angle) * hitSize * 0.8f;
+                float y = Mathf.sin(angle) * hitSize * 0.8f;
                 abilities.add(new UnitSpawnAbility(legionnaire, 600, x, y));
                 angle += Mathf.PI2 / units;
             }
@@ -655,6 +664,9 @@ public class FOSUnitTypes {
             mineTier = 2;
             mineSpeed = 8f;
             buildSpeed = 1f;
+
+            groundLayer = Layer.legUnit;
+
             weapons.add(FOSWeaponModules.standard1.weapons);
         }};
         king = new LumoniPlayerUnitType("king", LegsLumoniPlayerUnit.class){{
@@ -667,6 +679,20 @@ public class FOSUnitTypes {
             mineTier = 4;
             mineSpeed = 10f;
             buildSpeed = 2f;
+
+            groundLayer = Layer.legUnit;
+
+            legLength = 15f;
+            legForwardScl = 1.2f;
+            legBaseOffset = 1.6f;
+            legMoveSpace = 1.8f;
+            legLengthScl = 1.1f;
+            legMaxLength = 1.5f;
+            legMinLength = 0.75f;
+            baseLegStraightness = 0.3f;
+            legStraightness = 0.1f;
+            lockLegBase = true;
+
             weapons.add(FOSWeaponModules.standard2.weapons);
         }};
 
@@ -911,6 +937,8 @@ public class FOSUnitTypes {
             legForwardScl = 0.9075F;
             legMoveSpace = 2F;
 
+            groundLayer = Layer.legUnit;
+
             weapons.add(
                     new Weapon("fos-e-weapon"){{
                         x = 0; y = 3;
@@ -965,6 +993,8 @@ public class FOSUnitTypes {
             legForwardScl = 0.9075F;
             legMoveSpace = 1.085F;
 
+            groundLayer = Layer.legUnit;
+
             abilities.add(new EnergyFieldAbility(20f, 90f, 90f){{
                 x = 0; y = -2;
                 statusDuration = 120f;
@@ -1017,6 +1047,8 @@ public class FOSUnitTypes {
             legLengthScl = 0.925F;
             legForwardScl = 0.9075F;
             legMoveSpace = 1.085F;
+
+            groundLayer = Layer.legUnit;
 
             weapons.add(
                     new Weapon("fos-e-railgun"){{
@@ -1310,9 +1342,13 @@ public class FOSUnitTypes {
             health = 160;
             armor = 8;
             hitSize = 16f;
-            speed = 0.3f;
+            speed = 0.7f;
             segments = 3;
             crushDamage = 0.2f;
+
+            abilities.add(
+                new ScreechAbility()
+            );
 
             //copied from renale for now
             segmentScl = 3f;
@@ -1326,14 +1362,18 @@ public class FOSUnitTypes {
             health = 480;
             armor = 15;
             hitSize = 18f;
-            speed = 0.48f;
+            speed = 0.64f;
             segments = 4;
             crushDamage = 0.6f;
 
-            //copied from renale too, he's the same size for some reason
+            //copied from renale too, he's the same size
             segmentScl = 3f;
             segmentPhase = 5f;
             segmentMag = 0.5f;
+
+            abilities.add(
+                new EndureAbility(120f)
+            );
 
             firstRequirements = ItemStack.with(zinc, 5, diamond, 3);
         }};
@@ -1367,6 +1407,7 @@ public class FOSUnitTypes {
             legStraightLength = 0.9f;
 
             drawBody = true;
+            groundLayer = Layer.legUnit;
 
             parts.addAll(
                 //new RegionPart(),
@@ -1473,6 +1514,7 @@ public class FOSUnitTypes {
             legStraightLength = 0.9f;
 
             drawBody = true;
+            groundLayer = Layer.legUnit;
 
             parts.addAll(
                 //new RegionPart(),
@@ -1673,6 +1715,8 @@ public class FOSUnitTypes {
             legBaseOffset = 12;
             legExtension = 3.25f;
             legStraightness = 0.5f;
+
+            groundLayer = Layer.legUnit;
 
             parts.addAll(
                 new RegionPart(),

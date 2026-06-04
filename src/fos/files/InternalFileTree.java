@@ -28,7 +28,7 @@ public class InternalFileTree {
     public Fi child(String childPath) {
         Fi out = root;
         for (String s : childPath.split("/")) {
-            if (!"".equals(s))
+            if (!s.isEmpty())
                 out = out.child(s);
         }
         return out;

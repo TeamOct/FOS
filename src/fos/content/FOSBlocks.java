@@ -30,7 +30,7 @@ import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.ui.*;
 import mindustry.world.Block;
-import mindustry.world.blocks.defense.Wall;
+import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.environment.*;
@@ -60,7 +60,7 @@ public class FOSBlocks {
 
     // PRODUCTION
     crudeDrill, improvedDrill, proficientDrill,
-    rockCrusher, zincDrill, silverDrill, diamondDrill, vanadiumDrill,
+    rockCrusher, zincDrill, diamondDrill, vanadiumDrill,
     oreDetectorSmall, oreDetector, oreDetectorReinforced, oreDetectorOverclocked,
 
     // DISTRIBUTION
@@ -71,38 +71,42 @@ public class FOSBlocks {
     copperPipe, brassPipe, fluidJunction, fluidBridge, pneumaticPump, pumpjack, fluidRouter, fluidContainer, fluidTank,
 
     // POWER
-    zincWire, copperWire, brassWire, zincWirePole, copperWirePole, brassWirePole, windTurbine, steamTurbine, heatGenerator, plasmaLauncher, solarPanelMedium,
+    zincWire, copperWire, brassWire, zincWirePole, copperWirePole, brassWirePole, windTurbine, steamTurbine, heatGenerator, solarPanelMedium,
     copperBattery, brassBattery,
 
     // DEFENSE
-    zincWall, zincWallLarge, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
+    zincWall, zincWallLarge, securityDoor, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
     helix, sticker, sludge, dot, particulator, firefly, pulse, breakdown, rupture, thunder, cluster, judge, newJudge, bugSentry,
-    matrixShieldProj, beamMender, beamMendProjector,
+    matrixShieldProj, beamMender,
     landMine,
 
     // ENVIRONMENT & ORES
     cyanium, cyaniumWall, crimsonStone, crimsonStoneWall, elithite, elithiteWall, elbium, elbiumWall, nethratium, nethratiumWall,
-    annite, anniteWall, blublu, blubluWall, purpur, purpurWall, murmur, murmurWall, calcite, calciteWall,
+    annite, anniteWall, blublu, blubluWall, purpur, purpurWall, murmur, murmurWall, calcite, calciteWall, ashStone, ashStoneCraters, ashStoneWall,
+    quartum, quartumWall,
+    concreteEmpty, concreteT, concreteB, concreteL, concreteR, concreteTL, concreteTR, concreteBL, concreteBR, concreteFull, concreteWall,
+
     tokiciteFloor,
     cyaniumWater, crimsonStoneWater, anniteWater, blubluWater, purpurWater, quartumWater,
     alienMoss,
+
     oreAluminium, oreZinc, oreZincSurface, oreZincDeep, oreSilver, oreSilverDeep, oreLithium, oreDiamond, oreVanadium, oreVanadiumDeep, oreIridium, oreLuminium,
+
     hiveFloor, bugSpawn,
-    ashStone, ashStoneCraters, ashStoneWall,
-    quartum, quartumWall,
-    concreteT, concreteB, concreteL, concreteR, concreteTL, concreteTR, concreteBL, concreteBR, concreteFull, concreteWall,
+
+
 
     // PROPS
     softbush, calciteCrystal, calciteMineral, blueTree, ashStoneBoulder, quartumBoulder,
 
     // UNITS
-    upgradeCenter, destroyerFactory, eliminatorFactory, injectorFactory, simpleReconstructor, droidConstructor, draugFactory,
+    upgradeCenter, destroyerFactory, eliminatorFactory, injectorFactory, simpleReconstructor, draugFactory,
 
     // STORAGE & CORES
     coreColony, coreFortress, coreCity, coreMetropolis, lightUnloader,
 
     // SPECIAL
-    nukeLauncher, bigBoy, cliffDetonator, surfaceDetonator, orbitalAccelerator, mechResearchCore, bioResearchCore,
+    nukeLauncher, bigBoy, cliffDetonator, surfaceDetonator, orbitalAccelerator,
 
     // NON-PLAYER STUFF
     soontm, citadelSpawner;
@@ -218,7 +222,7 @@ public class FOSBlocks {
             consumePower(8f);
             consumeItems(with(diamond, 1, quartz, 4));
             outputItems = with(silicon, 4);
-            requirements(Category.crafting, with(zinc, 180, silver, 150, diamond, 100));
+            requirements(Category.crafting, with(zinc, 180, copper, 150, diamond, 100));
             drawer = new DrawMulti(
                 new DrawRegion("-bottom"),
                 new DrawArcSmelt(),
@@ -296,7 +300,7 @@ public class FOSBlocks {
             drawSpinSprite = false;
 
             drillMultipliers.put(zinc, 2f);
-            drillMultipliers.put(silver, 2f);
+            drillMultipliers.put(copper, 2f);
             drillMultipliers.put(vanadium, 2f);
 
             consumeLiquid(water, 0.08f).boost();
@@ -312,12 +316,12 @@ public class FOSBlocks {
             squareSprite = false;
 
             drillMultipliers.put(zinc, 2f);
-            drillMultipliers.put(silver, 2f);
+            drillMultipliers.put(copper, 2f);
             drillMultipliers.put(vanadium, 2f);
 
             consumePower(1f);
             consumeLiquid(water, 0.24f).boost();
-            requirements(Category.production, with(zinc, 45, silver, 30));
+            requirements(Category.production, with(zinc, 45, copper, 30));
             envEnabled ^= Env.space;
         }};
         proficientDrill = new Drill("proficient-drill"){{
@@ -327,7 +331,7 @@ public class FOSBlocks {
             squareSprite = false;
 
             drillMultipliers.put(zinc, 2f);
-            drillMultipliers.put(silver, 2f);
+            drillMultipliers.put(copper, 2f);
             drillMultipliers.put(vanadium, 2f);
 
             consumePower(6f);
@@ -359,6 +363,7 @@ public class FOSBlocks {
             requirements(Category.production, with(zinc, 15));
             researchCost = with(zinc, 50);
         }};
+/*
         silverDrill = new UndergroundDrill("silver-drill"){{
             size = 2;
             tier = 4;
@@ -369,6 +374,7 @@ public class FOSBlocks {
 
             requirements(Category.production, with(zinc, 10, silver, 10));
         }};
+*/
         diamondDrill = new UndergroundDrill("diamond-drill"){{
             size = 3;
             tier = 5;
@@ -380,7 +386,7 @@ public class FOSBlocks {
             drillEffect = Fx.mineHuge;
             drillEffectChance = 0.3f;
 
-            requirements(Category.production, with(silver, 45, silicon, 75, diamond, 40));
+            requirements(Category.production, with(copper, 45, silicon, 75, diamond, 40));
         }};
         vanadiumDrill = new UndergroundDrill("vanadium-drill"){{
             size = 3;
@@ -391,7 +397,7 @@ public class FOSBlocks {
 
             drillEffect = Fx.mineImpact;
 
-            requirements(Category.production, with(zinc, 30, silver, 95, silicon, 50, vanadium, 50));
+            requirements(Category.production, with(zinc, 30, copper, 95, silicon, 50, vanadium, 50));
         }};
         oreDetectorSmall = new OreDetector("ore-detector-small"){{
             health = 480;
@@ -441,6 +447,12 @@ public class FOSBlocks {
             size = 2;
             buildCostMultiplier = 3f;
             requirements(Category.defense, with(zinc, 24));
+        }};
+        securityDoor = new AutoDoor("security-door"){{
+            scaledHealth = 1250;
+            size = 1;
+            buildCostMultiplier = 4f;
+            requirements(Category.defense, with(zinc, 4, vanadium, 2));
         }};
         diamondWall = new Wall("diamond-wall"){{
             scaledHealth = 1250;
@@ -592,7 +604,7 @@ public class FOSBlocks {
                 }}
             );
             consumeCoolant(0.25f).boost();
-            requirements(Category.turret, with(zinc, 60, silver, 50));
+            requirements(Category.turret, with(zinc, 60, copper, 50));
         }};
         sticker = new ItemTurret("sticker"){{
             scaledHealth = 480;
@@ -642,7 +654,7 @@ public class FOSBlocks {
                     }}
                 );
             }};
-            requirements(Category.turret, with(zinc, 75, silver, 50, silicon, 50));
+            requirements(Category.turret, with(zinc, 75, copper, 50, silicon, 50));
         }};
         sludge = new LiquidTurret("sludge"){{
             health = 2400;
@@ -747,7 +759,7 @@ public class FOSBlocks {
 
                 buildingDamageMultiplier = 0.3f;
             }};
-            requirements(Category.turret, with(silver, 50, diamond, 75, vanadium, 50));
+            requirements(Category.turret, with(copper, 50, diamond, 75, vanadium, 50));
         }};
         particulator = new ItemTurret("particulator"){{
             health = 2400;
@@ -879,7 +891,7 @@ public class FOSBlocks {
             drawer = new DrawTurret("lumoni-");
             consumeCoolant(0.5f).boost();
             coolantMultiplier = 2f;
-            requirements(Category.turret, with(zinc, 200, silver, 125, silicon, 175, vanadium, 150));
+            requirements(Category.turret, with(zinc, 200, copper, 125, silicon, 175, vanadium, 150));
         }};
         firefly = new LiquidTurret("firefly"){{
             health = 2400;
@@ -981,7 +993,7 @@ public class FOSBlocks {
             outlineColor = Color.valueOf("302326");
             squareSprite = false;
             consumePower(4);
-            requirements(Category.turret, with(silver, 300, diamond, 250, silicon, 250, vanadium, 175));
+            requirements(Category.turret, with(copper, 300, diamond, 250, silicon, 250, vanadium, 175));
         }};
         breakdown = new ItemTurret("breakdown"){{
             health = 2400;
@@ -1007,7 +1019,7 @@ public class FOSBlocks {
                 }}
             );
             drawer = new DrawTurret("lumoni-");
-            requirements(Category.turret, with(silver, 150, silicon, 100, diamond, 75, nickel, 100));
+            requirements(Category.turret, with(copper, 150, silicon, 100, diamond, 75, nickel, 100));
         }};
         rupture = new ItemTurret("rupture"){{
             requirements(Category.turret, with(zinc, 1));
@@ -1510,12 +1522,12 @@ public class FOSBlocks {
             requirements(Category.distribution, with(zinc, 4));
         }};
         zincSorter = new Sorter("tin-sorter"){{
-            researchCost = with(zinc, 60, silver, 60);
-            requirements(Category.distribution, with(zinc, 2, silver, 2));
+            researchCost = with(zinc, 60, copper, 60);
+            requirements(Category.distribution, with(zinc, 2, copper, 2));
         }};
         flowGate = new FlowGate("flow-gate"){{
-            researchCost = with(zinc, 60, silver, 60);
-            requirements(Category.distribution, with(zinc, 2, silver, 2));
+            researchCost = with(zinc, 60, copper, 60);
+            requirements(Category.distribution, with(zinc, 2, copper, 2));
         }};
         zincBridge = new BufferedItemBridge("tin-bridge"){{
             fadeIn = moveArrows = false;
@@ -1712,7 +1724,7 @@ public class FOSBlocks {
         solarPanelMedium = new SolarGenerator("solar-panel-medium"){{
             size = 2;
             powerProduction = 0.5f;
-            requirements(Category.power, with(lithium, 50, silver, 75, rawElithite, 50));
+            requirements(Category.power, with(lithium, 50, copper, 75, rawElithite, 50));
         }};
 
         copperBattery = new Battery("copper-battery"){{
@@ -1938,30 +1950,33 @@ public class FOSBlocks {
 	    quartum = new Floor("quartum", 4);
 	    quartumWall = new StaticWall("quartum-wall");
 
-        concreteFull = new Floor("concrete-full", 0);
+        concreteEmpty = new Floor("concrete-empty", 0);
+        concreteFull = new Floor("concrete-full", 0){{
+            blendGroup = concreteEmpty;
+        }};
         concreteT = new Floor("concrete-t", 0){{
-            blendGroup = concreteFull;
+            blendGroup = concreteEmpty;
         }};
         concreteB = new Floor("concrete-b", 0){{
-            blendGroup = concreteFull;
+            blendGroup = concreteEmpty;
         }};
         concreteL = new Floor("concrete-l", 0){{
-            blendGroup = concreteFull;
+            blendGroup = concreteEmpty;
         }};
         concreteR = new Floor("concrete-r", 0){{
-            blendGroup = concreteFull;
+            blendGroup = concreteEmpty;
         }};
         concreteTL = new Floor("concrete-tl", 0){{
-            blendGroup = concreteFull;
+            blendGroup = concreteEmpty;
         }};
         concreteTR = new Floor("concrete-tr", 0){{
-            blendGroup = concreteFull;
+            blendGroup = concreteEmpty;
         }};
         concreteBL = new Floor("concrete-bl", 0){{
-            blendGroup = concreteFull;
+            blendGroup = concreteEmpty;
         }};
         concreteBR = new Floor("concrete-br", 0){{
-            blendGroup = concreteFull;
+            blendGroup = concreteEmpty;
         }};
         concreteWall = new StaticWall("concrete-wall");
 
@@ -2004,8 +2019,8 @@ public class FOSBlocks {
             solid = true;
             squareSprite = false;
             consumePower(3f);
-            researchCost = with(zinc, 125, silver, 100);
-            requirements(Category.units, with(zinc, 250, silver, 200));
+            researchCost = with(zinc, 125, copper, 100);
+            requirements(Category.units, with(zinc, 250, copper, 200));
             drawer = new DrawMulti(
                 new DrawDefault(),
                 new DrawFlame()
@@ -2017,9 +2032,9 @@ public class FOSBlocks {
             size = 3;
             configurable = false;
             consumePower(5f);
-            requirements(Category.units, with(zinc, 100, silver, 75, silicon, 150));
+            requirements(Category.units, with(zinc, 100, copper, 75, silicon, 150));
             plans.add(
-                new UnitPlan(FOSUnitTypes.assault, 20f * 60, with(silicon, 15, silver, 15))
+                new UnitPlan(FOSUnitTypes.assault, 20f * 60, with(silicon, 15, copper, 15))
             );
         }};
         eliminatorFactory = new UnitFactory("eliminator-factory"){{
@@ -2027,7 +2042,7 @@ public class FOSBlocks {
             size = 3;
             configurable = false;
             consumePower(5f);
-            requirements(Category.units, with(zinc, 100, silver, 75, silicon, 150));
+            requirements(Category.units, with(zinc, 100, copper, 75, silicon, 150));
             plans.add(
                 new UnitPlan(FOSUnitTypes.radix, 20f * 60, with(silicon, 15, diamond, 10))
             );
@@ -2037,7 +2052,7 @@ public class FOSBlocks {
             size = 3;
             configurable = false;
             consumePower(5f);
-            requirements(Category.units, with(zinc, 100, silver, 75, silicon, 150));
+            requirements(Category.units, with(zinc, 100, copper, 75, silicon, 150));
             plans.add(
                 new UnitPlan(FOSUnitTypes.sergeant, 20f * 60, with(silicon, 15, zinc, 20))
             );
@@ -2053,7 +2068,7 @@ public class FOSBlocks {
                 new UnitType[]{sergeant, lieutenant}
             );
             constructTime = 60f * 25;
-            requirements(Category.units, with(silver, 150, silicon, 150, vanadium, 100));
+            requirements(Category.units, with(copper, 150, silicon, 150, vanadium, 100));
         }};
 /*
         droidConstructor = new OverdriveDroneCenter("droid-constructor"){{
@@ -2074,7 +2089,7 @@ public class FOSBlocks {
             maxSpawn = 1;
             unitType = draug;
             produceTime = 1200f;
-            requirements(Category.units, with(zinc, 150, silver, 250, diamond, 50));
+            requirements(Category.units, with(zinc, 150, copper, 250, diamond, 50));
         }};
         //endregion
         //region storage
@@ -2099,7 +2114,7 @@ public class FOSBlocks {
             unitType = FOSUnitTypes.lord;
             squareSprite = false;
             alwaysUnlocked = true;
-            requirements(Category.effect, with(zinc, 2000, silver, 1250));
+            requirements(Category.effect, with(zinc, 2000, copper, 1250));
         }};
         coreCity = new DetectorCoreBlock("core-city"){{
             health = 4600;
@@ -2109,7 +2124,12 @@ public class FOSBlocks {
             unitType = FOSUnitTypes.king;
             squareSprite = false;
             researchCostMultiplier = 0.1f;
-            requirements(Category.effect, with(zinc, 2500, silver, 2000, diamond, 750, silicon, 2500, vanadium, 1500));
+
+            radarRange = 30f * 8f;
+            radarCone = 30f;
+            speed = 0.6f;
+
+            requirements(Category.effect, with(zinc, 2500, copper, 2000, diamond, 750, silicon, 2500, vanadium, 1500));
         }};
         coreMetropolis = new DetectorCoreBlock("core-metropolis"){{
             health = 8000;
@@ -2124,7 +2144,7 @@ public class FOSBlocks {
             health = 60;
             size = 1;
             speed = 60f / 5f;
-            requirements(Category.effect, with(zinc, 20, silver, 25));
+            requirements(Category.effect, with(zinc, 20, copper, 25));
         }};
         //endregion
         //region special
@@ -2179,8 +2199,9 @@ public class FOSBlocks {
             consumePower(10f);
             consumeLiquid(hydrogen, 300);
             launchBlock = coreFortress;
-            requirements(Category.effect, BuildVisibility.campaignOnly, with(aluminium, 5000, titanium, 3000, lithium, 2500, zinc, 2500, silver, 2000, cuberium, 2000));
+            requirements(Category.effect, BuildVisibility.campaignOnly, with(aluminium, 5000, titanium, 3000, lithium, 2500, zinc, 2500, copper, 2000, cuberium, 2000));
         }};
+/*
         mechResearchCore = new ResearchCore("mech-research-core"){{
             scaledHealth = 160;
             size = 3;
@@ -2190,6 +2211,7 @@ public class FOSBlocks {
             consumePower(3f);
             requirements(Category.effect, BuildVisibility.debugOnly, with(zinc, 250, silver, 300, silicon, 150));
         }};
+*/
 
         liquidConveyor = new LiquidConveyor("l-c"){{
             requirements(Category.distribution, BuildVisibility.debugOnly, with(Items.copper, 1));

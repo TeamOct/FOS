@@ -13,7 +13,7 @@ import mindustry.graphics.Layer;
 public class AcidController {
     public static Color acidColor = Color.valueOf("B3DB81");
     public static Acid acid2 = new Acid(1f, new Effect(260f, e -> {
-        Draw.z(29-0.1f);
+        Draw.z(Layer.blockUnder + 0.1f);
         Draw.alpha(0.6f);
         Draw.color(acidColor);
 

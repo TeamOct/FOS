@@ -65,15 +65,19 @@ public class FOSWeaponModules {
                         lifetime = 40f;
                         shootEffect = Fx.shootSmallSmoke;
                         trailLength = 6;
+
                         fragOnHit = false;
                         fragBullets = 2;
                         fragVelocityMin = 1f;
-                        fragBullet = new PlayerSmartBulletType(7f, 60){{
+                        fragBullet = new PlayerBasicBulletType(7f, 60){{
                             width = 4f; height = 5f;
                             lifetime = 20f;
-                            trailLength = 15;
-                            hitEffect = Fx.hitBulletSmall;
+                            homingPower = 0.4f;
                             collidesTiles = true;
+
+                            trailLength = 15;
+                            trailWidth = 1f;
+                            hitEffect = Fx.hitBulletSmall;
                         }};
                     }};
                 }}
@@ -253,6 +257,7 @@ public class FOSWeaponModules {
                     splashDamageRadius = 16;
                     killShooter = false;
                     knockback = 4f;
+                    despawnSound = Sounds.explosionDull;
                 }};
             }};
         }}).reqs(with(zinc, 200, silver, 50, silicon, 200, vanadium, 100));
@@ -318,7 +323,7 @@ public class FOSWeaponModules {
                     x = 0; y = 0;
                     mirror = false;
                     beamWidth = 0.4f;
-                    repairSpeed = 0.2f;
+                    repairSpeed = 0.6f;
                     bullet = new BulletType(){{
                         maxRange = 40f;
                     }};
@@ -328,7 +333,7 @@ public class FOSWeaponModules {
             Events.on(EventType.ContentInitEvent.class, e -> {
                 abilities.add(
                     new UnitResistanceAbility(FOSUnitTypes.legionnaireReplica, 0.05f),
-                    new UnitSpawnAbility(FOSUnitTypes.legionnaireReplica, 600, 16, 0)
+                    new UnitSpawnAbility(FOSUnitTypes.legionnaireReplica, 600, -16, 0)
                 );
             });
         }}.reqs(with(zinc, 200, silver, 125, silicon, 150)).produceTime(60 * 20);

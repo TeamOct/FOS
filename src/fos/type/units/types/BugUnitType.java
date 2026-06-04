@@ -1,11 +1,12 @@
 package fos.type.units.types;
 
-import arc.Events;
+import arc.*;
 import arc.graphics.Color;
 import fos.ai.bugs.*;
 import fos.content.*;
 import fos.gen.Bugc;
 import fos.mod.FOSEventTypes;
+import mindustry.Vars;
 import mindustry.content.StatusEffects;
 import mindustry.gen.*;
 import mindustry.world.meta.BlockFlag;
@@ -65,5 +66,12 @@ public class BugUnitType extends FOSUnitType {
     public void killed(Unit unit) {
         super.killed(unit);
         Events.fire(new FOSEventTypes.InsectDeathEvent(unit.tileOn()));
+
+        // keep track of killed bugs for bestiary
+        if (Vars.state.isCampaign() && !Vars.net.client()) {
+            int cur = Core.settings.getInt(name + "-count", 0);
+            cur++;
+            Core.settings.put(name + "-count", cur);
+        }
     }
 }

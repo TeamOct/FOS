@@ -15,7 +15,9 @@ import static arc.graphics.g2d.Draw.color;
 import static arc.math.Angles.randLenVectors;
 
 public class FOSStatuses {
-    public static StatusEffect hacked, injected, tokiciteSlowed, buildBoost, dissolving;
+    public static StatusEffect hacked, injected, tokiciteSlowed, buildBoost, dissolving,
+    enraged,
+    /* DISPLAY ONLY! */ bestiary;
 
     public static void load() {
         hacked = new HackedEffect("hacked"){{
@@ -64,5 +66,26 @@ public class FOSStatuses {
                 });
             });
         }};
+
+        // region bug-specific statuses
+        enraged = new StatusEffect("enraged"){{
+            show = false;
+            speedMultiplier = 1.6f;
+            healthMultiplier = 0.95f;
+        }};
+        // endregion
+
+        bestiary = new StatusEffect("bestiary"){
+            {
+                show = false;
+                allDatabaseTabs = false;
+                permanent = false;
+            }
+
+            @Override
+            public void applied(Unit unit, float time, boolean extend) {
+                unit.unapply(this);
+            }
+        };
     }
 }

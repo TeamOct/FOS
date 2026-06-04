@@ -19,3 +19,5 @@ gen/
 *.aseprite
 *.ase
 
+### Audacity files
+*.aup3

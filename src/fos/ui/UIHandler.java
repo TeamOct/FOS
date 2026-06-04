@@ -69,6 +69,7 @@ public class UIHandler {
 
         // dedicated weapon module tab in core DB
         ui.database.shown(UIHandler::modifyCoreDb);
+        // FIXME: certain cases missing since V8 release
 
         Element w2 = ui.database.getChildren().get(1);
         w2 = ((Group) w2).getChildren().get(0);
@@ -76,6 +77,8 @@ public class UIHandler {
         TextField search = (TextField)w2;
 
         search.typed(c -> modifyCoreDb());
+
+
     }
 
     static void preReleaseDisclaimer() {

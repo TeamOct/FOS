@@ -21,7 +21,12 @@ public class FOSSectors {
         awakening = new FOSSectorPreset("awakening", lumoni, 89){{
             alwaysUnlocked = true;
             difficulty = 1;
-            captureWave = 2;
+            captureWave = 3;
+
+            rules = r -> {
+                r.fog = true;
+                r.coreCapture = true;
+            };
         }};
 
         ruins = new SectorPreset("ruins", lumoni, 26){{

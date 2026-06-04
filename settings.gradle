@@ -1,8 +1,8 @@
-pluginManagement{
-    repositories{
+pluginManagement {
+    repositories {
         gradlePluginPortal()
-        maven{url 'https://raw.githubusercontent.com/GlennFolker/EntityAnnoMaven/main'}
-        maven{url 'https://jitpack.io'}
+        maven { url 'https://raw.githubusercontent.com/GlennFolker/EntityAnnoMaven/main' }
+        maven { url 'https://jitpack.io' }
     }
 }
 

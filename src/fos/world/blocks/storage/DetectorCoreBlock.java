@@ -10,6 +10,7 @@ import arc.struct.Seq;
 import arc.util.Time;
 import arc.util.io.*;
 import fos.audio.FOSSounds;
+import fos.content.FOSSectors;
 import fos.core.FOSVars;
 import fos.world.blocks.environment.UndergroundOreBlock;
 import mindustry.game.Team;
@@ -109,7 +110,7 @@ public class DetectorCoreBlock extends CoreBlock {
                 Time.run(timer, () -> {
                     if (player.dead()) {
                         super.requestSpawn(player);
-                        Call.soundAt(Sounds.unitCreate, x, y, 1, 1);
+                        Call.soundAt(FOSSounds.respawn, x, y, 1, 1);
                     }
                     requested = false;
                 });
@@ -160,22 +161,28 @@ public class DetectorCoreBlock extends CoreBlock {
             if (timer > 0) {
                 ui.showLabel(String.valueOf(Mathf.ceil(timer / 60f)), 999 /*TODO: what the hell is an id???*/, 1f / 60f, x, y + 16f);
 
-                Draw.z(Layer.overlayUI);
-                Draw.color(Pal.gray);
-                Draw.rect("empty", x, y, 45f);
+                Draw.z(Layer.blockBuilding);
+                Draw.color(Pal.gray, 0.4f);
+                Draw.rect("empty", x, y, size*8 - 8f, size*8 - 8f, 45f);
 
                 Draw.color();
 
                 float progress = 1 - timer / spawnCooldown;
-                Draw.draw(Layer.blockOver, () -> Drawf.construct(this, unitType, 0f, progress, 1f, progress * 300f));
+                Draw.draw(Layer.blockBuilding + 0.1f, () -> Drawf.construct(this, unitType, 0f, progress, 1f, progress * 300f));
 
-                Drawf.square(x, y, 6f);
+                Drawf.square(x, y, size * 4 - 2f);
             }
         }
 
         @Override
         public boolean shouldAmbientSound() {
             return canConsume() && showOres && FOSVars.mapStarted();
+        }
+
+        @Override
+        public void beginLaunch(boolean launching) {
+            if (state.rules.sector != FOSSectors.awakening.sector)
+                super.beginLaunch(launching);
         }
 
         public float radarRot() {

@@ -32,11 +32,11 @@ public class ImprovedTreeBlock extends TreeBlock {
         Draw.scl(treeScl);
 
         if (shad.found()) {
-            Draw.z(Layer.power - 1);
+            Draw.z(Layer.legUnit + 1.5f);
 
             Draw.rect(shad, tile.worldx() + shadowOffset, tile.worldy() + shadowOffset, rot);
             if (secondLayer) {
-                Draw.z(Layer.power + 1.01f);
+                Draw.z(Layer.legUnit + 1.01f);
                 Draw.alpha(0.7f);
                 Draw.rect(shad, tile.worldx() + shadowOffset * 2, tile.worldy() + shadowOffset * 2, rot2);
                 Draw.alpha(1f);
@@ -45,7 +45,7 @@ public class ImprovedTreeBlock extends TreeBlock {
 
         TextureRegion reg = variants == 0 ? region : variantRegions[Mathf.randomSeed(tile.pos(), 0, Math.max(0, variantRegions.length - 1))];
 
-        Draw.z(Layer.power + 1);
+        Draw.z(Layer.legUnit + 2.5f);
         Draw.rectv(reg, x, y, w, h, rot, vec -> vec.add(
             Mathf.sin(vec.y*3 + Time.time, scl, mag) + Mathf.sin(vec.x*3 - Time.time, 70, 0.8f),
             Mathf.cos(vec.x*3 + Time.time + 8, scl + 6f, mag * 1.1f) + Mathf.sin(vec.y*3 - Time.time, 50, 0.2f)
@@ -62,7 +62,7 @@ public class ImprovedTreeBlock extends TreeBlock {
         Draw.scl(treeScl);
 
         if (secondLayer) {
-            Draw.z(Layer.power + 1.1f);
+            Draw.z(Layer.legUnit+ 1.1f);
 
             Draw.rectv(reg, x, y, w, h, rot2, vec -> vec.add(
                 Mathf.sin(vec.y*3 + Time.time*1.5f, scl, mag) + Mathf.sin(vec.x*3 - Time.time, 70, 0.8f),

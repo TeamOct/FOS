@@ -1,13 +1,7 @@
 package fos.content;
 
-import arc.Core;
 import arc.graphics.Color;
-import arc.graphics.g2d.*;
-import arc.math.geom.Vec2;
-import arc.struct.*;
-import arc.util.*;
 import mindustry.game.Team;
-import mindustry.ui.Fonts;
 
 public class FOSTeams {
     public static Team corru, bessin;
@@ -31,6 +25,7 @@ public class FOSTeams {
             team.palettei[i] = team.palette[i].rgba();
         }
 
+/*
         //attempt to load the team icon
         Seq<Font> fonts = Seq.with(Fonts.def, Fonts.outline);
 
@@ -63,6 +58,7 @@ public class FOSTeams {
 
         //now put whatever the heck we get for an emoji
         team.emoji = stringIcons.get(team.name, "");
+*/
 
         return team;
     }

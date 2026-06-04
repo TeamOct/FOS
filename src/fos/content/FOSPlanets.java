@@ -7,7 +7,7 @@ import arc.struct.Seq;
 import arc.util.Tmp;
 import fos.core.FOSVars;
 import fos.maps.planet.*;
-import mindustry.game.Team;
+import mindustry.game.*;
 import mindustry.graphics.g3d.*;
 import mindustry.type.*;
 import mindustry.world.meta.Env;
@@ -154,7 +154,6 @@ public class FOSPlanets {
             //TODO you'll see why I did this :)
             launchCandidates.add(uxerd);
             solarSystem = caldemolt;
-            //itemWhitelist = lumoniItems;
             cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 5, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
             ruleSetter = r -> {
                 r.loadout = ItemStack.list();
@@ -162,17 +161,15 @@ public class FOSPlanets {
                 r.defaultTeam = FOSTeams.corru;
                 r.waveTeam = r.attackMode ? Team.sharded : FOSTeams.bessin;
                 r.enemyCoreBuildRadius = 300;
-                r.coreCapture = false;
                 WeatherEntry weather = new WeatherEntry(FOSWeathers.wind);
                 weather.always = true; //always windy
                 r.weather.add(weather);
                 r.bannedBlocks.addAll(conveyor, junction, router, duo, mechanicalDrill, copperWall, copperWallLarge);
                 r.hideBannedBlocks = true;
             };
-        }};
 
-        //hide modded items from vanilla planets
-        //serpulo.hiddenItems.addAll(uxerdItems).addAll(lumoniItems).removeAll(Items.serpuloItems);
-        //erekir.hiddenItems.addAll(uxerdItems).addAll(lumoniItems).removeAll(Items.erekirItems);
+            campaignRules.fog = true;
+            campaignRules.clearSectorOnLose = true;
+        }};
     }
 }

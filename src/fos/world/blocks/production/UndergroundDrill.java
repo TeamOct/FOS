@@ -33,6 +33,8 @@ public class UndergroundDrill extends Drill {
     //placeable on scanned tiles or replaceable by other underground drills
     @Override
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {
+        if (state.rules.editor) return true;
+
         if (isMultiblock()) {
             for(Tile other : tile.getLinkedTilesAs(this, tempTiles)) {
                 Building block = other.build;
@@ -50,7 +52,7 @@ public class UndergroundDrill extends Drill {
     public void drawPlace(int x, int y, int rotation, boolean valid) {
         Tile tile = world.tile(x, y);
         var detector = nearestDetector(player.team(), x*8, y*8);
-        if (tile == null) return;
+        if (tile == null || state.rules.editor) return;
 
         if (detector == null) {
             drawPlaceText(Core.bundle.get("bar.detectorreq"), x, y, valid);

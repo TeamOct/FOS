@@ -33,7 +33,7 @@ public class UpgradeCenter extends Block {
      * */
     public static void upgrade(Player player, Tile tile) {
         // check received packet integrity (other validation server-side)
-        if (tile == null || tile.build == null || !(tile.build instanceof UpgradeCenterBuild ucb)) return;
+        if (tile == null || !(tile.build instanceof UpgradeCenterBuild ucb)) return;
 
         ucb.upgrade(player);
     }

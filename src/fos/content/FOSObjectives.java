@@ -26,6 +26,28 @@ public class FOSObjectives {
         }
     }
 
+    public static class DefeatBugs implements Objective {
+        public UnitType type;
+        public int amount;
+
+        public DefeatBugs(UnitType type, int amount) {
+            this.type = type;
+            this.amount = amount;
+        }
+
+        @Override
+        public boolean complete() {
+            return settings.getInt(type.name + "-count", 0) >= amount;
+        }
+
+        @Override
+        public String display() {
+            return amount == 1 ? Core.bundle.format("requirement.defeatbug", type.localizedName) :
+                Core.bundle.format("requirement.defeatbugs",
+                type.localizedName, settings.getInt(type.name + "-count", 0), amount);
+        }
+    }
+
     public static class FindInCrates implements Objective {
         public FindInCrates(){}
 

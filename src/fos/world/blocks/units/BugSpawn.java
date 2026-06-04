@@ -87,8 +87,8 @@ public class BugSpawn extends UnitBlock {
         private UnitType getBug() {
             UnitType[][] units = {
                 { FOSUnitTypes.bugSmall, FOSUnitTypes.bugMedium },
-                { FOSUnitTypes.spewer},
-                { FOSUnitTypes.bugScout }
+                { FOSUnitTypes.spewer },
+                //{ FOSUnitTypes.bugScout }
             };
 
             UnitType[] workers = { FOSUnitTypes.bugWorker };
@@ -100,7 +100,7 @@ public class BugSpawn extends UnitBlock {
 
             if (tier > units[branch].length) tier = units[branch].length;
             var type = units[branch][tier-1];
-            return (!items.has(type.getFirstRequirements())) ? workers[Math.min(tier-1, workers.length-1)] : type;
+            return (!items.has(type.getFirstRequirements()) && enabled) ? workers[Math.min(tier-1, workers.length-1)] : type;
         }
 
         private float evo() {
