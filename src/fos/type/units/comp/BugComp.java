@@ -1,7 +1,10 @@
 package fos.type.units.comp;
 
+import arc.util.*;
 import arc.util.io.*;
 import fos.core.FOSVars;
+import mindustry.entities.Units;
+import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.io.TypeIO;
 import mindustry.type.UnitType;
@@ -19,13 +22,27 @@ abstract class BugComp implements Unitc {
     transient boolean invading = false;
     /** Whether it is supposed to stand still at the moment. */
     transient boolean idle = false;
-    @Import
-    transient UnitType type;
+
+    @Import transient UnitType type;
+    @Import transient float x, y, rotation;
+    @Import transient Team team;
 
     @Override
     @Replace
     public boolean isPathImpassable(int x, int y) {
         return !type.flying && world.tiles.in(x, y) && type.pathCost.getCost(team().id, FOSVars.pathfinder.get(x, y)) == -1;
+    }
+
+    @Override
+    public void update() {
+        if (!(self() instanceof Crawlc)) return;
+
+        Tmp.v1.set(4, 0).rotate(rotation);
+
+        Units.nearbyEnemies(team, x + Tmp.v1.x, y + Tmp.v1.y, type.hitSize / 1.85f, other -> {
+            if (!other.isGrounded()) return;
+            other.damageContinuousPierce(type.crushDamage);
+        });
     }
 
     @Override

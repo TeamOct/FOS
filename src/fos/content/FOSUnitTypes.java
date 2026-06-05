@@ -101,7 +101,7 @@ public class FOSUnitTypes {
         lord, king;
 
     public static @EntityDef({Unitc.class, Crawlc.class, Bugc.class}) UnitType
-        // CRAWLING INSECTS
+        // CRAWLING BUGS
         bugSmall, bugMedium, terrapod;
 
     public static @EntityDef({Unitc.class, Legsc.class, Bugc.class}) UnitType

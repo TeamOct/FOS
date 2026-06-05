@@ -18,8 +18,8 @@ import static mindustry.Vars.ui;
 
 public class ScreechAbility extends Ability {
     public StatusEffect status = FOSStatuses.enraged;
-    public float range = 64f;
-    public float statusDuration = 600f;
+    public float range = 48f;
+    public float statusDuration = 420f;
 
     public Sound screechSound = FOSSounds.bugScreech;
     public float soundPitchMin = 0.8f, soundPitchMax = 1.2f;

@@ -22,11 +22,11 @@ public class DeathMapController implements SaveFileReader.CustomChunk {
 
         Events.on(FOSEventTypes.InsectDeathEvent.class, e -> {
             int ti = e.tile.array();
-            deathMap[ti] += 25;
+            deathMap[ti] += 1;
 
             e.tile.circle(3, (tile) -> {
                 if (tile == null) return;
-                deathMap[tile.array()] += 25;
+                deathMap[tile.array()] += 1;
 
                 // overflow? leave it at max
                 if (deathMap[tile.array()] < 0) {

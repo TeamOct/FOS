@@ -414,17 +414,13 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         pass((x, y) -> {
             Tile cur = tiles.get(x, y);
 
-            //plants on quartum - has to be done after all liquid/mini-biome stuff so no conflicts happen
-            if (floor == quartum && block == air) {
+            //plants on purpur - has to be done after all liquid/mini-biome stuff so no conflicts happen
+            if (floor == purpur && block == air) {
                 if (rand.chance(0.0015f)) {
                     block = blueTree;
                     cur.circle(6, other -> {
-                        if (rand.chance(0.3f) && other.floor() == quartum && !other.solid()) {
+                        if (rand.chance(0.3f) && other.floor() == purpur && !other.solid()) {
                             other.setBlock(softbush);
-                            var ang = Mathf.angle(other.x - x, other.y - y);
-                            if (ang > 60f && ang < 120f && rand.chance(0.6f)) {
-                                other.setOverlay(alienMoss);
-                            }
                         }
                     });
                 }

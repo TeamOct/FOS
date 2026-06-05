@@ -9,6 +9,7 @@ import fos.mod.FOSEventTypes;
 import mindustry.Vars;
 import mindustry.content.StatusEffects;
 import mindustry.gen.*;
+import mindustry.graphics.Layer;
 import mindustry.world.meta.BlockFlag;
 
 /** Just a template for bugs. */
@@ -20,23 +21,26 @@ public class BugUnitType extends FOSUnitType {
     public <T extends Unit> BugUnitType(String name, Class<T> type, boolean flying) {
         super(name, type);
         isEnemy = false;
-        lightOpacity = lightRadius = 0f;
-        drawCell = false;
-        drawBody = false;
-        outlineColor = Color.valueOf("452319");
-        //createScorch = false;
-        //createWreck = false;
         canDrown = false; // FIXME: they still drown for some reason
-        deathExplosionEffect = FOSFx.bugDeath1;
-        deathSound = Sounds.plantBreak;
-        immunities.addAll(FOSStatuses.hacked, FOSStatuses.injected, StatusEffects.sapped);
         omniMovement = flying;
         this.flying = flying;
         targetAir = flying;
         targetGround = true;
+        immunities.addAll(FOSStatuses.hacked, FOSStatuses.injected, StatusEffects.sapped, FOSStatuses.dissolving);
+
         playerControllable = false;
         targetFlags = new BlockFlag[]{BlockFlag.generator, BlockFlag.drill, BlockFlag.factory, BlockFlag.core};
         controller = u -> flying ? new FlyingBugAI() : new BugAI();
+
+        lightOpacity = lightRadius = 0f;
+        drawCell = false;
+        drawBody = false;
+        outlineColor = Color.valueOf("452319");
+        //createWreck = false;
+        createScorch = false;
+        deathExplosionEffect = FOSFx.bugDeath1;
+        deathSound = Sounds.plantBreak;
+        groundLayer = Layer.legUnit - 0.01f;
     }
     public <T extends Unit> BugUnitType(String name, Class<T> type, boolean flying, boolean melee) {
         this(name, type, flying);
