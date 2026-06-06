@@ -5,7 +5,9 @@ import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.struct.ObjectSet;
+import arc.util.Log;
 import fos.entities.Acid;
+import mindustry.Vars;
 import mindustry.entities.Effect;
 import mindustry.game.EventType;
 import mindustry.graphics.Layer;
@@ -29,20 +31,24 @@ public class AcidController {
         });
     }), 425f);
 
-    public static ObjectSet<Acid> acids = new ObjectSet<>();
-
+    public static ObjectSet<Acid> acids = new ObjectSet<>(100);
+    
     public static void init() {
+        Events.on(EventType.ResetEvent.class, e -> {
+            acids.clear();
+        });
         Events.run(EventType.Trigger.update, AcidController::update);
         Events.run(EventType.Trigger.draw, AcidController::draw);
-/*
-        Events.on(EventType.BuildDamageEvent.class, e -> {
-            Acid.at(acid2, e.source.x, e.source.y);
-            Log.info("Acid at " + e.build.x + " " + e.build.y);
-        });
-*/
+//        Events.on(EventType.BuildDamageEvent.class, e -> {
+//            Acid.at(acid2, e.source.x, e.source.y);
+//            Log.info("Acid at " + e.build.x + " " + e.build.y);
+//        });
     }
 
     private static void update() {
+        if (Vars.state.isPaused()) return;
+        if (!Vars.state.isPlaying()) return;
+//        Log.info("update " + acids.size);
         acids.each(Acid::update);
     }
     private static void draw() {
