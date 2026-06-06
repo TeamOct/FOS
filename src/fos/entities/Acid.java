@@ -77,7 +77,7 @@ public class Acid implements Cloneable{
             dead(acid);
             return;
         }
-
+ 
         Building b = Vars.world.buildWorld(acid.x, acid.y);
 
         if (b != null) {
