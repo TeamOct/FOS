@@ -1,3 +1,5 @@
+import com.github.nekit508.nmp.extensions.NMPluginCoreExtension
+
 plugins {
     id "com.github.nekit508.mindustry-mod-plugin" version "$nmpVersion" apply true
 }
@@ -23,7 +25,7 @@ group = modGroup
 version = modVersion
 
 nmp.core project, "core"
-nmp.entityAnno project, "eanno", core
+nmp.entityAnno project, "eanno", (NMPluginCoreExtension) core
 
 core.with {
     configureTasks {

@@ -21,3 +21,5 @@ gen/
 
 ### Audacity files
 *.aup3
+
+cacheDir
