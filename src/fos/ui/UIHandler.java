@@ -98,9 +98,9 @@ public class UIHandler {
                 ui.showCustomConfirm("@fos.noosttitle", bundle.get("fos.noost"),
                     "@mods.browser.add", "@no",
                     () -> {
-                        ui.mods.githubImportMod("TeamOct/FOS-OST", true);
+                        ui.mods.githubImportMod("TeamOct/FOS-OST", true, true);
                     },
-                    () -> {});
+                    () -> { /* no means no. do nothing */ });
             }
         } else if (!ost.enabled()) {
             ui.showCustomConfirm("@fos.ostdisabledtitle", bundle.get("fos.ostdisabled"),

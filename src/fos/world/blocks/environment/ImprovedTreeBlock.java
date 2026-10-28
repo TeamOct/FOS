@@ -1,5 +1,6 @@
 package fos.world.blocks.environment;
 
+import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
@@ -10,6 +11,8 @@ import mindustry.world.blocks.environment.TreeBlock;
 
 public class ImprovedTreeBlock extends TreeBlock {
     public boolean secondLayer = true;
+    /** Tree radius in world units. */
+    public float size = 35f;
 
     public ImprovedTreeBlock(String name) {
         super(name);
@@ -17,6 +20,9 @@ public class ImprovedTreeBlock extends TreeBlock {
 
     @Override
     public void drawBase(Tile tile) {
+
+        boolean fade = Mathf.dst(Core.input.mouseWorldX(), Core.input.mouseWorldY(), tile.worldx(), tile.worldy()) < size;
+
         float
             x = tile.worldx(), y = tile.worldy(),
             rot = Mathf.randomSeed(tile.pos(), 0, 4) * 90 + Mathf.sin(Time.time + x, 50f, 0.5f) + Mathf.sin(Time.time - y, 65f, 0.9f) + Mathf.sin(Time.time + y - x, 85f, 0.9f),
@@ -31,21 +37,24 @@ public class ImprovedTreeBlock extends TreeBlock {
 
         Draw.scl(treeScl);
 
+        Draw.alpha(fade ? 0.2f : 1);
+
         if (shad.found()) {
             Draw.z(Layer.legUnit + 1.5f);
 
             Draw.rect(shad, tile.worldx() + shadowOffset, tile.worldy() + shadowOffset, rot);
             if (secondLayer) {
                 Draw.z(Layer.legUnit + 1.01f);
-                Draw.alpha(0.7f);
+                Draw.alpha(0.7f * (fade ? 0.2f : 1));
                 Draw.rect(shad, tile.worldx() + shadowOffset * 2, tile.worldy() + shadowOffset * 2, rot2);
-                Draw.alpha(1f);
+                Draw.alpha(fade ? 0.2f : 1);
             }
         }
 
         TextureRegion reg = variants == 0 ? region : variantRegions[Mathf.randomSeed(tile.pos(), 0, Math.max(0, variantRegions.length - 1))];
 
         Draw.z(Layer.legUnit + 2.5f);
+
         Draw.rectv(reg, x, y, w, h, rot, vec -> vec.add(
             Mathf.sin(vec.y*3 + Time.time, scl, mag) + Mathf.sin(vec.x*3 - Time.time, 70, 0.8f),
             Mathf.cos(vec.x*3 + Time.time + 8, scl + 6f, mag * 1.1f) + Mathf.sin(vec.y*3 - Time.time, 50, 0.2f)
@@ -62,13 +71,16 @@ public class ImprovedTreeBlock extends TreeBlock {
         Draw.scl(treeScl);
 
         if (secondLayer) {
-            Draw.z(Layer.legUnit+ 1.1f);
+            Draw.z(Layer.legUnit + 1.1f);
+            Draw.alpha(fade ? 0.2f : 1);
 
             Draw.rectv(reg, x, y, w, h, rot2, vec -> vec.add(
                 Mathf.sin(vec.y*3 + Time.time*1.5f, scl, mag) + Mathf.sin(vec.x*3 - Time.time, 70, 0.8f),
                 Mathf.cos(vec.x*3 + Time.time*1.5f + 8, scl + 6f, mag * 1.1f) + Mathf.sin(vec.y*3 - Time.time, 50, 0.2f)
             ));
         }
+
+        Draw.reset();
 
         // This makes the tree impassable for legged units, effectively acting as a roadblock.
         tile.data = 2;

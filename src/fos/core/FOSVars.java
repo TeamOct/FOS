@@ -19,10 +19,6 @@ import java.util.*;
 import static mindustry.Vars.*;
 
 public class FOSVars {
-    /** A research dialog that shows one of the two tech trees declared below. */
-    public static ResearchCoreDialog researchCoreDialog;
-    /** Special tech trees accessed only by certain blocks. */
-    public static TechTree.TechNode mechTree, bioTree;
     /** Capsules creator **/
     public static CapsulesController capsulesController;
 
@@ -67,27 +63,6 @@ public class FOSVars {
 
     /** Names of outlined sprites. Internal. */
     public static final ObjectSet<String> outlined = new ObjectSet<>();
-
-    public static void load() {
-/*
-        TODO: probably scrapped.
-        if (!headless) researchCoreDialog = new ResearchCoreDialog();
-
-        mechTree = TechTree.nodeRoot("", mechResearchCore, true, () -> {
-            node(helix, with(scrap, 250), () -> {
-                node(sticker, with(scrap, 400), Seq.with(new Objectives.Research(FOSFluids.tokicite)), () -> {});
-                node(particulator, with(scrap, 1500), () -> {
-                    //TODO more mid-tier turrets
-                    node(cluster, with(scrap, 5250), () -> {
-                    });
-                    node(judge, with(scrap, 20000), () -> {});
-                });
-            });
-        });
-
-        TechTree.roots.remove(mechTree);
-*/
-    }
 
     public static boolean mapStarted() {
         return state.rules.sector != null && state.rules.sector == FOSSectors.awakening.sector ?

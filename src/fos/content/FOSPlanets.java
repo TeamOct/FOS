@@ -168,8 +168,9 @@ public class FOSPlanets {
                 r.hideBannedBlocks = true;
             };
 
-            campaignRules.fog = true;
-            campaignRules.clearSectorOnLose = true;
+            allowCampaignRules = true;
+            showRtsAIRule = true;
+            uxerd.statParent = this;
         }};
     }
 }

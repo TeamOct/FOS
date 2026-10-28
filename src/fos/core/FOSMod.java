@@ -17,6 +17,7 @@ import fos.gen.*;
 import fos.graphics.*;
 import fos.graphics.cachelayers.FOSCacheLayers;
 import fos.net.FOSCall;
+import fos.ui.AwakeningCutscene;
 import fos.ui.UIHandler;
 import fos.ui.menus.FOSMenus;
 import mindustry.game.EventType;
@@ -47,14 +48,7 @@ public class FOSMod extends Mod {
             clientLoaded();
         });
 
-        Events.run(EventType.Trigger.newGame, () -> {
-            // remove landing cutscene on Awakening
-            if (state.rules.sector != null && state.rules.sector == FOSSectors.awakening.sector) {
-                Reflect.set(renderer, "landTime", 0f);
-                var core = FOSTeams.corru.core();
-                Time.run(160f, () -> FOSFx.corruLogo.at(core.x, core.y));
-            }
-        });
+        AwakeningCutscene.load();
 
         Events.on(FOSEventTypes.RealisticToggleEvent.class, e -> {
             if (settings.getBool("fos-realisticmode") && state.rules.sector != null && !state.rules.sector.planet.hasAtmosphere) {
@@ -104,8 +98,6 @@ public class FOSMod extends Mod {
     @Override
     public void init() {
         Log.debug("[FOS] initialization");
-        //initialize mod variables
-        FOSVars.load();
 
         //anything after this is client-side only.
         if (headless) return;

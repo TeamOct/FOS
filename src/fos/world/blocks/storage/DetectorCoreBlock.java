@@ -159,7 +159,7 @@ public class DetectorCoreBlock extends CoreBlock {
             }
 
             if (timer > 0) {
-                ui.showLabel(String.valueOf(Mathf.ceil(timer / 60f)), 999 /*TODO: what the hell is an id???*/, 1f / 60f, x, y + 16f);
+                ui.showLabel(String.valueOf(Mathf.ceil(timer / 60f)), 999 /*TODO: what the hell is an id???*/, 1f / 60f, x, y + 16f, WorldLabel.flagBackground);
 
                 Draw.z(Layer.blockBuilding);
                 Draw.color(Pal.gray, 0.4f);

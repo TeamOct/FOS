@@ -282,5 +282,12 @@ public class FOSFx {
         randLenVectors(e.id, 4, 18f * e.fin(new Interp.ExpOut(8f, 5f)), e.rotation, 25f, 8f, (x, y) -> {
             Fill.circle(e.x + x, e.y + y, 1.8f * e.fout());
         });
-    }).layer(Layer.floor + 1).followParent(false);
+    }).layer(Layer.floor + 1).followParent(false),
+
+    blackScreen = new Effect(160f, e -> {
+        color(Color.black);
+        alpha(e.fout() * 2f);
+
+        Fill.rect(Core.camera.position.x, Core.camera.position.y, Core.camera.width, Core.camera.height);
+    }).layer(Layer.space);
 }

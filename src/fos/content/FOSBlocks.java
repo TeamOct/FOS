@@ -1412,7 +1412,10 @@ public class FOSBlocks {
 
                 backColor = trailColor = Color.valueOf("975c43");
                 frontColor = Color.valueOf("c89258");
+                lightOpacity = 0f;
                 layer = Layer.flyingUnitLow;
+                hitEffect = despawnEffect = Fx.none;
+
                 trailLength = 4;
                 trailWidth = 1;
             }};

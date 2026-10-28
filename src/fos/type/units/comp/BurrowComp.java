@@ -18,7 +18,8 @@ import static mindustry.async.PhysicsProcess.PhysicsWorld.PhysicsBody;
 @EntityComponent @SuppressWarnings("unused")
 abstract class BurrowComp implements Syncc, Unitc {
     @Import float x, y, elevation, rotation;
-    @Import PhysicRef physref;
+    //@Import PhysicRef physref;
+    @Import boolean hasPhysicsRef;
     @Import WeaponMount[] mounts;
     transient boolean burrowed = false, isBurrowing = false;
     transient float timer = 0f;
@@ -54,9 +55,6 @@ abstract class BurrowComp implements Syncc, Unitc {
             }
         }
 
-        if (burrowed && physref.body.radius > 0)
-            changeHitbox();
-
         if ((isBurrowing && timer <= 0f)) {
             if (!isValid()) return;
 
@@ -69,41 +67,19 @@ abstract class BurrowComp implements Syncc, Unitc {
     }
 
     void changeHitbox() {
-        float x = this.x, y = this.y;
-
-        PhysicsProcess.PhysicsWorld physics = Reflect.get(Vars.asyncCore.processes.get(0), "physics");
-        Seq<PhysicRef> refs = Reflect.get(Vars.asyncCore.processes.get(0), "refs");
+        Seq<PhysicRef> refs = Reflect.get(Vars.unitPhysics, "refs");
 
         if (burrowed) {
-            // create the new empty "hitbox"
-            PhysicsBody body = new PhysicsBody();
-            body.x = x;
-            body.y = y;
-            body.mass = mass();
-            body.radius = -1;
-
-            PhysicRef ref = new PhysicRef(this, body);
-
-            // remove the existing one from physics process
-            physics.remove(physref.body);
-            refs.remove(physref);
-
-            // and put the empty one at its place
-            refs.add(ref);
-            physref = ref;
-            physics.add(body);
-
-            ref.body.layer = 1; // PhysicsProcess.layerLegs
-            ref.x = x;
-            ref.y = y;
-            ref.body.local = !Vars.net.client() || isLocal();
+            // temporarily yeet the hitbox
+            var old = refs.find(r -> r.entity == self());
+            old.body.radius = 0;
         } else {
-            // when digging up, remove the empty box from physics process
-            physics.remove(physref.body);
-            refs.remove(physref);
+            // when digging up, remove empty hitbox
+            refs.remove(r -> r.entity == self());
 
             // then reset everything
-            physref = null;
+            hasPhysicsRef = false;
+            Vars.unitPhysics.add(self());
         }
     }
 

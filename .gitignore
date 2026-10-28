@@ -7,6 +7,7 @@ artifacts/
 
 ### Local files
 /settings/local.json
+/settings/settings.local.json
 
 ### Generated files
 gen/
