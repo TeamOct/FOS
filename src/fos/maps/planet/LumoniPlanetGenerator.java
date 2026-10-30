@@ -337,6 +337,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                 int rad = rand.random(15, 20);
 
                 floor = tokiciteFloor;
+                ore = air;
 
                 cur.circle(rad, other -> {
                     var noise = noise(other.x + 69, other.y - 69, 2, 0.6, 80);
@@ -350,16 +351,16 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                         if (rand.chance(0.06f)) other.setBlock(vibrantCrystalCluster);
                     } else if (noise > 0.76f) {
                         other.setFloor(murmur.asFloor());
+                        other.setOverlay(air);
                         if (other.block() != air) {
                             other.setBlock(murmurWall);
-                            other.setOverlay(air);
                         };
                     }
                     else if (noise > 0.57f) {
                         other.setFloor(carbonStone.asFloor());
+                        other.setOverlay(air);
                         if (other.block() != air) {
                             other.setBlock(carbonWall);
-                            other.setOverlay(air);
                         };
                     }
                 });
@@ -504,8 +505,8 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
     }
 
     /**
-     * Ensures that the given ores generate in a limited square area, no matter how many tries it takes.
-     * This probably hurts sector generation time quite a bit, but I don't know what else to try.
+     * Ensures that the given ores generate in a limited square area.
+     * Will keep executing until generation is confirmed successful.
      * @param ores List of ores to generate.
      * @param cx Center X coordinate.
      * @param cy Center Y coordinate.
@@ -541,8 +542,8 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
     }
 
     /**
-     * Ensures that the given ores generate in a limited square area, no matter how many tries it takes.
-     * This probably hurts sector generation time quite a bit, but I don't know what else to try.
+     * Ensures that the given ores generate in a limited square area.
+     * Will keep executing until generation is confirmed successful.
      * @param ores List of ores to generate.
      * @param cx Center X coordinate.
      * @param cy Center Y coordinate.

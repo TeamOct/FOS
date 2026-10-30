@@ -74,7 +74,7 @@ abstract class BurrowComp implements Syncc, Unitc {
             var old = refs.find(r -> r.entity == self());
             old.body.radius = 0;
         } else {
-            // when digging up, remove empty hitbox
+            // when digging up, remove hitbox
             refs.remove(r -> r.entity == self());
 
             // then reset everything

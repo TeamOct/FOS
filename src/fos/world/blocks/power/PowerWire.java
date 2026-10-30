@@ -22,6 +22,7 @@ public class PowerWire extends PowerNode {
 
     public PowerWire(String name) {
         super(name);
+        update = true;
         conductivePower = true;
         laserRange = 0f;
         maxNodes = 0;
@@ -29,10 +30,11 @@ public class PowerWire extends PowerNode {
         solid = false;
         underBullets = true;
         configurable = false;
-        enableDrawStatus = false;
-        hasShadow = false;
         swapDiagonalPlacement = false;
         group = BlockGroup.power;
+
+        enableDrawStatus = false;
+        hasShadow = false;
     }
 
     @Override
@@ -206,8 +208,8 @@ public class PowerWire extends PowerNode {
                 if (build == null || !build.isValid() || build.team != this.team) continue;
 
                 if (build.block.hasPower && ((checkedNearby & 1 << 3-i) == 0)) {
-                    curTile += 1 << 3 - i;
-                    checkedNearby += 1 << 3 - i;
+                    curTile |= 1 << (3 - i);
+                    checkedNearby |= 1 << (3 - i);
                 }
             }
         }

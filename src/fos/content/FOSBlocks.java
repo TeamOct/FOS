@@ -1379,6 +1379,9 @@ public class FOSBlocks {
             reload = 5;
             range = 320;
             recoil = 0f;
+            playerControllable = false;
+            buildingFilter = b -> b instanceof TurretBuild;
+
             shootEffect = smokeEffect = Fx.none;
             shootSound = Sounds.none;
             loopSound = FOSSounds.buzz;
@@ -1934,6 +1937,7 @@ public class FOSBlocks {
             variants = 5;
             walkSound = Sounds.plantBreak;
             placeableOn = false;
+            speedMultiplier = 0.8f;
         }};
         bugSpawn = new BugSpawn("bug-spawn"){{
             scaledHealth = 400;
@@ -1953,34 +1957,26 @@ public class FOSBlocks {
 	    quartum = new Floor("quartum", 4);
 	    quartumWall = new StaticWall("quartum-wall");
 
-        concreteEmpty = new Floor("concrete-empty", 0);
-        concreteFull = new Floor("concrete-full", 0){{
-            blendGroup = concreteEmpty;
+        concreteEmpty = new Floor("concrete-empty", 0){{
+            speedMultiplier = 1.1f;
         }};
-        concreteT = new Floor("concrete-t", 0){{
-            blendGroup = concreteEmpty;
-        }};
-        concreteB = new Floor("concrete-b", 0){{
-            blendGroup = concreteEmpty;
-        }};
-        concreteL = new Floor("concrete-l", 0){{
-            blendGroup = concreteEmpty;
-        }};
-        concreteR = new Floor("concrete-r", 0){{
-            blendGroup = concreteEmpty;
-        }};
-        concreteTL = new Floor("concrete-tl", 0){{
-            blendGroup = concreteEmpty;
-        }};
-        concreteTR = new Floor("concrete-tr", 0){{
-            blendGroup = concreteEmpty;
-        }};
-        concreteBL = new Floor("concrete-bl", 0){{
-            blendGroup = concreteEmpty;
-        }};
-        concreteBR = new Floor("concrete-br", 0){{
-            blendGroup = concreteEmpty;
-        }};
+
+        class ConcreteFloor extends Floor {
+            ConcreteFloor(String name, int variants) {
+                super(name, variants);
+                blendGroup = concreteEmpty;
+                speedMultiplier = 1.1f;
+            }
+        }
+        concreteFull = new ConcreteFloor("concrete-full", 0);
+        concreteT = new ConcreteFloor("concrete-t", 0);
+        concreteB = new ConcreteFloor("concrete-b", 0);
+        concreteL = new ConcreteFloor("concrete-l", 0);
+        concreteR = new ConcreteFloor("concrete-r", 0);
+        concreteTL = new ConcreteFloor("concrete-tl", 0);
+        concreteTR = new ConcreteFloor("concrete-tr", 0);
+        concreteBL = new ConcreteFloor("concrete-bl", 0);
+        concreteBR = new ConcreteFloor("concrete-br", 0);
         concreteWall = new StaticWall("concrete-wall");
 
         softbush = new Prop("softbush"){{
