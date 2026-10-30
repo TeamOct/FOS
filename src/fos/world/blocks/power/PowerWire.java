@@ -195,6 +195,11 @@ public class PowerWire extends PowerNode {
         }
 
         @Override
+        public void drawCached() {
+            draw();
+        }
+
+        @Override
         public void onProximityUpdate() {
             super.onProximityUpdate();
 
