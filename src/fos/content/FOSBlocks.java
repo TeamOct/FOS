@@ -76,7 +76,7 @@ public class FOSBlocks {
 
     // DEFENSE
     zincWall, zincWallLarge, securityDoor, diamondWall, diamondWallLarge, vanadiumWall, vanadiumWallLarge, cuberiumWall, cuberiumWallLarge,
-    helix, sticker, sludge, dot, particulator, firefly, pulse, breakdown, rupture, thunder, cluster, judge, newJudge, bugSentry,
+    helix, sticker, sludge, dot, particulator, firebird, pulse, breakdown, rupture, thunder, cluster, judge, newJudge, bugSentry,
     matrixShieldProj, beamMender,
     landMine,
 
@@ -893,7 +893,7 @@ public class FOSBlocks {
             coolantMultiplier = 2f;
             requirements(Category.turret, with(zinc, 200, copper, 125, silicon, 175, vanadium, 150));
         }};
-        firefly = new LiquidTurret("firefly"){{
+        firebird = new LiquidTurret("firebird"){{
             health = 2400;
             size = 3;
             range = 200;
