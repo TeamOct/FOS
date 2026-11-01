@@ -6,6 +6,7 @@ import arc.util.Time;
 import fos.graphics.FOSPal;
 import fos.type.statuses.*;
 import fos.world.draw.FOSStats;
+import mindustry.content.StatusEffects;
 import mindustry.entities.Effect;
 import mindustry.gen.Unit;
 import mindustry.type.StatusEffect;
@@ -44,9 +45,12 @@ public class FOSStatuses {
             }
         };
         tokiciteSlowed = new FOSStatusEffect("tokicite-slowed"){{
-            speedMultiplier = 0.25f;
+            speedMultiplier = 0.45f;
             effect = FOSFx.tokiciteDrop;
             color = Color.valueOf("d16792");
+            init(() -> {
+                opposite(StatusEffects.wet, StatusEffects.tarred, StatusEffects.freezing); // don't stack with other liquid-based slowdown effects
+            });
         }};
         buildBoost = new StatusEffect("build-boost"){{
             buildSpeedMultiplier = 1.25f;
