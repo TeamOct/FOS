@@ -134,7 +134,8 @@ public class FOSUnitTypes {
 
     public static void load(){
         legionnaire = new FOSUnitType("legionnaire", UnitEntity.class){{
-            health = 500;
+            health = 600;
+            armor = 3;
             hitSize = 12;
             rotateSpeed = 6f;
             speed = 2.5f;
@@ -208,7 +209,7 @@ public class FOSUnitTypes {
         }};
         legion = new BossUnitType("legion", MechUnit.class){{
             health = 4500;
-            armor = 10;
+            armor = 15;
             hitSize = 25;
             speed = 0.3f;
             flying = false;
@@ -223,13 +224,13 @@ public class FOSUnitTypes {
                     beamWidth = 0.6f;
                     repairSpeed = 1f;
                     bullet = new BulletType(){{
-                        maxRange = 40f;
+                        maxRange = 80f;
                     }};
                 }},
                 new Weapon("fos-legion-sapper"){{
                     x = 0f; y = 6f;
                     mirror = false;
-                    reload = 20f;
+                    reload = 10f;
                     top = false;
                     layerOffset = -0.05f;
                     rotate = false;
@@ -243,7 +244,7 @@ public class FOSUnitTypes {
                         length = maxRange = 80f;
                         damage = 90;
                         buildingDamageMultiplier = 2f;
-                        sapStrength = 0.2f;
+                        sapStrength = 0.3f;
 
                         hitColor = color = Color.valueOf("bf92f9");
                         despawnEffect = Fx.none;
