@@ -1,27 +1,38 @@
 package fos.core;
 
-import arc.*;
+import arc.ApplicationListener;
+import arc.Events;
 import arc.audio.Music;
 import arc.backend.sdl.SdlApplication;
 import arc.backend.sdl.jni.SDL;
-import arc.graphics.*;
+import arc.graphics.Pixmap;
+import arc.graphics.Texture;
+import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.ScreenQuad;
 import arc.graphics.gl.Shader;
-import arc.input.*;
+import arc.input.GestureDetector;
+import arc.input.KeyCode;
 import arc.math.Mathf;
 import arc.struct.Seq;
-import arc.util.*;
+import arc.util.Log;
+import arc.util.Reflect;
+import arc.util.Time;
 import fos.content.*;
-import fos.mod.*;
-import fos.gen.*;
-import fos.graphics.*;
+import fos.gen.EntityRegistry;
+import fos.gen.LumoniPlayerc;
+import fos.graphics.ConveyorSpritesPacker;
+import fos.graphics.FOSOreRenderer;
+import fos.graphics.FOSShaders;
 import fos.graphics.cachelayers.FOSCacheLayers;
+import fos.mod.*;
 import fos.net.FOSCall;
 import fos.ui.AwakeningCutscene;
 import fos.ui.UIHandler;
 import fos.ui.menus.FOSMenus;
 import mindustry.game.EventType;
-import mindustry.gen.*;
+import mindustry.gen.EntityMapping;
+import mindustry.gen.Musics;
+import mindustry.graphics.Layer;
 import mindustry.mod.Mod;
 
 import java.util.Calendar;
@@ -172,6 +183,22 @@ public class FOSMod extends Mod {
         }));
 
         Events.fire(new FOSEventTypes.RealisticToggleEvent());
+
+        //debug-only insect pathfinder test
+        if (settings.getBool("fos-pathfinder-debug", false)) {
+            Events.run(EventType.Trigger.draw, () -> {
+                for (int i = 0; i < FOSVars.deathMapController.deathMap.length; i++) {
+                    if (FOSVars.deathMapController.deathMap[i] == 0) continue;
+
+                    Draw.z(Layer.light);
+                    Draw.alpha(FOSVars.deathMapController.deathMap[i] / 100f);
+
+                    Draw.rect("empty", world.tiles.geti(i).worldx(), world.tiles.geti(i).worldy());
+
+                    Draw.reset();
+                }
+            });
+        }
     }
 
     public void constructSettings() {

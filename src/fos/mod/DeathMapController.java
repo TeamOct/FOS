@@ -1,7 +1,9 @@
 package fos.mod;
 
 import arc.Events;
+import arc.util.Time;
 import arc.util.io.*;
+import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.io.*;
 
@@ -21,19 +23,24 @@ public class DeathMapController implements SaveFileReader.CustomChunk {
         });
 
         Events.on(FOSEventTypes.InsectDeathEvent.class, e -> {
-            int ti = e.tile.array();
-            deathMap[ti] += 1;
+            // delay update by 10 seconds
+            Time.runTask(600f, () -> {
+                if (!Vars.state.isGame()) return;
 
-            e.tile.circle(3, (tile) -> {
-                if (tile == null) return;
-                deathMap[tile.array()] += 1;
+                int ti = e.tile.array();
+                deathMap[ti] += 1;
 
-                // overflow? leave it at max
-                if (deathMap[tile.array()] < 0) {
-                    deathMap[tile.array()] = Short.MAX_VALUE;
-                }
+                e.tile.circle(3, (tile) -> {
+                    if (tile == null) return;
+                    deathMap[tile.array()] += 1;
 
-                shouldSave = true;
+                    // overflow? leave it at max
+                    if (deathMap[tile.array()] < 0) {
+                        deathMap[tile.array()] = Short.MAX_VALUE;
+                    }
+
+                    shouldSave = true;
+                });
             });
         });
 
