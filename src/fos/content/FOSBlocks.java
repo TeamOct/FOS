@@ -660,7 +660,7 @@ public class FOSBlocks {
             health = 2400;
             size = 3;
             range = 270;
-            reload = 90f;
+            reload = 60f;
             shootCone = 20f;
             inaccuracy = 2f;
             targetGround = targetAir = true;
@@ -671,48 +671,114 @@ public class FOSBlocks {
             squareSprite = false;
 
             ammo(
-                tokicite, new FragLiquidBulletType(tokicite){
-                    {
-                        puddleSize = 30f;
-                        orbSize = 6f;
-                        ammoMultiplier = 1f/30f;
-                        lifetime = 60f; speed = 4.5f;
-                        damage = 30f;
+                water, new FragLiquidBulletType(water){{
+                    puddleSize = 30f;
+                    orbSize = 6f;
+                    ammoMultiplier = 1f/30f;
+                    lifetime = 40f; speed = 6.75f;
+                    damage = 10f;
+                    knockback = 2.25f;
 
-                        trailEffect = FOSFx.tokiciteDrop;
-                        trailChance = 0.2f;
+                    reloadMultiplier = 2f;
+
+                    trailEffect = Fx.wet;
+                    trailChance = 0.2f;
+                    hitSound = Sounds.stepWater;
+                    hitSoundPitch = 0.7f;
+                    shootSound = Sounds.stepWater;
+
+                    setDefaults = false;
+                    despawnHit = true;
+                    fragOnHit = true;
+                    fragBullets = 8;
+                    fragVelocityMin = 0.6f;
+                    fragVelocityMax = 1.4f;
+                    fragBullet = new LiquidBulletType(water){{
+                        lifetime = 15f; speed = 2f;
+                        despawnHit = true;
+                        pierce = true;
+                        pierceCap = 2;
+                        pierceBuilding = false;
+                        knockback = 1f;
+
+                        hitSound = Sounds.stepWater;
+                        hitSoundVolume = 0.5f;
+                        hitSoundPitch = 0.6f;
+                    }};
+                }},
+                oil, new FragLiquidBulletType(oil){{
+                    puddleSize = 30f;
+                    orbSize = 6f;
+                    ammoMultiplier = 1f/30f;
+                    lifetime = 60f; speed = 4.5f;
+                    damage = 10f;
+                    knockback = 0.3f;
+
+                    trailEffect = Fx.oily;
+                    trailChance = 0.2f;
+                    hitSound = Sounds.stepWater;
+                    hitSoundPitch = 0.7f;
+
+                    setDefaults = false;
+                    despawnHit = true;
+                    fragOnHit = true;
+                    fragBullets = 6;
+                    fragVelocityMin = 0.6f;
+                    fragVelocityMax = 1.4f;
+                    fragBullet = new LiquidBulletType(oil){{
+                        lifetime = 20f; speed = 1.5f;
+                        despawnHit = true;
+                        pierce = true;
+                        pierceCap = 2;
+                        pierceBuilding = false;
+
                         hitSound = FOSSounds.sticky;
-                        hitSoundPitch = 0.7f;
-                        // TODO: smokeEffect doesn't work for some reason
-                        smokeEffect = new Effect(40f, e -> {
-                            Draw.color(tokicite.color);
+                        hitSoundVolume = 0.5f;
+                        hitSoundPitch = 0.6f;
+                    }};
+                }},
+                tokicite, new FragLiquidBulletType(tokicite){{
+                    puddleSize = 30f;
+                    orbSize = 6f;
+                    ammoMultiplier = 1f/30f;
+                    lifetime = 60f; speed = 4.5f;
+                    damage = 30f;
 
-                            randLenVectors(e.id, 4, 18, e.rotation, 25f, (x, y) -> {
-                                Fill.circle(x, y, e.fout() * 6f);
-                            });
+                    reloadMultiplier = 2/3f;
 
-                            Draw.reset();
+                    trailEffect = FOSFx.tokiciteDrop;
+                    trailChance = 0.2f;
+                    hitSound = FOSSounds.sticky;
+                    hitSoundPitch = 0.7f;
+                    // TODO: smokeEffect doesn't work for some reason
+                    smokeEffect = new Effect(40f, e -> {
+                        Draw.color(tokicite.color);
+
+                        randLenVectors(e.id, 4, 18, e.rotation, 25f, (x, y) -> {
+                            Fill.circle(x, y, e.fout() * 6f);
                         });
 
-                        setDefaults = false;
-                        despawnHit = true;
-                        fragOnHit = true;
-                        fragBullets = 6;
-                        fragVelocityMin = 0.6f;
-                        fragVelocityMax = 1.4f;
-                        fragBullet = new LiquidBulletType(tokicite){{
-                            lifetime = 20f; speed = 1.5f;
-                            despawnHit = true;
-                            pierce = true;
-                            pierceCap = 2;
-                            pierceBuilding = false;
+                        Draw.reset();
+                    });
 
-                            hitSound = FOSSounds.sticky;
-                            hitSoundVolume = 0.5f;
-                            hitSoundPitch = 0.6f;
-                        }};
-                    }
-                }
+                    setDefaults = false;
+                    despawnHit = true;
+                    fragOnHit = true;
+                    fragBullets = 6;
+                    fragVelocityMin = 0.6f;
+                    fragVelocityMax = 1.4f;
+                    fragBullet = new LiquidBulletType(tokicite){{
+                        lifetime = 20f; speed = 1.5f;
+                        despawnHit = true;
+                        pierce = true;
+                        pierceCap = 2;
+                        pierceBuilding = false;
+
+                        hitSound = FOSSounds.sticky;
+                        hitSoundVolume = 0.5f;
+                        hitSoundPitch = 0.6f;
+                    }};
+                }}
             );
 
             drawer = new DrawTurret("lumoni-"){{
