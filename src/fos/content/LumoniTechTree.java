@@ -183,6 +183,9 @@ public class LumoniTechTree {
                 });
             });
 
+            // LOGIC BLOCKS
+            node(itemDisplay);
+
             // CORE UNIT WEAPON MODULES
             node(upgradeCenter, () -> {
                 //RIFLES

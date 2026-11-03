@@ -2,51 +2,100 @@ package fos.content;
 
 import arc.Core;
 import arc.graphics.Color;
-import arc.graphics.g2d.*;
+import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Fill;
+import arc.graphics.g2d.Lines;
 import arc.math.Mathf;
 import arc.util.Strings;
 import fos.audio.FOSSounds;
-import fos.entities.bullet.*;
-import fos.graphics.*;
+import fos.entities.bullet.FragLiquidBulletType;
+import fos.entities.bullet.OhioBeamBulletType;
+import fos.entities.bullet.ShieldPierceBulletType;
+import fos.entities.bullet.StickyBulletType;
+import fos.graphics.FOSPal;
+import fos.graphics.FOSShaders;
 import fos.graphics.cachelayers.FOSCacheLayers;
-import fos.world.blocks.campaign.*;
+import fos.world.blocks.campaign.GiantNukeLauncher;
+import fos.world.blocks.campaign.NukeLauncher;
+import fos.world.blocks.campaign.OrbitalAccelerator;
 import fos.world.blocks.defense.*;
-import fos.world.blocks.distribution.*;
-import fos.world.blocks.environment.*;
-import fos.world.blocks.power.*;
-import fos.world.blocks.production.*;
-import fos.world.blocks.special.*;
+import fos.world.blocks.distribution.FlowGate;
+import fos.world.blocks.distribution.LiquidConveyor;
+import fos.world.blocks.distribution.PipeConveyor;
+import fos.world.blocks.distribution.SpaceDuct;
+import fos.world.blocks.environment.AnimatedOreBlock;
+import fos.world.blocks.environment.ImprovedTreeBlock;
+import fos.world.blocks.environment.UndergroundOreBlock;
+import fos.world.blocks.logic.ItemDisplay;
+import fos.world.blocks.power.HeatGenerator;
+import fos.world.blocks.power.PowerWire;
+import fos.world.blocks.power.PowerWireNode;
+import fos.world.blocks.power.WindTurbine;
+import fos.world.blocks.production.HeatProducerDrill;
+import fos.world.blocks.production.OreDetector;
+import fos.world.blocks.production.UndergroundDrill;
+import fos.world.blocks.special.CliffExplosive;
+import fos.world.blocks.special.PlaceholderBlock;
+import fos.world.blocks.special.SurfaceExplosive;
+import fos.world.blocks.special.UpgradeCenter;
 import fos.world.blocks.storage.DetectorCoreBlock;
-import fos.world.blocks.units.*;
+import fos.world.blocks.units.BugSpawn;
+import fos.world.blocks.units.MinerUnitFactory;
+import fos.world.blocks.units.WaveSpawnerBlock;
 import fos.world.draw.DrawOutputLiquids;
-import mindustry.content.*;
+import mindustry.content.Fx;
+import mindustry.content.Items;
+import mindustry.content.StatusEffects;
 import mindustry.entities.Effect;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.MultiEffect;
-import mindustry.entities.part.*;
-import mindustry.entities.pattern.*;
+import mindustry.entities.part.RegionPart;
+import mindustry.entities.part.ShapePart;
+import mindustry.entities.pattern.ShootAlternate;
+import mindustry.entities.pattern.ShootBarrel;
+import mindustry.entities.pattern.ShootHelix;
+import mindustry.entities.pattern.ShootMulti;
 import mindustry.gen.Sounds;
-import mindustry.graphics.*;
-import mindustry.type.*;
-import mindustry.ui.*;
+import mindustry.graphics.CacheLayer;
+import mindustry.graphics.Drawf;
+import mindustry.graphics.Layer;
+import mindustry.graphics.Pal;
+import mindustry.type.Category;
+import mindustry.type.ItemStack;
+import mindustry.type.LiquidStack;
+import mindustry.type.UnitType;
+import mindustry.ui.Bar;
+import mindustry.ui.Styles;
 import mindustry.world.Block;
-import mindustry.world.blocks.defense.*;
-import mindustry.world.blocks.defense.turrets.*;
+import mindustry.world.blocks.defense.AutoDoor;
+import mindustry.world.blocks.defense.Wall;
+import mindustry.world.blocks.defense.turrets.ItemTurret;
+import mindustry.world.blocks.defense.turrets.LiquidTurret;
+import mindustry.world.blocks.defense.turrets.PowerTurret;
+import mindustry.world.blocks.defense.turrets.TractorBeamTurret;
 import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.liquid.*;
-import mindustry.world.blocks.power.*;
-import mindustry.world.blocks.production.*;
+import mindustry.world.blocks.power.Battery;
+import mindustry.world.blocks.power.ConsumeGenerator;
+import mindustry.world.blocks.power.SolarGenerator;
+import mindustry.world.blocks.production.AttributeCrafter;
+import mindustry.world.blocks.production.Drill;
+import mindustry.world.blocks.production.GenericCrafter;
+import mindustry.world.blocks.production.Pump;
 import mindustry.world.blocks.storage.Unloader;
-import mindustry.world.blocks.units.*;
+import mindustry.world.blocks.units.Reconstructor;
+import mindustry.world.blocks.units.UnitFactory;
 import mindustry.world.consumers.ConsumeLiquidFlammable;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 
 import static arc.graphics.g2d.Draw.color;
-import static arc.graphics.g2d.Lines.*;
+import static arc.graphics.g2d.Lines.lineAngle;
+import static arc.graphics.g2d.Lines.stroke;
 import static arc.math.Angles.randLenVectors;
-import static fos.content.FOSFluids.*;
+import static fos.content.FOSFluids.oxygen;
+import static fos.content.FOSFluids.tokicite;
 import static fos.content.FOSItems.*;
 import static fos.content.FOSUnitTypes.*;
 import static mindustry.content.Items.*;
@@ -94,8 +143,6 @@ public class FOSBlocks {
 
     hiveFloor, bugSpawn,
 
-
-
     // PROPS
     softbush, calciteCrystal, calciteMineral, blueTree, ashStoneBoulder, quartumBoulder,
 
@@ -107,6 +154,9 @@ public class FOSBlocks {
 
     // SPECIAL
     nukeLauncher, bigBoy, cliffDetonator, surfaceDetonator, orbitalAccelerator,
+
+    // LOGIC
+    itemDisplay,
 
     // NON-PLAYER STUFF
     soontm, citadelSpawner;
@@ -2277,6 +2327,13 @@ public class FOSBlocks {
             requirements(Category.effect, BuildVisibility.debugOnly, with(zinc, 250, silver, 300, silicon, 150));
         }};
 */
+
+        itemDisplay = new ItemDisplay("item-display"){{
+            health = 480;
+            size = 3;
+            squareSprite = false;
+            requirements(Category.logic, with(zinc, 25, copper, 25, silicon, 50));
+        }};
 
         liquidConveyor = new LiquidConveyor("l-c"){{
             requirements(Category.distribution, BuildVisibility.debugOnly, with(Items.copper, 1));
