@@ -1594,6 +1594,8 @@ public class FOSUnitTypes {
                     }};
                 }}
             );
+
+            firstRequirements = ItemStack.with(copper, 5, diamond, 3);
         }};
 
         bugFlyingSmall = new BugUnitType("bug-flying-small", BugUnit.class, true, true){{
@@ -1673,11 +1675,12 @@ public class FOSUnitTypes {
 
             isEnemy = false;
 
-            itemCapacity = 1;
-            mineSpeed = 0.2f;
+            itemCapacity = 2;
+            mineSpeed = 0.3f;
             mineTier = 2;
             mineRange = 4f;
-            mineItems = Seq.with(zinc, copper);
+            mineItems = Seq.with(zinc, copper, diamond);
+            drawMineBeam = false;
 
             controller = u -> new MinerBugAI();
             defaultCommand = UnitCommand.mineCommand;
