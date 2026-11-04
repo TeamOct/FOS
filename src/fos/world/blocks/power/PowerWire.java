@@ -35,6 +35,8 @@ public class PowerWire extends PowerNode {
 
         enableDrawStatus = false;
         hasShadow = false;
+        drawCached = true;
+        drawDynamic = false;
     }
 
     @Override
@@ -217,6 +219,8 @@ public class PowerWire extends PowerNode {
                     checkedNearby |= 1 << (3 - i);
                 }
             }
+
+            recache();
         }
 
         @Override

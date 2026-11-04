@@ -40,12 +40,16 @@ public class FlowGate extends OverflowGate {
         @Override
         public void draw() {
             Draw.rect(inverse ? inverseRegion : region, x, y);
+            drawTeamTop();
         }
 
         @Override
         public boolean configTapped() {
             configure(!inverse);
+
             clickSound.at(this);
+            recache();
+
             return false;
         }
 
