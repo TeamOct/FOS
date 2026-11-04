@@ -354,14 +354,14 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                         other.setOverlay(air);
                         if (other.block() != air) {
                             other.setBlock(murmurWall);
-                        };
+                        }
                     }
                     else if (noise > 0.57f) {
                         other.setFloor(carbonStone.asFloor());
                         other.setOverlay(air);
                         if (other.block() != air) {
                             other.setBlock(carbonWall);
-                        };
+                        }
                     }
                 });
 
@@ -392,7 +392,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                         if (rand.random(1f) < 0.4f) {
                             t.setFloor(arkyicStone.asFloor());
                             t.setOverlay(air);
-                        };
+                        }
                     });
 
                     //more arkycite because 1x1 puddles all around do not look natural
@@ -400,7 +400,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                         if (rand.random(1f) < 0.25f) {
                             t.setFloor(arkyciteFloor.asFloor());
                             t.setOverlay(air);
-                        };
+                        }
                     });
 
                     floor = arkyciteFloor;
@@ -469,7 +469,7 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                     if (rand.chance(0.35f)) {
                         t.setFloor(hiveFloor.asFloor());
                         t.setOverlay(air);
-                    };
+                    }
                 });
 
                 // spawn point

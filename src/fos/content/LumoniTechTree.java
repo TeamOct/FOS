@@ -40,6 +40,9 @@ public class LumoniTechTree {
                         node(zincBridge);
                     })
                 );
+                node(smallCrate, () -> {
+                    node(zincUnloader);
+                });
             });
 
             // POWER. TODO
