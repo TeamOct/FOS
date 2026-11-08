@@ -1,11 +1,17 @@
 package fos.type;
 
 import arc.Core;
-import arc.graphics.*;
+import arc.func.Cons;
+import arc.graphics.Pixmap;
+import arc.util.Nullable;
+import mindustry.game.Rules;
 import mindustry.graphics.*;
 import mindustry.type.*;
 
 public class FOSSectorPreset extends SectorPreset {
+    /** These rules will have higher priority over even campaign settings. */
+    public @Nullable Cons<Rules> rulesOverride;
+
     public FOSSectorPreset(String name, Planet planet, int sector) {
         super(name, planet, sector);
     }

@@ -667,7 +667,6 @@ public class FOSBlocks {
             inaccuracy = 2f;
             targetGround = targetAir = true;
             liquidCapacity = 60f;
-            ammoPerShot = 20;
 
             loopSound = Sounds.none;
             shootSound = FOSSounds.sticky;
@@ -681,6 +680,7 @@ public class FOSBlocks {
                     damage = 20f;
                     knockback = 2.5f;
                     rangeChange = 50f;
+                    ammoMultiplier = 1f/20f;
 
                     reloadMultiplier = 2f;
 
@@ -715,6 +715,7 @@ public class FOSBlocks {
                     lifetime = 60f; speed = 4.5f;
                     damage = 10f;
                     knockback = 0.3f;
+                    ammoMultiplier = 1f/20f;
 
                     trailEffect = Fx.oily;
                     trailChance = 0.2f;
@@ -745,6 +746,7 @@ public class FOSBlocks {
                     orbSize = 6f;
                     lifetime = 60f; speed = 4.5f;
                     damage = 30f;
+                    ammoMultiplier = 1f/20f;
 
                     reloadMultiplier = 2/3f;
 
@@ -1570,14 +1572,14 @@ public class FOSBlocks {
         zincBelt = new PipeConveyor("tin-belt"){{
             health = 10;
             speed = 0.058f;
-            displayedSpeed = 8.1f;
+            displayedSpeed = 8f;
             researchCost = with(zinc, 30);
             requirements(Category.distribution, with(zinc, 1));
         }};
         brassBelt = new PipeConveyor("brass-belt"){{
             health = 10;
             speed = 0.087f;
-            displayedSpeed = 12.1f;
+            displayedSpeed = 12f;
             requirements(Category.distribution, with(brass, 1));
         }};
         zincJunction = new Junction("tin-junction"){{

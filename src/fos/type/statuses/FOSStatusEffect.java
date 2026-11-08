@@ -10,7 +10,7 @@ import mindustry.content.Fx;
 import mindustry.entities.units.StatusEntry;
 import mindustry.gen.Unit;
 import mindustry.graphics.*;
-import mindustry.type.StatusEffect;
+import mindustry.type.*;
 
 public class FOSStatusEffect extends StatusEffect {
     public FOSStatusEffect(String name) {

@@ -73,6 +73,7 @@ public class FOSWeaponModules {
                             width = 4f; height = 5f;
                             lifetime = 20f;
                             homingPower = 0.4f;
+                            homingRange = 140f;
                             collidesTiles = true;
 
                             trailLength = 15;

@@ -24,8 +24,11 @@ public class FOSSectors {
             captureWave = 3;
 
             rules = r -> {
-                r.fog = true;
                 r.coreCapture = true;
+            };
+
+            rulesOverride = r -> {
+                r.fog = r.staticFog = true;
             };
         }};
 

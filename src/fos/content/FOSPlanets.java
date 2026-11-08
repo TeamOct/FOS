@@ -7,6 +7,8 @@ import arc.struct.Seq;
 import arc.util.Tmp;
 import fos.core.FOSVars;
 import fos.maps.planet.*;
+import fos.type.FOSSectorPreset;
+import mindustry.Vars;
 import mindustry.game.*;
 import mindustry.graphics.g3d.*;
 import mindustry.type.*;
@@ -133,44 +135,54 @@ public class FOSPlanets {
             };
         }};
 
-        lumoni = new Planet("lumoni", caldemolt, 0.9f, 2){{
-            defaultCore = coreFortress;
-            hasAtmosphere = true;
-            bloom = false;
-            atmosphereColor = Color.valueOf("288a5d27");
-            iconColor = annite.mapColor;
-            meshLoader = () -> new HexMesh(this, 5);
-            startSector = 89;
-            generator = new LumoniPlanetGenerator(){{
-                defaultLoadout = FOSSchematics.lumoniLoadout;
-            }};
-            defaultEnv = Env.terrestrial | Env.oxygen | Env.groundWater;
-            minZoom = 0.8f;
-            camRadius += 0.4f;
-            orbitSpacing = 6f;
-            allowLaunchLoadout = true;
-            accessible = true;
-            alwaysUnlocked = true;
-            //TODO you'll see why I did this :)
-            launchCandidates.add(uxerd);
-            solarSystem = caldemolt;
-            cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 5, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
-            ruleSetter = r -> {
-                r.loadout = ItemStack.list();
-                r.fog = true;
-                r.defaultTeam = FOSTeams.corru;
-                r.waveTeam = r.attackMode ? Team.sharded : FOSTeams.bessin;
-                r.enemyCoreBuildRadius = 300;
-                WeatherEntry weather = new WeatherEntry(FOSWeathers.wind);
-                weather.always = true; //always windy
-                r.weather.add(weather);
-                r.bannedBlocks.addAll(conveyor, junction, router, duo, mechanicalDrill, copperWall, copperWallLarge);
-                r.hideBannedBlocks = true;
-            };
+        lumoni = new Planet("lumoni", caldemolt, 0.9f, 2){
+            {
+                defaultCore = coreFortress;
+                hasAtmosphere = true;
+                bloom = false;
+                atmosphereColor = Color.valueOf("288a5d27");
+                iconColor = annite.mapColor;
+                meshLoader = () -> new HexMesh(this, 5);
+                startSector = 89;
+                generator = new LumoniPlanetGenerator(){{
+                    defaultLoadout = FOSSchematics.lumoniLoadout;
+                }};
+                defaultEnv = Env.terrestrial | Env.oxygen | Env.groundWater;
+                minZoom = 0.8f;
+                camRadius += 0.4f;
+                orbitSpacing = 6f;
+                allowLaunchLoadout = true;
+                accessible = true;
+                alwaysUnlocked = true;
+                //TODO you'll see why I did this :)
+                launchCandidates.add(uxerd);
+                solarSystem = caldemolt;
+                cloudMeshLoader = () -> new HexSkyMesh(this, 7, 1.1f, 0.15f, 5, Color.valueOf("b0dcb76d"), 2, 0.5f, 1f, 0.38f);
+                ruleSetter = r -> {
+                    r.loadout = ItemStack.list();
 
-            allowCampaignRules = true;
-            showRtsAIRule = true;
-            uxerd.statParent = this;
-        }};
+                    r.defaultTeam = FOSTeams.corru;
+                    r.waveTeam = r.attackMode ? Team.sharded : FOSTeams.bessin;
+                    r.enemyCoreBuildRadius = 300;
+                    WeatherEntry weather = new WeatherEntry(FOSWeathers.wind);
+                    weather.always = true; //always windy
+                    r.weather.add(weather);
+                    r.bannedBlocks.addAll(conveyor, junction, router, duo, mechanicalDrill, copperWall, copperWallLarge);
+                    r.hideBannedBlocks = true;
+                };
+
+                allowCampaignRules = true;
+                uxerd.statParent = this;
+            }
+
+            @Override
+            public void applyRules(Rules rules, boolean customGame) {
+                super.applyRules(rules, customGame);
+
+                if (Vars.state.getSector().preset instanceof FOSSectorPreset s && s.rulesOverride != null) {
+                    s.rulesOverride.get(rules);
+                }
+            }
+        };
     }
 }
