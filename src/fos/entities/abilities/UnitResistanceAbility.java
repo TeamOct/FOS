@@ -1,8 +1,8 @@
 package fos.entities.abilities;
 
 import arc.graphics.g2d.*;
+import arc.math.Mathf;
 import arc.scene.ui.layout.Table;
-import arc.util.Strings;
 import fos.world.draw.FOSStats;
 import mindustry.entities.abilities.Ability;
 import mindustry.gen.*;
@@ -22,7 +22,7 @@ public class UnitResistanceAbility extends Ability {
     public void addStats(Table t) {
         t.add("[lightgray]" + Stat.unitType.localized() + ": [white]" + unitType.localizedName);
         t.row();
-        t.add("[lightgray]" + FOSStats.unitDamageRes.localized() + ": [white]+" + Strings.autoFixed(resistance * 100, 1000) + StatUnit.percent.localized());
+        t.add("[lightgray]" + FOSStats.unitDamageRes.localized() + ": [white]+" + Mathf.round(resistance * 100) + StatUnit.percent.localized());
         t.row();
     }
 

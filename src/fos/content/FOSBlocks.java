@@ -242,7 +242,7 @@ public class FOSBlocks {
             squareSprite = false;
             consumePower(4.5f);
             consumeItems(with(copper, 2, zinc, 1));
-            consumeLiquid(tokicite, 0.5f);
+            consumeLiquid(tokicite, 0.1f);
             outputItems = with(brass, 1);
             requirements(Category.crafting, with(zinc, 100, copper, 75, silicon, 150));
             craftEffect = FOSFx.brassSmelterCraft;
@@ -662,11 +662,12 @@ public class FOSBlocks {
             health = 2400;
             size = 3;
             range = 270;
-            reload = 60f;
+            reload = 40f;
             shootCone = 20f;
             inaccuracy = 2f;
             targetGround = targetAir = true;
             liquidCapacity = 60f;
+            ammoPerShot = 20;
 
             loopSound = Sounds.none;
             shootSound = FOSSounds.sticky;
@@ -676,10 +677,10 @@ public class FOSBlocks {
                 water, new FragLiquidBulletType(water){{
                     puddleSize = 30f;
                     orbSize = 6f;
-                    ammoMultiplier = 1f/30f;
-                    lifetime = 40f; speed = 6.75f;
-                    damage = 10f;
-                    knockback = 2.25f;
+                    lifetime = 40f; speed = 8f;
+                    damage = 20f;
+                    knockback = 2.5f;
+                    rangeChange = 50f;
 
                     reloadMultiplier = 2f;
 
@@ -711,7 +712,6 @@ public class FOSBlocks {
                 oil, new FragLiquidBulletType(oil){{
                     puddleSize = 30f;
                     orbSize = 6f;
-                    ammoMultiplier = 1f/30f;
                     lifetime = 60f; speed = 4.5f;
                     damage = 10f;
                     knockback = 0.3f;
@@ -733,6 +733,7 @@ public class FOSBlocks {
                         pierce = true;
                         pierceCap = 2;
                         pierceBuilding = false;
+                        knockback = 0.2f;
 
                         hitSound = FOSSounds.sticky;
                         hitSoundVolume = 0.5f;
@@ -742,7 +743,6 @@ public class FOSBlocks {
                 tokicite, new FragLiquidBulletType(tokicite){{
                     puddleSize = 30f;
                     orbSize = 6f;
-                    ammoMultiplier = 1f/30f;
                     lifetime = 60f; speed = 4.5f;
                     damage = 30f;
 
@@ -775,6 +775,7 @@ public class FOSBlocks {
                         pierce = true;
                         pierceCap = 2;
                         pierceBuilding = false;
+                        knockback = 0.2f;
 
                         hitSound = FOSSounds.sticky;
                         hitSoundVolume = 0.5f;

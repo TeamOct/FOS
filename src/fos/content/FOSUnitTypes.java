@@ -214,7 +214,7 @@ public class FOSUnitTypes {
             speed = 0.3f;
             flying = false;
             canBoost = false;
-            maxRange = 144f;
+            range = 80f; maxRange = 144f;
             rotateMoveFirst = true;
 
             weapons.add(
@@ -222,7 +222,7 @@ public class FOSUnitTypes {
                     x = 4; y = 0;
                     mirror = true;
                     beamWidth = 0.6f;
-                    repairSpeed = 1f;
+                    repairSpeed = 2f;
                     bullet = new BulletType(){{
                         maxRange = 80f;
                     }};
@@ -241,10 +241,10 @@ public class FOSUnitTypes {
                         spread = 4f;
                     }};
                     bullet = new SapBulletType(){{
-                        length = maxRange = 80f;
+                        length = rangeOverride = 80f;
                         damage = 90;
                         buildingDamageMultiplier = 2f;
-                        sapStrength = 0.3f;
+                        sapStrength = 0.5f;
 
                         hitColor = color = Color.valueOf("bf92f9");
                         despawnEffect = Fx.none;
