@@ -96,7 +96,7 @@ public class FOSBlocks {
     hiveFloor, bugSpawn,
 
     // PROPS
-    softbush, calciteCrystal, calciteMineral, blueTree, ashStoneBoulder, quartumBoulder,
+    softbush, calciteCrystal, calciteMineral, blueTree, ashStoneBoulder, quartumBoulder, cyaniumBush, cyaniumGrass,
 
     // UNITS
     upgradeCenter, destroyerFactory, eliminatorFactory, injectorFactory, simpleReconstructor, draugFactory,
@@ -225,6 +225,7 @@ public class FOSBlocks {
             consumeItems(with(diamond, 1, quartz, 4));
             outputItems = with(silicon, 4);
             requirements(Category.crafting, with(zinc, 180, copper, 150, diamond, 100));
+            
             drawer = new DrawMulti(
                 new DrawRegion("-bottom"),
                 new DrawArcSmelt(),
@@ -269,8 +270,11 @@ public class FOSBlocks {
             craftTime = 60f;
             outputItem = new ItemStack(sulphur, 1);
             outputLiquids = LiquidStack.with(oil, 18f/60f, nitrogen, 6f/60f);
+
             liquidOutputDirections = new int[]{0, 2};
-            craftEffect = FOSFx.refinerySmoke;
+            updateEffect = FOSFx.refinerySmoke;
+            updateEffectChance = 0.1f;
+            updateEffectSpread = 0.75f;
             lightRadius = 32f;
             drawer = new DrawMulti(
                 new DrawRegion("-bottom"),
@@ -1453,6 +1457,8 @@ public class FOSBlocks {
             playerControllable = false;
             buildingFilter = b -> b instanceof TurretBuild;
 
+            forceTeam = FOSTeams.bessin;
+
             shootEffect = smokeEffect = Fx.none;
             shootSound = Sounds.none;
             loopSound = FOSSounds.buzz;
@@ -2018,6 +2024,8 @@ public class FOSBlocks {
             customShadow = true;
             createRubble = false;
             unitCapModifier = 15;
+
+            forceTeam = FOSTeams.bessin;
         }};
 	    ashStone = new Floor("ash-stone", 4);
 	    ashStoneCraters = new Floor("ash-stone-craters", 4);
@@ -2050,7 +2058,7 @@ public class FOSBlocks {
         concreteBR = new ConcreteFloor("concrete-br", 0);
         concreteWall = new StaticWall("concrete-wall");
 
-        softbush = new Prop("softbush"){{
+        softbush = new WobbleProp("softbush"){{
             variants = 3;
             annite.asFloor().decoration = this;
             breakSound = Sounds.plantBreak;
@@ -2079,6 +2087,15 @@ public class FOSBlocks {
 	    quartumBoulder = new Prop("quartum-boulder"){{
             variants = 3;
             quartum.asFloor().decoration = this;
+        }};
+        cyaniumBush = new WobbleProp("cyanium-bush"){{
+            variants = 0;
+            cyanium.asFloor().decoration = this;
+            customShadow = true;
+        }};
+        cyaniumGrass = new WobbleProp("cyanium-grass"){{
+            variants = 3;
+            customShadow = true;
         }};
 
         //endregion

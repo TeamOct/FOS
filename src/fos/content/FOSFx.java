@@ -8,7 +8,7 @@ import arc.math.geom.*;
 import arc.util.Tmp;
 import fos.entities.bullet.OhioBeamBulletType;
 import fos.graphics.FOSPal;
-import mindustry.content.Fx;
+import mindustry.content.*;
 import mindustry.entities.Effect;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -149,7 +149,7 @@ public class FOSFx {
 
     refinerySmoke = new Effect(1f, e -> {
         //RECYCLED ASSET TIME
-        windSmoke.at(e.x, e.y, Pal.gray);
+        windSmoke.at(e.x, e.y, Liquids.arkycite.color.cpy().a(0.8f));
     }),
 
     dotLaserLine = new Effect(10f, e -> {
