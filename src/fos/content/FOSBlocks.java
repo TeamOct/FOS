@@ -2123,6 +2123,8 @@ public class FOSBlocks {
             plans.add(
                 new UnitPlan(FOSUnitTypes.assault, 20f * 60, with(silicon, 15, copper, 15))
             );
+
+            regionSuffix = "-lumoni";
         }};
         eliminatorFactory = new UnitFactory("eliminator-factory"){{
             scaledHealth = 120;
@@ -2133,6 +2135,8 @@ public class FOSBlocks {
             plans.add(
                 new UnitPlan(FOSUnitTypes.radix, 20f * 60, with(silicon, 15, diamond, 10))
             );
+
+            regionSuffix = "-lumoni";
         }};
         injectorFactory = new UnitFactory("injector-factory"){{
             scaledHealth = 120;
@@ -2143,6 +2147,8 @@ public class FOSBlocks {
             plans.add(
                 new UnitPlan(FOSUnitTypes.sergeant, 20f * 60, with(silicon, 15, zinc, 20))
             );
+
+            regionSuffix = "-lumoni";
         }};
         simpleReconstructor = new Reconstructor("simple-reconstructor"){{
             scaledHealth = 160;
@@ -2156,6 +2162,8 @@ public class FOSBlocks {
             );
             constructTime = 60f * 25;
             requirements(Category.units, with(copper, 150, silicon, 150, vanadium, 100));
+
+            regionSuffix = "-lumoni";
         }};
 /*
         droidConstructor = new OverdriveDroneCenter("droid-constructor"){{
