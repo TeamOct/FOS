@@ -36,7 +36,7 @@ public class FOSPlanets {
             iconColor = Color.valueOf("f7c265");
             solarSystem = this;
 
-            boolean nya = FOSVars.debug || FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
+            boolean nya = FOSVars.caldemoltDebug || FOSVars.date.get(Calendar.MONTH) == Calendar.APRIL && FOSVars.date.get(Calendar.DAY_OF_MONTH) == 1;
             accessible = nya;
             alwaysUnlocked = nya;
             if (nya) {

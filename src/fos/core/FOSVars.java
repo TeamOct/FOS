@@ -7,10 +7,9 @@ import fos.content.FOSSectors;
 import fos.files.InternalFileTree;
 import fos.graphics.FOSOreRenderer;
 import fos.mod.*;
-import fos.ui.*;
+import fos.ui.FOSHints;
 import fos.ui.menus.FOSMenuRenderer;
 import mindustry.ai.Pathfinder;
-import mindustry.content.TechTree;
 import mindustry.entities.units.BuildPlan;
 import mindustry.mod.Mods;
 
@@ -27,8 +26,11 @@ public class FOSVars {
     /** An additional modded pathfinder for insect AI. Should not affect vanilla {@link Pathfinder}. */
     public static FOSPathfinder pathfinder = new FOSPathfinder();
 
-    /** Enabling debug mode debug **/
-    public static final boolean debug = Core.settings.getBool("fos-debugmode");
+    // Debug variables
+    public static boolean planetDebug = Core.settings.getBool("fos-planet-debug", false);
+    public static final boolean pathfinderDebug = Core.settings.getBool("fos-pathfinder-debug", false);
+    public static final boolean caldemoltDebug = Core.settings.getBool("fos-caldemolt-debug", false);
+    public static boolean logDebug = Core.settings.getBool("fos-log-debug", false);
     // TODO disable in release version
     /** Early access **/
     public static final boolean earlyAccess = true;

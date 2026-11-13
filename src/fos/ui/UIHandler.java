@@ -1,7 +1,8 @@
 package fos.ui;
 
-import arc.Core;
+import arc.*;
 import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
 import arc.input.KeyCode;
 import arc.math.Mathf;
 import arc.scene.*;
@@ -15,9 +16,9 @@ import fos.type.WeaponSet;
 import fos.ui.menus.*;
 import mindustry.Vars;
 import mindustry.ctype.UnlockableContent;
-import mindustry.game.Team;
+import mindustry.game.*;
 import mindustry.gen.*;
-import mindustry.graphics.Pal;
+import mindustry.graphics.*;
 import mindustry.mod.Mods;
 import mindustry.ui.*;
 import mindustry.ui.dialogs.PlanetDialog;
@@ -34,7 +35,7 @@ public class UIHandler {
         bleedingEdgeIsBroken();
 
         // unlock every planet if debug
-        if (FOSVars.debug)
+        if (FOSVars.planetDebug)
             PlanetDialog.debugSelect = true;
 
         // check for "Fictional Octo System OST" mod. if it doesn't exist, prompt to download from GitHub
@@ -46,12 +47,8 @@ public class UIHandler {
         // 2 more team buttons in editor UI
         modifyEditorUI();
 
-        // an anti-cheat system from long ago, is it really necessary now?
-        anticheat();
-
         // debug-only insect pathfinder test
-/*
-        if (settings.getBool("fos-pathfinder-debug", false)) {
+        if (FOSVars.pathfinderDebug) {
             Events.run(EventType.Trigger.draw, () -> {
                 for (int i = 0; i < FOSVars.deathMapController.deathMap.length; i++) {
                     if (FOSVars.deathMapController.deathMap[i] == 0) continue;
@@ -65,7 +62,6 @@ public class UIHandler {
                 }
             });
         }
-*/
 
         // dedicated weapon module tab in core DB
         ui.database.shown(UIHandler::modifyCoreDb);
@@ -82,7 +78,7 @@ public class UIHandler {
     }
 
     static void preReleaseDisclaimer() {
-        if (FOSVars.earlyAccess && !FOSVars.debug)
+        if (FOSVars.earlyAccess)
             ui.showOkText("@fos.earlyaccesstitle", bundle.get("fos.earlyaccess"), () -> {});
     }
 
@@ -156,15 +152,6 @@ public class UIHandler {
                 ((Table)teambuttons).add(button);
             }
         });
-    }
-
-    static void anticheat() {
-        Mods.LoadedMod xf = mods.list().find(m ->
-            /* some mods don't even have the author field, apparently. how stupid. */ m.meta.author != null &&
-            (m.meta.author.equals("XenoTale") || m.meta.author.equals("goldie")));
-        if (xf != null) {
-            ui.showOkText("@fos.errortitle", bundle.format("fos.errortext", xf.meta.displayName), () -> app.exit());
-        }
     }
 
     static void modifyCoreDb() {
