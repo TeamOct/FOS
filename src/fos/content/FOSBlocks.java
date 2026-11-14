@@ -4,7 +4,7 @@ import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
-import arc.util.Strings;
+import arc.util.*;
 import fos.audio.FOSSounds;
 import fos.entities.bullet.*;
 import fos.graphics.*;
@@ -29,7 +29,7 @@ import mindustry.gen.Sounds;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.ui.*;
-import mindustry.world.Block;
+import mindustry.world.*;
 import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
@@ -64,7 +64,7 @@ public class FOSBlocks {
     oreDetectorSmall, oreDetector, oreDetectorReinforced, oreDetectorOverclocked,
 
     // DISTRIBUTION
-    spaceDuct, spaceRouter, spaceBridge, itemCatapult, zincRouter, zincDistributor, zincJunction, zincBridge, zincBelt, brassBelt, zincSorter, flowGate,
+    spaceDuct, spaceRouter, spaceBridge, itemCatapult, zincRouter, zincDistributor, zincJunction, brassJunction, zincBridge, zincBelt, brassBelt, zincSorter, flowGate,
     liquidConveyor,
 
     // FLUIDS
@@ -1589,9 +1589,10 @@ public class FOSBlocks {
         }};
         zincJunction = new Junction("tin-junction"){{
             speed = 16f;
+            capacity = 5;
+            displayedSpeed = 12f;
             researchCost = with(zinc, 60);
             ((Conveyor) zincBelt).junctionReplacement = this;
-            ((Conveyor) brassBelt).junctionReplacement = this;
             requirements(Category.distribution, with(zinc, 2));
         }};
         zincRouter = new Router("tin-router"){{
@@ -2087,11 +2088,25 @@ public class FOSBlocks {
             variants = 3;
             quartum.asFloor().decoration = this;
         }};
-        cyaniumBush = new WobbleProp("cyanium-bush"){{
-            variants = 0;
-            cyanium.asFloor().decoration = this;
-            customShadow = true;
-        }};
+        cyaniumBush = new WobbleProp("cyanium-bush"){
+            {
+                variants = 0;
+                layer = Layer.blockOver + 0.1f;
+                cyanium.asFloor().decoration = this;
+                customShadow = true;
+            }
+
+            @Override
+            public void drawBase(Tile tile) {
+                var region = variants > 0 ? variantRegions[Mathf.randomSeed(tile.pos(), 0, Math.max(0, variantRegions.length - 1))] : this.region;
+
+                Draw.z(layer);
+                Draw.rectv(region, tile.worldx(), tile.worldy(), region.width * region.scl(), region.height * region.scl(), 0, vec -> vec.add(
+                    Mathf.sin(vec.y*3 + Time.time, wscl, wmag) + Mathf.sin(vec.x*3 - Time.time, 70 * wtscl, 0.8f * wmag2),
+                    Mathf.cos(vec.x*3 + Time.time + 8, wscl + 6f, wmag * 1.1f) + Mathf.sin(vec.y*3 - Time.time, 50 * wtscl, 0.2f * wmag2)
+                ));
+            }
+        };
         cyaniumGrass = new WobbleProp("cyanium-grass"){{
             variants = 3;
             customShadow = true;
