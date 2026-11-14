@@ -2203,7 +2203,7 @@ public class FOSBlocks {
         }};
         coreFortress = new DetectorCoreBlock("core-fortress"){{
             health = 2800;
-            size = 3;
+            size = 4;
             unitCapModifier = 7;
             itemCapacity = 2500;
             unitType = FOSUnitTypes.lord;
@@ -2213,7 +2213,7 @@ public class FOSBlocks {
         }};
         coreCity = new DetectorCoreBlock("core-city"){{
             health = 4600;
-            size = 4;
+            size = 5;
             unitCapModifier = 10;
             itemCapacity = 5000;
             unitType = FOSUnitTypes.king;
@@ -2228,7 +2228,7 @@ public class FOSBlocks {
         }};
         coreMetropolis = new DetectorCoreBlock("core-metropolis"){{
             health = 8000;
-            size = 5;
+            size = 7;
             unitCapModifier = 14;
             itemCapacity = 8000;
             unitType = FOSUnitTypes.king; //TODO: replace

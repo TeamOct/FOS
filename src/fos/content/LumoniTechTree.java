@@ -246,18 +246,16 @@ public class LumoniTechTree {
 
             // ITEMS
             nodeProduce(zinc, () -> {
-                nodeProduce(silver, () ->
-                    nodeProduce(diamond, () -> {
-                        nodeProduce(silicon, () -> {});
-                        nodeProduce(vanadium, () -> {
-                            nodeProduce(sulphur, Seq.with(new Research(arkyciteRefinery)), () -> {});
-                            soontm();
+                nodeProduce(diamond, () -> {
+                    nodeProduce(silicon, () -> {});
+                    nodeProduce(vanadium, () -> {
+                        nodeProduce(sulphur, Seq.with(new Research(arkyciteRefinery)), () -> {});
+                        soontm();
 /*
-                            nodeProduce(nickel)
+                        nodeProduce(nickel)
 */
-                        });
-                    })
-                );
+                    });
+                });
                 nodeProduce(copper, () ->
                     nodeProduce(brass, () -> {})
                 );
