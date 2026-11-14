@@ -266,7 +266,6 @@ public class LumoniTechTree {
                 nodeProduce(tokicite, () -> {});
                 nodeProduce(arkycite, () -> {
                     nodeProduce(oil, () -> {});
-                    nodeProduce(nitrogen, () -> {});
                 });
             });
 

@@ -19,7 +19,6 @@ import fos.world.blocks.production.*;
 import fos.world.blocks.special.*;
 import fos.world.blocks.storage.DetectorCoreBlock;
 import fos.world.blocks.units.*;
-import fos.world.draw.DrawOutputLiquids;
 import mindustry.content.*;
 import mindustry.entities.Effect;
 import mindustry.entities.bullet.*;
@@ -269,9 +268,9 @@ public class FOSBlocks {
             consumeLiquid(arkycite, 0.5f);
             craftTime = 60f;
             outputItem = new ItemStack(sulphur, 1);
-            outputLiquids = LiquidStack.with(oil, 18f/60f, nitrogen, 6f/60f);
+            outputLiquid = new LiquidStack(oil, 18f/60f);
 
-            liquidOutputDirections = new int[]{0, 2};
+            liquidOutputDirections = new int[]{0};
             updateEffect = FOSFx.refinerySmoke;
             updateEffectChance = 0.1f;
             updateEffectSpread = 0.75f;
@@ -292,7 +291,7 @@ public class FOSBlocks {
                 }},
                 new DrawGlowRegion("-glow"),
                 new DrawDefault(),
-                new DrawOutputLiquids() //not to be confused with DrawLiquidOutputs, this one's modded!
+                new DrawLiquidOutputs()
             );
             requirements(Category.crafting, with(zinc, 150, diamond, 100, silicon, 75, vanadium, 125));
         }};
