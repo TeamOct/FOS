@@ -16,12 +16,12 @@ public class CaldemoltStarGenerator extends PlanetGenerator {
     }
 
     @Override
-    public Color getColor(Vec3 position) {
-        return null;
+    public void getColor(Vec3 position, Color out) {
+        //no
     }
 
     @Override
-    public void generate(Tiles tiles) {
+    public void generate(Tiles tiles, WorldParams params) {
         pass((x, y) -> floor = Blocks.slag);
 
         for (int x = -3; x <= 3; x++) {

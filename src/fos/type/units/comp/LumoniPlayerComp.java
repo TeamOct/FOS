@@ -24,7 +24,7 @@ abstract class LumoniPlayerComp implements Weaponsc, Entityc, Syncc, Unitc {
         drag(type().drag);
         armor(type().armor);
         hitSize(type().hitSize);
-        hovering(type().hovering);
+        //hovering(type().hovering);
         
         if (controller() == null) controller(type().createController(self()));
 

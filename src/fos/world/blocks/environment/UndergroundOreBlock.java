@@ -2,6 +2,7 @@ package fos.world.blocks.environment;
 
 import arc.graphics.g2d.Draw;
 import fos.world.blocks.production.OreDetector;
+import mindustry.Vars;
 import mindustry.graphics.Layer;
 import mindustry.type.Item;
 import mindustry.world.*;
@@ -44,7 +45,7 @@ public class UndergroundOreBlock extends OverlayFloor {
 
     @Override
     public void drawBase(Tile tile) {
-        if (shouldDrawBase) {
+        if (shouldDrawBase || Vars.state.isEditor()) {
             float l = Draw.z();
             Draw.z(Layer.light);
 

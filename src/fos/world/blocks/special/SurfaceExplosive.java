@@ -26,7 +26,7 @@ public class SurfaceExplosive extends Block {
     public Effect explosionEffect = Fx.scatheExplosion;
     public Effect smokeEffect = Fx.titanSmoke;
     public Color explosionColor = Pal.redSpark;
-    public Sound explosionSound = Sounds.explosionbig;
+    public Sound explosionSound = Sounds.blockExplodeExplosive;
     public float explosionShake = 10f;
     public float damage = 2000f;
     public Seq<Block> bannedFloors = Seq.with(arkyicStone, arkyciteFloor, tokiciteFloor, murmur, deepwater);

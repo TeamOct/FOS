@@ -28,7 +28,9 @@ public class PolyForceProjector extends ForceProjector {
     protected final Cons<Bullet> customShieldConsumer = bullet -> {
         if(bullet.team != paramEntity.team && bullet.type.absorbable && Intersector.isInPolygon(((PolyForceBuild) paramEntity).hitbox, new Vec2(bullet.x, bullet.y))){
             bullet.absorb();
-            paramEffect.at(bullet);
+
+            paramBlock.hitSound.at(bullet.x, bullet.y, 1f + Mathf.range(0.1f), paramBlock.hitSoundVolume);
+            paramBlock.absorbEffect.at(bullet);
             paramEntity.hit = 1f;
             paramEntity.buildup += bullet.damage;
         }
@@ -201,7 +203,6 @@ public class PolyForceProjector extends ForceProjector {
 
             if ((realRadius > 0 && !broken) || shockwaveTimer > 0) {
                 paramEntity = this;
-                paramEffect = absorbEffect;
                 Groups.bullet.intersect(x - realRadius, y - realRadius, realRadius * 2f, realRadius * 2f, customShieldConsumer);
             }
         }

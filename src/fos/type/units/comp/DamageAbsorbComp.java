@@ -34,6 +34,16 @@ abstract class DamageAbsorbComp implements Shieldc {
 
     @Override
     @Replace(100)
+    public void damagePierce(float amount) {
+        damagePierce(false, amount);
+    }
+
+    void damagePierce(boolean isStatus, float amount) {
+        damagePierce(isStatus, amount, true);
+    }
+
+    @Override
+    @Replace(100)
     public void damagePierce(float amount, boolean withEffect) {
         damagePierce(false, amount, withEffect);
     }

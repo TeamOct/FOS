@@ -78,7 +78,7 @@ public class FOSUnitType extends UnitType {
 
             //generate tank animation
             if (sample instanceof Tankc) {
-                Pixmap pix = Core.atlas.getPixmap(treadRegion).crop();
+                Pixmap pix = Core.atlas.getPixmap(treadRegion).pixmap;
 
                 for(int r = 0; r < treadRects.length; r++){
                     Rect treadRect = treadRects[r];

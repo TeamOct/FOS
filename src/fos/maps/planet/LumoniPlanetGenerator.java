@@ -82,9 +82,9 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
     }
 
     @Override
-    public Color getColor(Vec3 position) {
+    public void getColor(Vec3 position, Color out) {
         Block block = getBlock(position);
-        return Tmp.c1.set(block.mapColor).a(1 - block.albedo);
+        out.set(block.mapColor).a(1 - block.albedo);
     }
 
     Block getSolidBlock(Vec3 position) {
@@ -139,13 +139,13 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
     }
 
     @Override
-    public void generate(Tiles tiles, Sector sec, int seed) {
+    public void generate(Tiles tiles, Sector sec, WorldParams params) {
         this.tiles = tiles;
-        this.seed = seed;
+        this.seed = params.seedOffset + baseSeed;
         this.sector = sec;
         this.width = tiles.width;
         this.height = tiles.height;
-        this.rand.setSeed(seed);
+        this.rand.setSeed(sec.id + params.seedOffset + baseSeed);
 
         TileGen gen = new TileGen();
         tiles.each((x, y) -> {
@@ -337,23 +337,31 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                 int rad = rand.random(15, 20);
 
                 floor = tokiciteFloor;
+                ore = air;
 
                 cur.circle(rad, other -> {
                     var noise = noise(other.x + 69, other.y - 69, 2, 0.6, 80);
                     if (noise > 0.87f) {
                         other.setFloor(tokiciteFloor.asFloor());
                         other.setAir();
+                        other.setOverlay(air);
                         for (Point2 p : Geometry.d8) {
                             if (!tiles.get(other.x + p.x, other.y + p.y).block().isAir()) return;
                         }
                         if (rand.chance(0.06f)) other.setBlock(vibrantCrystalCluster);
                     } else if (noise > 0.76f) {
                         other.setFloor(murmur.asFloor());
-                        if (other.block() != air) other.setBlock(murmurWall);
+                        other.setOverlay(air);
+                        if (other.block() != air) {
+                            other.setBlock(murmurWall);
+                        }
                     }
                     else if (noise > 0.57f) {
                         other.setFloor(carbonStone.asFloor());
-                        if (other.block() != air) other.setBlock(carbonWall);
+                        other.setOverlay(air);
+                        if (other.block() != air) {
+                            other.setBlock(carbonWall);
+                        }
                     }
                 });
 
@@ -376,16 +384,23 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
 
                 if (noise(x * 3f + 236, y * 3f + 213, 2, 0.6, 80) < 0.17f && isFree[0]) {
                     //arkyic stone around arkycite puddles
-                    tiles.get(x, y).circle(3, t ->
-                        t.setFloor(arkyicStone.asFloor())
-                    );
+                    tiles.get(x, y).circle(3, t -> {
+                        t.setFloor(arkyicStone.asFloor());
+                        t.setOverlay(air);
+                    });
                     tiles.get(x, y).circle(4, t -> {
-                        if (rand.random(1f) < 0.4f) t.setFloor(arkyicStone.asFloor());
+                        if (rand.random(1f) < 0.4f) {
+                            t.setFloor(arkyicStone.asFloor());
+                            t.setOverlay(air);
+                        }
                     });
 
                     //more arkycite because 1x1 puddles all around do not look natural
                     tiles.get(x, y).circle(2, t -> {
-                        if (rand.random(1f) < 0.25f) t.setFloor(arkyciteFloor.asFloor());
+                        if (rand.random(1f) < 0.25f) {
+                            t.setFloor(arkyciteFloor.asFloor());
+                            t.setOverlay(air);
+                        }
                     });
 
                     floor = arkyciteFloor;
@@ -400,17 +415,13 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         pass((x, y) -> {
             Tile cur = tiles.get(x, y);
 
-            //plants on quartum - has to be done after all liquid/mini-biome stuff so no conflicts happen
-            if (floor == quartum && block == air) {
+            //plants on purpur - has to be done after all liquid/mini-biome stuff so no conflicts happen
+            if (floor == purpur && block == air) {
                 if (rand.chance(0.0015f)) {
                     block = blueTree;
                     cur.circle(6, other -> {
-                        if (rand.chance(0.3f) && other.floor() == quartum && !other.solid()) {
+                        if (rand.chance(0.3f) && other.floor() == purpur && !other.solid()) {
                             other.setBlock(softbush);
-                            var ang = Mathf.angle(other.x - x, other.y - y);
-                            if (ang > 60f && ang < 120f && rand.chance(0.6f)) {
-                                other.setOverlay(alienMoss);
-                            }
                         }
                     });
                 }
@@ -422,8 +433,10 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         });
 
         float difficulty = sector.threat;
+/*      UNNEEDED FOR NOW
         ints.clear();
         ints.ensureCapacity(width * height / 4);
+*/
 
         Schematics.placeLaunchLoadout(spawn.x, spawn.y);
 
@@ -437,13 +450,26 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
                 // wasp nests - the anti-core unit rush, in its core
                 for (int i = 0; i < 3; i++) {
                     Tmp.v4.trns(rand.random(360), rand.random(4, 6));
-                    tiles.get(Math.round(cur.x + Tmp.v4.x), Math.round(cur.y + Tmp.v4.y)).setBlock(bugSentry, FOSTeams.bessin);
+                    int rx = Math.round(cur.x + Tmp.v4.x), ry = Math.round(cur.y + Tmp.v4.y);
+                    tiles.get(rx, ry).setBlock(bugSentry, FOSTeams.bessin);
+
+                    for (int j = 0; j < 2; j++) {
+                        for (int k = 0; k < 2; k++) {
+                            tiles.get(rx + j, ry + k).setFloor(hiveFloor.asFloor());
+                        }
+                    }
                 }
 
                 // hive floor
-                cur.circle(7, t -> t.setFloor(hiveFloor.asFloor()));
+                cur.circle(7, t -> {
+                    t.setFloor(hiveFloor.asFloor());
+                    t.setOverlay(air);
+                });
                 cur.circle(11, t -> {
-                    if (rand.chance(0.35f)) t.setFloor(hiveFloor.asFloor());
+                    if (rand.chance(0.35f)) {
+                        t.setFloor(hiveFloor.asFloor());
+                        t.setOverlay(air);
+                    }
                 });
 
                 // spawn point
@@ -479,12 +505,12 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
     }
 
     /**
-     * Ensures that the given ores generate in a limited square area, no matter how many tries it takes.
-     * This probably hurts sector generation time quite a bit, but I don't know what else to try.
+     * Ensures that the given ores generate in a limited square area.
+     * Will keep executing until generation is confirmed successful.
      * @param ores List of ores to generate.
      * @param cx Center X coordinate.
      * @param cy Center Y coordinate.
-     * @param rad A "radius" of a square (very dumb description, I know.)
+     * @param rad Side length of a square divided by 2.
      * @param floorOn If not {@code Blocks.empty}, on which floor should the ores be generated.
      */
     public void oresSquare(Seq<Block> ores, int cx, int cy, int rad, float scl, Floor floorOn) {
@@ -516,12 +542,12 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
     }
 
     /**
-     * Ensures that the given ores generate in a limited square area, no matter how many tries it takes.
-     * This probably hurts sector generation time quite a bit, but I don't know what else to try.
+     * Ensures that the given ores generate in a limited square area.
+     * Will keep executing until generation is confirmed successful.
      * @param ores List of ores to generate.
      * @param cx Center X coordinate.
      * @param cy Center Y coordinate.
-     * @param rad A "radius" of a square (very dumb description, I know.)
+     * @param rad Side length of a square divided by 2.
      */
     public void oresSquare(Seq<Block> ores, int cx, int cy, int rad) {
         oresSquare(ores, cx, cy, rad, 1f, empty.asFloor());
@@ -541,6 +567,12 @@ public class LumoniPlanetGenerator extends PlanetGenerator {
         }
     }
 
+    /**
+     * Generates an island in a given location. Used in water-heavy maps.
+     * @param ix Center X coordinate.
+     * @param iy Center Y coordinate.
+     * @param rad Island size, from center to edge.
+     */
     public void island(int ix, int iy, int rad) {
         Vec3 pos = sector.rect.project((float)ix / tiles.width, (float)iy / tiles.height);
         Floor floor = getSolidBlock(pos).asFloor();

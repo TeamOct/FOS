@@ -7,10 +7,9 @@ import fos.content.FOSSectors;
 import fos.files.InternalFileTree;
 import fos.graphics.FOSOreRenderer;
 import fos.mod.*;
-import fos.ui.*;
+import fos.ui.FOSHints;
 import fos.ui.menus.FOSMenuRenderer;
 import mindustry.ai.Pathfinder;
-import mindustry.content.TechTree;
 import mindustry.entities.units.BuildPlan;
 import mindustry.mod.Mods;
 
@@ -19,10 +18,6 @@ import java.util.*;
 import static mindustry.Vars.*;
 
 public class FOSVars {
-    /** A research dialog that shows one of the two tech trees declared below. */
-    public static ResearchCoreDialog researchCoreDialog;
-    /** Special tech trees accessed only by certain blocks. */
-    public static TechTree.TechNode mechTree, bioTree;
     /** Capsules creator **/
     public static CapsulesController capsulesController;
 
@@ -31,8 +26,11 @@ public class FOSVars {
     /** An additional modded pathfinder for insect AI. Should not affect vanilla {@link Pathfinder}. */
     public static FOSPathfinder pathfinder = new FOSPathfinder();
 
-    /** Enabling debug mode debug **/
-    public static final boolean debug = Core.settings.getBool("fos-debugmode");
+    // Debug variables
+    public static boolean planetDebug = Core.settings.getBool("fos-planet-debug", false);
+    public static final boolean pathfinderDebug = Core.settings.getBool("fos-pathfinder-debug", false);
+    public static final boolean caldemoltDebug = Core.settings.getBool("fos-caldemolt-debug", false);
+    public static boolean logDebug = Core.settings.getBool("fos-log-debug", false);
     // TODO disable in release version
     /** Early access **/
     public static final boolean earlyAccess = true;
@@ -67,27 +65,6 @@ public class FOSVars {
 
     /** Names of outlined sprites. Internal. */
     public static final ObjectSet<String> outlined = new ObjectSet<>();
-
-    public static void load() {
-/*
-        TODO: probably scrapped.
-        if (!headless) researchCoreDialog = new ResearchCoreDialog();
-
-        mechTree = TechTree.nodeRoot("", mechResearchCore, true, () -> {
-            node(helix, with(scrap, 250), () -> {
-                node(sticker, with(scrap, 400), Seq.with(new Objectives.Research(FOSFluids.tokicite)), () -> {});
-                node(particulator, with(scrap, 1500), () -> {
-                    //TODO more mid-tier turrets
-                    node(cluster, with(scrap, 5250), () -> {
-                    });
-                    node(judge, with(scrap, 20000), () -> {});
-                });
-            });
-        });
-
-        TechTree.roots.remove(mechTree);
-*/
-    }
 
     public static boolean mapStarted() {
         return state.rules.sector != null && state.rules.sector == FOSSectors.awakening.sector ?

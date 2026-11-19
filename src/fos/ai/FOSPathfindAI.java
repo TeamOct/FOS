@@ -15,8 +15,12 @@ import static fos.ai.FOSPathfinder.*;
 public interface FOSPathfindAI {
     /** @return next tile to travel to */
     default Tile pathfind(Unit unit) {
+        return pathfind(unit, 0);
+    }
+
+    default Tile pathfind(Unit unit, int pathType) {
         Tile tile = unit.tileOn();
-        FOSFlowfield ff = FOSVars.pathfinder.getField(unit.team, unit.pathType(), unit instanceof Burrowc ? fieldBurrowing : fieldBug);
+        FOSFlowfield ff = FOSVars.pathfinder.getField(unit.team, pathType, unit instanceof Burrowc ? fieldBurrowing : fieldBug);
         return FOSVars.pathfinder.getTargetTile(tile, ff);
     }
 }

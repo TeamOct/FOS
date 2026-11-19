@@ -9,19 +9,23 @@ import arc.graphics.g2d.ScreenQuad;
 import arc.graphics.gl.Shader;
 import arc.input.*;
 import arc.math.Mathf;
+import arc.scene.ui.layout.Collapser;
 import arc.struct.Seq;
 import arc.util.*;
 import fos.content.*;
-import fos.mod.*;
 import fos.gen.*;
 import fos.graphics.*;
 import fos.graphics.cachelayers.FOSCacheLayers;
+import fos.mod.*;
 import fos.net.FOSCall;
-import fos.ui.UIHandler;
+import fos.ui.*;
 import fos.ui.menus.FOSMenus;
+import mindustry.ctype.UnlockableContent;
 import mindustry.game.EventType;
 import mindustry.gen.*;
 import mindustry.mod.Mod;
+import mindustry.ui.Styles;
+import mindustry.ui.dialogs.*;
 
 import java.util.Calendar;
 
@@ -35,7 +39,7 @@ public class FOSMod extends Mod {
 
     public FOSMod() {
         Log.debug("[FOS] main class construction");
-        if (FOSVars.debug)
+        if (FOSVars.logDebug)
             Log.level = Log.LogLevel.debug;
 
         FOSCall.registerPackets();
@@ -47,14 +51,7 @@ public class FOSMod extends Mod {
             clientLoaded();
         });
 
-        Events.run(EventType.Trigger.newGame, () -> {
-            // remove landing cutscene on Awakening
-            if (state.rules.sector != null && state.rules.sector == FOSSectors.awakening.sector) {
-                Reflect.set(renderer, "landTime", 0f);
-                var core = FOSTeams.corru.core();
-                Time.run(160f, () -> FOSFx.corruLogo.at(core.x, core.y));
-            }
-        });
+        AwakeningCutscene.load();
 
         Events.on(FOSEventTypes.RealisticToggleEvent.class, e -> {
             if (settings.getBool("fos-realisticmode") && state.rules.sector != null && !state.rules.sector.planet.hasAtmosphere) {
@@ -104,8 +101,6 @@ public class FOSMod extends Mod {
     @Override
     public void init() {
         Log.debug("[FOS] initialization");
-        //initialize mod variables
-        FOSVars.load();
 
         //anything after this is client-side only.
         if (headless) return;
@@ -114,9 +109,6 @@ public class FOSMod extends Mod {
 
         if (FOSVars.isAprilFools)
             Musics.menu = tree.loadMusic("mistake");
-
-        //display the mod version
-        FOSVars.mod.meta.description += "\n\n" + bundle.get("mod.currentversion") + "\n" + FOSVars.mod.meta.version;
 
         //load icons and menu themes
         FOSIcons.load();
@@ -208,6 +200,50 @@ public class FOSMod extends Mod {
                 int n = Mathf.floor((float) Math.random() * SplashTexts.splashes.size);
                 mods.locateMod("fos").meta.subtitle = SplashTexts.splashes.get(n);
             });
+
+            t.row();
+
+            // debug functions territory
+            boolean def = settings.getBool("fos-debugmode", false); // backwards compat with old setting
+
+            SettingsMenuDialog.SettingsTable dt = new SettingsMenuDialog.SettingsTable();
+
+            dt.checkPref("fos-unlock-all-content", false, b -> {
+                content.each(c -> {
+                    if (c instanceof UnlockableContent uc && uc.isModded() && uc.minfo.mod.name.equals("fos")) {
+                        uc.quietUnlock();
+                    }
+                });
+                settings.put("fos-unlock-all-content", false);
+                Sounds.uiUnlock.play();
+            });
+            dt.checkPref("fos-planet-debug", def, b -> {
+                PlanetDialog.debugSelect = b;
+            });
+            dt.checkPref("fos-pathfinder-debug", def);
+            dt.checkPref("fos-caldemolt-debug", def);
+            dt.checkPref("fos-log-debug", def, b -> {
+                Log.level = b ? Log.LogLevel.debug : Log.LogLevel.info;
+            });
+
+            Collapser coll = new Collapser(dt, true);
+            coll.setDuration(0.5f);
+
+            t.table(t2 -> {
+                t2.background(Styles.grayPanel);
+                t2.margin(10f);
+                t2.align(Align.left);
+
+                ui.addDescTooltip(t2, "@setting.fos-debugmode.description");
+
+                t2.left().defaults().left();
+
+                t2.add(Core.bundle.get("setting.fos-debugmode.name"));
+                t2.button(Icon.downOpen, Styles.emptyi, () -> coll.toggle(false)).update(i -> i.getStyle().imageUp = (!coll.isCollapsed() ? Icon.upOpen : Icon.downOpen)).size(8).padLeft(16f).expandX();
+            });
+            t.row();
+            t.add(coll);
+/*
             t.checkPref("fos-debugmode", false, b -> {
                 if (b) {
                     ui.showConfirm("@warning", "@fos-dangerzone", () -> {
@@ -216,6 +252,7 @@ public class FOSMod extends Mod {
                 } else
                     settings.put("fos-debugmode", false);
             });
+*/
         });
     }
 
@@ -232,9 +269,7 @@ public class FOSMod extends Mod {
         input.getInputMultiplexer().clear();
         Log.debug("input cleared");
 
-        graphics.setFullscreen();
-        graphics.setBorderless(true);
-        graphics.setResizable(false);
+        graphics.setFullscreen(true);
         Log.debug("window prepared");
 
         Music mistake = tree.loadMusic("mistake");

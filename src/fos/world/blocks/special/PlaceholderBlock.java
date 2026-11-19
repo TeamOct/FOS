@@ -4,7 +4,7 @@ import mindustry.world.Block;
 import mindustry.world.meta.BuildVisibility;
 
 /**
- * A placeholder that indicates that more content will be added in the future later.
+ * A placeholder node for the tech tree that indicates that more content will be added in the future.
  * Not researchable.
  * @author Slotterleet
  */
@@ -17,6 +17,11 @@ public class PlaceholderBlock extends Block {
 
     @Override
     public void unlock() {
+        //haha no
+    }
+
+    @Override
+    public void quietUnlock() {
         //haha no
     }
 

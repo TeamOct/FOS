@@ -49,7 +49,7 @@ public class CliffExplosive extends Block {
                 }
             }
 
-            Sounds.explosionbig.at(this);
+            Sounds.blockExplodeExplosive.at(this);
             Fx.explosion.at(this);
             tile.remove();
         }

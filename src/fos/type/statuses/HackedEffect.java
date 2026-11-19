@@ -8,6 +8,7 @@ import fos.graphics.FOSPal;
 import fos.world.draw.FOSStats;
 import mindustry.content.Fx;
 import mindustry.entities.Effect;
+import mindustry.entities.units.StatusEntry;
 import mindustry.gen.Unit;
 import mindustry.world.meta.StatUnit;
 
@@ -23,7 +24,7 @@ public class HackedEffect extends FOSStatusEffect {
     }
 
     @Override
-    public void update(Unit unit, float time) {
+    public void update(Unit unit, StatusEntry entry) {
         if (unit instanceof DamageAbsorbc abs)
             abs.damageContinuousPierce(true, (unit.maxHealth * healthMultiplier) / lifetime);
         else

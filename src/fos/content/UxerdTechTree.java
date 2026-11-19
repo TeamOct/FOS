@@ -46,7 +46,7 @@ public class UxerdTechTree {
             });
             node(rockCrusher, Seq.with(new OnPlanet(FOSPlanets.uxerd)), () -> node(heatGenerator, () -> {
                 node(solarPanelMedium);
-                node(resourceExtractor, () -> {
+                node(zincWall, () -> { //TODO: PLACEHOLDER
                     node(cliffDetonator);
                     node(sublimator, () -> node(copperPipe));
                     node(cuberiumSynthesizer, () -> {

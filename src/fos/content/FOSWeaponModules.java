@@ -65,15 +65,20 @@ public class FOSWeaponModules {
                         lifetime = 40f;
                         shootEffect = Fx.shootSmallSmoke;
                         trailLength = 6;
+
                         fragOnHit = false;
                         fragBullets = 2;
                         fragVelocityMin = 1f;
-                        fragBullet = new PlayerSmartBulletType(7f, 60){{
+                        fragBullet = new PlayerBasicBulletType(7f, 60){{
                             width = 4f; height = 5f;
                             lifetime = 20f;
-                            trailLength = 15;
-                            hitEffect = Fx.hitBulletSmall;
+                            homingPower = 0.4f;
+                            homingRange = 140f;
                             collidesTiles = true;
+
+                            trailLength = 15;
+                            trailWidth = 1f;
+                            hitEffect = Fx.hitBulletSmall;
                         }};
                     }};
                 }}
@@ -97,7 +102,7 @@ public class FOSWeaponModules {
 
             cooldownTime = 90f;
             ejectEffect = Fx.casing3;
-            shootSound = Sounds.splash;
+            shootSound = Sounds.shootSpectre;
 
             bullet = new PlayerBasicBulletType(7f, 60){{
                 width = 7f; height = 9f;
@@ -121,7 +126,7 @@ public class FOSWeaponModules {
                     reload = recoilTime = 45f;
                     shootY = 0.5f;
 
-                    shootSound = Sounds.shootBig;
+                    shootSound = Sounds.shootDiffuse;
                     ejectEffect = Fx.casing2;
 
                     bullet = new PlayerBasicBulletType(){{
@@ -179,7 +184,7 @@ public class FOSWeaponModules {
                     reload = recoilTime = 45f;
                     shootY = 0.5f;
 
-                    shootSound = Sounds.shootBig;
+                    shootSound = Sounds.shootDiffuse;
                     ejectEffect = Fx.casing2;
 
                     bullet = new PlayerBasicBulletType(){{
@@ -236,7 +241,7 @@ public class FOSWeaponModules {
                 spread = 1.2f;
             }};
             reload = recoilTime = 40f;
-            shootSound = Sounds.cannon;
+            shootSound = Sounds.shootSpectre;
             ejectEffect = Fx.casing3;
             shootY = 1.5f;
             bullet = new PlayerBasicBulletType(){{
@@ -253,6 +258,7 @@ public class FOSWeaponModules {
                     splashDamageRadius = 16;
                     killShooter = false;
                     knockback = 4f;
+                    despawnSound = Sounds.explosionDull;
                 }};
             }};
         }}).reqs(with(zinc, 200, silver, 50, silicon, 200, vanadium, 100));
@@ -286,7 +292,7 @@ public class FOSWeaponModules {
                 backColor = Pal.heal;
                 frontColor = Color.white;
                 shootEffect = Fx.shootHeal;
-                shootSound = Sounds.lasershoot;
+                shootSound = Sounds.shootLaser;
 
                 damage = 0;
                 collidesTeam = true;
@@ -318,17 +324,20 @@ public class FOSWeaponModules {
                     x = 0; y = 0;
                     mirror = false;
                     beamWidth = 0.4f;
-                    repairSpeed = 0.2f;
+                    repairSpeed = 0.6f;
                     bullet = new BulletType(){{
                         maxRange = 40f;
                     }};
                 }}
             );
+
             customIcon = true;
+            outline = false;
+
             Events.on(EventType.ContentInitEvent.class, e -> {
                 abilities.add(
                     new UnitResistanceAbility(FOSUnitTypes.legionnaireReplica, 0.05f),
-                    new UnitSpawnAbility(FOSUnitTypes.legionnaireReplica, 600, 16, 0)
+                    new UnitSpawnAbility(FOSUnitTypes.legionnaireReplica, 600, -16, 0)
                 );
             });
         }}.reqs(with(zinc, 200, silver, 125, silicon, 150)).produceTime(60 * 20);

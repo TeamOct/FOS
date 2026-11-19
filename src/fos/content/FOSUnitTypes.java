@@ -9,9 +9,10 @@ import fos.ai.*;
 import fos.ai.bugs.*;
 import fos.audio.FOSSounds;
 import fos.entities.abilities.*;
+import fos.entities.abilities.bugs.*;
 import fos.entities.bullet.*;
 import fos.gen.*;
-import fos.graphics.*;
+import fos.graphics.FOSPal;
 import fos.graphics.trails.ArrowFadeTrail;
 import fos.type.WeaponSet;
 import fos.type.units.types.*;
@@ -24,12 +25,12 @@ import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
+import mindustry.gen.*;
 import mindustry.gen.ElevationMoveUnit;
 import mindustry.gen.LegsUnit;
 import mindustry.gen.MechUnit;
 import mindustry.gen.TankUnit;
 import mindustry.gen.UnitEntity;
-import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.weapons.*;
@@ -100,7 +101,7 @@ public class FOSUnitTypes {
         lord, king;
 
     public static @EntityDef({Unitc.class, Crawlc.class, Bugc.class}) UnitType
-        // CRAWLING INSECTS
+        // CRAWLING BUGS
         bugSmall, bugMedium, terrapod;
 
     public static @EntityDef({Unitc.class, Legsc.class, Bugc.class}) UnitType
@@ -133,16 +134,20 @@ public class FOSUnitTypes {
 
     public static void load(){
         legionnaire = new FOSUnitType("legionnaire", UnitEntity.class){{
-            health = 200;
+            health = 600;
+            armor = 3;
             hitSize = 12;
-            rotateSpeed = 12f;
+            rotateSpeed = 6f;
             speed = 2.5f;
             accel = 0.08f;
-            drag = 0.04f;
+            drag = 0.03f;
             isEnemy = false;
             flying = true;
+            circleTarget = true;
+            circleTargetRadius = 46f;
             targetPriority = -2f;
             playerControllable = false;
+            fogRadius = 0f;
             weapons.add(
                 new Weapon(){{
                     x = 2f; y = 3f;
@@ -168,16 +173,17 @@ public class FOSUnitTypes {
             controller = u -> new ProtectorAI();
         }};
         legionnaireReplica = new FOSUnitType("legionnaire-replica", UnitEntity.class){{
-            health = 150;
+            health = 350;
             hitSize = 12;
-            rotateSpeed = 12f;
+            rotateSpeed = 6f;
             speed = 2f;
             accel = 0.08f;
-            drag = 0.04f;
+            drag = 0.03f;
             isEnemy = false;
             flying = true;
             targetPriority = -2f;
             playerControllable = false;
+            fogRadius = 0f;
             weapons.add(
                 new Weapon(){{
                     x = 0f; y = 3f;
@@ -203,53 +209,57 @@ public class FOSUnitTypes {
         }};
         legion = new BossUnitType("legion", MechUnit.class){{
             health = 4500;
-            armor = 10;
+            armor = 15;
             hitSize = 25;
             speed = 0.3f;
             flying = false;
             canBoost = false;
-            range = 40f;
+            range = 80f; maxRange = 144f;
+            rotateMoveFirst = true;
 
             weapons.add(
                 new RepairBeamWeapon("fos-legion-beam"){{
                     x = 4; y = 0;
                     mirror = true;
                     beamWidth = 0.6f;
+                    repairSpeed = 2f;
                     bullet = new BulletType(){{
-                        maxRange = 40f;
+                        maxRange = 80f;
                     }};
                 }},
                 new Weapon("fos-legion-sapper"){{
                     x = 0f; y = 6f;
                     mirror = false;
-                    reload = 40f;
+                    reload = 10f;
                     top = false;
                     layerOffset = -0.05f;
                     rotate = false;
-                    shootCone = 25f;
-                    shootSound = Sounds.sap;
+                    shootCone = 120f;
+                    shootSound = Sounds.shootSap;
                     shoot = new ShootAlternate(){{
                         barrels = 2;
                         spread = 4f;
                     }};
                     bullet = new SapBulletType(){{
-                        length = 80f;
-                        damage = 60;
+                        length = rangeOverride = 80f;
+                        damage = 90;
+                        buildingDamageMultiplier = 2f;
+                        sapStrength = 0.5f;
+
                         hitColor = color = Color.valueOf("bf92f9");
-                        sapStrength = 0.6f;
                         despawnEffect = Fx.none;
                         shootEffect = Fx.shootSmall;
                     }};
                 }}
             );
 
-            abilities.add(new UnitResistanceAbility(legionnaire, 0.1f));
+            abilities.add(new UnitResistanceAbility(legionnaire, 0.2f));
 
-            float angle = 0f;
-            int units = 1;
+            float angle = Mathf.PI / 4;
+            int units = 4;
             for(int i = 0; i < units; i++){
-                float x = Mathf.cos(angle) * 32;
-                float y = Mathf.sin(angle) * 32;
+                float x = Mathf.cos(angle) * hitSize * 0.8f;
+                float y = Mathf.sin(angle) * hitSize * 0.8f;
                 abilities.add(new UnitSpawnAbility(legionnaire, 600, x, y));
                 angle += Mathf.PI2 / units;
             }
@@ -326,8 +336,8 @@ public class FOSUnitTypes {
                         shake = 2f;
                         healthFrac = 0.5f;
 
-                        chargeSound = Sounds.lasercharge2;
-                        shootSound = Sounds.laserbig;
+                        chargeSound = Sounds.chargeVela;
+                        shootSound = Sounds.shootMeltdown;
 
                         bullet = new ContinuousLaserBulletType(60){{
                             length = 120;
@@ -399,7 +409,7 @@ public class FOSUnitTypes {
                         trailWidth = 5f;
                         trailLength = 12;
                         trailEffect = Fx.artilleryTrail;
-                        shootSound = Sounds.artillery;
+                        shootSound = Sounds.shootArtillery;
                         hitEffect = despawnEffect = Fx.massiveExplosion;
                     }};
                 }},
@@ -424,7 +434,7 @@ public class FOSUnitTypes {
                         trailWidth = 5f;
                         trailLength = 12;
                         trailEffect = Fx.artilleryTrail;
-                        shootSound = Sounds.artillery;
+                        shootSound = Sounds.shootArtillery;
                         hitEffect = despawnEffect = Fx.massiveExplosion;
                     }};
                 }},
@@ -490,7 +500,7 @@ public class FOSUnitTypes {
                         lifetime = 30f;
                         collidesAir = true;
                         collidesGround = false;
-                        shootSound = Sounds.missile;
+                        shootSound = Sounds.shootMissileLong;
                         hitEffect = Fx.blastExplosion;
                     }};
                 }}
@@ -512,7 +522,7 @@ public class FOSUnitTypes {
             treadRects = new Rect[]{new Rect(27 - xo, 152 - yo, 56, 73), new Rect(24 - xo, 51 - 9 - yo, 29, 17), new Rect(59 - xo, 18 - 9 - yo, 39, 19)};
 
             weapons.add(new Weapon("fos-myriad-point-weapon"){{
-                shootSound = Sounds.bolt;
+                shootSound = Sounds.shootLaser;
                 reload = 45f;
                 shootY = 7f;
                 recoil = 2f;
@@ -543,7 +553,7 @@ public class FOSUnitTypes {
                     mag = 1f;
                     scl = 3f;
                 }};
-                shootSound = Sounds.largeCannon;
+                shootSound = Sounds.shootTank;
                 layerOffset = 0.1f;
                 reload = 120f;
                 shootY = 27.5f;
@@ -655,6 +665,9 @@ public class FOSUnitTypes {
             mineTier = 2;
             mineSpeed = 8f;
             buildSpeed = 1f;
+
+            groundLayer = Layer.legUnit;
+
             weapons.add(FOSWeaponModules.standard1.weapons);
         }};
         king = new LumoniPlayerUnitType("king", LegsLumoniPlayerUnit.class){{
@@ -667,6 +680,20 @@ public class FOSUnitTypes {
             mineTier = 4;
             mineSpeed = 10f;
             buildSpeed = 2f;
+
+            groundLayer = Layer.legUnit;
+
+            legLength = 15f;
+            legForwardScl = 1.2f;
+            legBaseOffset = 1.6f;
+            legMoveSpace = 1.8f;
+            legLengthScl = 1.1f;
+            legMaxLength = 1.5f;
+            legMinLength = 0.75f;
+            baseLegStraightness = 0.3f;
+            legStraightness = 0.1f;
+            lockLegBase = true;
+
             weapons.add(FOSWeaponModules.standard2.weapons);
         }};
 
@@ -712,7 +739,7 @@ public class FOSUnitTypes {
 
                     ejectEffect = Fx.casing1;
                     recoil = 0f;
-                    shootSound = Sounds.bolt;
+                    shootSound = Sounds.shootLaser;
 
                     parts.add(
                         new RegionPart("-barrel"){{
@@ -787,7 +814,7 @@ public class FOSUnitTypes {
                     shootCone = 15f;
                     rotate = false;
                     shootY = 4f;
-                    shootSound = Sounds.spark;
+                    shootSound = Sounds.shootArc;
                     bullet = new BasicBulletType(){{
                         width = height = 12f;
                         backColor = FOSPal.hackedBack;
@@ -855,7 +882,7 @@ public class FOSUnitTypes {
                     rotate = true;
                     reload = 30f;
                     inaccuracy = 12f;
-                    shootSound = Sounds.missile;
+                    shootSound = Sounds.shootMissileSmall;
                     bullet = new MissileBulletType(){{
                         damage = 25f;
                         speed = 2.4f; lifetime = 90f;
@@ -911,6 +938,8 @@ public class FOSUnitTypes {
             legForwardScl = 0.9075F;
             legMoveSpace = 2F;
 
+            groundLayer = Layer.legUnit;
+
             weapons.add(
                     new Weapon("fos-e-weapon"){{
                         x = 0; y = 3;
@@ -919,7 +948,7 @@ public class FOSUnitTypes {
                         layerOffset = -0.0001f;
                         reload = 30f;
                         rotate = false;
-                        shootSound = Sounds.missile;
+                        shootSound = Sounds.shootMissile;
                         bullet = new BasicBulletType(){{
                             damage = 20;
                             lifetime = 45;
@@ -965,6 +994,8 @@ public class FOSUnitTypes {
             legForwardScl = 0.9075F;
             legMoveSpace = 1.085F;
 
+            groundLayer = Layer.legUnit;
+
             abilities.add(new EnergyFieldAbility(20f, 90f, 90f){{
                 x = 0; y = -2;
                 statusDuration = 120f;
@@ -989,7 +1020,7 @@ public class FOSUnitTypes {
                 recoil = 0.2f;
 
                 bullet = new BulletType(){{
-                    shootSound = Sounds.lasershoot;
+                    shootSound = Sounds.shootLaser;
                     shootEffect = Fx.sparkShoot;
                     hitEffect = Fx.pointHit;
                     maxRange = 175f;
@@ -1017,6 +1048,8 @@ public class FOSUnitTypes {
             legLengthScl = 0.925F;
             legForwardScl = 0.9075F;
             legMoveSpace = 1.085F;
+
+            groundLayer = Layer.legUnit;
 
             weapons.add(
                     new Weapon("fos-e-railgun"){{
@@ -1069,7 +1102,7 @@ public class FOSUnitTypes {
                         recoil = 0.2f;
 
                         bullet = new BulletType(){{
-                            shootSound = Sounds.lasershoot;
+                            shootSound = Sounds.shootLaser;
                             shootEffect = Fx.sparkShoot;
                             hitEffect = Fx.pointHit;
                             maxRange = 160f;
@@ -1171,7 +1204,7 @@ public class FOSUnitTypes {
                     reload = 240f;
                     shoot.shots = 5;
                     inaccuracy = 11.25f;
-                    shootSound = Sounds.artillery;
+                    shootSound = Sounds.shootArtillery;
                     bullet = new BasicBulletType(){{
                         width = height = 12;
                         speed = 3f;
@@ -1198,7 +1231,7 @@ public class FOSUnitTypes {
                             backColor = Pal.sapBulletBack;
                             frontColor = Pal.reactorPurple2;
                             hitEffect = Fx.massiveExplosion;
-                            hitSound = Sounds.boom;
+                            hitSound = Sounds.explosion;
                         }};
                     }};
                 }}
@@ -1234,7 +1267,7 @@ public class FOSUnitTypes {
                         spread = 2f;
                     }};
 
-                    shootSound = Sounds.missile;
+                    shootSound = Sounds.shootMissile;
 
                     bullet = new MissileBulletType(){{
                         speed = 4f; lifetime = 30f;
@@ -1284,7 +1317,7 @@ public class FOSUnitTypes {
                         shootStatusDuration = 300f;
 
                         hitEffect = Fx.reactorExplosion;
-                        hitSound = Sounds.largeExplosion;
+                        hitSound = Sounds.explosionReactor;
                         chargeEffect = FOSFx.bruntCharge;
                     }};
                 }}
@@ -1310,9 +1343,13 @@ public class FOSUnitTypes {
             health = 160;
             armor = 8;
             hitSize = 16f;
-            speed = 0.3f;
+            speed = 0.7f;
             segments = 3;
             crushDamage = 0.2f;
+
+            abilities.add(
+                new ScreechAbility()
+            );
 
             //copied from renale for now
             segmentScl = 3f;
@@ -1326,14 +1363,18 @@ public class FOSUnitTypes {
             health = 480;
             armor = 15;
             hitSize = 18f;
-            speed = 0.48f;
+            speed = 0.64f;
             segments = 4;
             crushDamage = 0.6f;
 
-            //copied from renale too, he's the same size for some reason
+            //copied from renale too, he's the same size
             segmentScl = 3f;
             segmentPhase = 5f;
             segmentMag = 0.5f;
+
+            abilities.add(
+                new EndureAbility(120f)
+            );
 
             firstRequirements = ItemStack.with(zinc, 5, diamond, 3);
         }};
@@ -1367,6 +1408,7 @@ public class FOSUnitTypes {
             legStraightLength = 0.9f;
 
             drawBody = true;
+            groundLayer = Layer.legUnit;
 
             parts.addAll(
                 //new RegionPart(),
@@ -1473,6 +1515,7 @@ public class FOSUnitTypes {
             legStraightLength = 0.9f;
 
             drawBody = true;
+            groundLayer = Layer.legUnit;
 
             parts.addAll(
                 //new RegionPart(),
@@ -1551,6 +1594,8 @@ public class FOSUnitTypes {
                     }};
                 }}
             );
+
+            firstRequirements = ItemStack.with(copper, 5, diamond, 3);
         }};
 
         bugFlyingSmall = new BugUnitType("bug-flying-small", BugUnit.class, true, true){{
@@ -1597,7 +1642,7 @@ public class FOSUnitTypes {
                 new Weapon(){{
                     x = 0f; y = 6f;
                     reload = 180f;
-                    shootSound = Sounds.mud;
+                    shootSound = Sounds.stepMud;
                     rotate = false;
                     shoot = new ShootSpread(){{
                         shots = 3;
@@ -1630,11 +1675,12 @@ public class FOSUnitTypes {
 
             isEnemy = false;
 
-            itemCapacity = 1;
-            mineSpeed = 0.2f;
+            itemCapacity = 2;
+            mineSpeed = 0.3f;
             mineTier = 2;
             mineRange = 4f;
-            mineItems = Seq.with(zinc, copper);
+            mineItems = Seq.with(zinc, copper, diamond);
+            drawMineBeam = false;
 
             controller = u -> new MinerBugAI();
             defaultCommand = UnitCommand.mineCommand;
@@ -1673,6 +1719,8 @@ public class FOSUnitTypes {
             legBaseOffset = 12;
             legExtension = 3.25f;
             legStraightness = 0.5f;
+
+            groundLayer = Layer.legUnit;
 
             parts.addAll(
                 new RegionPart(),
@@ -1718,7 +1766,7 @@ public class FOSUnitTypes {
                         hitEffect = Fx.none;
                         despawnEffect = Fx.none;
                         smokeEffect = Fx.none;
-                        shootSound = Sounds.largeExplosion;
+                        shootSound = Sounds.explosionDull;
 
                         splashDamage = 600f;
                         splashDamageRadius = 4f;

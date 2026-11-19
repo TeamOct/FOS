@@ -1,7 +1,10 @@
 package fos.mod;
 
 import arc.Events;
+import arc.struct.Seq;
+import arc.util.*;
 import arc.util.io.*;
+import mindustry.Vars;
 import mindustry.game.EventType;
 import mindustry.io.*;
 
@@ -12,6 +15,8 @@ import static mindustry.Vars.world;
 public class DeathMapController implements SaveFileReader.CustomChunk {
     public volatile short[] deathMap;
     public boolean shouldSave;
+    public float updateDelay = 600f;
+    public Seq<Runnable> updateQueue = new Seq<>();
 
     public DeathMapController() {
         Events.on(EventType.ResetEvent.class, e -> reset());
@@ -21,20 +26,29 @@ public class DeathMapController implements SaveFileReader.CustomChunk {
         });
 
         Events.on(FOSEventTypes.InsectDeathEvent.class, e -> {
-            int ti = e.tile.array();
-            deathMap[ti] += 25;
+            // delay update by 10 seconds
+            Runnable r = () -> {
+                if (!Vars.state.isGame()) return;
 
-            e.tile.circle(3, (tile) -> {
-                if (tile == null) return;
-                deathMap[tile.array()] += 25;
+                int ti = e.tile.array();
+                deathMap[ti] += 1;
 
-                // overflow? leave it at max
-                if (deathMap[tile.array()] < 0) {
-                    deathMap[tile.array()] = Short.MAX_VALUE;
-                }
+                e.tile.circle(3, (tile) -> {
+                    if (tile == null) return;
+                    deathMap[tile.array()] += 1;
 
-                shouldSave = true;
-            });
+                    // overflow? leave it at max
+                    if (deathMap[tile.array()] < 0) {
+                        deathMap[tile.array()] = Short.MAX_VALUE;
+                    }
+
+                    shouldSave = true;
+                });
+            };
+
+            updateQueue.add(r);
+            Time.run(updateDelay, r);
+            Time.run(updateDelay + 1f, () -> updateQueue.remove(r));
         });
 
         SaveVersion.addCustomChunk("fos-bug-death-map", this);
@@ -47,11 +61,23 @@ public class DeathMapController implements SaveFileReader.CustomChunk {
     @SuppressWarnings("resource")
     @Override
     public void write(DataOutput stream) throws IOException {
-        Writes write = new Writes(stream);
-        write.i(deathMap.length);
+        try {
+            Writes write = new Writes(stream);
+            write.i(deathMap.length);
 
-        for (short s : deathMap) {
-            write.s(s);
+            // whatever had been delayed up to this point, execute immediately on save
+            for (var r : updateQueue) {
+                r.run();
+                updateQueue.remove(r);
+            }
+
+            Time.clear();
+
+            for (short s : deathMap) {
+                write.s(s);
+            }
+        } catch (Exception e) {
+            Log.err(e);
         }
     }
 

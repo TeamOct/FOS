@@ -5,13 +5,13 @@ import arc.graphics.g2d.TextureAtlas;
 import arc.struct.Seq;
 import arc.util.Log;
 import fos.core.FOSVars;
-import mindustry.Vars;
 
 import java.lang.reflect.Field;
 
 public class ConveyorSpritesPacker { // TODO rename
     public static Field packer;
 	public static int spacing = 4;
+    /*
     static {
         try {
             packer = Vars.mods.getClass().getDeclaredField("packer");
@@ -20,6 +20,7 @@ public class ConveyorSpritesPacker { // TODO rename
             throw new RuntimeException(somethingWentWrong);
         }
     }
+    */
 
     public static String getPrefix() {
         return FOSVars.mod.name + "-conveyor";

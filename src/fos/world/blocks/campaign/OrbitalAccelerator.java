@@ -1,23 +1,17 @@
 package fos.world.blocks.campaign;
 
-import arc.*;
-import arc.func.*;
-import arc.graphics.g2d.*;
-import arc.scene.ui.layout.*;
+import arc.func.Prov;
+import arc.graphics.g2d.Draw;
+import arc.scene.ui.layout.Table;
 import arc.util.*;
-import fos.content.*;
-import mindustry.Vars;
-import mindustry.content.*;
-import mindustry.game.*;
-import mindustry.gen.*;
-import mindustry.world.*;
-import mindustry.world.blocks.campaign.*;
-import mindustry.world.blocks.storage.CoreBlock;
-import mindustry.world.blocks.storage.CoreBlock.*;
+import fos.content.FOSBlocks;
+import mindustry.content.Fx;
+import mindustry.gen.Building;
+import mindustry.world.Tile;
+import mindustry.world.blocks.campaign.Accelerator;
+import mindustry.world.blocks.storage.CoreBlock.CoreBuild;
 import mindustry.world.consumers.*;
-import mindustry.world.meta.*;
-
-import java.io.IOException;
+import mindustry.world.meta.Stat;
 
 import static arc.Core.camera;
 import static mindustry.Vars.*;
@@ -78,14 +72,14 @@ public class OrbitalAccelerator extends Accelerator {
 
                     Reflect.set(renderer, "landTime", 160f);
                     Reflect.set(renderer, "launching", true);
-                    Fx.coreLaunchConstruct.at(x, y, launching.size);
+                    Fx.coreLaunchConstruct.at(x, y, launchBlock.size);
 
                     build = fakeCore(FOSBlocks.coreFortress::newBuilding);
 
                     Time.run(160f, () -> {
                         isLaunched = false;
                         build.remove();
-                        ui.planet.showPlanetLaunch(state.getSector(), sector -> {
+/*                        ui.planet.showPlanetLaunch(state.getSector(), sector -> {
                             consume();
 
                             universe.clearLoadoutInfo();
@@ -97,7 +91,7 @@ public class OrbitalAccelerator extends Accelerator {
                             }
 
                             Events.fire(EventType.Trigger.acceleratorUse);
-                        });
+                        });*/
                     });
                 });
             }

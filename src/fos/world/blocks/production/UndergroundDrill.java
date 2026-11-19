@@ -33,15 +33,17 @@ public class UndergroundDrill extends Drill {
     //placeable on scanned tiles or replaceable by other underground drills
     @Override
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {
+        if (state.rules.editor) return true;
+
         if (isMultiblock()) {
             for(Tile other : tile.getLinkedTilesAs(this, tempTiles)) {
                 Building block = other.build;
-                if (block != null && block.block() instanceof UndergroundDrill && block.team == team) return true;
+                if (block != null && block.block instanceof UndergroundDrill && block.team == team) return true;
             }
             return nearestDetector(team, tile.worldx(), tile.worldy()) != null;
         } else {
             Building block = tile.build;
-            return (block != null && block.block() instanceof UndergroundDrill && block.team == team) ||
+            return (block != null && block.block instanceof UndergroundDrill && block.team == team) ||
                 nearestDetector(team, tile.worldx(), tile.worldy()) != null;
         }
     }
@@ -50,7 +52,7 @@ public class UndergroundDrill extends Drill {
     public void drawPlace(int x, int y, int rotation, boolean valid) {
         Tile tile = world.tile(x, y);
         var detector = nearestDetector(player.team(), x*8, y*8);
-        if (tile == null) return;
+        if (tile == null || state.rules.editor) return;
 
         if (detector == null) {
             drawPlaceText(Core.bundle.get("bar.detectorreq"), x, y, valid);
@@ -170,49 +172,11 @@ public class UndergroundDrill extends Drill {
     @SuppressWarnings("unused")
     public class UndergroundDrillBuild extends DrillBuild {
         @Override
-        public void updateTile() {
-            if(timer(timerDump, dumpTime)){
-                dump(dominantItem != null && items.has(dominantItem) ? dominantItem : null);
-            }
-
-            if(dominantItem == null){
-                return;
-            }
-
-            timeDrilled += warmup * delta();
-
-            float delay = getDrillTime(dominantItem);
-
-            if(items.total() < itemCapacity && dominantItems > 0 && efficiency > 0){
-                float speed = Mathf.lerp(1f, liquidBoostIntensity, optionalEfficiency) * efficiency;
-
-                lastDrillSpeed = (speed * dominantItems * warmup) / delay;
-                warmup = Mathf.approachDelta(warmup, speed, warmupSpeed);
-                progress += delta() * dominantItems * speed * warmup;
-
-                if(Mathf.chanceDelta(updateEffectChance * warmup))
-                    updateEffect.at(x + Mathf.range(size * 2f), y + Mathf.range(size * 2f));
-            }else{
-                lastDrillSpeed = 0f;
-                warmup = Mathf.approachDelta(warmup, 0f, warmupSpeed);
-                return;
-            }
-
-            if(dominantItems > 0 && progress >= delay && items.total() < itemCapacity){
-                offload(dominantItem);
-
-                progress %= delay;
-
-                // Fix drill effect chance being mistaken for update effect chance. TODO: If PR #10440 gets merged and v8 releases, then remove this override
-                if(wasVisible && Mathf.chanceDelta(drillEffectChance * warmup)) drillEffect.at(x + Mathf.range(drillEffectRnd), y + Mathf.range(drillEffectRnd), tileOn().floor().mapColor);
-            }
-        }
-
-        @Override
         public void onProximityUpdate() {
             super.onProximityUpdate();
 
             dominantItem = getOutput(tile);
+            if (dominantItem == FOSItems.quartz) dominantItems = (int)Mathf.sqr(size);
         }
 
         @Override

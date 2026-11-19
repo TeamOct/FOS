@@ -14,8 +14,8 @@ import mindustry.ui.fragments.HintsFragment;
 import mindustry.world.Block;
 
 import static fos.content.FOSBlocks.*;
+import static fos.content.FOSItems.quartz;
 import static mindustry.Vars.*;
-import static mindustry.content.Items.sand;
 
 public class FOSHints {
     static ObjectSet<String> events = new ObjectSet<>();
@@ -50,7 +50,7 @@ public class FOSHints {
         ),
         sandUnderground(
             () -> control.input.block == siliconSynthesizer || placedBlocks.contains(siliconSynthesizer),
-            () -> Groups.build.contains(b -> b.team == Vars.player.team() && b instanceof UndergroundDrill.UndergroundDrillBuild ud && ud.dominantItem == sand)
+            () -> Groups.build.contains(b -> b.team == Vars.player.team() && b instanceof UndergroundDrill.UndergroundDrillBuild ud && ud.dominantItem == quartz)
         ),
         detonatorIntro(
             () -> surfaceDetonator.unlocked(),

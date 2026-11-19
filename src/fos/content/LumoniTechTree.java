@@ -1,14 +1,16 @@
 package fos.content;
 
 import arc.struct.Seq;
-import mindustry.type.ItemStack;
+import mindustry.type.*;
 
 import static fos.content.FOSBlocks.*;
 import static fos.content.FOSFluids.tokicite;
 import static fos.content.FOSItems.*;
 import static fos.content.FOSObjectives.*;
 import static fos.content.FOSSectors.*;
+import static fos.content.FOSStatuses.bestiary;
 import static fos.content.FOSUnitTypes.*;
+import static fos.content.FOSUnitTypes.citadel;
 import static fos.content.FOSWeaponModules.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.Liquids.*;
@@ -38,6 +40,9 @@ public class LumoniTechTree {
                         node(zincBridge);
                     })
                 );
+                node(smallCrate, () -> {
+                    node(zincUnloader);
+                });
             });
 
             // POWER. TODO
@@ -99,9 +104,9 @@ public class LumoniTechTree {
             });
 
             // DEFENCE
-            node(helix, Seq.with(new OnSector(ruins)), () -> {
-                node(sticker, () -> {
-                    node(sludge, () -> {
+            node(helix, Seq.with(new OnSector(rwf), new FindInArchives()), () -> {
+                node(sticker, Seq.with(new FindInArchives()), () -> {
+                    node(sludge, Seq.with(new FindInArchives()), () -> {
                         //node(firefly, /* TODO: sector handicap */ () -> {});
                     });
                     node(particulator, () -> {
@@ -127,7 +132,7 @@ public class LumoniTechTree {
 
             // DRILLS
             node(crudeDrill, () -> {
-                node(improvedDrill, Seq.with(new OnSector(ruins)), () -> {
+                node(improvedDrill, Seq.with(new OnSector(rwf)), () -> {
                     node(draugFactory, Seq.with(new SectorComplete(zincMiningSite)), () ->
                         node(draug, ItemStack.with(), Seq.with(new Research(draugFactory)), () -> {})
                     );
@@ -140,11 +145,9 @@ public class LumoniTechTree {
 
             // UNDERGROUND DRILLS
             node(zincDrill, () ->
-                node(silverDrill, () -> {
-                    node(diamondDrill, Seq.with(new OnSector(intruders)), () -> {
-                        node(surfaceDetonator);
-                        soontm();
-                    });
+                node(diamondDrill, Seq.with(new OnSector(intruders)), () -> {
+                    node(surfaceDetonator);
+                    soontm();
                 })
             );
 
@@ -171,7 +174,7 @@ public class LumoniTechTree {
             });
 
             // FACTORIES. TODO
-            node(siliconSynthesizer, Seq.with(new OnSector(ruins)), () -> {
+            node(siliconSynthesizer, Seq.with(new OnSector(rwf)), () -> {
                 node(brassSmelter, () -> {
                     soontm();
 /*
@@ -182,6 +185,9 @@ public class LumoniTechTree {
 */
                 });
             });
+
+            // LOGIC BLOCKS
+            node(itemDisplay);
 
             // CORE UNIT WEAPON MODULES
             node(upgradeCenter, () -> {
@@ -223,7 +229,7 @@ public class LumoniTechTree {
                 //TODO: artillery
                 soontm();
                 // SUPPORT
-                node(support1, Seq.with(new SectorComplete(ruins)), () ->
+                node(support1, Seq.with(new SectorComplete(rwf)), () ->
                     node(support2, () ->
                         node(support3, () ->
                             soontm()
@@ -232,7 +238,7 @@ public class LumoniTechTree {
                 );
                 // BOSS-SPECIFIC WEAPONS
                 node(legionFabricator, Seq.with(new DefeatBoss(legion)), () -> {
-                    node(citadelStickyLauncher, Seq.with(new DefeatBoss(FOSUnitTypes.citadel)), () -> {
+                    node(citadelStickyLauncher, Seq.with(new DefeatBoss(citadel)), () -> {
                         soontm();
                     });
                 });
@@ -240,18 +246,16 @@ public class LumoniTechTree {
 
             // ITEMS
             nodeProduce(zinc, () -> {
-                nodeProduce(silver, () ->
-                    nodeProduce(diamond, () -> {
-                        nodeProduce(silicon, () -> {});
-                        nodeProduce(vanadium, () -> {
-                            nodeProduce(sulphur, Seq.with(new Research(arkyciteRefinery)), () -> {});
-                            soontm();
+                nodeProduce(diamond, () -> {
+                    nodeProduce(silicon, () -> {});
+                    nodeProduce(vanadium, () -> {
+                        nodeProduce(sulphur, Seq.with(new Research(arkyciteRefinery)), () -> {});
+                        soontm();
 /*
-                            nodeProduce(nickel)
+                        nodeProduce(nickel)
 */
-                        });
-                    })
-                );
+                    });
+                });
                 nodeProduce(copper, () ->
                     nodeProduce(brass, () -> {})
                 );
@@ -262,14 +266,13 @@ public class LumoniTechTree {
                 nodeProduce(tokicite, () -> {});
                 nodeProduce(arkycite, () -> {
                     nodeProduce(oil, () -> {});
-                    nodeProduce(nitrogen, () -> {});
                 });
             });
 
             // SECTORS
             node(awakening, () -> {
-                node(ruins, Seq.with(new SectorComplete(awakening)), () -> {
-                    node(intruders, Seq.with(new SectorComplete(ruins)), () -> {
+                node(rwf, Seq.with(new SectorComplete(awakening)), () -> {
+                    node(intruders, Seq.with(new SectorComplete(rwf)), () -> {
                         node(conflict, Seq.with(new SectorComplete(intruders)), () -> {
                             soontm();
                         });
@@ -278,7 +281,33 @@ public class LumoniTechTree {
                         });
                         node(hostiles, Seq.with(new SectorComplete(intruders)), () -> {});
                     });
-                    node(FOSSectors.citadel, Seq.with(new SectorComplete(ruins)), () -> {
+                    node(FOSSectors.citadel, Seq.with(new SectorComplete(rwf)), () -> {
+                        soontm();
+                    });
+                });
+            });
+
+            // INSECT/DRONE BESTIARY
+            node(bestiary, Seq.with(new SectorComplete(awakening)), () -> {
+                bugNode(bugSmall, 20, () -> {
+                    bugNode(bugMedium, 15, () -> {
+                        bugNode(grain, 3, () -> {
+                            soontm();
+                        });
+                    });
+                });
+                bugNode(spewer, 20, () -> {
+                    bugNode(purger, 15, () -> {
+                        soontm();
+                    });
+                });
+                bugNode(bugWorker, 10, () -> {
+                    bugNode(bugScout, 5, () -> {});
+                });
+
+                bossNode(legion, () -> {
+                    node(legionnaire, Seq.with(new DefeatBoss(legion)), () -> {});
+                    bossNode(FOSUnitTypes.citadel, () -> {
                         soontm();
                     });
                 });
@@ -288,5 +317,13 @@ public class LumoniTechTree {
     
     public static void soontm() {
         node(soontm, Seq.with(new TBDObjective()), () -> {});
+    }
+
+    public static void bugNode(UnitType type, int amount, Runnable node) {
+        node(type, Seq.with(new DefeatBugs(type, amount)), node);
+    }
+
+    public static void bossNode(UnitType type, Runnable node) {
+        node(type, Seq.with(new DefeatBoss(type)), node);
     }
 }

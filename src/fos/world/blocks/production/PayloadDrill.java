@@ -39,12 +39,12 @@ public class PayloadDrill extends BlockProducer {
         if (isMultiblock()) {
             for(Tile other : tile.getLinkedTilesAs(this, tempTiles)) {
                 Building block = other.build;
-                if (block != null && block.block() instanceof UndergroundDrill && block.team == team) return true;
+                if (block != null && block.block instanceof UndergroundDrill && block.team == team) return true;
             }
             return nearestDetector(team, tile.worldx(), tile.worldy()) != null;
         } else {
             Building block = tile.build;
-            return (block != null && block.block() instanceof UndergroundDrill && block.team == team) ||
+            return (block != null && block.block instanceof UndergroundDrill && block.team == team) ||
                 nearestDetector(team, tile.worldx(), tile.worldy()) != null;
         }
     }

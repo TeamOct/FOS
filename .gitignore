@@ -7,6 +7,9 @@ artifacts/
 
 ### Local files
 /settings/local.json
+/settings/settings.local.json
+mindustry-dir.local
+mindustry-server-dir.local
 
 ### Generated files
 gen/
@@ -19,3 +22,7 @@ gen/
 *.aseprite
 *.ase
 
+### Audacity files
+*.aup3
+
+cacheDir
