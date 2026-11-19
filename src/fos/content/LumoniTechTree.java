@@ -104,9 +104,9 @@ public class LumoniTechTree {
             });
 
             // DEFENCE
-            node(helix, Seq.with(new OnSector(ruins)), () -> {
-                node(sticker, () -> {
-                    node(sludge, () -> {
+            node(helix, Seq.with(new OnSector(rwf), new FindInArchives()), () -> {
+                node(sticker, Seq.with(new FindInArchives()), () -> {
+                    node(sludge, Seq.with(new FindInArchives()), () -> {
                         //node(firefly, /* TODO: sector handicap */ () -> {});
                     });
                     node(particulator, () -> {
@@ -132,7 +132,7 @@ public class LumoniTechTree {
 
             // DRILLS
             node(crudeDrill, () -> {
-                node(improvedDrill, Seq.with(new OnSector(ruins)), () -> {
+                node(improvedDrill, Seq.with(new OnSector(rwf)), () -> {
                     node(draugFactory, Seq.with(new SectorComplete(zincMiningSite)), () ->
                         node(draug, ItemStack.with(), Seq.with(new Research(draugFactory)), () -> {})
                     );
@@ -174,7 +174,7 @@ public class LumoniTechTree {
             });
 
             // FACTORIES. TODO
-            node(siliconSynthesizer, Seq.with(new OnSector(ruins)), () -> {
+            node(siliconSynthesizer, Seq.with(new OnSector(rwf)), () -> {
                 node(brassSmelter, () -> {
                     soontm();
 /*
@@ -229,7 +229,7 @@ public class LumoniTechTree {
                 //TODO: artillery
                 soontm();
                 // SUPPORT
-                node(support1, Seq.with(new SectorComplete(ruins)), () ->
+                node(support1, Seq.with(new SectorComplete(rwf)), () ->
                     node(support2, () ->
                         node(support3, () ->
                             soontm()
@@ -271,8 +271,8 @@ public class LumoniTechTree {
 
             // SECTORS
             node(awakening, () -> {
-                node(ruins, Seq.with(new SectorComplete(awakening)), () -> {
-                    node(intruders, Seq.with(new SectorComplete(ruins)), () -> {
+                node(rwf, Seq.with(new SectorComplete(awakening)), () -> {
+                    node(intruders, Seq.with(new SectorComplete(rwf)), () -> {
                         node(conflict, Seq.with(new SectorComplete(intruders)), () -> {
                             soontm();
                         });
@@ -281,7 +281,7 @@ public class LumoniTechTree {
                         });
                         node(hostiles, Seq.with(new SectorComplete(intruders)), () -> {});
                     });
-                    node(FOSSectors.citadel, Seq.with(new SectorComplete(ruins)), () -> {
+                    node(FOSSectors.citadel, Seq.with(new SectorComplete(rwf)), () -> {
                         soontm();
                     });
                 });

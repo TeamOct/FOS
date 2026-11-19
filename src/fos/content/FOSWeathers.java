@@ -25,7 +25,7 @@ public class FOSWeathers {
             baseSpeed = 3.6f;
             force = 0f;
             sound = Sounds.wind;
-            soundVol = 0.9f;
+            soundVol = 0.4f;
             duration = 7f * Time.toMinutes;
             attrs.set(FOSAttributes.windPower, 1f);
         }};

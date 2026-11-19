@@ -48,17 +48,18 @@ public class FOSObjectives {
         }
     }
 
-    public static class FindInCrates implements Objective {
-        public FindInCrates(){}
+    public static class FindInArchives implements Objective {
+        public FindInArchives(){}
 
         @Override
         public boolean complete() {
+            // No conditions - this content will be unlocked externally.
             return false;
         }
 
         @Override
         public String display() {
-            return Core.bundle.format("requirement.findincrates");
+            return Core.bundle.format("requirement.findinarchives");
         }
     }
 

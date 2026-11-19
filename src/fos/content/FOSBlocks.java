@@ -25,6 +25,7 @@ import mindustry.entities.bullet.*;
 import mindustry.entities.effect.MultiEffect;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
+import mindustry.game.Team;
 import mindustry.gen.Sounds;
 import mindustry.graphics.*;
 import mindustry.type.*;
@@ -104,7 +105,7 @@ public class FOSBlocks {
     coreColony, coreFortress, coreCity, coreMetropolis, zincUnloader, smallCrate,
 
     // SPECIAL
-    nukeLauncher, bigBoy, cliffDetonator, surfaceDetonator, orbitalAccelerator,
+    nukeLauncher, bigBoy, cliffDetonator, surfaceDetonator, orbitalAccelerator, archiveBlock,
 
     // LOGIC
     itemDisplay,
@@ -1456,7 +1457,7 @@ public class FOSBlocks {
             playerControllable = false;
             buildingFilter = b -> b instanceof TurretBuild;
 
-            forceTeam = FOSTeams.bessin;
+            forceTeam = Team.get(70);
 
             shootEffect = smokeEffect = Fx.none;
             shootSound = Sounds.none;
@@ -1619,6 +1620,9 @@ public class FOSBlocks {
             arrowSpacing = 6f;
             bufferCapacity = 14;
             researchCost = with(zinc, 150);
+
+            squareSprite = false;
+
             ((Conveyor) zincBelt).bridgeReplacement = this;
             ((Conveyor) brassBelt).bridgeReplacement = this;
             requirements(Category.distribution, with(zinc, 10));
@@ -2025,7 +2029,7 @@ public class FOSBlocks {
             createRubble = false;
             unitCapModifier = 15;
 
-            forceTeam = FOSTeams.bessin;
+            forceTeam = Team.get(70);
         }};
 	    ashStone = new Floor("ash-stone", 4);
 	    ashStoneCraters = new Floor("ash-stone-craters", 4);
@@ -2318,6 +2322,9 @@ public class FOSBlocks {
             consumeLiquid(hydrogen, 300);
             launchBlock = coreFortress;
             requirements(Category.effect, BuildVisibility.campaignOnly, with(aluminium, 5000, titanium, 3000, lithium, 2500, zinc, 2500, copper, 2000, cuberium, 2000));
+        }};
+        archiveBlock = new ArchiveBlock("archive-block"){{
+            size = 5;
         }};
 /*
         mechResearchCore = new ResearchCore("mech-research-core"){{

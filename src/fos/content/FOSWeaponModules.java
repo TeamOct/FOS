@@ -330,7 +330,10 @@ public class FOSWeaponModules {
                     }};
                 }}
             );
+
             customIcon = true;
+            outline = false;
+
             Events.on(EventType.ContentInitEvent.class, e -> {
                 abilities.add(
                     new UnitResistanceAbility(FOSUnitTypes.legionnaireReplica, 0.05f),

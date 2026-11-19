@@ -179,7 +179,7 @@ public class FOSPlanets {
             public void applyRules(Rules rules, boolean customGame) {
                 super.applyRules(rules, customGame);
 
-                if (Vars.state.getSector().preset instanceof FOSSectorPreset s && s.rulesOverride != null) {
+                if (Vars.state.getSector() != null && Vars.state.getSector().preset instanceof FOSSectorPreset s && s.rulesOverride != null) {
                     s.rulesOverride.get(rules);
                 }
             }

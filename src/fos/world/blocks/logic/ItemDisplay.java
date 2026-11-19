@@ -118,7 +118,6 @@ public class ItemDisplay extends Block {
         public void read(Reads read, byte revision) {
             super.read(read, revision);
             toDisplay = content.getByName(ContentType.valueOf(read.str()), read.str());
-
             if (toDisplay == air) toDisplay = null;
         }
     }
