@@ -1,19 +1,18 @@
 package fos.world.blocks.campaign;
 
-import arc.scene.ui.layout.Table;
 import arc.struct.Seq;
 import arc.util.Nullable;
 import arc.util.io.*;
 import mindustry.Vars;
 import mindustry.ctype.*;
+import mindustry.game.Team;
 import mindustry.gen.Building;
 import mindustry.logic.LAccess;
 import mindustry.type.*;
-import mindustry.world.Block;
-import mindustry.world.blocks.ItemSelection;
+import mindustry.world.*;
 import mindustry.world.meta.*;
 
-import static mindustry.Vars.content;
+import static mindustry.Vars.*;
 import static mindustry.content.Blocks.air;
 
 /**
@@ -30,16 +29,17 @@ public class ArchiveBlock extends Block {
         breakable = false;
         privileged = true;
         solid = true;
-        configurable = true;
         logicConfigurable = true;
         replaceable = false;
         targetable = false;
         group = BlockGroup.logic;
+        category = Category.logic;
         drawCached = true;
         drawDynamic = false;
         envEnabled = Env.any;
         selectionColumns = selectionRows = 8;
         buildVisibility = BuildVisibility.worldProcessorOnly;
+        hideDetails = false;
 
         @SuppressWarnings("rawtypes") Seq<Class> contents = new Seq<>(
             new Class[]{Block.class, Item.class, Liquid.class, UnitType.class, StatusEffect.class, Planet.class, SectorPreset.class});
@@ -55,23 +55,18 @@ public class ArchiveBlock extends Block {
         });
     }
 
+    public boolean accessible() {
+        return !privileged || state.rules.editor || state.playtestingMap != null || state.rules.allowEditWorldProcessors;
+    }
+
+    @Override
+    public boolean canBreak(Tile tile){
+        return accessible();
+    }
+
     public class ArchiveBuild extends Building {
         public @Nullable UnlockableContent toUnlock;
         public boolean shouldUnlock = true; // to handle block animations later
-
-        @Override
-        public void buildConfiguration(Table table) {
-            Seq<UnlockableContent> contents = new Seq<>();
-            var types = new ContentType[] {ContentType.block, ContentType.item, ContentType.liquid,
-                ContentType.unit, ContentType.status, ContentType.planet, ContentType.sector};
-            for (var ct : types) {
-                contents.addAll(Vars.content.getBy(ct));
-            }
-
-            ItemSelection.buildTable(ArchiveBlock.this, table,
-                contents.select(u -> u.isOnPlanet(Vars.state.getPlanet()) && u.techNode != null),
-                () -> (UnlockableContent)config(), this::configure, selectionRows, selectionColumns);
-        }
 
         @Override
         public void created() {
@@ -90,8 +85,13 @@ public class ArchiveBlock extends Block {
 
         @Override
         public Object senseObject(LAccess sensor) {
-            if (sensor == LAccess.selectedBlock) return toUnlock;
+            if (sensor == LAccess.config) return toUnlock;
             return super.sense(sensor);
+        }
+
+        @Override
+        public boolean interactable(Team team) {
+            return false;
         }
 
         @Override
