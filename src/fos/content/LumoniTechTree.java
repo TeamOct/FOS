@@ -247,7 +247,9 @@ public class LumoniTechTree {
             // ITEMS
             nodeProduce(zinc, () -> {
                 nodeProduce(diamond, () -> {
-                    nodeProduce(silicon, () -> {});
+                    node(quartz, Seq.with(new Research(siliconSynthesizer)), () -> {
+                        nodeProduce(silicon, () -> {});
+                    });
                     nodeProduce(vanadium, () -> {
                         nodeProduce(sulphur, Seq.with(new Research(arkyciteRefinery)), () -> {});
                         soontm();

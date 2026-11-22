@@ -6,7 +6,7 @@ import arc.util.io.*;
 import mindustry.Vars;
 import mindustry.ctype.*;
 import mindustry.game.Team;
-import mindustry.gen.Building;
+import mindustry.gen.*;
 import mindustry.logic.LAccess;
 import mindustry.type.*;
 import mindustry.world.*;
@@ -27,6 +27,7 @@ public class ArchiveBlock extends Block {
         update = true;
         noUpdateDisabled = true;
         breakable = false;
+        destructible = false;
         privileged = true;
         solid = true;
         logicConfigurable = true;
@@ -92,6 +93,18 @@ public class ArchiveBlock extends Block {
         @Override
         public boolean interactable(Team team) {
             return false;
+        }
+
+        @Override
+        public boolean collide(Bullet other){
+            return !privileged || destructible;
+        }
+
+        @Override
+        public void damage(float damage){
+            if (!privileged || destructible) {
+                super.damage(damage);
+            }
         }
 
         @Override
