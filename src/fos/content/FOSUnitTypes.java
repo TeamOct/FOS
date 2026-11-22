@@ -677,7 +677,7 @@ public class FOSUnitTypes {
             speed = 1.5f;
             flying = false;
             canBoost = false;
-            mineTier = 4;
+            mineTier = 3;
             mineSpeed = 10f;
             buildSpeed = 2f;
 
