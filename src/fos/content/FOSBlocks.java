@@ -225,6 +225,7 @@ public class FOSBlocks {
             consumeItems(with(diamond, 1, quartz, 4));
             outputItems = with(silicon, 4);
             requirements(Category.crafting, with(zinc, 180, copper, 150, diamond, 100));
+            researchCostMultiplier = 0.15f;
             
             drawer = new DrawMulti(
                 new DrawRegion("-bottom"),
@@ -1655,12 +1656,13 @@ public class FOSBlocks {
             ((Conduit)brassPipe).bridgeReplacement = this;
         }};
         pneumaticPump = new Pump("pneumatic-pump"){{
-            health = 200;
-            size = 1;
+            scaledHealth = 200;
+            size = 2;
             pumpAmount = 0.1f;
-            liquidCapacity = 30f;
+            liquidCapacity = 120f;
             squareSprite = false;
-            requirements(Category.liquid, with(zinc, 25, copper, 50));
+            requirements(Category.liquid, with(zinc, 50, copper, 100));
+            researchCostMultiplier = 0.2f;
         }};
         pumpjack = new Pump("pumpjack"){{
             scaledHealth = 60;
@@ -1695,17 +1697,21 @@ public class FOSBlocks {
             consumesPower = true;
             consumePower(2f / 60f);
             requirements(Category.power, with(zinc, 1));
+            researchCost = with(zinc, 10);
         }};
         copperWire = new PowerWire("copper-wire"){{
             health = 5;
             consumesPower = true;
             consumePower(0.5f / 60f);
             requirements(Category.power, with(copper, 2));
+
+            researchCost = with(copper, 20);
         }};
         brassWire = new PowerWire("brass-wire"){{
             health = 8;
             //does not consume any power
             requirements(Category.power, with(brass, 1));
+            researchCost = with(brass, 30);
         }};
         zincWirePole = new PowerWireNode("tin-wire-pole"){{
             health = 30;
@@ -1746,7 +1752,7 @@ public class FOSBlocks {
             size = 2;
             powerProduction = 0.8f;
             requirements(Category.power, with(zinc, 40));
-            researchCost = with(zinc, 160);
+            researchCost = with(zinc, 80);
             squareSprite = false;
             drawer = new DrawMulti(
                 new DrawDefault(),

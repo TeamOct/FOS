@@ -19,7 +19,7 @@ import mindustry.type.Weapon;
 import mindustry.type.weapons.*;
 
 import static fos.content.FOSItems.*;
-import static mindustry.content.Items.silicon;
+import static mindustry.content.Items.*;
 import static mindustry.type.ItemStack.*;
 
 //why the heck I added FOS to class's name if weapon modules are unique to this mod anyway
@@ -83,7 +83,7 @@ public class FOSWeaponModules {
                     }};
                 }}
             );
-            reqs = with(zinc, 75, silver, 75);
+            reqs = with(zinc, 75, copper, 75);
             researchCost = empty;
         }};
         standard3 = new WeaponSet("standard3", new Weapon("fos-standard-weapon3"){{
@@ -229,7 +229,7 @@ public class FOSWeaponModules {
                     }};
                 }}
             );
-            reqs = with(zinc, 60, silver, 90);
+            reqs = with(zinc, 60, copper, 90);
         }};
         shotgun3 = new WeaponSet("shotgun3", new Weapon("fos-shotgun-mount3"){{
             x = y = 0;
@@ -261,7 +261,7 @@ public class FOSWeaponModules {
                     despawnSound = Sounds.explosionDull;
                 }};
             }};
-        }}).reqs(with(zinc, 200, silver, 50, silicon, 200, vanadium, 100));
+        }}).reqs(with(zinc, 200, copper, 50, silicon, 200, vanadium, 100));
         //TODO: placeholder
         //shotgun4 = new WeaponSet("shotgun4", new Weapon()).reqs(with(lead, 1));
 
@@ -300,7 +300,7 @@ public class FOSWeaponModules {
                 collidesGround = true;
                 healPercent = 5;
             }};
-        }}).reqs(with(zinc, 50, silver, 100));
+        }}).reqs(with(zinc, 50, copper, 100));
         support3 = new WeaponSet("support3"){{
             abilities.add(
                 new EnergyFieldAbility(0f, 40f, 64f){{
@@ -314,7 +314,7 @@ public class FOSWeaponModules {
                     damageEffect = Fx.chainLightning;
                 }}
             );
-            reqs = with(zinc, 75, silver, 150, vanadium, 150);
+            reqs = with(zinc, 75, copper, 150, vanadium, 150);
         }};
 
         // BOSS WEAPONS
@@ -340,7 +340,7 @@ public class FOSWeaponModules {
                     new UnitSpawnAbility(FOSUnitTypes.legionnaireReplica, 600, -16, 0)
                 );
             });
-        }}.reqs(with(zinc, 200, silver, 125, silicon, 150)).produceTime(60 * 20);
+        }}.reqs(with(zinc, 200, copper, 125, silicon, 150)).produceTime(60 * 20);
         citadelStickyLauncher = new WeaponSet("citadel-stickybomb-launcher"){
             {
                 description = Core.bundle.getOrNull(getContentType() + "." + this.name + ".description" + (Vars.mobile ? "-mobile" : ""));
