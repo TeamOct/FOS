@@ -34,7 +34,7 @@ import static arc.input.GestureDetector.GestureListener;
 import static mindustry.Vars.*;
 
 public class FOSMod extends Mod {
-    /** Only for debugging! */
+    // for access from in-game console
     public FOSVars vars = new FOSVars();
 
     public FOSMod() {
@@ -83,6 +83,10 @@ public class FOSMod extends Mod {
         FOSStatuses.load();
         FOSItems.load();
         FOSFluids.load();
+
+        FOSVars.capsulesController = new CapsulesController();
+        FOSVars.capsulesController.load();
+
         FOSWeathers.load();
         FOSWeaponModules.load();
         FOSUnitTypes.load();
@@ -93,9 +97,6 @@ public class FOSMod extends Mod {
 
         LumoniTechTree.load();
         UxerdTechTree.load();
-
-        FOSVars.capsulesController = new CapsulesController();
-        FOSVars.capsulesController.load();
     }
 
     @Override

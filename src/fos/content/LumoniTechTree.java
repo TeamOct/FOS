@@ -153,6 +153,9 @@ public class LumoniTechTree {
 
             // FLUID BLOCKS
             node(pneumaticPump, () -> {
+                node(capsuleLoader, () -> {
+                    node(capsuleUnloader);
+                });
                 node(pumpjack);
                 node(copperPipe, () -> {
                     node(brassPipe);

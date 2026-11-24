@@ -3,6 +3,7 @@ package fos.mod;
 import arc.Events;
 import arc.struct.*;
 import arc.util.*;
+import fos.content.FOSPlanets;
 import fos.type.LiquidCapsule;
 import mindustry.Vars;
 import mindustry.async.AsyncProcess;
@@ -41,9 +42,10 @@ public class CapsulesController implements AsyncProcess {
         });
         capsules.clear();
 
-        Vars.content.liquids().each(liquid -> {
-            if (Vars.content.getByName(ContentType.item, "capsule-" + liquid.name) != null) {
-                Log.warn("[FOS][Capsule Controller] Capsule with name '@' already defined." +
+        Vars.content.liquids().select(l -> l.isOnPlanet(FOSPlanets.lumoni) || l.isOnPlanet(FOSPlanets.uxerd))
+            .each(liquid -> {
+                if (Vars.content.getByName(ContentType.item, "capsule-" + liquid.name) != null) {
+                    Log.warn("[FOS][Capsule Controller] Capsule with name '@' already defined." +
                         " Is capsule controller loaded multiply?", "capsule-" + liquid.name);
             }
             capsules.add(new LiquidCapsule("capsule-" + liquid.name, liquid));

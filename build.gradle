@@ -12,6 +12,11 @@ allprojects.each {project ->
         maven { url "https://raw.githubusercontent.com/GglLfr/EntityAnnoMaven/main" }
         maven { url "https://www.jitpack.io" }
         maven { url "https://maven.xpdustry.com/mindustry" }
+        ivy {
+            url = 'https://github.com/'
+            patternLayout {artifact '/[organisation]/[module]/releases/download/[revision]/MultiCrafter.jar'}
+            metadataSources { artifact() }
+        }
     }
 
     project.repositories {
@@ -39,7 +44,8 @@ core.with {
                     "repo": "TeamOct/FOS",
                     "java": true,
                     "main": "fos.core.FOSMod",
-                    "hidden": false
+                    "hidden": false,
+                    "dependencies": [ "multicrafter" ]
             )
         }
 
@@ -59,9 +65,9 @@ core.with {
 
     nmp.configuration {
         dependencies {
-            implementation "com.github.liplum:MultiCrafterLib:$multiCrafterLibVersion"
             compileOnly nmp.arcDependency(arcVersion.get(), "discord")
             compileOnly nmp.arcDependency(arcVersion.get(), "backend-sdl")
+            compileOnly 'JojoFR1:MultiCrafter:v1.5.2'
         }
     }
 }

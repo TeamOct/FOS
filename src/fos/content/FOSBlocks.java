@@ -5,10 +5,14 @@ import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.util.*;
+import dev.jojofr.multicrafter.MultiCrafterBlock;
+import dev.jojofr.multicrafter.type.Recipe;
 import fos.audio.FOSSounds;
+import fos.core.FOSVars;
 import fos.entities.bullet.*;
 import fos.graphics.*;
 import fos.graphics.cachelayers.FOSCacheLayers;
+import fos.mod.CapsulesController;
 import fos.world.blocks.campaign.*;
 import fos.world.blocks.defense.*;
 import fos.world.blocks.distribution.*;
@@ -19,6 +23,7 @@ import fos.world.blocks.production.*;
 import fos.world.blocks.special.*;
 import fos.world.blocks.storage.DetectorCoreBlock;
 import fos.world.blocks.units.*;
+import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.entities.Effect;
 import mindustry.entities.bullet.*;
@@ -58,6 +63,7 @@ public class FOSBlocks {
     public static Block
     // CRAFTING
     resourceExtractor, cuberiumSynthesizer, sublimator, siliconSynthesizer, brassSmelter, arkyciteRefinery,
+    capsuleLoader, capsuleUnloader,
 
     // PRODUCTION
     crudeDrill, improvedDrill, proficientDrill,
@@ -296,6 +302,47 @@ public class FOSBlocks {
                 new DrawLiquidOutputs()
             );
             requirements(Category.crafting, with(zinc, 150, diamond, 100, silicon, 75, vanadium, 125));
+        }};
+        capsuleLoader = new MultiCrafterBlock("capsule-loader"){{
+            scaledHealth = 160;
+            size = 3;
+            autoSelectRecipe = true;
+            liquidCapacity = 100f;
+
+            for (Liquid l : Vars.content.liquids().select(li -> !li.hidden && (li.isOnPlanet(FOSPlanets.lumoni) || li.isOnPlanet(FOSPlanets.uxerd)))) {
+                addRecipe(
+                    new Recipe("fill-capsule-" + l.name,
+                        in -> in.withItems(zinc, 1)
+                            .withLiquids(l, CapsulesController.liquidInCapsule / 4f)
+                            .withPower(0.5f),
+                        out -> out.withItems(FOSVars.capsulesController.toCapsule(l), 1)
+                    ).withCraftTime(4f)
+                );
+            }
+
+            researchCostMultiplier = 0.5f;
+            requirements(Category.crafting, with(zinc, 100, brass, 50));
+        }};
+        capsuleUnloader = new MultiCrafterBlock("capsule-unloader"){{
+            scaledHealth = 160;
+            size = 3;
+            autoSelectRecipe = true;
+            liquidCapacity = 100f;
+
+            for (Liquid l : Vars.content.liquids().select(li -> !li.hidden && (li.isOnPlanet(FOSPlanets.lumoni) || li.isOnPlanet(FOSPlanets.uxerd)))) {
+                addRecipe(
+                    new Recipe("empty-capsule-" + l.name,
+                        in -> in.withItems(FOSVars.capsulesController.toCapsule(l), 1)
+                            .withPower(0.5f),
+                        out -> out.withItems(zinc, 1)
+                            .withLiquids(l, CapsulesController.liquidInCapsule / 4f)
+
+                    ).withCraftTime(4f)
+                );
+            }
+
+            researchCostMultiplier = 0.5f;
+            requirements(Category.crafting, with(zinc, 100, brass, 50));
         }};
         //endregion
         //region production
