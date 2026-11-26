@@ -1,11 +1,14 @@
 # Fictional Octo System
-### FOS IS IN A PRE-RELEASE STATE RIGHT NOW - BROKEN, UNFINISHED OR UNBALANCED CONTENT MAY BE PRESENT!
+> [!NOTE]
+> FOS is currently in Early Access - only the limited amount of content is currently available. Found a bug? [Let us know!](https://github.com/TeamOct/FOS/issues/new?template=bug_report.yml)
 
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/TeamOct/fos/workflow-build.yml?style=for-the-badge)](https://github.com/TeamOct/fictional-octo-system/actions)
 [![GitHub Repo stars](https://img.shields.io/github/stars/TeamOct/fos?style=for-the-badge)](https://github.com/TeamOct/fictional-octo-system/stargazers)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/teamoct/fos/total?style=for-the-badge)
 [![Discord](https://img.shields.io/discord/833695554767683656?label=Team%20Oct%20Discord&style=for-the-badge)](https://discord.gg/F9j8WvU4Bv)
 [![GitHub Release](https://img.shields.io/github/v/release/teamoct/fos?style=for-the-badge)](https://github.com/teamoct/fos/releases/latest)
+
+![Banner](banner.jpg)
 
 This adventure will take place in the Caldemolt Star System, planet Lumoni.
 
@@ -15,20 +18,33 @@ Survive. Expand. Locate former Corru bases and re-discover their mysteries.
 
 Also, your core still remembers a different faction that assisted in your near demise...
 
----
-### *Note: For this mod to work, you will need to install an external library to your game first: https://github.com/JojoFR1/MultiCrafter/*
+> [!IMPORTANT]
+> For this mod to work, you will need to install an external library to your game first: https://github.com/JojoFR1/MultiCrafter/
 
----
-
-## How to build
-### Use at least java 20
-Run `nmpBuildRelease` task:
-
-```shell
-./gradlew nmpBuildRelease
-```
-
-Mod file will be in [build/libs](build%2Flibs).
+## How To Build
+1. Use at least Java 20
+2. From there you have multiple options:
+   1. Option 1:
+      1. Run `nmpBuildRelease` task:
+      ```shell
+      ./gradlew nmpBuildRelease
+      ```
+      2. Mod file will be in [build/libs](build%2Flibs) folder.
+   2. Option 2:
+      1. Create a new `settings` folder, then make a `settings.local.json` file.
+      2. Inside the JSON, create the `copy` array and specify your directory(-ies) to copy the mod's JAR file to:
+      ```json
+      {
+        "copy": [
+          "C:\\Users\\admin\\AppData\\Roaming\\Mindustry\\mods",
+          "/home/admin/.local/share/Mindustry/mods"
+        ] 
+      }
+      ```
+      3. Run `nmpCopyBuildRelease` task:
+      ```shell
+      ./gradlew nmpCopyBuildRelease
+      ```
 
 
 ## Credits
@@ -41,7 +57,11 @@ Mod file will be in [build/libs](build%2Flibs).
 ## Special Thanks
 - Pre-alpha Testers: [@kapzduke](https://github.com/kapzduke), [@RouterXdd](https://github.com/RouterXdd), [@Sh1penfire](https://github.com/Sh1penfire), [@DoSh1K883](https://github.com/DoSh1K883)
 - Contributors: [@kapzduke](https://github.com/kapzduke), [@RouterXdd](https://github.com/RouterXdd)
-- Authors of libraries we use: [@liplum](https://github.com/liplum) - MultiCrafter Lib (now outdated), [@JojoFR1](https://github.com/jojofr1) - MultiCrafter
+- Authors of external projects we use:
+  - [@liplum](https://github.com/liplum) - MultiCrafter Lib (now outdated)
+  - [@JojoFR1](https://github.com/jojofr1) - MultiCrafter
+  - [@GglLfr](https://github.com/ggllfr) - EntityAnno
+  - [@nekit508](https://github.com/nekit508) - Mindustry mod plugin
 - The Mindustry modding community.
 
 
