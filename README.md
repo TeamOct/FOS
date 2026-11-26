@@ -32,7 +32,7 @@ Also, your core still remembers a different faction that assisted in your near d
       2. Mod file will be in [build/libs](build%2Flibs) folder.
    2. Option 2:
       1. Create a new `settings` folder, then make a `settings.local.json` file.
-      2. Inside the JSON, create the `copy` array and specify your directory(-ies) to copy the mod's JAR file to:
+      2. Inside the JSON, create the `copy` array and specify your directory(-ies) to copy the mod's JAR file to. Example directories shown here include Mindustry's working directories on Windows and Linux:
       ```json
       {
         "copy": [
