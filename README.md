@@ -22,30 +22,23 @@ Also, your core still remembers a different faction that assisted in your near d
 > For this mod to work, you will need to install an external library to your game first: https://github.com/JojoFR1/MultiCrafter/
 
 ## How To Build
-1. Use at least Java 20
-2. From there you have multiple options:
-   1. Option 1:
-      1. Run `nmpBuildRelease` task:
-      ```shell
-      ./gradlew nmpBuildRelease
-      ```
-      2. Mod file will be in [build/libs](build%2Flibs) folder.
-   2. Option 2:
-      1. Create a new `settings` folder, then make a `settings.local.json` file.
-      2. Inside the JSON, create the `copy` array and specify your directory(-ies) to copy the mod's JAR file to. Example directories shown here include Mindustry's working directories on Windows and Linux:
-      ```json
-      {
-        "copy": [
-          "C:\\Users\\admin\\AppData\\Roaming\\Mindustry\\mods",
-          "/home/admin/.local/share/Mindustry/mods"
-        ] 
-      }
-      ```
-      3. Run `nmpCopyBuildRelease` task:
-      ```shell
-      ./gradlew nmpCopyBuildRelease
-      ```
+> [!IMPORTANT]
+> Make sure your JDK version is **20** or newer.
 
+Run `./gradlew nmpBuildRelease` to compile the project.
+
+Please note that by default, this task will build for Android, and will fail if Android SDK isn't installed on your machine; to compile _without_ Android support, create a `settings` folder inside the project, with a `settings.local.json` file:
+```json
+{
+  "build": {
+    "useAndroid": false
+  }
+}
+```
+
+Mod file will be in [build/libs](build%2Flibs) folder.
+
+For more advanced options (such as copying the built JAR file somewhere else, launching Mindustry after compilation, etc.) refer to [Mindustry Mod Plugin's documentation](https://github.com/nekit508/mindustry-mod-plugin/blob/master/scratch.md). _(As of writing this section, it's only available in Russian, so if you don't speak Russian, you will have to use a translator 🙁)_
 
 ## Credits
 - Team founder: [@Polar4ik](https://github.com/Polar4ik) (polar4ik)

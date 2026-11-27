@@ -28,8 +28,8 @@ public class FOSVars {
 
     // Debug variables
     public static boolean planetDebug = Core.settings.getBool("fos-planet-debug", false);
-    public static final boolean pathfinderDebug = Core.settings.getBool("fos-pathfinder-debug", false);
-    public static final boolean caldemoltDebug = Core.settings.getBool("fos-caldemolt-debug", false);
+    public static boolean pathfinderDebug = Core.settings.getBool("fos-pathfinder-debug", false);
+    public static boolean caldemoltDebug = Core.settings.getBool("fos-caldemolt-debug", false);
     public static boolean logDebug = Core.settings.getBool("fos-log-debug", false);
     // TODO disable in release version
     /** Early access **/
